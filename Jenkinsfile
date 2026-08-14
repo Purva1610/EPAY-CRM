@@ -7,6 +7,7 @@ pipeline {
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
+        skipDefaultCheckout()
         timeout(time: 20, unit: 'MINUTES')
         timestamps()
     }
@@ -20,6 +21,15 @@ pipeline {
 
         stage('Setup Node.js') {
             steps {
+                script {
+                    if (!sh(script: 'which node', returnStatus: true).equals(0)) {
+                        sh '''
+                            echo "Node.js not found. Installing via NodeSource..."
+                            curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+                            apt-get install -y nodejs
+                        '''
+                    }
+                }
                 sh 'node --version'
                 sh 'npm --version'
             }
@@ -104,27 +114,6 @@ pipeline {
                 always {
                     cleanWs()
                 }
-            }
-        }
-    }
-
-    post {
-        success {
-            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                emailext(
-                    subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: "Build ${env.BUILD_URL} succeeded.",
-                    to: "${env.CHANGE_AUTHOR_EMAIL ?: 'team@epaycrm.com'}"
-                )
-            }
-        }
-        failure {
-            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                emailext(
-                    subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: "Build ${env.BUILD_URL} failed.",
-                    to: "${env.CHANGE_AUTHOR_EMAIL ?: 'team@epaycrm.com'}"
-                )
             }
         }
     }
