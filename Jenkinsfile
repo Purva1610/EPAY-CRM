@@ -21,15 +21,6 @@ pipeline {
 
         stage('Setup Node.js') {
             steps {
-                script {
-                    if (!sh(script: 'which node', returnStatus: true).equals(0)) {
-                        sh '''
-                            echo "Node.js not found. Installing via NodeSource..."
-                            curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-                            apt-get install -y nodejs
-                        '''
-                    }
-                }
                 sh 'node --version'
                 sh 'npm --version'
             }
