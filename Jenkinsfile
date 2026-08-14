@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'epay' }
 
     environment {
         NODE_VERSION = '20'
