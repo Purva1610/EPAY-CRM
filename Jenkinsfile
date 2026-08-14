@@ -34,6 +34,11 @@ pipeline {
             steps {
                 sh 'npm ci'
             }
+            post {
+                always {
+                    cleanWs()
+                }
+            }
         }
 
         stage('Run Tests') {
