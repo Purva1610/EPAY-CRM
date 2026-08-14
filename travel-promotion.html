@@ -1,0 +1,1018 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ePay Travel — Your Journey Starts Here</title>
+<meta name="description" content="Plan travel with ePay Gallery — visa assistance, documentation, flights, insurance, accommodation, airport transfers and pre-departure support. Start online or visit your nearest Gallery." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+
+
+
+:root {
+  --sky: #0ea5e9; --sky-d: #0284c7; --sky-l: #38bdf8;
+  --navy: #0f172a; --slate: #1e293b;
+  --green: #10b981; --amber: #f59e0b;
+  --text: #0f172a; --muted: #64748b;
+  --bg: #f8fafc; --white: #fff;
+  --radius: 18px; --radius-sm: 12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+.container{width:100%;max-width:1140px;margin:0 auto;padding:0 24px}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:blur(16px);border-bottom:1px solid transparent;transition:.3s}
+.nav.scrolled{border-bottom-color:#e2e8f0;box-shadow:0 4px 24px rgba(15,23,42,.06)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:70px}
+.logo{font-weight:800;font-size:1.2rem;display:flex;align-items:center;gap:8px}
+.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--sky-l),var(--sky-d));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.8rem}
+.logo span{background:linear-gradient(135deg,var(--sky),var(--sky-d));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:22px;list-style:none;font-size:.88rem;font-weight:500;color:var(--muted)}
+.nav-links a:hover{color:var(--sky-d)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;font-size:.9rem;font-weight:600;border-radius:100px;border:none;cursor:pointer;transition:.35s cubic-bezier(.34,1.56,.64,1);font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,var(--sky-l),var(--sky-d));color:#fff;box-shadow:0 4px 18px rgba(14,165,233,.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(14,165,233,.45)}
+.btn-ghost{background:transparent;border:1.5px solid #cbd5e1;color:var(--text)}
+.btn-ghost:hover{border-color:var(--sky);color:var(--sky-d);background:#f0f9ff}
+.btn-dark{background:var(--navy);color:#fff}
+.btn-dark:hover{background:var(--slate);transform:translateY(-2px)}
+.btn-lg{padding:15px 28px;font-size:1rem}
+.btn-sm{padding:8px 16px;font-size:.82rem}
+.mobile-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.mobile-toggle span{display:block;width:22px;height:2.5px;background:var(--text);margin:5px 0;border-radius:2px}
+
+/* Hero */
+.hero{padding:130px 0 70px;background:linear-gradient(165deg,#e0f2fe 0%,#f0f9ff 35%,#fff 70%);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-20%;right:-10%;width:500px;height:500px;background:radial-gradient(circle,rgba(14,165,233,.15),transparent 70%);border-radius:50%;pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:#e0f2fe;color:var(--sky-d);font-size:.78rem;font-weight:600;padding:6px 14px;border-radius:100px;margin-bottom:18px;border:1px solid #bae6fd}
+.hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(2.2rem,4.5vw,3.4rem);font-weight:800;line-height:1.12;letter-spacing:-.03em;margin-bottom:16px}
+.hero h1 .em{background:linear-gradient(135deg,var(--sky),var(--sky-d));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:1.05rem;color:var(--muted);max-width:520px;margin-bottom:28px;line-height:1.7}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:28px}
+.trust-strip{display:flex;flex-wrap:wrap;gap:8px}
+.trust-pill{font-size:.78rem;font-weight:500;background:rgba(255,255,255,.9);border:1px solid #e2e8f0;padding:7px 12px;border-radius:100px;color:var(--text)}
+.hero-card{background:#fff;border-radius:20px;border:1px solid #e2e8f0;box-shadow:0 20px 50px rgba(14,165,233,.12);padding:22px;overflow:hidden}
+.hero-card img{border-radius:14px;height:180px;width:100%;object-fit:cover;margin-bottom:14px}
+.hero-card .metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.metric{background:#f0f9ff;border-radius:10px;padding:10px 12px}
+.metric .l{font-size:.7rem;color:var(--muted);text-transform:uppercase}
+.metric .v{font-size:1.15rem;font-weight:800;color:var(--sky-d)}
+
+/* Sections */
+section{padding:80px 0}
+.section-label{display:inline-block;font-size:.72rem;font-weight:700;color:var(--sky-d);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;background:#e0f2fe;padding:5px 12px;border-radius:100px}
+.section-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.6rem,3vw,2.3rem);font-weight:800;letter-spacing:-.02em;margin-bottom:10px;line-height:1.2}
+.section-sub{font-size:1.02rem;color:var(--muted);max-width:560px;margin-bottom:36px;line-height:1.65}
+.text-center{text-align:center}
+.text-center .section-sub{margin-left:auto;margin-right:auto}
+
+/* Goal cards */
+.goal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.goal-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:var(--radius);padding:24px 20px;cursor:pointer;transition:.3s;text-align:left}
+.goal-card:hover,.goal-card.selected{border-color:var(--sky);box-shadow:0 12px 32px rgba(14,165,233,.15);transform:translateY(-4px)}
+.goal-card .icon{font-size:1.8rem;margin-bottom:10px}
+.goal-card h3{font-size:1.05rem;font-weight:700;margin-bottom:6px}
+.goal-card p{font-size:.88rem;color:var(--muted);margin-bottom:14px}
+.goal-card .link{font-size:.85rem;font-weight:600;color:var(--sky-d)}
+
+/* Journey flow */
+.journey-flow{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;align-items:center;padding:20px 0}
+.jf-step{background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;padding:10px 14px;font-size:.82rem;font-weight:600;color:var(--sky-d);text-align:center;min-width:100px}
+.jf-arrow{color:var(--sky);font-size:.9rem}
+
+/* Service cards */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.svc-card{background:#fff;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px;transition:.3s}
+.svc-card:hover{border-color:var(--sky-l);box-shadow:0 10px 28px rgba(14,165,233,.1);transform:translateY(-3px)}
+.svc-card .icon{font-size:1.6rem;margin-bottom:10px}
+.svc-card h3{font-size:1rem;font-weight:700;margin-bottom:6px}
+.svc-card p{font-size:.88rem;color:var(--muted)}
+
+/* Destinations */
+.dest-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.dest-card{border-radius:16px;min-height:140px;padding:16px;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;background-size:cover;background-position:center;cursor:pointer;transition:.3s;position:relative;overflow:hidden}
+.dest-card::before{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,.75),rgba(15,23,42,.15));}
+.dest-card:hover{transform:scale(1.03)}
+.dest-card h4,.dest-card span{position:relative;z-index:1}
+.dest-card h4{font-size:1.05rem;font-weight:700}
+.dest-card span{font-size:.78rem;opacity:.9}
+
+/* Checklist journey */
+.check-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
+.check-list li{font-size:.92rem;display:flex;align-items:center;gap:8px}
+.check-list li::before{content:'✓';color:var(--green);font-weight:800}
+
+/* Progress */
+.progress-wrap{background:#e2e8f0;border-radius:100px;height:12px;overflow:hidden;margin:12px 0}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--sky-l),var(--sky-d));border-radius:100px;transition:width .8s ease}
+
+/* Readiness */
+.readiness-box{background:linear-gradient(135deg,#0f172a,#1e3a5f);border-radius:20px;padding:28px;color:#fff}
+.readiness-box .score{font-size:3rem;font-weight:800;color:var(--sky-l)}
+.readiness-table{width:100%;margin-top:16px;font-size:.88rem}
+.readiness-table td{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.readiness-table td:last-child{text-align:right}
+
+/* Packages */
+.pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.pkg-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:20px;padding:28px 24px;position:relative;transition:.3s}
+.pkg-card.featured{border-color:var(--sky);box-shadow:0 16px 40px rgba(14,165,233,.15)}
+.pkg-card .tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--sky);color:#fff;font-size:.72rem;font-weight:700;padding:4px 14px;border-radius:100px}
+.pkg-card h3{font-size:1.2rem;font-weight:800;margin-bottom:6px}
+.pkg-card .tier{font-size:.85rem;color:var(--muted);margin-bottom:16px}
+.pkg-card ul{list-style:none;margin-bottom:20px}
+.pkg-card ul li{font-size:.88rem;padding:5px 0;display:flex;gap:8px}
+.pkg-card ul li::before{content:'✓';color:var(--green);font-weight:700}
+
+/* Why */
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.why-card{background:#f8fafc;border-radius:14px;padding:20px;border:1px solid #e2e8f0}
+.why-card h4{font-size:.98rem;font-weight:700;margin:8px 0 4px}
+.why-card p{font-size:.85rem;color:var(--muted)}
+
+/* Gallery experience */
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gallery-grid img{border-radius:14px;height:180px;width:100%;object-fit:cover}
+
+/* Reviews */
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.rev-card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:22px}
+.rev-card .stars{color:var(--amber);margin-bottom:8px;letter-spacing:2px}
+.rev-card p{font-size:.92rem;color:var(--muted);margin-bottom:12px;font-style:italic}
+.rev-card .who{font-size:.85rem;font-weight:600}
+
+/* FAQ */
+.faq-item{border-bottom:1px solid #e2e8f0}
+.faq-q{width:100%;text-align:left;background:none;border:none;padding:16px 0;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;gap:12px}
+.faq-q:hover{color:var(--sky-d)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;font-size:.92rem;color:var(--muted)}
+.faq-item.open .faq-a{max-height:160px;padding-bottom:14px}
+.faq-item.open .faq-q .chev{transform:rotate(180deg)}
+.chev{transition:.3s;color:var(--sky)}
+
+/* CTA band */
+.cta-band{background:linear-gradient(135deg,#0c4a6e,#0284c7);border-radius:24px;padding:48px 40px;text-align:center;color:#fff}
+.cta-band h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:10px}
+.cta-band p{opacity:.9;margin-bottom:22px;max-width:480px;margin-left:auto;margin-right:auto}
+
+/* Online flow */
+.online-flow{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;align-items:center}
+.of-step{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px 16px;font-size:.82rem;font-weight:600;text-align:center;min-width:110px}
+.of-arrow{color:var(--sky)}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:20px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;padding:28px;position:relative}
+.modal h2{font-size:1.3rem;margin-bottom:6px}
+.modal .sub{font-size:.9rem;color:var(--muted);margin-bottom:18px}
+.modal-x{position:absolute;top:14px;right:14px;border:none;background:#f1f5f9;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.1rem}
+.form-g{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-g .full{grid-column:1/-1}
+.form-g label{font-size:.78rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px}
+.form-g input,.form-g select,.form-g textarea{width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:.9rem;font-family:inherit;outline:none}
+.form-g input:focus,.form-g select:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(14,165,233,.12)}
+
+footer{background:var(--navy);color:#94a3b8;padding:40px 0 24px;font-size:.85rem;text-align:center}
+footer .logo{justify-content:center;margin-bottom:12px;color:#fff}
+footer .logo span{-webkit-text-fill-color:unset;color:#38bdf8;background:none}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+
+.bg-soft{background:#f8fafc}
+.bg-sky{background:linear-gradient(180deg,#f0f9ff,#fff)}
+
+@media(max-width:900px){
+  .hero-grid,.goal-grid,.svc-grid,.pkg-grid,.why-grid,.rev-grid,.dest-grid{grid-template-columns:1fr 1fr}
+  .gallery-grid{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:70px;left:0;right:0;background:#fff;padding:16px 24px;border-bottom:1px solid #e2e8f0;box-shadow:0 8px 24px rgba(0,0,0,.06)}
+  .mobile-toggle{display:block}
+  .check-list{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .hero-grid,.goal-grid,.svc-grid,.pkg-grid,.why-grid,.rev-grid,.dest-grid,.gallery-grid,.form-g{grid-template-columns:1fr}
+  .hero{padding:110px 0 50px}
+}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo"><div class="logo-mark">eP</div> ePay <span>Travel</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#goals">Goals</a></li>
+      <li><a href="#visa">Visa</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#destinations">Destinations</a></li>
+      <li><a href="#packages">Packages</a></li>
+      <li><a href="#gallery">Galleries</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="btn btn-ghost btn-sm" onclick="openModal('gallery')">Find Gallery</button>
+      <button class="btn btn-primary btn-sm" onclick="openModal('journey')">Start Journey</button>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-badge">✈️ ePay Travel · Gallery-Assisted</div>
+      <h1>Your Journey Starts <span class="em">Here.</span> 🌍</h1>
+      <p class="hero-sub">Travel with confidence with complete assistance from ePay Gallery — from visa guidance and documentation to flights, insurance, accommodation, airport transfers and pre-departure support.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-primary btn-lg" onclick="openModal('journey')">Start My Travel Journey</button>
+        <button class="btn btn-ghost btn-lg" onclick="openModal('gallery')">Find My Nearest ePay Gallery</button>
+      </div>
+      <div class="trust-strip">
+        <span class="trust-pill">🌍 Domestic &amp; International</span>
+        <span class="trust-pill">📄 Documentation</span>
+        <span class="trust-pill">🛂 Visa Assistance</span>
+        <span class="trust-pill">✈️ Travel Planning</span>
+        <span class="trust-pill">🏢 Gallery Support</span>
+      </div>
+    </div>
+    <div class="hero-card reveal">
+      <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80" alt="Travel" />
+      <div class="metrics">
+        <div class="metric"><div class="l">Destinations</div><div class="v">40+</div></div>
+        <div class="metric"><div class="l">Galleries</div><div class="v">120+</div></div>
+        <div class="metric"><div class="l">Journeys</div><div class="v">18K+</div></div>
+        <div class="metric"><div class="l">Support</div><div class="v">24×7</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GOALS -->
+<section id="goals" class="bg-soft">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Travel Goal</span>
+      <h2 class="section-title">What Are You Planning?</h2>
+      <p class="section-sub">Choose your goal — we’ll tailor the journey and connect you with the right Gallery support.</p>
+    </div>
+    <div class="goal-grid">
+      <div class="goal-card" data-goal="Holiday" onclick="selectGoal(this)">
+        <div class="icon">🏖️</div><h3>Holiday</h3>
+        <p>Plan your vacation with complete travel assistance.</p>
+        <span class="link">Explore Travel →</span>
+      </div>
+      <div class="goal-card" data-goal="Business" onclick="selectGoal(this)">
+        <div class="icon">💼</div><h3>Business Travel</h3>
+        <p>Meetings, conferences and business opportunities.</p>
+        <span class="link">Plan Business Travel →</span>
+      </div>
+      <div class="goal-card" data-goal="Study" onclick="selectGoal(this)">
+        <div class="icon">🎓</div><h3>Study Abroad</h3>
+        <p>From application support to travel preparation.</p>
+        <span class="link">Explore Study Travel →</span>
+      </div>
+      <div class="goal-card" data-goal="Work" onclick="selectGoal(this)">
+        <div class="icon">💼</div><h3>Work Abroad</h3>
+        <p>Assistance with your international career journey.</p>
+        <span class="link">Explore Work Travel →</span>
+      </div>
+      <div class="goal-card" data-goal="Family" onclick="selectGoal(this)">
+        <div class="icon">👨‍👩‍👧</div><h3>Family Visit</h3>
+        <p>Plan international visits for family and loved ones.</p>
+        <span class="link">Plan Family Travel →</span>
+      </div>
+      <div class="goal-card" data-goal="Relocation" onclick="selectGoal(this)">
+        <div class="icon">🌍</div><h3>Relocation</h3>
+        <p>Moving to another city or country?</p>
+        <span class="link">Plan My Relocation →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPLETE JOURNEY -->
+<section id="journey-map">
+  <div class="container text-center">
+    <span class="section-label">Complete Assistance</span>
+    <h2 class="section-title">Everything You Need. One ePay Journey.</h2>
+    <p class="section-sub">From first consultation to wheels-up — organised as one connected path.</p>
+    <div class="journey-flow reveal">
+      <div class="jf-step">Travel Planning</div><span class="jf-arrow">→</span>
+      <div class="jf-step">Visa Assistance</div><span class="jf-arrow">→</span>
+      <div class="jf-step">Documentation</div><span class="jf-arrow">→</span>
+      <div class="jf-step">Appointment</div><span class="jf-arrow">→</span>
+      <div class="jf-step">Travel Insurance</div><span class="jf-arrow">→</span>
+      <div class="jf-step">Flight</div><span class="jf-arrow">→</span>
+      <div class="jf-step">Accommodation</div><span class="jf-arrow">→</span>
+      <div class="jf-step">Airport Transfer</div><span class="jf-arrow">→</span>
+      <div class="jf-step">SIM / eSIM</div><span class="jf-arrow">→</span>
+      <div class="jf-step">Forex</div><span class="jf-arrow">→</span>
+      <div class="jf-step">Pre-Departure</div><span class="jf-arrow">→</span>
+      <div class="jf-step">Travel Support</div>
+    </div>
+  </div>
+</section>
+
+<!-- VISA -->
+<section id="visa" class="bg-sky">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Visa Assistance</span>
+      <h2 class="section-title">Your Visa Journey, Guided Step by Step</h2>
+      <p class="section-sub">Visa applications can be complicated. ePay Gallery helps you understand the process, organise documents and stay updated throughout your application journey.</p>
+    </div>
+    <div class="svc-grid reveal">
+      <div class="svc-card"><div class="icon">📋</div><h3>Eligibility &amp; Category</h3><p>Assessment and guidance on the right visa category for your goal.</p></div>
+      <div class="svc-card"><div class="icon">📄</div><h3>Document Checklist</h3><p>Clear checklists, verification and organisation of your papers.</p></div>
+      <div class="svc-card"><div class="icon">✍️</div><h3>Application Assistance</h3><p>Help completing forms and coordinating required submissions.</p></div>
+      <div class="svc-card"><div class="icon">🌐</div><h3>Translation &amp; Attestation</h3><p>Coordination for translation and attestation where required.</p></div>
+      <div class="svc-card"><div class="icon">📅</div><h3>Appointments &amp; Biometrics</h3><p>Embassy appointment assistance and biometrics guidance.</p></div>
+      <div class="svc-card"><div class="icon">📍</div><h3>Tracking &amp; Renewals</h3><p>Application tracking and visa renewal reminders.</p></div>
+    </div>
+    <div style="margin-top:24px;display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+      <button class="btn btn-primary" onclick="openModal('journey')">Get Visa Assistance</button>
+      <p style="font-size:.78rem;color:var(--muted);max-width:480px">Visa decisions are made by the relevant authorities. ePay provides assistance and coordination and does not guarantee visa approval.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Travel Services</span>
+      <h2 class="section-title">From Application to Take-Off</h2>
+      <p class="section-sub">Partner-backed services coordinated through your ePay journey.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card reveal"><div class="icon">✈️</div><h3>Flights</h3><p>Find suitable flight options through our travel assistance network.</p></div>
+      <div class="svc-card reveal"><div class="icon">🛡️</div><h3>Travel Insurance</h3><p>Explore suitable cover through eligible insurance partners.</p></div>
+      <div class="svc-card reveal"><div class="icon">🏨</div><h3>Accommodation</h3><p>Find suitable stays for your destination and dates.</p></div>
+      <div class="svc-card reveal"><div class="icon">🚕</div><h3>Airport Transfer</h3><p>Arrange airport pickup and destination transfers.</p></div>
+      <div class="svc-card reveal"><div class="icon">📱</div><h3>SIM / eSIM</h3><p>Stay connected when you arrive at your destination.</p></div>
+      <div class="svc-card reveal"><div class="icon">💱</div><h3>Forex Assistance</h3><p>International travel money guidance via authorised partners.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- DESTINATIONS -->
+<section id="destinations" class="bg-soft">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Destinations</span>
+      <h2 class="section-title">Where Are You Going?</h2>
+      <p class="section-sub">Popular corridors for study, work, visit and business.</p>
+    </div>
+    <div class="dest-grid reveal">
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80')" onclick="pickDest('UAE')"><h4>🇦🇪 UAE</h4><span>Work · Visit · Business</span></div>
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600&q=80')" onclick="pickDest('UK')"><h4>🇬🇧 UK</h4><span>Study · Work · Visit</span></div>
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1517935706615-2717063c2225?w=600&q=80')" onclick="pickDest('Canada')"><h4>🇨🇦 Canada</h4><span>Study · Work · Visit</span></div>
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1523482580745-af32f7f3f9ee?w=600&q=80')" onclick="pickDest('Australia')"><h4>🇦🇺 Australia</h4><span>Study · Work · Visit</span></div>
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600&q=80')" onclick="pickDest('Germany')"><h4>🇩🇪 Germany</h4><span>Study · Work · Career</span></div>
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1485738422979-f5c462d49f74?w=600&q=80')" onclick="pickDest('USA')"><h4>🇺🇸 USA</h4><span>Study · Business · Visit</span></div>
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80')" onclick="pickDest('France')"><h4>🇫🇷 France</h4><span>Travel · Study · Business</span></div>
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&q=80')" onclick="pickDest('Japan')"><h4>🇯🇵 Japan</h4><span>Travel · Study · Work</span></div>
+    </div>
+    <div style="text-align:center;margin-top:24px">
+      <button class="btn btn-ghost" onclick="openModal('journey')">Explore All Destinations</button>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONALIZED JOURNEY -->
+<section id="personal">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center">
+      <div class="reveal">
+        <span class="section-label">Personalized</span>
+        <h2 class="section-title">Your Journey. Your Plan.</h2>
+        <p class="section-sub">Example: Rahul wants to travel to Germany for work. ePay builds a coordinated checklist.</p>
+        <ul class="check-list">
+          <li>Travel Consultation</li><li>Eligibility Assessment</li>
+          <li>Document Checklist</li><li>Document Verification</li>
+          <li>Visa Assistance</li><li>Appointment</li>
+          <li>Insurance</li><li>Flight</li>
+          <li>Accommodation</li><li>SIM</li>
+          <li>Airport Pickup</li><li>Pre-Departure Assistance</li>
+        </ul>
+        <div style="margin-top:20px">
+          <div style="display:flex;justify-content:space-between;font-size:.85rem;font-weight:600"><span>Journey Progress</span><span id="journeyPct">72%</span></div>
+          <div class="progress-wrap"><div class="progress-fill" id="journeyBar" style="width:72%"></div></div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:16px" onclick="openModal('journey')">Build My Journey</button>
+      </div>
+      <div class="readiness-box reveal">
+        <div style="font-size:.85rem;opacity:.8;margin-bottom:4px">Travel Readiness Score</div>
+        <div class="score" id="readyScore">78<span style="font-size:1.2rem;opacity:.7"> / 100</span></div>
+        <table class="readiness-table">
+          <tr><td>Passport</td><td>✅ Ready</td></tr>
+          <tr><td>Visa</td><td>🟡 Processing</td></tr>
+          <tr><td>Documents</td><td>✅ Ready</td></tr>
+          <tr><td>Flight</td><td>⏳ Pending</td></tr>
+          <tr><td>Insurance</td><td>⏳ Pending</td></tr>
+          <tr><td>Accommodation</td><td>⏳ Pending</td></tr>
+          <tr><td>SIM</td><td>⏳ Pending</td></tr>
+        </table>
+        <button class="btn btn-primary" style="margin-top:16px;width:100%" onclick="checkReadiness()">Check My Travel Readiness</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" class="bg-sky">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">ePay Gallery</span>
+      <h2 class="section-title">Prefer Personal Assistance? Visit an ePay Gallery.</h2>
+      <p class="section-sub">Start online or walk into your nearest Gallery. Our team helps you understand requirements, organise documents and guide your travel journey.</p>
+    </div>
+    <div class="why-grid reveal">
+      <div class="why-card"><div style="font-size:1.4rem">👨‍💼</div><h4>Personal assistance</h4><p>Face-to-face guidance from trained Gallery staff.</p></div>
+      <div class="why-card"><div style="font-size:1.4rem">📄</div><h4>Document support</h4><p>Help organising and verifying your papers.</p></div>
+      <div class="why-card"><div style="font-size:1.4rem">💻</div><h4>Digital application</h4><p>Assisted online applications at the Gallery desk.</p></div>
+      <div class="why-card"><div style="font-size:1.4rem">💳</div><h4>Payment assistance</h4><p>Clear fee guidance and payment support.</p></div>
+      <div class="why-card"><div style="font-size:1.4rem">📞</div><h4>Follow-up support</h4><p>Stay updated after you leave the Gallery.</p></div>
+      <div class="why-card"><div style="font-size:1.4rem">📊</div><h4>Application tracking</h4><p>Track status from your ePay account.</p></div>
+    </div>
+    <div style="text-align:center;margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-primary btn-lg" onclick="openModal('gallery')">Find Nearest Gallery</button>
+      <button class="btn btn-ghost btn-lg" onclick="openModal('appointment')">Book Gallery Appointment</button>
+    </div>
+  </div>
+</section>
+
+<!-- ONLINE → GALLERY FLOW -->
+<section>
+  <div class="container text-center">
+    <span class="section-label">How It Works</span>
+    <h2 class="section-title">Start Online. Continue at Your Gallery.</h2>
+    <p class="section-sub">Your travel journey doesn’t end after you apply — track everything while your Gallery team supports you.</p>
+    <div class="online-flow reveal">
+      <div class="of-step">Start Online</div><span class="of-arrow">→</span>
+      <div class="of-step">Select Goal</div><span class="of-arrow">→</span>
+      <div class="of-step">Create Profile</div><span class="of-arrow">→</span>
+      <div class="of-step">Submit Enquiry</div><span class="of-arrow">→</span>
+      <div class="of-step">Choose Gallery</div><span class="of-arrow">→</span>
+      <div class="of-step">Meet Our Team</div><span class="of-arrow">→</span>
+      <div class="of-step">Complete Process</div><span class="of-arrow">→</span>
+      <div class="of-step">Track Online</div><span class="of-arrow">→</span>
+      <div class="of-step">Travel Ready ✈️</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRE-DEPARTURE -->
+<section class="bg-soft" id="predeparture">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Pre-Departure</span>
+      <h2 class="section-title">Everything Ready Before You Leave?</h2>
+      <p class="section-sub">Your ePay Gallery can help you prepare for departure.</p>
+    </div>
+    <div class="svc-grid reveal">
+      <div class="svc-card"><h3>Passport &amp; visa check</h3><p>Confirm documents are valid for travel dates.</p></div>
+      <div class="svc-card"><h3>Flight &amp; insurance</h3><p>Confirmations and cover in one place.</p></div>
+      <div class="svc-card"><h3>Stay &amp; transfer</h3><p>Accommodation and airport pickup details.</p></div>
+      <div class="svc-card"><h3>SIM / eSIM</h3><p>Connectivity planned before you land.</p></div>
+      <div class="svc-card"><h3>Emergency contacts</h3><p>Key numbers and destination info.</p></div>
+      <div class="svc-card"><h3>Full checklist</h3><p>Employer/university details and final review.</p></div>
+    </div>
+    <button class="btn btn-primary" style="margin-top:20px" onclick="openModal('journey')">Prepare for Departure</button>
+  </div>
+</section>
+
+<!-- SUPPORT -->
+<section id="support">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Travel Support</span>
+      <h2 class="section-title">We’re With You Beyond the Application</h2>
+      <p class="section-sub">ePay can coordinate assistance for eligible situations such as lost documents, disruptions, accommodation issues and emergency coordination.</p>
+      <button class="btn btn-primary" onclick="openModal('support')">Get Travel Assistance</button>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section id="packages" class="bg-sky">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Assistance Packages</span>
+      <h2 class="section-title">Choose the Assistance You Need</h2>
+      <p class="section-sub">Pricing varies by destination and service. We’ll confirm applicable fees after understanding your journey.</p>
+    </div>
+    <div class="pkg-grid">
+      <div class="pkg-card reveal">
+        <h3>🟢 Essential</h3>
+        <div class="tier">Core guidance</div>
+        <ul>
+          <li>Travel consultation</li>
+          <li>Visa guidance</li>
+          <li>Document checklist</li>
+          <li>Application tracking</li>
+        </ul>
+        <button class="btn btn-ghost" style="width:100%" onclick="openModal('journey')">Get Started</button>
+      </div>
+      <div class="pkg-card featured reveal">
+        <div class="tag">Most chosen</div>
+        <h3>🔵 Complete</h3>
+        <div class="tier">End-to-end coordination</div>
+        <ul>
+          <li>Visa assistance</li>
+          <li>Documentation</li>
+          <li>Insurance</li>
+          <li>Flight assistance</li>
+          <li>Accommodation assistance</li>
+          <li>Airport transfer</li>
+        </ul>
+        <button class="btn btn-primary" style="width:100%" onclick="openModal('journey')">Start Complete Journey</button>
+      </div>
+      <div class="pkg-card reveal">
+        <h3>🟣 Premium</h3>
+        <div class="tier">Dedicated consultant</div>
+        <ul>
+          <li>Dedicated travel consultant</li>
+          <li>Full visa &amp; document coordination</li>
+          <li>Flight · Insurance · Stay</li>
+          <li>Transfer · SIM / eSIM</li>
+          <li>Pre-departure assistance</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="btn btn-dark" style="width:100%" onclick="openModal('journey')">Talk to ePay</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY EPAY -->
+<section id="why">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Why ePay</span>
+      <h2 class="section-title">Why Choose ePay Gallery?</h2>
+    </div>
+    <div class="why-grid reveal">
+      <div class="why-card"><div style="font-size:1.5rem">🧭</div><h4>One Journey</h4><p>Multiple travel requirements managed together.</p></div>
+      <div class="why-card"><div style="font-size:1.5rem">👥</div><h4>Human Assistance</h4><p>Real Gallery team support, not only chatbots.</p></div>
+      <div class="why-card"><div style="font-size:1.5rem">📱</div><h4>Digital Tracking</h4><p>Track applications and services online.</p></div>
+      <div class="why-card"><div style="font-size:1.5rem">📁</div><h4>Document Support</h4><p>Keep travel documents organised.</p></div>
+      <div class="why-card"><div style="font-size:1.5rem">🧩</div><h4>Multiple Services</h4><p>Visa, flights, insurance, stay and more.</p></div>
+      <div class="why-card"><div style="font-size:1.5rem">📍</div><h4>Local Access</h4><p>Visit a nearby Gallery whenever you need help.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="bg-soft">
+  <div class="container text-center">
+    <span class="section-label">Trust</span>
+    <h2 class="section-title">Your Documents. Your Journey. Your Privacy.</h2>
+    <div class="trust-strip" style="justify-content:center;margin-top:20px">
+      <span class="trust-pill">🔐 Secure document handling</span>
+      <span class="trust-pill">👤 Dedicated service team</span>
+      <span class="trust-pill">🏢 Verified Gallery network</span>
+      <span class="trust-pill">📊 Transparent tracking</span>
+      <span class="trust-pill">🔔 Notifications</span>
+      <span class="trust-pill">📄 Digital records</span>
+      <span class="trust-pill">🤝 Partner-based services</span>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY EXPERIENCE -->
+<section>
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Gallery Experience</span>
+      <h2 class="section-title">Meet ePay in Person.</h2>
+      <p class="section-sub">Consultation desks, document assistance and professional support at ePay Galleries.</p>
+    </div>
+    <div class="gallery-grid reveal">
+      <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80" alt="Gallery" />
+      <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&q=80" alt="Consultation" />
+      <img src="https://images.unsplash.com/photo-1556745753-b2903579e95c?w=600&q=80" alt="Support" />
+    </div>
+    <div style="text-align:center;margin-top:24px">
+      <button class="btn btn-primary" onclick="openModal('gallery')">Visit an ePay Gallery</button>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="bg-soft" id="reviews">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Stories</span>
+      <h2 class="section-title">Real Journeys. Real Assistance.</h2>
+    </div>
+    <div class="rev-grid reveal">
+      <div class="rev-card"><div class="stars">★★★★★</div><p>“The ePay team helped me organise my documents and guided me throughout my travel process.”</p><div class="who">Rahul — Pune</div></div>
+      <div class="rev-card"><div class="stars">★★★★★</div><p>“I didn’t know where to start. The Gallery team explained the complete process and helped me prepare.”</p><div class="who">Priya — Mumbai</div></div>
+      <div class="rev-card"><div class="stars">★★★★★</div><p>“I could start online and continue everything through my nearest Gallery.”</p><div class="who">Amit — Hyderabad</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container" style="max-width:720px">
+    <div class="text-center reveal">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+    <div class="reveal">
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I start my travel application online? <span class="chev">▾</span></button><div class="faq-a">Yes. You can begin your enquiry digitally and connect with an ePay Gallery for assisted service.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Do I need to visit a Gallery? <span class="chev">▾</span></button><div class="faq-a">Depending on the service, some steps may be digital while others may need physical assistance or appointments.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can ePay guarantee my visa? <span class="chev">▾</span></button><div class="faq-a">No. Visa decisions are made by the relevant government/immigration authorities. ePay provides assistance and coordination only.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can ePay help with documents? <span class="chev">▾</span></button><div class="faq-a">Yes — eligible document preparation, organisation, verification and coordination assistance.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I track my application? <span class="chev">▾</span></button><div class="faq-a">Yes, eligible services can be tracked through your ePay account.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I book flights through ePay? <span class="chev">▾</span></button><div class="faq-a">ePay can provide flight booking assistance through applicable travel partners.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I get accommodation assistance? <span class="chev">▾</span></button><div class="faq-a">Yes, accommodation options can be provided through the applicable partner ecosystem.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section>
+  <div class="container">
+    <div class="cta-band reveal">
+      <h2>Where Are You Going Next? 🌍</h2>
+      <p>Tell ePay where you want to go, and we’ll help you understand the journey ahead.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary btn-lg" style="background:#fff;color:#0284c7" onclick="openModal('journey')">Start My Travel Journey</button>
+        <button class="btn btn-ghost btn-lg" style="border-color:rgba(255,255,255,.5);color:#fff" onclick="openModal('gallery')">Find Nearest Gallery</button>
+        <button class="btn btn-ghost btn-lg" style="border-color:rgba(255,255,255,.5);color:#fff" onclick="openModal('journey')">Talk to a Travel Consultant</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo" style="margin-bottom:12px"><div class="logo-mark">eP</div> ePay <span>Travel</span></div>
+    <p>© 2026 ePay Digital Gallery · Travel assistance through Galleries &amp; partners. Visa approval is decided by authorities.</p>
+  </div>
+</footer>
+
+<!-- JOURNEY MODAL -->
+<div class="modal-bg" id="modal-journey">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('journey')">×</button>
+    <h2>Start My Travel Journey</h2>
+    <p class="sub">Tell us your goal — an ePay Gallery will follow up.</p>
+    <form onsubmit="return submitJourney(event)">
+      <div class="form-g">
+        <div class="full"><label>Full Name *</label><input name="name" required placeholder="Your name" /></div>
+        <div><label>Mobile *</label><input name="mobile" required type="tel" placeholder="10-digit" /></div>
+        <div><label>Email</label><input name="email" type="email" placeholder="you@email.com" /></div>
+        <div><label>Goal *</label>
+          <select name="goal" id="formGoal" required>
+            <option value="">Select</option>
+            <option>Holiday</option><option>Business</option><option>Study</option>
+            <option>Work</option><option>Family</option><option>Relocation</option>
+          </select>
+        </div>
+        <div><label>Destination</label><input name="dest" id="formDest" placeholder="e.g. Germany" /></div>
+        <div class="full"><label>Notes</label><textarea name="notes" rows="2" placeholder="Timeline, city, any questions..."></textarea></div>
+        <div class="full"><button type="submit" class="btn btn-primary" style="width:100%">Submit Enquiry</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- GALLERY MODAL -->
+<div class="modal-bg" id="modal-gallery">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('gallery')">×</button>
+    <h2>Find Nearest ePay Gallery</h2>
+    <p class="sub">Enter your city or PIN to locate a Travel Expert Gallery.</p>
+    <form onsubmit="return findGallery(event)">
+      <div class="form-g">
+        <div class="full"><label>City / PIN *</label><input name="city" required placeholder="Pune / 411001" /></div>
+        <div class="full"><button type="submit" class="btn btn-primary" style="width:100%">Search Galleries</button></div>
+      </div>
+    </form>
+    <div id="galleryResults" style="margin-top:16px;display:none"></div>
+  </div>
+</div>
+
+<!-- APPOINTMENT -->
+<div class="modal-bg" id="modal-appointment">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('appointment')">×</button>
+    <h2>Book Gallery Appointment</h2>
+    <form onsubmit="return bookAppt(event)">
+      <div class="form-g">
+        <div class="full"><label>Name *</label><input name="name" required /></div>
+        <div><label>Mobile *</label><input name="mobile" required type="tel" /></div>
+        <div><label>Preferred date</label><input name="date" type="date" /></div>
+        <div class="full"><label>Gallery city</label><input name="city" placeholder="Pune" /></div>
+        <div class="full"><button type="submit" class="btn btn-primary" style="width:100%">Request Appointment</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- SUPPORT -->
+<div class="modal-bg" id="modal-support">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('support')">×</button>
+    <h2>Get Travel Assistance</h2>
+    <form onsubmit="return submitSupport(event)">
+      <div class="form-g">
+        <div class="full"><label>Name *</label><input name="name" required /></div>
+        <div><label>Mobile *</label><input name="mobile" required type="tel" /></div>
+        <div><label>Issue type</label>
+          <select name="issue"><option>Lost documents</option><option>Travel disruption</option><option>Accommodation</option><option>Emergency</option><option>Other</option></select>
+        </div>
+        <div class="full"><label>Details</label><textarea name="details" rows="3"></textarea></div>
+        <div class="full"><button type="submit" class="btn btn-primary" style="width:100%">Request Support</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openModal(id){ document.getElementById('modal-'+id).classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal(id){ document.getElementById('modal-'+id).classList.remove('open'); document.body.style.overflow=''; }
+document.querySelectorAll('.modal-bg').forEach(function(m){
+  m.addEventListener('click', function(e){ if(e.target===m){ m.classList.remove('open'); document.body.style.overflow=''; }});
+});
+
+function selectGoal(el){
+  document.querySelectorAll('.goal-card').forEach(function(c){ c.classList.remove('selected'); });
+  el.classList.add('selected');
+  var g = el.getAttribute('data-goal');
+  var sel = document.getElementById('formGoal');
+  if(sel){ for(var i=0;i<sel.options.length;i++) if(sel.options[i].value===g) sel.selectedIndex=i; }
+  openModal('journey');
+}
+
+function pickDest(name){
+  var d = document.getElementById('formDest');
+  if(d) d.value = name;
+  openModal('journey');
+}
+
+function toggleFaq(btn){
+  var item = btn.parentElement;
+  var open = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(function(i){ i.classList.remove('open'); });
+  if(!open) item.classList.add('open');
+}
+
+function checkReadiness(){
+  var score = 70 + Math.floor(Math.random()*25);
+  document.getElementById('readyScore').innerHTML = score + '<span style="font-size:1.2rem;opacity:.7"> / 100</span>';
+  var pct = Math.min(95, score - 5);
+  document.getElementById('journeyPct').textContent = pct + '%';
+  document.getElementById('journeyBar').style.width = pct + '%';
+  alert('Travel Readiness: ' + score + '/100\\n\\nComplete pending items (flight, insurance, stay, SIM) to improve your score. Start a journey to get Gallery help.');
+}
+
+function saveLead(data){
+  try{
+    var arr = JSON.parse(localStorage.getItem('epay-travel-leads')||'[]');
+    arr.push(Object.assign({ts:new Date().toISOString()}, data));
+    localStorage.setItem('epay-travel-leads', JSON.stringify(arr));
+  }catch(e){}
+}
+
+function submitJourney(e){
+  e.preventDefault();
+  var fd = new FormData(e.target);
+  saveLead({type:'travel-journey', name:fd.get('name'), mobile:fd.get('mobile'), email:fd.get('email'), goal:fd.get('goal'), dest:fd.get('dest'), notes:fd.get('notes')});
+  closeModal('journey');
+  alert('Enquiry submitted!\\n\\nRef: TVL-'+Date.now().toString().slice(-6)+'\\nAn ePay Gallery will contact you shortly.');
+  e.target.reset();
+  return false;
+}
+
+function findGallery(e){
+  e.preventDefault();
+  var city = (e.target.city.value||'').trim();
+  var box = document.getElementById('galleryResults');
+  var samples = [
+    {name:'ePay Gallery — Pune FC', rating:'4.8', services:'Visa · Travel · Documentation', phone:'020-XXXX-1001'},
+    {name:'ePay Gallery — '+ (city||'Your City') +' Central', rating:'4.7', services:'Travel Expert Available', phone:'Call via app'}
+  ];
+  box.style.display = 'block';
+  box.innerHTML = samples.map(function(g){
+    return '<div style="padding:12px;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:8px"><b>'+g.name+'</b><br/><span style="font-size:.85rem;color:#64748b">★ '+g.rating+' · '+g.services+'</span><br/><button type="button" class="btn btn-primary btn-sm" style="margin-top:8px" onclick="closeModal(\'gallery\');openModal(\'appointment\')">Book Appointment</button></div>';
+  }).join('');
+  saveLead({type:'gallery-search', city:city});
+  return false;
+}
+
+function bookAppt(e){
+  e.preventDefault();
+  var fd = new FormData(e.target);
+  saveLead({type:'gallery-appointment', name:fd.get('name'), mobile:fd.get('mobile'), date:fd.get('date'), city:fd.get('city')});
+  closeModal('appointment');
+  alert('Appointment request sent! Gallery will confirm on '+ (fd.get('mobile')||'your mobile') +'.');
+  e.target.reset();
+  return false;
+}
+
+function submitSupport(e){
+  e.preventDefault();
+  var fd = new FormData(e.target);
+  saveLead({type:'travel-support', name:fd.get('name'), mobile:fd.get('mobile'), issue:fd.get('issue'), details:fd.get('details')});
+  closeModal('support');
+  alert('Support request logged. Our team will reach out for eligible assistance.');
+  e.target.reset();
+  return false;
+}
+
+window.addEventListener('scroll', function(){
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+});
+document.getElementById('mobileToggle').addEventListener('click', function(){
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+var obs = new IntersectionObserver(function(entries){
+  entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('visible'); obs.unobserve(en.target); }});
+}, {threshold:0.12});
+document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
+
+document.addEventListener('keydown', function(e){
+  if(e.key==='Escape') ['journey','gallery','appointment','support'].forEach(closeModal);
+});
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,1019 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ePay Arrival Manager · Your First 7 Days</title>
+<meta name="description" content="Guided checklist for your first 7 days in a new city — airport pickup, accommodation, SIM, banking, and more." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+
+
+
+:root {
+  --ink: #0a0b10;
+  --ink-2: #12141c;
+  --ink-3: #1a1d2a;
+  --purple: #8b5cf6;
+  --purple-light: #a78bfa;
+  --purple-dim: rgba(139,92,246,0.15);
+  --cyan: #06b6d4;
+  --cyan-dim: rgba(6,182,212,0.12);
+  --emerald: #10b981;
+  --emerald-dim: rgba(16,185,129,0.12);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.12);
+  --rose: #ef4444;
+  --rose-dim: rgba(239,68,68,0.12);
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --glass: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --radius: 20px;
+  --radius-sm: 12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--ink);
+  color:var(--text);
+  line-height:1.65;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+.container{width:100%;max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* Ambient */
+.ambient{
+  position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+}
+.ambient .orb{
+  position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;
+  animation:floatOrb 18s ease-in-out infinite;
+}
+.orb.o1{width:480px;height:480px;background:radial-gradient(circle,#8b5cf6,transparent 70%);top:-10%;right:-5%}
+.orb.o2{width:360px;height:360px;background:radial-gradient(circle,#06b6d4,transparent 70%);bottom:10%;left:-8%;animation-delay:-6s}
+.orb.o3{width:280px;height:280px;background:radial-gradient(circle,#10b981,transparent 70%);top:45%;left:40%;animation-delay:-12s;opacity:.2}
+@keyframes floatOrb{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(40px,-50px) scale(1.1)}
+  66%{transform:translate(-30px,30px) scale(.95)}
+}
+
+/* Nav */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(10,11,16,.7);backdrop-filter:blur(20px) saturate(160%);
+  border-bottom:1px solid transparent;transition:.4s;
+}
+.nav.scrolled{border-bottom-color:var(--border);box-shadow:0 8px 40px rgba(0,0,0,.4)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem;letter-spacing:-.02em}
+.logo-mark{
+  width:36px;height:36px;border-radius:11px;
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#fff;font-weight:900;
+  box-shadow:0 4px 16px rgba(139,92,246,.4);
+}
+.logo span{background:linear-gradient(135deg,var(--purple-light),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:26px;list-style:none}
+.nav-links a{font-size:.88rem;font-weight:500;color:var(--muted);transition:.25s}
+.nav-links a:hover{color:var(--purple-light)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 24px;font-size:.9rem;font-weight:600;border-radius:100px;border:none;cursor:pointer;
+  transition:.4s cubic-bezier(.34,1.56,.64,1);font-family:inherit;position:relative;overflow:hidden;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  color:#fff;box-shadow:0 4px 24px rgba(139,92,246,.35);
+}
+.btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 36px rgba(139,92,246,.5)}
+.btn-ghost{
+  background:transparent;color:var(--text);border:1.5px solid var(--border);
+}
+.btn-ghost:hover{border-color:var(--purple);color:var(--purple-light);background:var(--purple-dim)}
+.btn-success{
+  background:linear-gradient(135deg,var(--emerald),#059669);
+  color:#fff;box-shadow:0 4px 24px rgba(16,185,129,.35);
+}
+.btn-success:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 36px rgba(16,185,129,.5)}
+.btn-lg{padding:16px 32px;font-size:1rem}
+.btn-sm{padding:6px 16px;font-size:.8rem}
+.mobile-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.mobile-toggle span{display:block;width:22px;height:2px;background:var(--text);margin:5px 0;border-radius:2px}
+
+/* Hero */
+.hero{
+  min-height:100vh;display:flex;align-items:center;padding:120px 0 60px;position:relative;z-index:1;
+}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--purple-dim);border:1px solid rgba(139,92,246,.3);
+  color:var(--purple-light);font-size:.78rem;font-weight:600;padding:7px 16px;border-radius:100px;margin-bottom:22px;
+}
+.hero-badge .dot{width:7px;height:7px;background:var(--purple);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,.5)}50%{box-shadow:0 0 0 8px transparent}}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.4rem,5vw,3.6rem);font-weight:700;line-height:1.12;letter-spacing:-.03em;margin-bottom:18px;
+}
+.hero h1 .gradient{
+  background:linear-gradient(135deg,var(--purple-light),var(--cyan),var(--emerald));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{font-size:1.08rem;color:var(--muted);max-width:520px;margin-bottom:28px;line-height:1.7}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:32px}
+.hero-tagline{
+  font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--purple-light);
+  border-left:3px solid var(--purple);padding-left:16px;opacity:.9;
+}
+.hero-visual{position:relative}
+.hero-card{
+  background:linear-gradient(160deg,rgba(26,29,42,.9),rgba(18,20,28,.95));
+  border:1px solid var(--border);border-radius:24px;padding:24px;backdrop-filter:blur(20px);
+  box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 1px rgba(139,92,246,.08);
+  position:relative;overflow:hidden;
+}
+.hero-card::before{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:conic-gradient(from 0deg,transparent,rgba(139,92,246,.06),transparent 40%);
+  animation:spin 20s linear infinite;pointer-events:none;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-card-img{
+  height:180px;border-radius:16px;background-size:cover;background-position:center;
+  margin-bottom:16px;position:relative;overflow:hidden;
+}
+.hero-card-img .overlay{
+  position:absolute;inset:0;background:linear-gradient(to top,rgba(10,11,16,.8),transparent 50%);
+}
+.metric-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative;z-index:1}
+.metric{
+  background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:12px 14px;
+  transition:.3s;
+}
+.metric:hover{border-color:rgba(139,92,246,.3);background:rgba(139,92,246,.06)}
+.metric .label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.metric .val{font-size:1.25rem;font-weight:800;color:var(--purple-light);margin-top:2px}
+
+/* Sections */
+section{padding:60px 0;position:relative;z-index:1}
+.section-label{
+  display:inline-block;font-size:.72rem;font-weight:700;color:var(--purple);
+  text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;
+  background:var(--purple-dim);padding:6px 14px;border-radius:100px;border:1px solid rgba(139,92,246,.2);
+}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin-bottom:12px;
+}
+.section-sub{font-size:1.02rem;color:var(--muted);max-width:560px;margin-bottom:40px;line-height:1.7}
+.text-center{text-align:center}
+.text-center .section-sub{margin-left:auto;margin-right:auto}
+
+/* Cards */
+.card{
+  background:linear-gradient(160deg,rgba(26,29,42,.85),rgba(18,20,28,.9));
+  border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;
+  transition:.4s;
+}
+.card:hover{border-color:rgba(139,92,246,.2);box-shadow:0 10px 40px rgba(0,0,0,.3)}
+
+/* ===== DAY CARDS ===== */
+.day-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.day-card{
+  background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;
+  transition:.4s;position:relative;overflow:hidden;
+  cursor:pointer;
+}
+.day-card:hover{border-color:rgba(139,92,246,.3);transform:translateY(-4px);box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.day-card .day-number{
+  font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;
+  background:linear-gradient(135deg,var(--purple-light),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  display:inline-block;
+}
+.day-card .day-title{font-size:1.05rem;font-weight:700;color:#fff;margin:2px 0 4px}
+.day-card .day-desc{font-size:.85rem;color:var(--muted);line-height:1.5}
+.day-card .day-status{display:inline-block;margin-top:10px;padding:3px 14px;border-radius:50px;font-size:.7rem;font-weight:600}
+.day-card .day-status.pending{background:var(--amber-dim);color:var(--amber)}
+.day-card .day-status.in-progress{background:var(--cyan-dim);color:var(--cyan)}
+.day-card .day-status.done{background:var(--emerald-dim);color:var(--emerald)}
+.day-card .day-status.locked{background:var(--glass);color:var(--muted)}
+.day-card .day-check{position:absolute;top:14px;right:14px;font-size:1.3rem;opacity:.3}
+.day-card .day-check.done{opacity:1;color:var(--emerald)}
+.day-card .day-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.day-card .day-actions .btn{font-size:.75rem;padding:4px 14px}
+
+/* Completed count */
+.progress-wrapper{background:var(--glass);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 20px;margin-bottom:24px}
+.progress-bar-bg{width:100%;height:8px;background:var(--glass);border-radius:8px;overflow:hidden;margin-top:8px}
+.progress-bar-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--purple),var(--cyan));transition:width .6s ease;width:0%}
+.progress-text{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted)}
+.progress-text .count{font-weight:700;color:#fff}
+
+/* CTA band */
+.cta-band{
+  background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(16,185,129,.08));
+  border:1px solid rgba(139,92,246,.25);border-radius:28px;padding:48px 40px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-band::before{
+  content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);
+  animation:shimmer 4s infinite;
+}
+@keyframes shimmer{100%{left:150%}}
+.cta-band h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:12px}
+.cta-band p{color:var(--muted);max-width:480px;margin:0 auto 24px}
+
+/* Modal */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
+  z-index:200;display:none;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--ink-2);border:1px solid var(--border);border-radius:24px;
+  max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:32px;
+  box-shadow:0 40px 100px rgba(0,0,0,.6);animation:modalIn .4s ease;position:relative;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+.modal h2{font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:4px}
+.modal .sub{color:var(--muted);font-size:.85rem;margin-bottom:20px}
+.modal-close{
+  position:absolute;top:16px;right:16px;background:var(--glass);border:1px solid var(--border);
+  width:36px;height:36px;border-radius:50%;color:var(--muted);cursor:pointer;font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.modal .day-detail-icon{font-size:2.4rem;text-align:center;margin-bottom:6px}
+.modal .day-detail-list{list-style:none;padding:0;margin:12px 0}
+.modal .day-detail-list li{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.9rem;color:var(--text-secondary);display:flex;align-items:center;gap:10px}
+.modal .day-detail-list li i{color:var(--cyan);width:18px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid .full{grid-column:1/-1}
+.form-group label{display:block;font-size:.75rem;font-weight:600;color:var(--muted);margin-bottom:4px}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--glass);color:var(--text);font-family:inherit;font-size:.88rem;outline:none;transition:.25s;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  border-color:var(--purple);box-shadow:0 0 0 3px rgba(139,92,246,.15);
+}
+.form-group select option{background:var(--ink-2)}
+
+/* Toast */
+.toast-box{position:fixed;bottom:24px;right:24px;z-index:300}
+.toast{
+  background:var(--ink-3);border:1px solid rgba(139,92,246,.3);border-left:3px solid var(--purple);
+  border-radius:12px;padding:14px 18px;min-width:240px;font-size:.9rem;
+  box-shadow:0 12px 40px rgba(0,0,0,.4);animation:slideIn .35s ease;margin-top:8px;
+}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:none;opacity:1}}
+
+/* Footer */
+footer{
+  border-top:1px solid var(--border);padding:32px 0 24px;position:relative;z-index:1;
+  text-align:center;color:var(--muted);font-size:.8rem;
+}
+footer .logo{justify-content:center;margin-bottom:10px}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:none}
+.reveal-d1{transition-delay:.1s}
+.reveal-d2{transition-delay:.2s}
+.reveal-d3{transition-delay:.3s}
+
+/* Responsive */
+@media(max-width:900px){
+  .hero-grid{grid-template-columns:1fr}
+  .day-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:var(--ink-2);padding:20px;border-bottom:1px solid var(--border)}
+}
+@media(max-width:600px){
+  .hero{padding:100px 0 40px;min-height:auto}
+  .hero h1{font-size:1.8rem}
+  .cta-band{padding:32px 20px}
+  .form-grid{grid-template-columns:1fr}
+  .form-grid .full{grid-column:1}
+  .day-card{padding:16px}
+}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+<div class="ambient">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+</div>
+
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo"><div class="logo-mark">eA</div> <span>Arrival Manager</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#checklist">Checklist</a></li>
+      <li><a href="#support">Support</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="btn btn-ghost" onclick="openModal('login')">Sign In</button>
+      <button class="btn btn-primary" onclick="document.getElementById('checklist').scrollIntoView({behavior:'smooth'})">View Checklist</button>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-badge"><span class="dot"></span> Your First 7 Days</div>
+      <h1>Arrive. Settle. <span class="gradient">Start.</span></h1>
+      <p class="hero-sub">A guided checklist for your first 7 days in a new city — from airport pickup to workplace onboarding. Everything you need, step by step.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-primary btn-lg" onclick="document.getElementById('checklist').scrollIntoView({behavior:'smooth'})">📋 View Checklist</button>
+        <button class="btn btn-ghost btn-lg" onclick="openModal('support')">🆘 Need Help?</button>
+      </div>
+      <p class="hero-tagline">Arrive prepared. Settle stress-free.</p>
+    </div>
+    <div class="hero-visual reveal">
+      <div class="hero-card">
+        <div class="hero-card-img" style="background-image:url('https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&q=80')">
+          <div class="overlay"></div>
+        </div>
+        <div class="metric-row">
+          <div class="metric"><div class="label">Days</div><div class="val">7</div></div>
+          <div class="metric"><div class="label">Tasks</div><div class="val">21</div></div>
+          <div class="metric"><div class="label">Completed</div><div class="val" id="completedCount">0</div></div>
+          <div class="metric"><div class="label">Progress</div><div class="val" id="progressPercent">0%</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKLIST -->
+<section id="checklist" style="background:rgba(18,20,28,.3);padding-top:60px;padding-bottom:60px;">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Your Journey</span>
+      <h2 class="section-title">7-Day Arrival Checklist</h2>
+      <p class="section-sub">Follow this guided checklist to settle into your new city with confidence.</p>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-wrapper reveal">
+      <div class="progress-text">
+        <span>Overall Progress</span>
+        <span class="count" id="progressCount">0 / 21 tasks</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressFill" style="width:0%;"></div>
+      </div>
+    </div>
+
+    <!-- Day Cards -->
+    <div class="day-grid reveal" id="dayGrid">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- SUPPORT -->
+<section id="support" style="padding-top:40px;padding-bottom:40px;">
+  <div class="container">
+    <div class="cta-band" style="background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(6,182,212,.08));border:1px solid rgba(139,92,246,.25);border-radius:28px;padding:40px;text-align:center;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);animation:shimmer 4s infinite;"></div>
+      <span class="section-label" style="background:var(--cyan-dim);border-color:rgba(6,182,212,.3);color:var(--cyan);">24/7 Support</span>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.4rem,2.5vw,1.8rem);margin-bottom:10px;">Need Help Along the Way?</h2>
+      <p style="color:var(--muted);max-width:480px;margin:0 auto 20px;">Our arrival support team is available 24/7 to help you with airport pickup, accommodation, SIM, banking, and more.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
+        <button class="btn btn-primary" onclick="openModal('support')"><i class="fas fa-headset"></i> Contact Support</button>
+        <button class="btn btn-ghost" onclick="showToast('📞 Emergency contact: +91 98765 43210')"><i class="fas fa-phone"></i> Emergency</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="padding-top:40px;padding-bottom:60px;">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title">Questions About Your Arrival?</h2>
+    </div>
+    <div class="faq-list reveal" style="max-width:720px;margin:0 auto;">
+      <div class="faq-item" style="border-bottom:1px solid var(--border);">
+        <button class="faq-q" onclick="toggleFaq(this)" style="width:100%;text-align:left;background:none;border:none;color:var(--text);padding:18px 0;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center;gap:12px;">
+          Who is this checklist for?
+          <span class="chev" style="transition:.3s;color:var(--purple);">▾</span>
+        </button>
+        <div class="faq-a" style="max-height:0;overflow:hidden;transition:max-height .4s ease;color:var(--muted);font-size:.92rem;">This checklist is for anyone moving to a new city — students, employees, families, and travelers. It covers everything from airport pickup to workplace orientation.</div>
+      </div>
+      <div class="faq-item" style="border-bottom:1px solid var(--border);">
+        <button class="faq-q" onclick="toggleFaq(this)" style="width:100%;text-align:left;background:none;border:none;color:var(--text);padding:18px 0;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center;gap:12px;">
+          Do I have to complete days in order?
+          <span class="chev" style="transition:.3s;color:var(--purple);">▾</span>
+        </button>
+        <div class="faq-a" style="max-height:0;overflow:hidden;transition:max-height .4s ease;color:var(--muted);font-size:.92rem;">While the checklist is designed to be followed sequentially, you can complete tasks in any order that works for you. However, we recommend following the sequence for a smooth transition.</div>
+      </div>
+      <div class="faq-item" style="border-bottom:1px solid var(--border);">
+        <button class="faq-q" onclick="toggleFaq(this)" style="width:100%;text-align:left;background:none;border:none;color:var(--text);padding:18px 0;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center;gap:12px;">
+          What if I need help with a specific task?
+          <span class="chev" style="transition:.3s;color:var(--purple);">▾</span>
+        </button>
+        <div class="faq-a" style="max-height:0;overflow:hidden;transition:max-height .4s ease;color:var(--muted);font-size:.92rem;">You can contact our arrival support team 24/7. Click "Contact Support" on this page or call our emergency helpline.</div>
+      </div>
+      <div class="faq-item" style="border-bottom:1px solid var(--border);">
+        <button class="faq-q" onclick="toggleFaq(this)" style="width:100%;text-align:left;background:none;border:none;color:var(--text);padding:18px 0;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center;gap:12px;">
+          Is this service available internationally?
+          <span class="chev" style="transition:.3s;color:var(--purple);">▾</span>
+        </button>
+        <div class="faq-a" style="max-height:0;overflow:hidden;transition:max-height .4s ease;color:var(--muted);font-size:.92rem;">Yes. ePay Arrival Manager supports arrivals in India, UAE, UK, USA, Canada, Australia, Singapore, and more. Check with your destination.</div>
+      </div>
+      <div class="faq-item" style="border-bottom:1px solid var(--border);">
+        <button class="faq-q" onclick="toggleFaq(this)" style="width:100%;text-align:left;background:none;border:none;color:var(--text);padding:18px 0;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center;gap:12px;">
+          Can I reschedule tasks?
+          <span class="chev" style="transition:.3s;color:var(--purple);">▾</span>
+        </button>
+        <div class="faq-a" style="max-height:0;overflow:hidden;transition:max-height .4s ease;color:var(--muted);font-size:.92rem;">Yes. You can mark tasks as complete at your own pace. The checklist is flexible and adapts to your schedule.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="text-center" style="padding-bottom:80px;">
+  <div class="container reveal">
+    <h2 class="section-title" style="font-size:clamp(1.8rem,3.5vw,2.6rem);">Ready to Arrive?</h2>
+    <p class="section-sub">Your first 7 days, simplified. Start your journey with confidence.</p>
+    <button class="btn btn-primary btn-lg" onclick="document.getElementById('checklist').scrollIntoView({behavior:'smooth'})">📋 View Checklist</button>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo" style="margin-bottom:10px;justify-content:center;"><div class="logo-mark">eA</div> <span>ePay Arrival Manager</span></div>
+    <p>© 2026 ePay Arrival Manager · Your First 7 Days</p>
+    <p style="font-size:.65rem;margin-top:6px;color:var(--muted);">Guided checklist for a stress-free arrival.</p>
+  </div>
+</footer>
+
+<!-- MODALS -->
+
+<!-- DAY DETAIL MODAL -->
+<div class="modal-overlay" id="modal-day">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('day')">×</button>
+    <div id="dayModalContent">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- SUPPORT MODAL -->
+<div class="modal-overlay" id="modal-support">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('support')">×</button>
+    <h2>Contact Arrival Support</h2>
+    <p class="sub">We're here to help you settle in. Reach out anytime.</p>
+    <form onsubmit="return submitSupport(event)">
+      <div class="form-grid">
+        <div class="form-group full"><label>Full Name *</label><input name="name" required placeholder="Your name" /></div>
+        <div class="form-group"><label>Mobile *</label><input name="mobile" required type="tel" placeholder="10-digit" /></div>
+        <div class="form-group"><label>Email</label><input name="email" type="email" placeholder="you@email.com" /></div>
+        <div class="form-group full"><label>Category</label>
+          <select name="category">
+            <option value="airport">Airport Pickup</option>
+            <option value="accommodation">Accommodation</option>
+            <option value="sim">SIM / Connectivity</option>
+            <option value="banking">Banking</option>
+            <option value="registration">Local Registration</option>
+            <option value="workplace">Workplace Orientation</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group full"><label>Message *</label><textarea name="message" required rows="3" placeholder="How can we help you?"></textarea></div>
+        <div class="form-group full"><button type="submit" class="btn btn-primary btn-lg" style="width:100%"><i class="fas fa-paper-plane"></i> Send Request</button></div>
+      </div>
+      <div style="font-size:.7rem;color:var(--muted);background:var(--glass);border-radius:var(--radius-sm);padding:10px;margin-top:8px;border:1px solid var(--border);">
+        <i class="fas fa-clock" style="color:var(--cyan);margin-right:4px;"></i> Response within 30 minutes · 24/7 support
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('login')">×</button>
+    <h2>Sign In</h2>
+    <p class="sub">Track your arrival progress across devices.</p>
+    <form onsubmit="return submitLogin(event)">
+      <div class="form-grid">
+        <div class="form-group full"><label>Email</label><input name="email" required type="email" placeholder="you@email.com" /></div>
+        <div class="form-group full"><label>Password</label><input name="pass" type="password" required /></div>
+        <div class="form-group full"><button type="submit" class="btn btn-primary btn-lg" style="width:100%">Sign In</button></div>
+        <div class="form-group full text-center" style="font-size:.8rem;color:var(--muted);">Don't have an account? <a href="#" onclick="closeModal('login');openModal('support');return false" style="color:var(--purple-light);">Contact support</a></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-box" id="toasts"></div>
+
+<script>
+// ============================================================
+// DAY DATA
+// ============================================================
+const days = [
+  {
+    day: 1,
+    title: 'Airport Pickup',
+    icon: '✈️',
+    desc: 'Arrive at the airport, meet your driver, and transfer to your accommodation.',
+    tasks: ['Flight tracking', 'Driver assigned', 'Meet & greet', 'Transfer to accommodation'],
+    tips: ['Share your flight details in advance.', 'Keep your phone charged and accessible.'],
+    status: 'pending' // pending | in-progress | done
+  },
+  {
+    day: 2,
+    title: 'Accommodation',
+    icon: '🏠',
+    desc: 'Check into your accommodation, settle in, and get oriented with the neighborhood.',
+    tasks: ['Check-in', 'Key handover', 'Wi-Fi setup', 'Neighborhood orientation'],
+    tips: ['Take photos of the property for your records.', 'Save emergency contacts.'],
+    status: 'pending'
+  },
+  {
+    day: 3,
+    title: 'SIM / Connectivity',
+    icon: '📱',
+    desc: 'Get a local SIM card, set up mobile data, and ensure you stay connected.',
+    tasks: ['SIM card purchase', 'Data plan activation', 'WhatsApp setup', 'Local numbers saved'],
+    tips: ['Keep your passport handy for SIM registration.', 'Compare data plans before buying.'],
+    status: 'pending'
+  },
+  {
+    day: 4,
+    title: 'Local Registration',
+    icon: '📋',
+    desc: 'Complete local registration, FRRO/FRRO formalities (if applicable), and identity verification.',
+    tasks: ['Registration form', 'Document submission', 'FRRO appointment', 'Identity verification'],
+    tips: ['Carry all original documents.', 'Take multiple photocopies.'],
+    status: 'pending'
+  },
+  {
+    day: 5,
+    title: 'Banking Assistance',
+    icon: '🏦',
+    desc: 'Open a local bank account, set up internet banking, and understand local payment systems.',
+    tasks: ['Bank account opening', 'Debit/credit card', 'Internet banking', 'UPI / local payment setup'],
+    tips: ['Check if your employer has a preferred bank.', 'Keep your visa and address proof ready.'],
+    status: 'pending'
+  },
+  {
+    day: 6,
+    title: 'Workplace Orientation',
+    icon: '💼',
+    desc: 'Visit your workplace, meet your team, and understand your role and environment.',
+    tasks: ['Office visit', 'Team introduction', 'Role briefing', 'Workplace policies'],
+    tips: ['Arrive 15 minutes early.', 'Prepare a list of questions.'],
+    status: 'pending'
+  },
+  {
+    day: 7,
+    title: 'Final Onboarding',
+    icon: '🎯',
+    desc: 'Complete final onboarding formalities, get your ID card, and confirm all tasks are done.',
+    tasks: ['ID card / badge', 'IT setup', 'HR formalities', 'First day confirmation'],
+    tips: ['Review all completed tasks.', 'Reach out to HR for any pending items.'],
+    status: 'pending'
+  }
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let completedTasks = JSON.parse(localStorage.getItem('arrivalTasks')) || {};
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderDays() {
+  const grid = document.getElementById('dayGrid');
+  let totalTasks = 0;
+  let doneTasks = 0;
+
+  grid.innerHTML = days.map((d, idx) => {
+    // Count tasks for this day
+    const taskCount = d.tasks.length;
+    const doneCount = d.tasks.filter(t => completedTasks[t] === true).length;
+    totalTasks += taskCount;
+    doneTasks += doneCount;
+
+    // Determine status
+    let status = 'pending';
+    if (doneCount === taskCount && taskCount > 0) status = 'done';
+    else if (doneCount > 0) status = 'in-progress';
+
+    const statusLabels = {
+      pending: 'Not Started',
+      'in-progress': 'In Progress',
+      done: '✅ Completed'
+    };
+    const statusClasses = {
+      pending: 'pending',
+      'in-progress': 'in-progress',
+      done: 'done'
+    };
+    const checkIcon = doneCount === taskCount && taskCount > 0 ? '✅' : '⏳';
+
+    return `
+      <div class="day-card" onclick="openDay(${idx})">
+        <div class="day-number">Day ${d.day}</div>
+        <div class="day-title">${d.icon} ${d.title}</div>
+        <div class="day-desc">${d.desc}</div>
+        <div style="font-size:.7rem;color:var(--muted);margin-top:6px;">
+          ${doneCount}/${taskCount} tasks complete
+        </div>
+        <div class="day-status ${statusClasses[status]}">${statusLabels[status]}</div>
+        <div class="day-check ${status === 'done' ? 'done' : ''}">${checkIcon}</div>
+        <div class="day-actions" onclick="event.stopPropagation();">
+          <button class="btn btn-sm ${status === 'done' ? 'btn-ghost' : 'btn-success'}" onclick="toggleDay(${idx})">
+            ${status === 'done' ? '↻ Reset' : '✓ Complete All'}
+          </button>
+          <button class="btn btn-sm btn-ghost" onclick="openDay(${idx})">Details</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Update progress
+  updateProgress(totalTasks, doneTasks);
+}
+
+function updateProgress(total, done) {
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  document.getElementById('completedCount').textContent = done;
+  document.getElementById('progressPercent').textContent = pct + '%';
+  document.getElementById('progressCount').textContent = `${done} / ${total} tasks`;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// ============================================================
+// DAY MODAL
+// ============================================================
+function openDay(idx) {
+  const d = days[idx];
+  const modal = document.getElementById('modal-day');
+  const content = document.getElementById('dayModalContent');
+
+  const taskCount = d.tasks.length;
+  const doneCount = d.tasks.filter(t => completedTasks[t] === true).length;
+
+  const tasksHtml = d.tasks.map(t => {
+    const isDone = completedTasks[t] === true;
+    return `
+      <li style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);">
+        <span style="display:flex;align-items:center;gap:10px;">
+          <span style="color:${isDone ? 'var(--emerald)' : 'var(--muted)'};">${isDone ? '✅' : '⬜'}</span>
+          ${t}
+        </span>
+        <button class="btn btn-sm ${isDone ? 'btn-ghost' : 'btn-success'}" onclick="toggleTask('${t}', ${idx})" style="font-size:.65rem;padding:2px 12px;">
+          ${isDone ? 'Undo' : 'Done'}
+        </button>
+      </li>
+    `;
+  }).join('');
+
+  content.innerHTML = `
+    <div style="text-align:center;margin-bottom:4px;">
+      <div style="font-size:2.4rem;">${d.icon}</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.4rem;margin:4px 0;">Day ${d.day}: ${d.title}</h2>
+      <p style="color:var(--muted);font-size:.9rem;">${d.desc}</p>
+      <div style="margin-top:6px;font-size:.8rem;color:var(--muted);">
+        ${doneCount}/${taskCount} tasks complete
+        <span style="display:inline-block;margin-left:8px;padding:2px 12px;border-radius:50px;font-size:.7rem;font-weight:600;background:${doneCount === taskCount ? 'var(--emerald-dim)' : 'var(--cyan-dim)'};color:${doneCount === taskCount ? 'var(--emerald)' : 'var(--cyan)'};">
+          ${doneCount === taskCount ? '✅ Complete' : 'In Progress'}
+        </span>
+      </div>
+    </div>
+
+    <h4 style="font-size:.9rem;font-weight:600;color:var(--text);margin:12px 0 6px;">Tasks</h4>
+    <ul style="list-style:none;padding:0;">${tasksHtml}</ul>
+
+    <h4 style="font-size:.9rem;font-weight:600;color:var(--text);margin:12px 0 6px;">💡 Tips</h4>
+    <ul style="list-style:none;padding:0;">
+      ${d.tips.map(t => `<li style="padding:4px 0;font-size:.85rem;color:var(--muted);">• ${t}</li>`).join('')}
+    </ul>
+
+    <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-sm btn-success" onclick="toggleDay(${idx}); closeModal('day');">${doneCount === taskCount ? '↻ Reset All' : '✓ Complete All'}</button>
+      <button class="btn btn-sm btn-ghost" onclick="closeModal('day')">Close</button>
+    </div>
+  `;
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+// ============================================================
+// TASK TOGGLES
+// ============================================================
+function toggleTask(taskName, dayIdx) {
+  completedTasks[taskName] = !completedTasks[taskName];
+  localStorage.setItem('arrivalTasks', JSON.stringify(completedTasks));
+  // Re-render the modal content if it's open
+  const modal = document.getElementById('modal-day');
+  if (modal.classList.contains('open')) {
+    openDay(dayIdx);
+  }
+  renderDays();
+  showToast(completedTasks[taskName] ? '✅ Task completed!' : '↻ Task undone');
+}
+
+function toggleDay(dayIdx) {
+  const d = days[dayIdx];
+  const allDone = d.tasks.every(t => completedTasks[t] === true);
+  d.tasks.forEach(t => {
+    completedTasks[t] = !allDone;
+  });
+  localStorage.setItem('arrivalTasks', JSON.stringify(completedTasks));
+  renderDays();
+  showToast(allDone ? '↻ All tasks reset' : '✅ All tasks completed for this day!');
+  // Close modal if open
+  const modal = document.getElementById('modal-day');
+  if (modal.classList.contains('open')) {
+    openDay(dayIdx);
+  }
+}
+
+// ============================================================
+// TOAST & HELPERS
+// ============================================================
+function toast(msg) {
+  const box = document.getElementById('toasts');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  box.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = '.3s'; setTimeout(() => t.remove(), 300); }, 3000);
+}
+window.showToast = toast;
+
+function openModal(id) {
+  document.getElementById('modal-' + id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+  document.getElementById('modal-' + id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', function(e) { if (e.target === this) { this.classList.remove('open'); document.body.style.overflow = ''; } });
+});
+
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const open = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!open) item.classList.add('open');
+  const answer = item.querySelector('.faq-a');
+  const chev = btn.querySelector('.chev');
+  if (!open) {
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+    chev.style.transform = 'rotate(180deg)';
+    item.classList.add('open');
+  } else {
+    answer.style.maxHeight = '0';
+    chev.style.transform = 'rotate(0)';
+    item.classList.remove('open');
+  }
+}
+
+// ============================================================
+// FORM SUBMISSIONS
+// ============================================================
+function submitSupport(e) {
+  e.preventDefault();
+  closeModal('support');
+  toast('✅ Support request sent! We will contact you within 30 minutes.');
+  return false;
+}
+
+function submitLogin(e) {
+  e.preventDefault();
+  closeModal('login');
+  toast('Signed in successfully');
+  return false;
+}
+
+// ============================================================
+// NAV
+// ============================================================
+window.addEventListener('scroll', function() {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+document.getElementById('mobileToggle').addEventListener('click', function() {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// ============================================================
+// REVEAL
+// ============================================================
+const obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(en) { if (en.isIntersecting) { en.target.classList.add('visible'); obs.unobserve(en.target); } });
+}, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+
+// ============================================================
+// ESCAPE
+// ============================================================
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { ['day', 'support', 'login'].forEach(closeModal); } });
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+  renderDays();
+});
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

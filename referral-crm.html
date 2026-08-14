@@ -1,0 +1,1002 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Referral Management — CRM</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+<style>
+
+
+
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg-primary:#0b0e17;--bg-secondary:#111827;--bg-card:rgba(17,24,39,.85);
+  --bg-glass:rgba(255,255,255,.04);--border-glass:rgba(255,255,255,.07);
+  --text-primary:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;
+  --accent-blue:#3b82f6;--accent-cyan:#06b6d4;--accent-purple:#8b5cf6;
+  --accent-green:#22c55e;--accent-amber:#f59e0b;--accent-red:#ef4444;
+  --accent-pink:#ec4899;--accent-indigo:#6366f1;--accent-teal:#14b8a6;
+  --shadow-card:0 8px 32px rgba(0,0,0,.45);--radius:16px;--radius-sm:10px;--transition:.25s ease;
+}
+html{font-size:14px;scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg-primary);color:var(--text-primary);display:flex;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg-secondary)}
+::-webkit-scrollbar-thumb{background:var(--accent-purple);border-radius:8px}
+.sidebar{width:72px;min-height:100vh;background:var(--bg-secondary);border-right:1px solid var(--border-glass);display:flex;flex-direction:column;align-items:center;padding:20px 0 24px;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0;z-index:100;transition:width .3s ease}
+.sidebar:hover{width:260px}
+.sidebar .logo{font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--accent-purple),var(--accent-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:24px;white-space:nowrap;overflow:hidden;display:flex;align-items:center;gap:10px;padding:0 12px}
+.sidebar .logo i{-webkit-text-fill-color:var(--accent-cyan);font-size:22px}
+.sidebar .logo span{opacity:0;transition:opacity .3s;font-size:14px}
+.sidebar:hover .logo span{opacity:1}
+.sidebar nav{display:flex;flex-direction:column;gap:2px;width:100%;padding:0 8px;flex:1}
+.sidebar nav .nav-label{font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);padding:12px 12px 6px;opacity:0;transition:opacity .3s;font-weight:600}
+.sidebar:hover nav .nav-label{opacity:1}
+.sidebar nav a{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:var(--radius-sm);color:var(--text-secondary);text-decoration:none;font-weight:500;font-size:13px;white-space:nowrap;overflow:hidden;transition:all var(--transition);cursor:pointer}
+.sidebar nav a i{font-size:16px;width:24px;text-align:center;flex-shrink:0}
+.sidebar nav a span.label{opacity:0;transition:opacity .3s}
+.sidebar:hover nav a span.label{opacity:1}
+.sidebar nav a:hover{background:var(--bg-glass);color:var(--text-primary)}
+.sidebar nav a.active{background:rgba(139,92,246,.15);color:var(--accent-purple);border-left:3px solid var(--accent-purple)}
+.sidebar nav a .badge-nav{margin-left:auto;font-size:10px;background:var(--accent-red);color:#fff;padding:1px 7px;border-radius:50px;opacity:0;transition:opacity .3s}
+.sidebar:hover nav a .badge-nav{opacity:1}
+.sidebar .bottom{margin-top:auto;padding:16px 10px 0;border-top:1px solid var(--border-glass);width:100%;display:flex;flex-direction:column;align-items:center;gap:4px}
+.sidebar .bottom .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent-purple),var(--accent-cyan));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:#fff}
+.sidebar .bottom .user-name,.sidebar .bottom .user-role{opacity:0;transition:opacity .3s;white-space:nowrap;font-size:12px}
+.sidebar .bottom .user-role{font-size:10px;color:var(--text-muted)}
+.sidebar:hover .bottom .user-name,.sidebar:hover .bottom .user-role{opacity:1}
+.main{flex:1;padding:24px 28px 50px;max-width:100%;overflow-x:hidden}
+.page-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:22px}
+.page-header h1{font-size:24px;font-weight:700;letter-spacing:-.4px;background:linear-gradient(135deg,#fff,var(--text-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-header .sub{font-size:13px;color:var(--text-secondary);margin-top:4px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.page-header .sub i{color:var(--accent-cyan);margin-right:3px}
+.header-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.date-badge{background:var(--bg-glass);padding:7px 14px;border-radius:50px;border:1px solid var(--border-glass);font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:6px}
+.btn{padding:8px 16px;border-radius:50px;border:1px solid var(--border-glass);font-weight:600;font-size:12px;cursor:pointer;transition:all var(--transition);display:inline-flex;align-items:center;gap:6px;background:var(--bg-glass);color:var(--text-primary)}
+.btn-primary{background:linear-gradient(135deg,var(--accent-purple),var(--accent-cyan));color:#fff;border:none}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(139,92,246,.3)}
+.btn-success{background:linear-gradient(135deg,var(--accent-green),var(--accent-teal));color:#fff;border:none}
+.btn-danger{background:linear-gradient(135deg,var(--accent-red),#dc2626);color:#fff;border:none}
+.btn-sm{padding:4px 11px;font-size:11px}
+.view{display:none;animation:fadeUp .35s ease both}
+.view.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:22px}
+.kpi-card{background:var(--bg-card);backdrop-filter:blur(12px);border:1px solid var(--border-glass);border-radius:var(--radius);padding:14px 16px;transition:all var(--transition);cursor:pointer}
+.kpi-card:hover{transform:translateY(-3px);border-color:rgba(139,92,246,.25);box-shadow:var(--shadow-card)}
+.kpi-card .label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);display:flex;align-items:center;gap:5px;margin-bottom:5px}
+.kpi-card .label i{font-size:12px;color:var(--accent-cyan)}
+.kpi-card .value{font-size:20px;font-weight:700;color:#fff}
+.kpi-card .change{font-size:10px;font-weight:600;margin-top:4px;display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:50px}
+.change.up{color:var(--accent-green);background:rgba(34,197,94,.12)}
+.change.down{color:var(--accent-red);background:rgba(239,68,68,.12)}
+.change.neutral{color:var(--accent-amber);background:rgba(245,158,11,.12)}
+.row{display:grid;gap:16px;margin-bottom:20px}
+.row-2{grid-template-columns:1fr 1fr}
+.row-3{grid-template-columns:1fr 1fr 1fr}
+.row-2-1{grid-template-columns:2fr 1fr}
+@media(max-width:900px){.row-2,.row-3,.row-2-1{grid-template-columns:1fr}}
+.card{background:var(--bg-card);backdrop-filter:blur(12px);border:1px solid var(--border-glass);border-radius:var(--radius);padding:18px 20px}
+.card .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.card .card-header h3{font-size:14px;font-weight:600}
+.card .card-header .badge{font-size:10px;font-weight:600;padding:3px 12px;border-radius:50px;background:var(--bg-glass);color:var(--text-secondary);border:1px solid var(--border-glass)}
+.status-badge{display:inline-block;padding:3px 10px;border-radius:50px;font-size:10px;font-weight:600;text-transform:uppercase}
+.status-badge.green{background:rgba(34,197,94,.15);color:var(--accent-green)}
+.status-badge.amber{background:rgba(245,158,11,.15);color:var(--accent-amber)}
+.status-badge.red{background:rgba(239,68,68,.15);color:var(--accent-red)}
+.status-badge.blue{background:rgba(59,130,246,.15);color:var(--accent-blue)}
+.status-badge.purple{background:rgba(139,92,246,.15);color:var(--accent-purple)}
+.status-badge.cyan{background:rgba(6,182,212,.15);color:var(--accent-cyan)}
+.status-badge.gray{background:rgba(100,116,139,.15);color:var(--text-muted)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+table th{text-align:left;padding:9px 11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px;font-size:10px;border-bottom:1px solid var(--border-glass);background:rgba(0,0,0,.2)}
+table td{padding:9px 11px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--text-secondary);vertical-align:middle}
+table td .highlight{color:#fff;font-weight:600}
+table tr:hover td{background:rgba(255,255,255,.02)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px}
+.form-grid .full{grid-column:1/-1}
+.form-group{display:flex;flex-direction:column;gap:4px}
+.form-group label{font-size:12px;font-weight:500;color:var(--text-secondary)}
+.form-group label .required{color:var(--accent-red)}
+.form-group input,.form-group select,.form-group textarea{background:var(--bg-glass);border:1px solid var(--border-glass);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text-primary);font-size:13px;font-family:inherit;outline:none;transition:all var(--transition)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent-purple);box-shadow:0 0 0 3px rgba(139,92,246,.15)}
+.form-group select option{background:var(--bg-secondary)}
+.form-actions{display:flex;gap:10px;margin-top:16px;padding-top:14px;border-top:1px solid var(--border-glass)}
+.drill-path{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted);padding:7px 14px;background:var(--bg-glass);border-radius:50px;border:1px solid var(--border-glass);margin-bottom:18px;flex-wrap:wrap}
+.drill-path span{color:var(--text-primary);font-weight:500}
+.drill-path i{font-size:10px;color:var(--accent-cyan)}
+.glass-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:50px;background:var(--bg-glass);border:1px solid var(--border-glass);font-size:10px;color:var(--text-secondary)}
+.progress-bar{width:100%;height:5px;background:var(--bg-glass);border-radius:8px;overflow:hidden;margin-top:4px}
+.progress-bar .fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--accent-purple),var(--accent-cyan));transition:width .6s ease}
+.toast-box{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--bg-secondary);border:1px solid var(--border-glass);border-left:3px solid var(--accent-purple);border-radius:12px;padding:12px 16px;min-width:240px;font-size:13px;box-shadow:var(--shadow-card);animation:slideIn .3s ease;display:flex;align-items:center;gap:8px}
+.toast.ok{border-left-color:var(--accent-green)}
+.toast.err{border-left-color:var(--accent-red)}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+.share-card{background:var(--bg-glass);border:1px solid var(--border-glass);border-radius:var(--radius-sm);padding:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.share-card .name{font-weight:600;font-size:14px;color:#fff}
+.share-card .meta{font-size:11px;color:var(--text-muted);display:flex;gap:10px;margin-top:4px;flex-wrap:wrap}
+.share-card .price{font-size:16px;font-weight:700;color:var(--accent-cyan);margin-top:6px}
+.share-buttons{display:flex;gap:6px;flex-wrap:wrap}
+.funnel-grid{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center}
+.funnel-step{background:var(--bg-glass);border:1px solid var(--border-glass);border-radius:var(--radius-sm);padding:12px 16px;text-align:center;min-width:90px}
+.funnel-step .step-label{font-size:10px;color:var(--text-muted);text-transform:uppercase}
+.funnel-step .step-value{font-size:18px;font-weight:700;color:#fff;margin-top:4px}
+.funnel-arrow{color:var(--text-muted);font-size:12px}
+.attribution-flow{display:flex;align-items:center;gap:4px;flex-wrap:wrap;padding:12px 0}
+.attribution-step{background:var(--bg-glass);border:1px solid var(--border-glass);border-radius:8px;padding:8px 10px;text-align:center;min-width:70px}
+.attribution-step .label{font-size:9px;color:var(--text-muted);text-transform:uppercase}
+.attribution-step .value{font-size:14px;margin-top:2px}
+.attribution-step.done{border-color:rgba(34,197,94,.4)}
+.attribution-step.active{border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.08)}
+.attribution-step.pending{opacity:.5}
+.attribution-arrow{color:var(--text-muted);font-size:10px}
+.tree-node .node-card{background:var(--bg-glass);border:1px solid var(--border-glass);border-radius:var(--radius-sm);padding:12px 16px;min-width:150px;text-align:center}
+.tree-node .node-card .node-name{font-weight:600;font-size:13px;color:#fff}
+.tree-node .node-card .node-type{font-size:10px;color:var(--text-muted);text-transform:uppercase}
+.tree-node .node-card .node-amount{font-size:12px;font-weight:600;color:var(--accent-cyan);margin-top:2px}
+.filter-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;align-items:flex-end}
+.filter-bar .form-group{min-width:120px}
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:'';position:absolute;left:5px;top:0;bottom:0;width:2px;background:var(--border-glass)}
+.timeline-item{position:relative;padding:8px 0 8px 16px}
+.timeline-item::before{content:'';position:absolute;left:-22px;top:12px;width:10px;height:10px;border-radius:50%;background:var(--bg-secondary);border:2px solid var(--accent-purple)}
+.timeline-item .time{font-size:11px;color:var(--text-muted)}
+.timeline-item .title{font-weight:600;font-size:13px;color:#fff}
+.timeline-item .desc{font-size:12px;color:var(--text-secondary)}
+.dup-alert{display:none;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);border-radius:var(--radius-sm);padding:10px 14px;margin-top:8px;font-size:12px;color:var(--accent-red)}
+.dup-alert.show{display:block}
+.sub-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.sub-tabs .tab-btn{padding:6px 14px;border-radius:50px;border:1px solid var(--border-glass);background:var(--bg-glass);color:var(--text-secondary);font-size:12px;font-weight:500;cursor:pointer}
+.sub-tabs .tab-btn.active{background:rgba(139,92,246,.2);color:var(--accent-purple);border-color:var(--accent-purple)}
+.sub-view{display:none}
+.sub-view.active{display:block}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+<aside class="sidebar">
+  <div class="logo"><i class="fas fa-handshake"></i><span>Referral CRM</span></div>
+  <nav>
+    <div class="nav-label">Overview</div>
+    <a href="#" class="active" data-view="dashboard"><i class="fas fa-th-large"></i><span class="label">Dashboard</span></a>
+    <a href="#" data-view="my-referrals"><i class="fas fa-list"></i><span class="label">My Referrals</span><span class="badge-nav" id="badgeRefs">24</span></a>
+    <div class="nav-label">Create</div>
+    <a href="#" data-view="refer-employee"><i class="fas fa-user-plus"></i><span class="label">Refer Employee</span></a>
+    <a href="#" data-view="refer-gallery"><i class="fas fa-store"></i><span class="label">Refer a Gallery</span></a>
+    <a href="#" data-view="refer-epay"><i class="fas fa-credit-card"></i><span class="label">Refer ePay</span></a>
+    <a href="#" data-view="service-sharing"><i class="fas fa-share-alt"></i><span class="label">Service Sharing</span></a>
+    <div class="nav-label">Track</div>
+    <a href="#" data-view="referral-tree"><i class="fas fa-sitemap"></i><span class="label">Referral Tree</span></a>
+    <a href="#" data-view="referral-attribution"><i class="fas fa-project-diagram"></i><span class="label">Attribution</span></a>
+    <a href="#" data-view="activities"><i class="fas fa-clock"></i><span class="label">Activities</span></a>
+    <a href="#" data-view="followups"><i class="fas fa-calendar-check"></i><span class="label">Follow-ups</span><span class="badge-nav">5</span></a>
+    <div class="nav-label">Insights</div>
+    <a href="#" data-view="reports"><i class="fas fa-chart-bar"></i><span class="label">Referral Reports</span></a>
+    <a href="#" data-view="affiliate-reports"><i class="fas fa-file-alt"></i><span class="label">Affiliate Reports</span></a>
+    <a href="#" data-view="leaderboard"><i class="fas fa-trophy"></i><span class="label">Leaderboard</span></a>
+    <a href="#" data-view="management"><i class="fas fa-users-cog"></i><span class="label">Management</span></a>
+    <a href="#" data-view="audit"><i class="fas fa-history"></i><span class="label">Audit Log</span></a>
+  </nav>
+  <div class="bottom">
+    <div class="avatar">RK</div>
+    <div class="user-name">Rajesh Kumar</div>
+    <div class="user-role">BDE · EMP-0042</div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="page-header">
+    <div>
+      <h1 id="pageTitle">Dashboard</h1>
+      <div class="sub">
+        <span><i class="fas fa-user"></i> Rajesh Kumar · BDE</span>
+        <span><i class="fas fa-calendar-alt"></i> FY 2025–26 · Q2</span>
+        <span><i class="fas fa-handshake"></i> Network: <span id="netCount">42</span></span>
+        <span class="glass-tag"><i class="fas fa-circle" style="color:var(--accent-green);font-size:7px"></i> Active</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="date-badge"><i class="far fa-calendar"></i> <span id="todayDate">Aug 12, 2026</span></div>
+      <button class="btn btn-primary" onclick="refreshData()"><i class="fas fa-sync-alt"></i> Refresh</button>
+    </div>
+  </div>
+
+  <div class="drill-path"><i class="fas fa-home"></i> Referral Management <i class="fas fa-chevron-right"></i> <span id="drillCurrent">Dashboard</span></div>
+
+  <!-- DASHBOARD -->
+  <div class="view active" id="view-dashboard">
+    <div class="kpi-grid" id="dashKpis">
+      <div class="kpi-card" onclick="navigateTo('my-referrals')"><div class="label"><i class="fas fa-users"></i> Total Referrals</div><div class="value" id="kTotal">24</div><div class="change up">+4 this month</div></div>
+      <div class="kpi-card"><div class="label"><i class="fas fa-check-circle"></i> Converted</div><div class="value" id="kConv">11</div><div class="change up">45.8%</div></div>
+      <div class="kpi-card"><div class="label"><i class="fas fa-rupee-sign"></i> Referral GMV</div><div class="value" id="kGmv">₹48.2L</div><div class="change up">+18%</div></div>
+      <div class="kpi-card"><div class="label"><i class="fas fa-coins"></i> Commission Earned</div><div class="value" id="kComm">₹2.14L</div><div class="change up">Paid ₹1.6L</div></div>
+      <div class="kpi-card"><div class="label"><i class="fas fa-hourglass-half"></i> Pending</div><div class="value">7</div><div class="change neutral">In pipeline</div></div>
+      <div class="kpi-card"><div class="label"><i class="fas fa-times-circle"></i> Lost</div><div class="value">6</div><div class="change down">25%</div></div>
+      <div class="kpi-card" onclick="navigateTo('followups')"><div class="label"><i class="fas fa-phone"></i> Follow-ups Due</div><div class="value">5</div><div class="change down">2 overdue</div></div>
+      <div class="kpi-card"><div class="label"><i class="fas fa-star"></i> Quality Score</div><div class="value">91%</div><div class="change up">+3 pts</div></div>
+    </div>
+    <div class="row row-2-1">
+      <div class="card">
+        <div class="card-header"><h3><i class="fas fa-stream" style="color:var(--accent-cyan);margin-right:6px"></i>Recent Referrals</h3><span class="action-link" style="cursor:pointer;color:var(--accent-purple);font-size:12px" onclick="navigateTo('my-referrals')">View all</span></div>
+        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Type</th><th>Status</th><th>Value</th><th>Date</th></tr></thead>
+        <tbody id="recentTable"></tbody></table></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Pipeline</h3></div>
+        <div id="pipelineBars"></div>
+      </div>
+    </div>
+    <div class="row row-2">
+      <div class="card">
+        <div class="card-header"><h3>Activity Timeline</h3></div>
+        <div class="timeline" id="dashTimeline"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Commission Snapshot</h3></div>
+        <div class="table-wrap"><table><thead><tr><th>Month</th><th>Earned</th><th>Paid</th><th>Pending</th></tr></thead>
+        <tbody>
+          <tr><td>Aug 2026</td><td class="highlight">₹42,000</td><td>₹18,000</td><td>₹24,000</td></tr>
+          <tr><td>Jul 2026</td><td>₹58,000</td><td>₹58,000</td><td>₹0</td></tr>
+          <tr><td>Jun 2026</td><td>₹36,000</td><td>₹36,000</td><td>₹0</td></tr>
+        </tbody></table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MY REFERRALS -->
+  <div class="view" id="view-my-referrals">
+    <div class="filter-bar">
+      <div class="form-group"><label>Status</label><select id="refStatusFilter" onchange="renderReferrals()"><option value="">All</option><option>New</option><option>Contacted</option><option>In Progress</option><option>Converted</option><option>Lost</option></select></div>
+      <div class="form-group"><label>Type</label><select id="refTypeFilter" onchange="renderReferrals()"><option value="">All</option><option>Employee</option><option>Gallery</option><option>ePay Customer</option><option>Travel</option></select></div>
+      <div class="form-group"><label>Search</label><input type="text" id="refSearch" placeholder="Name / ID / mobile" oninput="renderReferrals()" /></div>
+      <button class="btn btn-primary" onclick="renderReferrals()"><i class="fas fa-filter"></i> Apply</button>
+    </div>
+    <div class="card"><div class="table-wrap"><table><thead><tr>
+      <th>ID</th><th>Name</th><th>Mobile</th><th>Type</th><th>Source</th><th>Status</th><th>Expected</th><th>Commission</th><th>Created</th><th>Action</th>
+    </tr></thead><tbody id="refsTable"></tbody></table></div></div>
+  </div>
+
+  <!-- REFER EMPLOYEE -->
+  <div class="view" id="view-refer-employee">
+    <div class="card">
+      <div class="card-header"><h3><i class="fas fa-user-plus" style="color:var(--accent-purple);margin-right:6px"></i>Refer an Employee</h3><span class="badge">Joining incentive applies</span></div>
+      <form id="formEmployee" onsubmit="return submitReferral(event,'Employee')">
+        <div class="form-grid">
+          <div class="form-group"><label>Full Name <span class="required">*</span></label><input required name="name" placeholder="Candidate full name" /></div>
+          <div class="form-group"><label>Mobile <span class="required">*</span></label><input required name="mobile" type="tel" placeholder="10-digit mobile" oninput="checkDup(this.value,'emp')" /></div>
+          <div class="form-group"><label>Email</label><input name="email" type="email" placeholder="email@example.com" /></div>
+          <div class="form-group"><label>Role interested</label><select name="role"><option>Telecaller</option><option>BDE</option><option>Gallery Staff</option><option>Travel Executive</option><option>Other</option></select></div>
+          <div class="form-group"><label>City</label><input name="city" placeholder="Pune" /></div>
+          <div class="form-group"><label>Expected joining</label><input name="join" type="date" /></div>
+          <div class="form-group full"><label>Notes</label><textarea name="notes" placeholder="Background, experience..."></textarea></div>
+        </div>
+        <div class="dup-alert" id="dupEmp">⚠ Mobile already exists in system (possible duplicate).</div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Referral</button>
+          <button type="reset" class="btn">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- REFER GALLERY -->
+  <div class="view" id="view-refer-gallery">
+    <div class="card">
+      <div class="card-header"><h3><i class="fas fa-store" style="color:var(--accent-cyan);margin-right:6px"></i>Refer a Gallery Partner</h3><span class="badge">Franchise lead</span></div>
+      <form id="formGallery" onsubmit="return submitReferral(event,'Gallery')">
+        <div class="form-grid">
+          <div class="form-group"><label>Owner Name <span class="required">*</span></label><input required name="name" /></div>
+          <div class="form-group"><label>Mobile <span class="required">*</span></label><input required name="mobile" type="tel" oninput="checkDup(this.value,'gal')" /></div>
+          <div class="form-group"><label>Email</label><input name="email" type="email" /></div>
+          <div class="form-group"><label>City / Area <span class="required">*</span></label><input required name="city" /></div>
+          <div class="form-group"><label>Investment capacity</label><select name="invest"><option>₹5–10L</option><option>₹10–20L</option><option>₹20L+</option></select></div>
+          <div class="form-group"><label>Preferred model</label><select name="model"><option>Standard Gallery</option><option>Travel-focused</option><option>Mini kiosk</option></select></div>
+          <div class="form-group full"><label>Notes</label><textarea name="notes"></textarea></div>
+        </div>
+        <div class="dup-alert" id="dupGal">⚠ This mobile is already registered as a gallery lead.</div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Gallery Lead</button>
+          <button type="reset" class="btn">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- REFER EPAY -->
+  <div class="view" id="view-refer-epay">
+    <div class="card">
+      <div class="card-header"><h3><i class="fas fa-credit-card" style="color:var(--accent-green);margin-right:6px"></i>Refer ePay Customer / Travel</h3></div>
+      <form id="formEpay" onsubmit="return submitReferral(event,'ePay Customer')">
+        <div class="form-grid">
+          <div class="form-group"><label>Customer Name <span class="required">*</span></label><input required name="name" /></div>
+          <div class="form-group"><label>Mobile <span class="required">*</span></label><input required name="mobile" type="tel" /></div>
+          <div class="form-group"><label>Interest</label><select name="interest"><option>Travel package</option><option>Utility / AEPS</option><option>Insurance</option><option>Multi-service</option></select></div>
+          <div class="form-group"><label>Destination (if travel)</label><input name="dest" placeholder="Dubai / Goa / ..." /></div>
+          <div class="form-group"><label>Budget</label><input name="budget" placeholder="₹1,50,000" /></div>
+          <div class="form-group"><label>Travel date</label><input name="tdate" type="date" /></div>
+          <div class="form-group full"><label>Notes</label><textarea name="notes"></textarea></div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Create Referral Lead</button>
+          <button type="reset" class="btn">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SERVICE SHARING -->
+  <div class="view" id="view-service-sharing">
+    <div class="card">
+      <div class="card-header"><h3><i class="fas fa-share-alt" style="color:var(--accent-cyan);margin-right:6px"></i>Service Sharing</h3><span class="badge">Share & Refer</span></div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Share a package. When the customer taps <strong>“I’m Interested”</strong>, a referral lead is created with you as referrer.</p>
+      <div id="sharePackages" style="display:flex;flex-direction:column;gap:14px"></div>
+      <div style="margin-top:14px;background:var(--bg-glass);border-radius:var(--radius-sm);padding:12px;border:1px solid var(--border-glass);font-size:12px;color:var(--text-secondary)">
+        <i class="fas fa-info-circle" style="color:var(--accent-cyan)"></i> Your code: <strong style="color:#fff">EPAY-RH7842</strong> · Link prefix: https://epay.in/join?ref=EPAY-RH7842
+      </div>
+    </div>
+  </div>
+
+  <!-- REFERRAL TREE -->
+  <div class="view" id="view-referral-tree">
+    <div class="card">
+      <div class="card-header"><h3><i class="fas fa-sitemap" style="color:var(--accent-purple);margin-right:6px"></i>Your Referral Tree</h3></div>
+      <div style="display:flex;flex-direction:column;align-items:center;padding:20px 0;gap:8px" id="treeRoot">
+        <div class="tree-node"><div class="node-card"><div class="node-name">Rajesh Kumar</div><div class="node-type">You · BDE</div><div class="node-amount">24 referrals</div></div></div>
+        <div style="width:2px;height:16px;background:var(--border-glass)"></div>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center" id="treeChildren"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ATTRIBUTION -->
+  <div class="view" id="view-referral-attribution">
+    <div class="card">
+      <div class="card-header"><h3><i class="fas fa-project-diagram" style="color:var(--accent-purple);margin-right:6px"></i>Referral Attribution</h3><span class="badge">Journey</span></div>
+      <div class="form-group" style="max-width:320px;margin-bottom:16px">
+        <label>Select referral</label>
+        <select id="attrSelect" onchange="updateAttribution(this.value)"></select>
+      </div>
+      <div id="attributionFlow" class="attribution-flow"></div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text-muted)" id="attrMeta"></div>
+    </div>
+  </div>
+
+  <!-- ACTIVITIES -->
+  <div class="view" id="view-activities">
+    <div class="card">
+      <div class="card-header"><h3>All Activities</h3><button class="btn btn-sm" onclick="renderActivities()">Refresh</button></div>
+      <div class="timeline" id="allActivities"></div>
+    </div>
+  </div>
+
+  <!-- FOLLOW-UPS -->
+  <div class="view" id="view-followups">
+    <div class="card">
+      <div class="card-header"><h3><i class="fas fa-calendar-check" style="color:var(--accent-amber);margin-right:6px"></i>Follow-ups</h3>
+        <button class="btn btn-primary btn-sm" onclick="logFollowup()"><i class="fas fa-plus"></i> Log</button></div>
+      <div class="table-wrap"><table><thead><tr><th>ID</th><th>Referral</th><th>Method</th><th>Due</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody id="fuTable"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- REPORTS -->
+  <div class="view" id="view-reports">
+    <div class="sub-tabs">
+      <button class="tab-btn active" data-sub="summary" onclick="showSub(this,'summary')">Summary</button>
+      <button class="tab-btn" data-sub="by-type" onclick="showSub(this,'by-type')">By Type</button>
+      <button class="tab-btn" data-sub="by-month" onclick="showSub(this,'by-month')">By Month</button>
+    </div>
+    <div class="sub-view active" id="sub-summary">
+      <div class="card"><div class="kpi-grid">
+        <div class="kpi-card"><div class="label">Total</div><div class="value">24</div></div>
+        <div class="kpi-card"><div class="label">Converted</div><div class="value">11</div></div>
+        <div class="kpi-card"><div class="label">Conv %</div><div class="value">45.8%</div></div>
+        <div class="kpi-card"><div class="label">GMV</div><div class="value">₹48.2L</div></div>
+        <div class="kpi-card"><div class="label">Commission</div><div class="value">₹2.14L</div></div>
+        <div class="kpi-card"><div class="label">ROI</div><div class="value">280%</div></div>
+      </div></div>
+    </div>
+    <div class="sub-view" id="sub-by-type">
+      <div class="card"><div class="table-wrap"><table><thead><tr><th>Type</th><th>Count</th><th>Converted</th><th>GMV</th><th>Commission</th></tr></thead>
+      <tbody>
+        <tr><td>Employee</td><td>8</td><td>4</td><td>—</td><td>₹48k</td></tr>
+        <tr><td>Gallery</td><td>6</td><td>2</td><td>₹28L</td><td>₹84k</td></tr>
+        <tr><td>ePay / Travel</td><td>10</td><td>5</td><td>₹20.2L</td><td>₹82k</td></tr>
+      </tbody></table></div></div>
+    </div>
+    <div class="sub-view" id="sub-by-month">
+      <div class="card"><div class="table-wrap"><table><thead><tr><th>Month</th><th>Referrals</th><th>Converted</th><th>Commission</th></tr></thead>
+      <tbody>
+        <tr><td>Aug 2026</td><td>4</td><td>1</td><td>₹42k</td></tr>
+        <tr><td>Jul 2026</td><td>7</td><td>4</td><td>₹58k</td></tr>
+        <tr><td>Jun 2026</td><td>5</td><td>3</td><td>₹36k</td></tr>
+        <tr><td>May 2026</td><td>8</td><td>3</td><td>₹78k</td></tr>
+      </tbody></table></div></div>
+    </div>
+  </div>
+
+  <!-- AFFILIATE REPORTS -->
+  <div class="view" id="view-affiliate-reports">
+    <div class="card">
+      <div class="card-header"><h3><i class="fas fa-chart-line" style="color:var(--accent-purple);margin-right:6px"></i>Affiliate Reports</h3><span class="badge">Executive</span></div>
+      <h4 style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Referral Funnel</h4>
+      <div class="funnel-grid" id="funnel"></div>
+      <h4 style="font-size:13px;color:var(--text-secondary);margin:20px 0 12px">Financial</h4>
+      <div class="row row-3" style="margin:0">
+        <div class="kpi-card"><div class="label">Referral GMV</div><div class="value">₹3.42 Cr</div></div>
+        <div class="kpi-card"><div class="label">Joining Incentives</div><div class="value">₹18.6L</div></div>
+        <div class="kpi-card"><div class="label">Employee Commissions</div><div class="value">₹12.4L</div></div>
+        <div class="kpi-card"><div class="label">Pending Commission</div><div class="value">₹4.8L</div></div>
+        <div class="kpi-card"><div class="label">Paid</div><div class="value">₹7.6L</div></div>
+        <div class="kpi-card"><div class="label">Referral ROI</div><div class="value">324%</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <div class="view" id="view-leaderboard">
+    <div class="card">
+      <div class="card-header"><h3><i class="fas fa-trophy" style="color:var(--accent-amber);margin-right:6px"></i>Top Referrers</h3>
+        <select id="lbPeriod" onchange="renderLeaderboard()" style="background:var(--bg-glass);border:1px solid var(--border-glass);color:#fff;padding:4px 10px;border-radius:8px;font-size:12px">
+          <option>All Time</option><option>This Quarter</option><option>This Month</option>
+        </select>
+      </div>
+      <div class="table-wrap"><table><thead><tr><th>Rank</th><th>Referrer</th><th>Referrals</th><th>Bookings</th><th>GMV</th><th>Commission</th><th>Conv %</th><th>Quality</th></tr></thead>
+      <tbody id="lbTable"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- MANAGEMENT -->
+  <div class="view" id="view-management">
+    <div class="card">
+      <div class="card-header"><h3>Management Dashboard</h3><span class="badge">Team view</span></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="label">Team Referrals</div><div class="value">186</div></div>
+        <div class="kpi-card"><div class="label">Team GMV</div><div class="value">₹2.1 Cr</div></div>
+        <div class="kpi-card"><div class="label">Active BDEs</div><div class="value">12</div></div>
+        <div class="kpi-card"><div class="label">Avg Conv</div><div class="value">38%</div></div>
+      </div>
+      <div class="table-wrap"><table><thead><tr><th>BDE</th><th>Referrals</th><th>Converted</th><th>GMV</th><th>Commission</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td class="highlight">Rahul S.</td><td>42</td><td>28</td><td>₹1.2 Cr</td><td>₹4.8L</td><td><span class="status-badge green">Top</span></td></tr>
+        <tr><td class="highlight">Priya M.</td><td>36</td><td>22</td><td>₹84L</td><td>₹3.6L</td><td><span class="status-badge green">Active</span></td></tr>
+        <tr><td class="highlight">Rajesh K. (You)</td><td>24</td><td>11</td><td>₹48.2L</td><td>₹2.14L</td><td><span class="status-badge cyan">Active</span></td></tr>
+        <tr><td class="highlight">Amit V.</td><td>31</td><td>18</td><td>₹72L</td><td>₹3.0L</td><td><span class="status-badge green">Active</span></td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+
+  <!-- AUDIT -->
+  <div class="view" id="view-audit">
+    <div class="card">
+      <div class="card-header"><h3>Audit Log</h3></div>
+      <div class="table-wrap"><table><thead><tr><th>Time</th><th>User</th><th>Action</th><th>Record</th><th>Detail</th></tr></thead>
+      <tbody id="auditTable"></tbody></table></div>
+    </div>
+  </div>
+
+  <div style="margin-top:28px;padding:14px 0;border-top:1px solid var(--border-glass);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--text-muted)">
+    <span>© 2026 Referral CRM · v3.0</span>
+    <span>Data: <span id="refreshTime">Just now</span> · <i class="fas fa-sync-alt" style="cursor:pointer" onclick="refreshData()"></i></span>
+    <span><i class="fas fa-shield-alt"></i> Audit · SOC2</span>
+  </div>
+</main>
+
+<div class="toast-box" id="toasts"></div>
+
+<script>
+// ========== DUMMY DATA ==========
+const REFERRALS = [
+  {id:'REF-2026-001',name:'Mahesh Enterprises',mobile:'9876500001',type:'Gallery',source:'Walk-in',status:'Converted',expected:'₹15L',commission:'₹45,000',created:'2026-06-12',steps:10},
+  {id:'REF-2026-002',name:'Sunita Investments',mobile:'9876500002',type:'Gallery',source:'Call',status:'In Progress',expected:'₹12L',commission:'—',created:'2026-07-03',steps:5},
+  {id:'REF-2026-003',name:'Ankit Sharma',mobile:'9876500003',type:'Employee',source:'Referral',status:'Converted',expected:'—',commission:'₹8,000',created:'2026-07-15',steps:10},
+  {id:'REF-2026-004',name:'Priya Nair',mobile:'9876500004',type:'Employee',source:'WhatsApp',status:'Contacted',expected:'—',commission:'—',created:'2026-08-01',steps:2},
+  {id:'REF-2026-005',name:'Sharma Constructions',mobile:'9876500005',type:'Gallery',source:'Event',status:'New',expected:'₹20L',commission:'—',created:'2026-08-05',steps:1},
+  {id:'REF-2026-006',name:'Vikram Shah',mobile:'9876500006',type:'Travel',source:'Share link',status:'In Progress',expected:'₹1.5L',commission:'—',created:'2026-08-08',steps:4},
+  {id:'REF-2026-007',name:'Neha Joshi',mobile:'9876500007',type:'ePay Customer',source:'WhatsApp',status:'Converted',expected:'₹1.12L',commission:'₹9,000',created:'2026-07-22',steps:10},
+  {id:'REF-2026-008',name:'Karan Mehta',mobile:'9876500008',type:'Travel',source:'Walk-in',status:'Lost',expected:'₹80k',commission:'—',created:'2026-06-28',steps:3},
+  {id:'REF-2026-009',name:'Sneha Desai',mobile:'9876500009',type:'ePay Customer',source:'Share link',status:'Converted',expected:'₹2.1L',commission:'₹16,800',created:'2026-05-18',steps:10},
+  {id:'REF-2026-010',name:'Rohit Patil',mobile:'9876500010',type:'Employee',source:'Referral',status:'New',expected:'—',commission:'—',created:'2026-08-10',steps:1},
+  {id:'REF-2026-011',name:'Aarav Travels',mobile:'9876500011',type:'Gallery',source:'Call',status:'Contacted',expected:'₹10L',commission:'—',created:'2026-08-02',steps:2},
+  {id:'REF-2026-012',name:'Meera Kapoor',mobile:'9876500012',type:'Travel',source:'Share link',status:'Converted',expected:'₹99,999',commission:'₹8,000',created:'2026-07-01',steps:10},
+];
+
+const PACKAGES = [
+  {name:'ePay Dubai Premium',flag:'🇦🇪',meta:'5N/6D · 5★ · All Inclusive',price:'₹1,49,999'},
+  {name:'Thailand Honeymoon',flag:'🇹🇭',meta:'6N/7D · 5★ Resort',price:'₹2,15,000'},
+  {name:'Paris Getaway',flag:'🇫🇷',meta:'4N/5D · 4★ · Breakfast',price:'₹1,85,000'},
+  {name:'Kashmir Paradise',flag:'🇮🇳',meta:'5N · Houseboat · Gulmarg',price:'₹42,999'},
+  {name:'Bali Honeymoon',flag:'🇮🇩',meta:'6N · Villa · Spa',price:'₹1,12,000'},
+];
+
+const LEADERBOARD = [
+  {rank:1,name:'Rahul',refs:42,bookings:28,gmv:'₹1.2Cr',comm:'₹4.8L',conv:'66.7%',quality:'94%'},
+  {rank:2,name:'Priya',refs:36,bookings:22,gmv:'₹84L',comm:'₹3.6L',conv:'61.1%',quality:'91%'},
+  {rank:3,name:'Amit',refs:31,bookings:18,gmv:'₹72L',comm:'₹3.0L',conv:'58.1%',quality:'88%'},
+  {rank:4,name:'Neha',refs:28,bookings:16,gmv:'₹64L',comm:'₹2.6L',conv:'57.1%',quality:'85%'},
+  {rank:5,name:'Rajesh (You)',refs:24,bookings:11,gmv:'₹48.2L',comm:'₹2.14L',conv:'45.8%',quality:'91%'},
+  {rank:6,name:'Raj',refs:24,bookings:14,gmv:'₹56L',comm:'₹2.2L',conv:'58.3%',quality:'82%'},
+];
+
+const FOLLOWUPS = [
+  {id:'FU-01',ref:'Sunita Investments',method:'Call',due:'Today 11:00',status:'Overdue'},
+  {id:'FU-02',ref:'Priya Nair',method:'WhatsApp',due:'Today 15:30',status:'Due'},
+  {id:'FU-03',ref:'Vikram Shah',method:'Call',due:'Tomorrow',status:'Scheduled'},
+  {id:'FU-04',ref:'Sharma Constructions',method:'In-person',due:'Aug 14',status:'Scheduled'},
+  {id:'FU-05',ref:'Aarav Travels',method:'Call',due:'Today 17:00',status:'Due'},
+];
+
+const ACTIVITIES = [
+  {time:'10:42',title:'Referral created',desc:'Rohit Patil · Employee · REF-2026-010'},
+  {time:'09:15',title:'Commission released',desc:'Neha Joshi · ₹9,000 paid'},
+  {time:'Yesterday',title:'Status → In Progress',desc:'Vikram Shah · Travel package'},
+  {time:'Yesterday',title:'Shared Dubai Premium',desc:'WhatsApp · 3 clicks'},
+  {time:'Aug 10',title:'Follow-up logged',desc:'Sunita Investments · Interested in ROI deck'},
+  {time:'Aug 08',title:'Lead from share link',desc:'Vikram Shah clicked “I’m Interested”'},
+  {time:'Aug 05',title:'Gallery referral',desc:'Sharma Constructions · Pune East'},
+];
+
+const AUDIT = [
+  {time:'2026-08-12 10:42',user:'Rajesh K.',action:'Create',record:'REF-2026-010',detail:'Employee referral · Rohit Patil'},
+  {time:'2026-08-11 16:20',user:'System',action:'Commission',record:'REF-2026-007',detail:'₹9,000 released'},
+  {time:'2026-08-10 11:05',user:'Rajesh K.',action:'Status change',record:'REF-2026-006',detail:'New → In Progress'},
+  {time:'2026-08-08 14:33',user:'System',action:'Lead from share',record:'REF-2026-006',detail:'Package: Dubai Premium'},
+  {time:'2026-08-05 09:50',user:'Rajesh K.',action:'Create',record:'REF-2026-005',detail:'Gallery · Sharma Constructions'},
+];
+
+const ATTR_STEPS = ['Shared','Clicked','Registered','Verified','Viewed Package','Quotation','Booking','Paid','Trip Completed','Commission'];
+
+const STATUS_CLASS = {New:'blue',Contacted:'cyan','In Progress':'amber',Converted:'green',Lost:'red'};
+
+// ========== NAV ==========
+const VIEW_TITLES = {
+  dashboard:'Dashboard','my-referrals':'My Referrals','refer-employee':'Refer Employee',
+  'refer-gallery':'Refer a Gallery','refer-epay':'Refer ePay','service-sharing':'Service Sharing',
+  'referral-tree':'Referral Tree','referral-attribution':'Attribution',activities:'Activities',
+  followups:'Follow-ups',reports:'Referral Reports','affiliate-reports':'Affiliate Reports',
+  leaderboard:'Leaderboard',management:'Management',audit:'Audit Log'
+};
+
+function navigateTo(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const t = document.getElementById('view-' + id);
+  if (t) t.classList.add('active');
+  document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
+  const link = document.querySelector('.sidebar nav a[data-view="'+id+'"]');
+  if (link) link.classList.add('active');
+  document.getElementById('pageTitle').textContent = VIEW_TITLES[id] || id;
+  document.getElementById('drillCurrent').textContent = VIEW_TITLES[id] || id;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+document.querySelectorAll('.sidebar nav a[data-view]').forEach(a => {
+  a.addEventListener('click', e => { e.preventDefault(); navigateTo(a.dataset.view); });
+});
+
+// ========== TOAST ==========
+function toast(msg, type) {
+  const box = document.getElementById('toasts');
+  const el = document.createElement('div');
+  el.className = 'toast ' + (type || 'ok');
+  el.innerHTML = '<i class="fas fa-'+(type==='err'?'exclamation-circle':'check-circle')+'"></i> ' + msg;
+  box.appendChild(el);
+  setTimeout(() => { el.style.opacity='0'; el.style.transition='.3s'; setTimeout(()=>el.remove(),300); }, 2800);
+}
+
+// ========== RENDER HELPERS ==========
+function statusBadge(s) {
+  return '<span class="status-badge '+(STATUS_CLASS[s]||'gray')+'">'+s+'</span>';
+}
+
+function renderReferrals() {
+  const st = document.getElementById('refStatusFilter').value;
+  const ty = document.getElementById('refTypeFilter').value;
+  const q = (document.getElementById('refSearch').value || '').toLowerCase();
+  const rows = REFERRALS.filter(r => {
+    if (st && r.status !== st) return false;
+    if (ty && r.type !== ty) return false;
+    if (q && !(r.name+r.id+r.mobile).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  document.getElementById('refsTable').innerHTML = rows.map(r =>
+    `<tr>
+      <td class="highlight">${r.id}</td><td>${r.name}</td><td>${r.mobile}</td><td>${r.type}</td><td>${r.source}</td>
+      <td>${statusBadge(r.status)}</td><td>${r.expected}</td><td>${r.commission}</td><td>${r.created}</td>
+      <td><button class="btn btn-sm" onclick="viewRef('${r.id}')">View</button></td>
+    </tr>`).join('') || '<tr><td colspan="10" style="text-align:center;color:var(--text-muted)">No matches</td></tr>';
+  document.getElementById('badgeRefs').textContent = REFERRALS.length;
+}
+
+function viewRef(id) {
+  const r = REFERRALS.find(x => x.id === id);
+  if (!r) return;
+  toast(r.id + ' · ' + r.name + ' · ' + r.status);
+  navigateTo('referral-attribution');
+  document.getElementById('attrSelect').value = id;
+  updateAttribution(id);
+}
+
+function renderRecent() {
+  const recent = REFERRALS.slice().sort((a,b)=>b.created.localeCompare(a.created)).slice(0,6);
+  document.getElementById('recentTable').innerHTML = recent.map(r =>
+    `<tr><td class="highlight">${r.id}</td><td>${r.name}</td><td>${r.type}</td><td>${statusBadge(r.status)}</td><td>${r.expected}</td><td>${r.created}</td></tr>`
+  ).join('');
+}
+
+function renderPipeline() {
+  const counts = {};
+  REFERRALS.forEach(r => { counts[r.status] = (counts[r.status]||0)+1; });
+  const total = REFERRALS.length || 1;
+  const order = ['New','Contacted','In Progress','Converted','Lost'];
+  document.getElementById('pipelineBars').innerHTML = order.map(s => {
+    const c = counts[s]||0;
+    const pct = Math.round(c/total*100);
+    return `<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px"><span>${s}</span><span>${c}</span></div><div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div></div>`;
+  }).join('');
+}
+
+function renderDashTimeline() {
+  document.getElementById('dashTimeline').innerHTML = ACTIVITIES.slice(0,5).map(a =>
+    `<div class="timeline-item"><div class="time">${a.time}</div><div class="title">${a.title}</div><div class="desc">${a.desc}</div></div>`
+  ).join('');
+}
+
+function renderActivities() {
+  document.getElementById('allActivities').innerHTML = ACTIVITIES.map(a =>
+    `<div class="timeline-item"><div class="time">${a.time}</div><div class="title">${a.title}</div><div class="desc">${a.desc}</div></div>`
+  ).join('');
+}
+
+function renderFollowups() {
+  document.getElementById('fuTable').innerHTML = FOLLOWUPS.map(f => {
+    const cls = f.status==='Overdue'?'red':(f.status==='Due'?'amber':'blue');
+    return `<tr><td>${f.id}</td><td class="highlight">${f.ref}</td><td>${f.method}</td><td>${f.due}</td>
+      <td><span class="status-badge ${cls}">${f.status}</span></td>
+      <td><button class="btn btn-sm btn-primary" onclick="toast('Calling '+f.ref+'…')">Call</button>
+      <button class="btn btn-sm" onclick="toast('Follow-up completed','ok')">Done</button></td></tr>`;
+  }).join('');
+}
+
+function logFollowup() {
+  FOLLOWUPS.unshift({id:'FU-'+String(FOLLOWUPS.length+1).padStart(2,'0'),ref:'New log',method:'Call',due:'Now',status:'Due'});
+  renderFollowups();
+  toast('Follow-up logged');
+}
+
+function renderShare() {
+  document.getElementById('sharePackages').innerHTML = PACKAGES.map(p =>
+    `<div class="share-card">
+      <div class="package-info">
+        <div class="name">${p.flag} ${p.name}</div>
+        <div class="meta">${p.meta.split(' · ').map(m=>'<span>'+m+'</span>').join('')}</div>
+        <div class="price">${p.price}</div>
+      </div>
+      <div class="share-buttons">
+        <button class="btn btn-success btn-sm" onclick="sharePackage('${p.name}')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+        <button class="btn btn-primary btn-sm" onclick="sharePackage('${p.name}')"><i class="fas fa-share"></i> Share</button>
+        <button class="btn btn-sm" onclick="copyLink('${p.name}')"><i class="fas fa-copy"></i> Copy</button>
+        <button class="btn btn-sm" onclick="sharePackage('${p.name}')"><i class="fas fa-sms"></i> SMS</button>
+        <button class="btn btn-sm" onclick="sharePackage('${p.name}')"><i class="fas fa-envelope"></i> Email</button>
+      </div>
+    </div>`
+  ).join('');
+}
+
+function sharePackage(name) {
+  toast('Shared “'+name+'” · referral link active');
+  ACTIVITIES.unshift({time:'Just now',title:'Shared '+name,desc:'WhatsApp / link · awaiting clicks'});
+  AUDIT.unshift({time:new Date().toISOString().slice(0,16).replace('T',' '),user:'Rajesh K.',action:'Share',record:name,detail:'EPAY-RH7842'});
+}
+
+function copyLink(name) {
+  const link = 'https://epay.in/join?ref=EPAY-RH7842&package='+encodeURIComponent(name);
+  if (navigator.clipboard) navigator.clipboard.writeText(link).then(()=>toast('Link copied')).catch(()=>toast(link));
+  else toast(link);
+}
+
+function renderTree() {
+  const kids = REFERRALS.filter(r => r.status==='Converted' || r.status==='In Progress').slice(0,6);
+  document.getElementById('treeChildren').innerHTML = kids.map(r =>
+    `<div class="tree-node"><div class="node-card" style="cursor:pointer" onclick="viewRef('${r.id}')">
+      <div class="node-name">${r.name.split(' ')[0]}</div>
+      <div class="node-type">${r.type}</div>
+      <div class="node-amount">${r.status}</div>
+    </div></div>`
+  ).join('');
+}
+
+function renderAttrSelect() {
+  document.getElementById('attrSelect').innerHTML = REFERRALS.map(r =>
+    `<option value="${r.id}">${r.id} · ${r.name}</option>`
+  ).join('');
+}
+
+function updateAttribution(id) {
+  const r = REFERRALS.find(x => x.id === id) || REFERRALS[0];
+  const done = r.steps || 1;
+  document.getElementById('attributionFlow').innerHTML = ATTR_STEPS.map((s,i) => {
+    let cls = 'pending', icon = '⬜';
+    if (i < done-1) { cls='done'; icon='✅'; }
+    else if (i === done-1) { cls='active'; icon='⏳'; }
+    return (i? '<span class="attribution-arrow"><i class="fas fa-arrow-right"></i></span>' : '') +
+      `<div class="attribution-step ${cls}"><div class="label">${s}</div><div class="value">${icon}</div></div>`;
+  }).join('');
+  document.getElementById('attrMeta').innerHTML =
+    `<span class="glass-tag"><i class="fas fa-user"></i> ${r.name}</span> · ${r.type} · ${statusBadge(r.status)} · Expected ${r.expected}`;
+}
+
+function renderLeaderboard() {
+  document.getElementById('lbTable').innerHTML = LEADERBOARD.map(r => {
+    const rankColor = r.rank===1?'#fbbf24':r.rank===2?'#9ca3af':r.rank===3?'#d97706':'#94a3b8';
+    return `<tr><td><span style="color:${rankColor};font-weight:700">#${r.rank}</span></td>
+      <td class="highlight">${r.name}</td><td>${r.refs}</td><td>${r.bookings}</td><td>${r.gmv}</td>
+      <td>${r.comm}</td><td>${r.conv}</td><td style="color:var(--accent-green)">${r.quality}</td></tr>`;
+  }).join('');
+}
+
+function renderFunnel() {
+  const steps = [['Shares','10,000'],['Clicks','4,200'],['Registrations','1,100'],['Verified','850'],['Eligible','620'],['Bookings','280']];
+  document.getElementById('funnel').innerHTML = steps.map((s,i) =>
+    (i?'<div class="funnel-arrow"><i class="fas fa-arrow-right"></i></div>':'') +
+    `<div class="funnel-step"><div class="step-label">${s[0]}</div><div class="step-value">${s[1]}</div></div>`
+  ).join('');
+}
+
+function renderAudit() {
+  document.getElementById('auditTable').innerHTML = AUDIT.map(a =>
+    `<tr><td>${a.time}</td><td>${a.user}</td><td>${a.action}</td><td class="highlight">${a.record}</td><td>${a.detail}</td></tr>`
+  ).join('');
+}
+
+// ========== FORMS ==========
+function checkDup(mobile, kind) {
+  const known = kind==='emp' ? '7654321098' : '9876543210';
+  const el = document.getElementById(kind==='emp'?'dupEmp':'dupGal');
+  if (el) el.classList.toggle('show', mobile === known);
+}
+
+function submitReferral(e, type) {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const name = fd.get('name') || 'New lead';
+  const mobile = fd.get('mobile') || '';
+  const id = 'REF-2026-' + String(100 + REFERRALS.length).slice(-3);
+  REFERRALS.unshift({
+    id, name, mobile, type, source:'Manual', status:'New',
+    expected: fd.get('budget') || fd.get('invest') || '—',
+    commission:'—', created: new Date().toISOString().slice(0,10), steps:1
+  });
+  ACTIVITIES.unshift({time:'Just now',title:'Referral created',desc:name+' · '+type+' · '+id});
+  AUDIT.unshift({time:new Date().toISOString().slice(0,16).replace('T',' '),user:'Rajesh K.',action:'Create',record:id,detail:type+' · '+name});
+  toast('Referral '+id+' created · '+name);
+  e.target.reset();
+  renderReferrals();
+  renderRecent();
+  renderPipeline();
+  renderTree();
+  renderAttrSelect();
+  document.getElementById('kTotal').textContent = REFERRALS.length;
+  document.getElementById('badgeRefs').textContent = REFERRALS.length;
+  navigateTo('my-referrals');
+  return false;
+}
+
+function showSub(btn, id) {
+  const view = btn.closest('.view');
+  view.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  view.querySelectorAll('.sub-view').forEach(sv => sv.classList.remove('active'));
+  const t = view.querySelector('#sub-'+id);
+  if (t) t.classList.add('active');
+}
+
+function refreshData() {
+  const el = document.getElementById('refreshTime');
+  el.textContent = 'Refreshing…';
+  // light jitter on KPIs
+  const total = REFERRALS.length;
+  document.getElementById('kTotal').textContent = total;
+  const conv = REFERRALS.filter(r=>r.status==='Converted').length;
+  document.getElementById('kConv').textContent = conv;
+  setTimeout(() => {
+    el.textContent = new Date().toLocaleTimeString();
+    toast('Data refreshed');
+    renderReferrals();
+    renderRecent();
+    renderPipeline();
+  }, 500);
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+  renderReferrals();
+  renderRecent();
+  renderPipeline();
+  renderDashTimeline();
+  renderActivities();
+  renderFollowups();
+  renderShare();
+  renderTree();
+  renderAttrSelect();
+  updateAttribution(REFERRALS[1].id);
+  renderLeaderboard();
+  renderFunnel();
+  renderAudit();
+  document.getElementById('refreshTime').textContent = new Date().toLocaleTimeString();
+  // live tick
+  setInterval(() => {
+    if (document.getElementById('view-dashboard').classList.contains('active') && Math.random()>0.8) {
+      const n = 20 + Math.floor(Math.random()*8);
+      document.getElementById('netCount').textContent = n;
+    }
+  }, 12000);
+});
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
+

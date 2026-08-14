@@ -1,0 +1,674 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ePay · Unified Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+
+
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --green-400:#34d399;
+            --green-500:#10b981;
+            --green-600:#059669;
+            --green-700:#047857;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #0f172a;
+        }
+
+        #bgVideo {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            background:
+                linear-gradient(135deg,
+                    rgba(15,23,42,0.72) 0%,
+                    rgba(30,10,60,0.55) 50%,
+                    rgba(15,23,42,0.78) 100%);
+        }
+
+        .card {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 440px;
+            padding: 44px 40px 36px;
+            border-radius: 26px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(32px) saturate(180%);
+            -webkit-backdrop-filter: blur(32px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.16);
+            box-shadow:
+                0 40px 100px rgba(0,0,0,0.55),
+                0 0 0 1px rgba(255,255,255,0.06) inset;
+            color: #fff;
+            animation: cardIn 0.65s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+        @keyframes cardIn {
+            from { opacity:0; transform:translateY(36px) scale(0.94); }
+            to   { opacity:1; transform:translateY(0)   scale(1);    }
+        }
+
+        .brand { text-align: center; margin-bottom: 28px; }
+        .brand-logo {
+            width: 58px; height: 58px; border-radius: 18px;
+            background: linear-gradient(135deg, var(--green-500), var(--green-500));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px; margin: 0 auto 14px;
+            box-shadow: 0 8px 28px rgba(16,185,129,0.4);
+        }
+        .brand h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.4px; }
+        .brand h1 span { color: var(--green-500); }
+        .brand p { font-size: 13px; opacity: 0.6; margin-top: 4px; }
+
+        .badge-row { text-align: center; margin-bottom: 22px; }
+        .role-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.08em; padding: 4px 12px; border-radius: 100px;
+            background: rgba(16,185,129,0.18); color: #6ee7b7;
+            border: 1px solid rgba(16,185,129,0.3);
+        }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block; font-size: 12px; font-weight: 600;
+            opacity: 0.75; margin-bottom: 6px; letter-spacing: 0.03em;
+        }
+        .input-wrap { position: relative; }
+        .input-wrap > i:first-child {
+            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+            font-size: 14px; opacity: 0.45; pointer-events: none;
+        }
+        .input-wrap input {
+            width: 100%; padding: 12px 44px 12px 40px; border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.08); color: #fff; font-size: 14px;
+            outline: none; transition: 0.2s;
+        }
+        .input-wrap input::placeholder { color: rgba(255,255,255,0.35); }
+        .input-wrap input:focus {
+            background: rgba(255,255,255,0.13);
+            border-color: rgba(255,255,255,0.35);
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.07);
+        }
+        .pw-toggle {
+            position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; color: rgba(255,255,255,0.4);
+            cursor: pointer; font-size: 14px; padding: 4px; transition: color 0.2s;
+        }
+        .pw-toggle:hover { color: rgba(255,255,255,0.8); }
+
+        .login-btn {
+            width: 100%; padding: 14px; border: none; border-radius: 11px;
+            font-size: 15px; font-weight: 700; cursor: pointer;
+            transition: all 0.25s ease; margin-top: 6px; letter-spacing: 0.02em;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: linear-gradient(135deg, var(--green-500), var(--green-700));
+            color: #fff; box-shadow: 0 6px 24px rgba(16,185,129,0.45);
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 34px rgba(16,185,129,0.6);
+        }
+        .login-btn:active { transform: scale(0.98); }
+        .login-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+
+        .btn-spinner {
+            display: none; width: 16px; height: 16px;
+            border: 2px solid rgba(255,255,255,0.35); border-top-color: #fff;
+            border-radius: 50%; animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .error-msg {
+            color: #fca5a5; font-size: 12.5px; margin-top: 10px; min-height: 18px;
+            display: flex; align-items: center; gap: 6px; opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .error-msg.visible { opacity: 1; }
+
+        .cred-hint {
+            margin-top: 20px; padding: 12px 14px; border-radius: 10px;
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.07);
+            font-size: 11.5px; opacity: 0.65; line-height: 1.7;
+        }
+        .cred-hint strong { color: #fff; opacity: 0.9; }
+        .cred-hint code { color: #6ee7b7; }
+
+        #successOverlay {
+            position: fixed; inset: 0; z-index: 50;
+            background: rgba(10,15,30,0.92); backdrop-filter: blur(12px);
+            display: none; align-items: center; justify-content: center;
+            flex-direction: column; text-align: center; color: #fff;
+        }
+        #successOverlay.visible { display: flex; }
+        .success-icon {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-500), #059669);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 38px; margin-bottom: 20px;
+            animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+            box-shadow: 0 12px 40px rgba(16,185,129,0.5);
+        }
+        @keyframes popIn {
+            from { transform: scale(0); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+        #successOverlay h2 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+        #successOverlay p { font-size: 14px; opacity: 0.65; margin-bottom: 6px; }
+        .redirect-bar {
+            width: 220px; height: 4px; border-radius: 2px;
+            background: rgba(255,255,255,0.12); margin: 18px auto 0; overflow: hidden;
+        }
+        .redirect-bar-fill { height: 100%; width: 0%; border-radius: 2px; background: var(--green-500); transition: width 1.8s linear; }
+
+        .page-footer {
+            position: fixed; bottom: 14px; left: 0; right: 0; z-index: 10;
+            text-align: center; font-size: 11px; color: rgba(255,255,255,0.28);
+            letter-spacing: 0.04em;
+        }
+        .page-footer a { color: rgba(255,255,255,0.38); text-decoration: none; }
+        .page-footer a:hover { color: rgba(255,255,255,0.6); }
+
+        @media (max-width: 480px) {
+            .card { margin: 16px; padding: 32px 24px 28px; }
+            .brand h1 { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+<!-- Global Navigation Component -->
+<div id="nav-container"></div>
+<script>
+    (function() {
+        var navContainer = document.getElementById('nav-container');
+        if (navContainer) {
+            fetch('navigation-component.html')
+                .then(response => response.text())
+                .then(html => {
+                    navContainer.innerHTML = html;
+                })
+                .catch(err => console.error('Navigation load error:', err));
+        }
+    })();
+</script>
+
+    <video id="bgVideo" autoplay muted loop playsinline>
+        <source src="assets/videos/bg2.mp4" type="video/mp4" />
+    </video>
+    <div class="overlay"></div>
+
+    <div class="card" id="loginCard">
+        <div class="brand">
+<div class="brand-logo"><img src="assets/images/logo.png" alt="ePay" style="width:40px;height:40px;object-fit:contain;border-radius:14px;" /></div>
+            <h1>ePay <span>Unified Login</span></h1>
+            <p>One login for every ePay portal · Authorised Personnel Only</p>
+        </div>
+
+        <div class="badge-row">
+            <span class="role-badge" id="roleBadge">
+                <i class="fas fa-shield-alt"></i>
+                <span id="roleBadgeText">Secure Access</span>
+            </span>
+        </div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
+            <div class="form-group">
+                <label for="emailInput">Email Address</label>
+                <div class="input-wrap">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="emailInput" placeholder="you@epay.in" autocomplete="username" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="passInput">Password</label>
+                <div class="input-wrap">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="passInput" placeholder="Enter your password" autocomplete="current-password" required />
+                    <button type="button" class="pw-toggle" onclick="togglePassword()" title="Show / hide password">
+                        <i class="fas fa-eye" id="pwIcon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                <span class="btn-spinner" id="btnSpinner"></span>
+                <i class="fas fa-sign-in-alt" id="btnIcon"></i>
+                <span id="btnText">Sign In</span>
+            </button>
+
+            <div class="error-msg" id="errorMsg">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="errorText">Invalid credentials.</span>
+            </div>
+        </form>
+
+        <div class="cred-hint" id="credHint">
+            <strong style="color:#6ee7b7;">Demo accounts</strong> — password: <code>epay@2024</code><br>
+            Owner: <code>owner@epay.in</code> · Manager: <code>gallery@epay.in</code><br>
+            Telecalling: <code>telecall@epay.in</code> · Social: <code>social@epay.in</code><br>
+            Marketing: <code>marketing@epay.in</code> · Support: <code>support@epay.in</code><br>
+            Developer: <code>dev@epay.in</code> · Finance: <code>finance@epay.in</code><br>
+            Super Admin: <code>superadmin@epay.in</code>
+        </div>
+    </div>
+
+    <div id="successOverlay">
+        <div class="success-icon"><i class="fas fa-check"></i></div>
+        <h2>Login Successful</h2>
+        <p id="successName">Welcome back!</p>
+        <p id="successRole" style="font-size:12px;opacity:0.5;"></p>
+        <div class="redirect-bar"><div class="redirect-bar-fill" id="redirectBar"></div></div>
+        <p style="font-size:12px;opacity:0.4;margin-top:10px;">Redirecting to your portal…</p>
+    </div>
+
+    <div class="page-footer">
+        &copy; 2026 ePay &nbsp;|&nbsp;
+        <a href="landingpage.html">Back to Home</a>
+        &nbsp;|&nbsp; Unified Portal v3.0
+    </div>
+
+    <!-- Firebase SDK Integration -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
+
+    <!-- Firebase Configuration -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Session Manager -->
+    <script src="session-manager.js"></script>
+
+    <script>
+    'use strict';
+    var PASSWORD = 'epay@2024';
+    var USERS = {
+// Gallery
+        'owner@epay.in':    { password: 'owner123', role: 'gallery-owner',   name: 'Rajesh Patil',   redirect: 'galleryowner.html' },
+        'gallery@epay.in':  { password: 'gallery123', role: 'gallery-manager', name: 'Suresh Jadhav',  redirect: 'gallerymanager.html' },
+        // Staff
+'superadmin@epay.in': { password: 'epay@2024', role: 'super-admin', name: 'Yashraj Sathe',  redirect: 'superadmin.html' },
+        'admin@epay.in':      { password: 'epay@2024', role: 'admin',       name: 'Yashraj Sathe',  redirect: 'admin.html' },
+        'hr@epay.in':         { password: 'epay@2024', role: 'hr',          name: 'HR Team',        redirect: 'hr.html' },
+        'finance@epay.in':    { password: 'epay@2024', role: 'finance',     name: 'Finance Team',   redirect: 'finance.html' },
+        'telecall@epay.in':   { password: 'epay@2024', role: 'telecaller',  name: 'Telecaller',     redirect: 'telecalling.html' },
+        'social@epay.in':     { password: 'epay@2024', role: 'social',      name: 'Social Media',   redirect: 'socialmediamanager.html' },
+        'marketing@epay.in':  { password: 'epay@2024', role: 'marketing',   name: 'Marketing',      redirect: 'digital marketing.html' },
+        'support@epay.in':    { password: 'epay@2024', role: 'support',     name: 'Support',        redirect: 'technical support.html' },
+        'dev@epay.in':        { password: 'epay@2024', role: 'developer',   name: 'Developer',      redirect: 'developerhub.html' }
+    };
+    var ROLE_META = {
+        'gallery-owner':   { label: 'Gallery Owner' },
+        'gallery-manager': { label: 'Gallery Manager' },
+        'super-admin':     { label: 'Super Admin' },
+        'admin':           { label: 'Admin' },
+        'hr':              { label: 'HR' },
+        'finance':         { label: 'Finance' },
+        'telecaller':      { label: 'Telecalling' },
+        'social':          { label: 'Social Media' },
+        'marketing':       { label: 'Digital Marketing' },
+        'support':         { label: 'Technical Support' },
+        'developer':       { label: 'Developer' }
+    };
+
+    (function init() {
+        // If a valid session already exists, redirect silently
+        var storedRole = getStoredRole();
+        if (storedRole) {
+            for (var k in USERS) {
+                if (USERS[k].role === storedRole) {
+                    window.location.replace(USERS[k].redirect);
+                    return;
+                }
+            }
+        }
+    })();
+
+    function handleLogin(e) {
+        e.preventDefault();
+        hideError();
+        var email    = document.getElementById('emailInput').value.trim().toLowerCase();
+        var password = document.getElementById('passInput').value;
+        if (!email || !password) {
+            showError('Please enter your email and password.');
+            return;
+        }
+        setLoading(true);
+        setTimeout(function () {
+            var user = USERS[email];
+            if (!user || user.password !== password) {
+                setLoading(false);
+                showError('Incorrect email or password. Please try again.');
+                shakeCard();
+                return;
+            }
+            persistSession(user, email);
+            setLoading(false);
+            showSuccess(user);
+        }, 820);
+    }
+
+    async function persistSession(user, email) {
+        try {
+            // Store basic session info in localStorage for compatibility
+            localStorage.setItem('crm-role',       user.role);
+            localStorage.setItem('crm-role-label', (ROLE_META[user.role] || {}).label || user.role);
+            localStorage.setItem('crm-user-name',  user.name);
+            localStorage.setItem('crm-user-email', email);
+            localStorage.setItem('crm-session-ts', Date.now().toString());
+            
+            // Store user info for SessionManager
+            localStorage.setItem('epay_user_info', JSON.stringify({
+                userId: email,
+                email: email,
+                displayName: user.name,
+                role: user.role
+            }));
+            
+            // Initialize or update SessionManager with user context
+            if (window.SessionManager) {
+                try {
+                    // Wait for SessionManager to be ready
+                    if (window.SessionManager.getCurrentSession()) {
+                        // Update existing session with user info
+                        window.SessionManager.currentSession.userId = email;
+                        window.SessionManager.currentSession.email = email;
+                        window.SessionManager.currentSession.role = user.role;
+                        window.SessionManager.currentSession.displayName = user.name;
+                        window.SessionManager.addActivity('login', { role: user.role, redirect: user.redirect });
+                        await window.SessionManager.syncActivities();
+                        console.log('[Session] Login session updated:', window.SessionManager.getCurrentSession().sessionId);
+                    } else {
+                        // Initialize new session with user context
+                        await window.SessionManager.init();
+                        window.SessionManager.currentSession.userId = email;
+                        window.SessionManager.currentSession.email = email;
+                        window.SessionManager.currentSession.role = user.role;
+                        window.SessionManager.currentSession.displayName = user.name;
+                        window.SessionManager.addActivity('login', { role: user.role, redirect: user.redirect });
+                        console.log('[Session] New login session created:', window.SessionManager.getCurrentSession().sessionId);
+                    }
+                    
+                    // Update presence in Firebase if available
+                    if (window.FirebaseDataService) {
+                        const presenceData = {
+                            displayName: user.name,
+                            role: user.role,
+                            loginTime: Date.now(),
+                            lastActivityTime: Date.now(),
+                            online: true,
+                            status: 'active'
+                        };
+                        await FirebaseDataService.updatePresence(email, presenceData);
+                        console.log('[Firebase] Presence updated for login:', email);
+                    }
+                } catch (sessionError) {
+                    console.error('[Session] Error updating session on login:', sessionError);
+                    // Continue with login even if session management fails
+                }
+            }
+        } catch (err) { 
+            console.warn('localStorage not available:', err); 
+        }
+    }
+
+    function getStoredRole() {
+        try { return localStorage.getItem('crm-role') || ''; } catch(e) { return ''; }
+    }
+
+    function showSuccess(user) {
+        document.getElementById('successName').textContent = 'Welcome back, ' + user.name + '!';
+        document.getElementById('successRole').textContent = (ROLE_META[user.role] || {}).label + ' Portal';
+        document.getElementById('successOverlay').classList.add('visible');
+        requestAnimationFrame(function () {
+            document.getElementById('redirectBar').style.width = '100%';
+        });
+        setTimeout(function () { window.location.href = user.redirect; }, 2000);
+    }
+
+    function setLoading(on) {
+        var btn = document.getElementById('loginBtn');
+        var spinner = document.getElementById('btnSpinner');
+        var icon = document.getElementById('btnIcon');
+        btn.disabled = on;
+        spinner.style.display = on ? 'block' : 'none';
+        icon.style.display = on ? 'none' : 'inline-block';
+    }
+
+    function showError(msg) {
+        document.getElementById('errorText').textContent = msg;
+        document.getElementById('errorMsg').classList.add('visible');
+    }
+    function hideError() {
+        document.getElementById('errorMsg').classList.remove('visible');
+    }
+
+    function shakeCard() {
+        var card = document.getElementById('loginCard');
+        card.style.animation = 'none';
+        card.offsetHeight;
+        card.style.animation = 'shake 0.45s ease';
+    }
+    function togglePassword() {
+        var input = document.getElementById('passInput');
+        var icon = document.getElementById('pwIcon');
+        if (input.type === 'password') { input.type = 'text'; icon.className = 'fas fa-eye-slash'; }
+        else { input.type = 'password'; icon.className = 'fas fa-eye'; }
+    }
+    
+    // Add logout function to properly end sessions
+    async function handleLogout() {
+        try {
+            // End the current session in SessionManager
+            if (window.SessionManager) {
+                await window.SessionManager.endSession();
+                console.log('[Session] Session ended on logout');
+            }
+            
+            // Clear localStorage
+            localStorage.removeItem('crm-role');
+            localStorage.removeItem('crm-role-label');
+            localStorage.removeItem('crm-user-name');
+            localStorage.removeItem('crm-user-email');
+            localStorage.removeItem('crm-session-ts');
+            localStorage.removeItem('epay_user_info');
+            localStorage.removeItem('epay_current_session');
+            
+            // Redirect to login page
+            window.location.href = 'login.html';
+        } catch (error) {
+            console.error('[Logout] Error during logout:', error);
+            // Force redirect even if logout fails
+            window.location.href = 'login.html';
+        }
+    }
+    
+    // Make logout function globally available
+    window.handleLogout = handleLogout;
+    (function addShakeKeyframe() {
+        var style = document.createElement('style');
+        style.textContent =
+            '@keyframes shake {' +
+            '  0%,100%{transform:translateX(0)}' +
+            '  20%{transform:translateX(-8px)}' +
+            '  40%{transform:translateX(8px)}' +
+            '  60%{transform:translateX(-6px)}' +
+            '  80%{transform:translateX(6px)}' +
+            '}';
+        document.head.appendChild(style);
+    })();
+    </script>
+
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
+
+

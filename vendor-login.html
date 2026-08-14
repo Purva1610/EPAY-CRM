@@ -1,0 +1,871 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Epay Vendor Portal — Login</title>
+<meta name="description" content="Epay Gallery Vendor Portal. Login, sign up, or recover your account." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+
+
+
+:root {
+  --ink: #0a0b10;
+  --ink-2: #12141c;
+  --ink-3: #1a1d2a;
+  --gold: #d4af37;
+  --gold-light: #f0d78c;
+  --gold-dim: rgba(212,175,55,0.14);
+  --emerald: #10b981;
+  --red: #ef4444;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --glass: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.09);
+  --radius: 16px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--ink);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--gold-light);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* Left panel */
+.panel-left{
+  flex:1;
+  background:
+    linear-gradient(160deg,rgba(10,11,16,.75),rgba(18,20,28,.9)),
+    url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&q=80') center/cover;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:40px 48px;position:relative;overflow:hidden;min-height:100vh;
+}
+.panel-left::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 20%,rgba(212,175,55,.15),transparent 50%),
+             radial-gradient(ellipse at 70% 80%,rgba(16,185,129,.1),transparent 45%);
+  pointer-events:none;
+}
+.brand{position:relative;z-index:1;display:flex;align-items:center;gap:12px}
+.brand-mark{
+  width:42px;height:42px;border-radius:12px;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:1rem;color:#0a0b10;
+  box-shadow:0 4px 20px rgba(212,175,55,.4);
+}
+.brand-text{font-weight:800;font-size:1.2rem;letter-spacing:-.02em}
+.brand-text span{background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.panel-left .hero-copy{position:relative;z-index:1;max-width:420px}
+.panel-left .hero-copy h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.8rem,3vw,2.4rem);line-height:1.2;margin-bottom:14px;
+}
+.panel-left .hero-copy h1 .gold{color:var(--gold-light)}
+.panel-left .hero-copy p{color:rgba(241,245,249,.75);font-size:.98rem;line-height:1.7}
+.panel-left .stats{position:relative;z-index:1;display:flex;gap:28px;flex-wrap:wrap}
+.panel-left .stats div .num{font-size:1.4rem;font-weight:800;color:var(--gold-light)}
+.panel-left .stats div .lbl{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+
+/* Right panel */
+.panel-right{
+  width:480px;max-width:100%;
+  background:var(--ink-2);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:48px 40px;border-left:1px solid var(--border);
+  position:relative;
+}
+.auth-box{width:100%;max-width:380px;margin:0 auto}
+.auth-tabs{display:flex;gap:4px;background:var(--glass);border-radius:12px;padding:4px;margin-bottom:28px;border:1px solid var(--border)}
+.auth-tabs button{
+  flex:1;padding:10px;border:none;background:transparent;color:var(--muted);
+  font-weight:600;font-size:.88rem;border-radius:9px;cursor:pointer;font-family:inherit;transition:.25s;
+}
+.auth-tabs button.active{
+  background:linear-gradient(135deg,var(--gold-light),var(--gold));
+  color:#0a0b10;box-shadow:0 2px 12px rgba(212,175,55,.3);
+}
+.auth-panel{display:none}
+.auth-panel.active{display:block;animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:6px}
+.form-group label .req{color:var(--red)}
+.form-group input,.form-group select{
+  width:100%;padding:12px 14px;border-radius:11px;border:1.5px solid var(--border);
+  background:var(--glass);color:var(--text);font-size:.92rem;font-family:inherit;outline:none;transition:.25s;
+}
+.form-group input:focus,.form-group select:focus{
+  border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,.15);
+}
+.form-group input::placeholder{color:#64748b}
+.form-group select option{background:var(--ink-3)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.input-wrap{position:relative}
+.input-wrap .toggle-eye{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--muted);cursor:pointer;font-size:.95rem;padding:4px;
+}
+.hint{font-size:.75rem;color:var(--muted);margin-top:5px}
+.error-msg{
+  display:none;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);
+  color:#fca5a5;font-size:.82rem;padding:10px 12px;border-radius:10px;margin-bottom:14px;
+}
+.error-msg.show{display:block}
+.success-msg{
+  display:none;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);
+  color:#6ee7b7;font-size:.82rem;padding:10px 12px;border-radius:10px;margin-bottom:14px;
+}
+.success-msg.show{display:block}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  padding:13px 20px;border-radius:12px;border:none;font-weight:700;font-size:.95rem;
+  cursor:pointer;font-family:inherit;transition:.35s cubic-bezier(.34,1.56,.64,1);
+}
+.btn-gold{
+  background:linear-gradient(135deg,var(--gold-light),var(--gold),#b8860b);
+  color:#0a0b10;box-shadow:0 4px 20px rgba(212,175,55,.35);margin-top:8px;
+}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(212,175,55,.5)}
+.btn-gold:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.btn-ghost{
+  background:transparent;color:var(--muted);border:1.5px solid var(--border);margin-top:10px;
+}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold-light)}
+
+.links-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:.82rem}
+.divider{display:flex;align-items:center;gap:12px;margin:22px 0;color:var(--muted);font-size:.78rem}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.ref-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--gold-dim);border:1px solid rgba(212,175,55,.3);
+  color:var(--gold-light);font-size:.75rem;font-weight:600;
+  padding:5px 12px;border-radius:100px;margin-bottom:16px;
+}
+
+/* Dashboard (after login) */
+.portal{
+  display:none;width:100%;min-height:100vh;background:var(--ink);
+}
+.portal.active{display:flex;flex-direction:column}
+.portal-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 28px;background:var(--ink-2);border-bottom:1px solid var(--border);
+}
+.portal-nav .user{display:flex;align-items:center;gap:12px;font-size:.9rem}
+.portal-nav .avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),#b8860b);
+  display:flex;align-items:center;justify-content:center;font-weight:800;color:#0a0b10;font-size:.85rem;
+}
+.portal-body{flex:1;padding:32px 28px;max-width:1100px;margin:0 auto;width:100%}
+.portal-body h1{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:6px}
+.portal-body .sub{color:var(--muted);font-size:.9rem;margin-bottom:28px}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:28px}
+.kpi{
+  background:var(--ink-3);border:1px solid var(--border);border-radius:14px;padding:16px 18px;
+}
+.kpi .label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.kpi .val{font-size:1.35rem;font-weight:800;color:var(--gold-light);margin-top:4px}
+.portal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.portal-card{
+  background:var(--ink-3);border:1px solid var(--border);border-radius:14px;padding:20px;
+  transition:.3s;cursor:pointer;
+}
+.portal-card:hover{border-color:rgba(212,175,55,.35);transform:translateY(-3px)}
+.portal-card .icon{font-size:1.5rem;margin-bottom:10px}
+.portal-card h3{font-size:.95rem;font-weight:700;margin-bottom:4px}
+.portal-card p{font-size:.8rem;color:var(--muted)}
+
+@media(max-width:900px){
+  body{flex-direction:column}
+  .panel-left{min-height:auto;padding:28px 24px;flex:none}
+  .panel-left .hero-copy,.panel-left .stats{display:none}
+  .panel-right{width:100%;border-left:none;padding:32px 24px;flex:1}
+}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+<!-- ========== AUTH SCREEN ========== -->
+<div id="authScreen" style="display:flex;width:100%;min-height:100vh">
+  <div class="panel-left">
+    <div class="brand">
+      <div class="brand-mark">eP</div>
+      <div class="brand-text">Epay <span>Vendor</span></div>
+    </div>
+    <div class="hero-copy">
+      <h1>Your products.<br/><span class="gold">Our network.</span></h1>
+      <p>Manage catalogue, orders, inventory and settlements from one portal. Partner with Epay Gallery and grow across locations and digital commerce.</p>
+    </div>
+    <div class="stats">
+      <div><div class="num">120+</div><div class="lbl">Galleries</div></div>
+      <div><div class="num">480+</div><div class="lbl">Vendors</div></div>
+      <div><div class="num">40+</div><div class="lbl">Categories</div></div>
+    </div>
+  </div>
+
+  <div class="panel-right">
+    <div class="auth-box">
+      <div class="auth-tabs">
+        <button class="active" data-tab="login" onclick="switchTab('login')">Login</button>
+        <button data-tab="signup" onclick="switchTab('signup')">Sign Up</button>
+        <button data-tab="forgot" onclick="switchTab('forgot')">Forgot</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div class="auth-panel active" id="tab-login">
+        <div class="error-msg" id="loginError"></div>
+        <div class="success-msg" id="loginSuccess"></div>
+        <form onsubmit="return handleLogin(event)">
+          <div class="form-group">
+            <label>Email or Vendor ID <span class="req">*</span></label>
+            <input type="text" id="loginId" required placeholder="vendor@business.com or VEN-XXXX" autocomplete="username" />
+          </div>
+          <div class="form-group">
+            <label>Password <span class="req">*</span></label>
+            <div class="input-wrap">
+              <input type="password" id="loginPass" required placeholder="••••••••" autocomplete="current-password" />
+              <button type="button" class="toggle-eye" onclick="togglePass('loginPass',this)" aria-label="Show password">👁</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Reference ID <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+            <input type="text" id="loginRef" placeholder="REF- / EPAY- / Partner code" />
+            <div class="hint">If you were referred by a gallery or partner, enter their reference ID.</div>
+          </div>
+          <div class="links-row">
+            <label style="display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);cursor:pointer">
+              <input type="checkbox" id="rememberMe" style="width:auto;accent-color:var(--gold)" /> Remember me
+            </label>
+            <a href="#" onclick="switchTab('forgot');return false">Forgot password?</a>
+          </div>
+          <button type="submit" class="btn btn-gold" id="loginBtn">Sign In</button>
+        </form>
+        <div class="divider">Demo account</div>
+        <p style="font-size:.8rem;color:var(--muted);text-align:center;line-height:1.6">
+          <strong style="color:var(--text)">vendor@demo.epay</strong> / <strong style="color:var(--text)">Demo@123</strong><br/>
+          Vendor ID: <strong style="color:var(--gold-light)">VEN-1001</strong>
+        </p>
+      </div>
+
+      <!-- SIGN UP -->
+      <div class="auth-panel" id="tab-signup">
+        <div class="error-msg" id="signupError"></div>
+        <div class="success-msg" id="signupSuccess"></div>
+        <div class="ref-badge">📋 Reference ID required for new vendors</div>
+        <form onsubmit="return handleSignup(event)">
+          <div class="form-group">
+            <label>Business / Brand Name <span class="req">*</span></label>
+            <input type="text" id="suBusiness" required placeholder="Your company name" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Contact Name <span class="req">*</span></label>
+              <input type="text" id="suName" required placeholder="Full name" />
+            </div>
+            <div class="form-group">
+              <label>Mobile <span class="req">*</span></label>
+              <input type="tel" id="suMobile" required placeholder="10-digit mobile" pattern="[0-9]{10}" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email <span class="req">*</span></label>
+            <input type="email" id="suEmail" required placeholder="you@business.com" autocomplete="email" />
+          </div>
+          <div class="form-group">
+            <label>Reference ID <span class="req">*</span></label>
+            <input type="text" id="suRef" required placeholder="e.g. REF-GAL-PUNE or EPAY-PARTNER-01" />
+            <div class="hint">Ask your Epay Gallery contact or partner for a valid Reference ID.</div>
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select id="suCategory">
+              <option value="">Select category</option>
+              <option>Furniture & Home</option>
+              <option>Electronics</option>
+              <option>Fashion & Lifestyle</option>
+              <option>Beauty & Personal Care</option>
+              <option>Kitchen & Appliances</option>
+              <option>Business & Commercial</option>
+              <option>Specialty</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Password <span class="req">*</span></label>
+              <div class="input-wrap">
+                <input type="password" id="suPass" required minlength="6" placeholder="Min 6 characters" autocomplete="new-password" />
+                <button type="button" class="toggle-eye" onclick="togglePass('suPass',this)">👁</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Confirm Password <span class="req">*</span></label>
+              <input type="password" id="suPass2" required minlength="6" placeholder="Repeat password" autocomplete="new-password" />
+            </div>
+          </div>
+          <label style="display:flex;align-items:flex-start;gap:8px;font-size:.8rem;color:var(--muted);margin:8px 0 4px;cursor:pointer">
+            <input type="checkbox" id="suTerms" required style="width:auto;margin-top:3px;accent-color:var(--gold)" />
+            I agree to Epay Vendor Terms &amp; confirm the Reference ID is valid.
+          </label>
+          <button type="submit" class="btn btn-gold" id="signupBtn">Create Vendor Account</button>
+        </form>
+        <p style="text-align:center;margin-top:14px;font-size:.82rem;color:var(--muted)">
+          Already have an account? <a href="#" onclick="switchTab('login');return false">Sign in</a>
+        </p>
+      </div>
+
+      <!-- FORGOT -->
+      <div class="auth-panel" id="tab-forgot">
+        <div class="error-msg" id="forgotError"></div>
+        <div class="success-msg" id="forgotSuccess"></div>
+        <p style="font-size:.9rem;color:var(--muted);margin-bottom:18px;line-height:1.6">
+          Enter your registered email / Vendor ID and Reference ID to reset your password.
+        </p>
+        <form onsubmit="return handleForgot(event)">
+          <div class="form-group">
+            <label>Email or Vendor ID <span class="req">*</span></label>
+            <input type="text" id="fgId" required placeholder="vendor@business.com or VEN-XXXX" />
+          </div>
+          <div class="form-group">
+            <label>Reference ID <span class="req">*</span></label>
+            <input type="text" id="fgRef" required placeholder="Reference ID used at registration" />
+            <div class="hint">Must match the Reference ID linked to your account.</div>
+          </div>
+          <div class="form-group">
+            <label>Registered Mobile <span class="req">*</span></label>
+            <input type="tel" id="fgMobile" required placeholder="10-digit mobile on account" pattern="[0-9]{10}" />
+          </div>
+          <div class="form-group">
+            <label>New Password <span class="req">*</span></label>
+            <div class="input-wrap">
+              <input type="password" id="fgPass" required minlength="6" placeholder="New password (min 6)" />
+              <button type="button" class="toggle-eye" onclick="togglePass('fgPass',this)">👁</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Confirm New Password <span class="req">*</span></label>
+            <input type="password" id="fgPass2" required minlength="6" placeholder="Repeat new password" />
+          </div>
+          <button type="submit" class="btn btn-gold" id="forgotBtn">Reset Password</button>
+          <button type="button" class="btn btn-ghost" onclick="switchTab('login')">Back to Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== VENDOR PORTAL (after login) ========== -->
+<div class="portal" id="portalScreen">
+  <div class="portal-nav">
+    <div class="brand" style="gap:10px">
+      <div class="brand-mark" style="width:34px;height:34px;font-size:.85rem">eP</div>
+      <div class="brand-text" style="font-size:1rem">Epay <span>Vendor Portal</span></div>
+    </div>
+    <div class="user">
+      <div>
+        <div style="font-weight:600" id="portalName">Vendor</div>
+        <div style="font-size:.75rem;color:var(--muted)" id="portalId">VEN-XXXX</div>
+      </div>
+      <div class="avatar" id="portalAvatar">V</div>
+      <button class="btn btn-ghost" style="width:auto;padding:8px 14px;font-size:.8rem;margin:0" onclick="handleLogout()">Logout</button>
+    </div>
+  </div>
+  <div class="portal-body">
+    <h1>Welcome back, <span id="portalHello">Vendor</span></h1>
+    <p class="sub">Reference: <span id="portalRef" style="color:var(--gold-light)">—</span> · Manage your Epay business from here.</p>
+    <div class="kpi-row">
+      <div class="kpi"><div class="label">Products</div><div class="val">24</div></div>
+      <div class="kpi"><div class="label">Open Orders</div><div class="val">7</div></div>
+      <div class="kpi"><div class="label">Pending Settlement</div><div class="val">₹1.2L</div></div>
+      <div class="kpi"><div class="label">This Month GMV</div><div class="val">₹4.8L</div></div>
+    </div>
+    <div class="portal-grid">
+      <div class="portal-card" onclick="toast('Products module (demo)')"><div class="icon">📦</div><h3>Products</h3><p>Catalogue, pricing, images</p></div>
+      <div class="portal-card" onclick="toast('Inventory module (demo)')"><div class="icon">📊</div><h3>Inventory</h3><p>Stock & availability</p></div>
+      <div class="portal-card" onclick="toast('Orders module (demo)')"><div class="icon">🛒</div><h3>Orders</h3><p>Confirm to delivery</p></div>
+      <div class="portal-card" onclick="toast('Payments module (demo)')"><div class="icon">💳</div><h3>Payments</h3><p>Transactions & status</p></div>
+      <div class="portal-card" onclick="toast('Settlements module (demo)')"><div class="icon">🏦</div><h3>Settlements</h3><p>History & pending</p></div>
+      <div class="portal-card" onclick="toast('Reports module (demo)')"><div class="icon">📈</div><h3>Reports</h3><p>Sales performance</p></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== STORAGE ==========
+var STORAGE_KEY = 'epay_vendors_v1';
+var SESSION_KEY = 'epay_vendor_session';
+
+// Valid reference IDs (demo whitelist — in production from backend)
+var VALID_REFS = [
+  'REF-GAL-PUNE', 'REF-GAL-MUMBAI', 'REF-GAL-DELHI', 'REF-GAL-AHMEDABAD',
+  'EPAY-PARTNER-01', 'EPAY-PARTNER-02', 'EPAY-HQ-VENDOR',
+  'REF-BDE-1001', 'REF-2026-VENDOR'
+];
+
+function getVendors() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+function saveVendors(list) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+function seedDemo() {
+  var list = getVendors();
+  if (list.some(function(v){ return v.email === 'vendor@demo.epay'; })) return;
+  list.push({
+    vendorId: 'VEN-1001',
+    business: 'Demo Supplies Pvt Ltd',
+    name: 'Amit Vendor',
+    mobile: '9876543210',
+    email: 'vendor@demo.epay',
+    password: 'Demo@123',
+    referenceId: 'EPAY-HQ-VENDOR',
+    category: 'Electronics',
+    createdAt: '2026-01-15T10:00:00.000Z'
+  });
+  saveVendors(list);
+}
+
+function nextVendorId() {
+  var list = getVendors();
+  var max = 1001;
+  list.forEach(function(v) {
+    var n = parseInt(String(v.vendorId).replace(/\D/g, ''), 10);
+    if (n > max) max = n;
+  });
+  return 'VEN-' + (max + 1);
+}
+
+function normalizeRef(r) {
+  return String(r || '').trim().toUpperCase().replace(/\s+/g, '-');
+}
+function isValidRef(r) {
+  return VALID_REFS.indexOf(normalizeRef(r)) !== -1;
+}
+
+// ========== UI HELPERS ==========
+function switchTab(name) {
+  document.querySelectorAll('.auth-tabs button').forEach(function(b) {
+    b.classList.toggle('active', b.getAttribute('data-tab') === name);
+  });
+  document.querySelectorAll('.auth-panel').forEach(function(p) {
+    p.classList.remove('active');
+  });
+  var panel = document.getElementById('tab-' + name);
+  if (panel) panel.classList.add('active');
+  clearMessages();
+}
+function clearMessages() {
+  ['loginError','loginSuccess','signupError','signupSuccess','forgotError','forgotSuccess'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) { el.classList.remove('show'); el.textContent = ''; }
+  });
+}
+function showErr(id, msg) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+}
+function showOk(id, msg) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+}
+function togglePass(inputId, btn) {
+  var inp = document.getElementById(inputId);
+  if (!inp) return;
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🔒';
+}
+function toast(msg) {
+  // simple alert-style for portal clicks
+  var t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1a1d2a;border:1px solid rgba(212,175,55,.35);border-left:3px solid #d4af37;padding:12px 16px;border-radius:12px;z-index:99;font-size:.88rem;box-shadow:0 12px 40px rgba(0,0,0,.4)';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function(){ t.style.opacity='0'; t.style.transition='.3s'; setTimeout(function(){ t.remove(); },300); },2500);
+}
+
+// ========== LOGIN ==========
+function handleLogin(e) {
+  e.preventDefault();
+  clearMessages();
+  var id = (document.getElementById('loginId').value || '').trim().toLowerCase();
+  var pass = document.getElementById('loginPass').value || '';
+  var ref = normalizeRef(document.getElementById('loginRef').value);
+
+  if (!id || !pass) {
+    showErr('loginError', 'Email/Vendor ID and password are required.');
+    return false;
+  }
+
+  var list = getVendors();
+  var user = list.find(function(v) {
+    return v.email.toLowerCase() === id || String(v.vendorId).toLowerCase() === id;
+  });
+
+  if (!user) {
+    showErr('loginError', 'Account not found. Check email / Vendor ID or sign up.');
+    return false;
+  }
+  if (user.password !== pass) {
+    showErr('loginError', 'Incorrect password.');
+    return false;
+  }
+  // Optional reference check on login — if provided, must match account
+  if (ref && normalizeRef(user.referenceId) !== ref) {
+    showErr('loginError', 'Reference ID does not match this account.');
+    return false;
+  }
+
+  var session = {
+    vendorId: user.vendorId,
+    name: user.name,
+    business: user.business,
+    email: user.email,
+    referenceId: user.referenceId,
+    loginAt: new Date().toISOString()
+  };
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  if (document.getElementById('rememberMe').checked) {
+    localStorage.setItem(SESSION_KEY + '_remember', JSON.stringify(session));
+  }
+  showOk('loginSuccess', 'Login successful. Opening portal…');
+  setTimeout(enterPortal, 600);
+  return false;
+}
+
+// ========== SIGN UP ==========
+function handleSignup(e) {
+  e.preventDefault();
+  clearMessages();
+  var business = (document.getElementById('suBusiness').value || '').trim();
+  var name = (document.getElementById('suName').value || '').trim();
+  var mobile = (document.getElementById('suMobile').value || '').trim();
+  var email = (document.getElementById('suEmail').value || '').trim().toLowerCase();
+  var ref = normalizeRef(document.getElementById('suRef').value);
+  var category = document.getElementById('suCategory').value || '';
+  var pass = document.getElementById('suPass').value || '';
+  var pass2 = document.getElementById('suPass2').value || '';
+
+  if (!business || !name || !mobile || !email || !ref || !pass) {
+    showErr('signupError', 'Please fill all required fields including Reference ID.');
+    return false;
+  }
+  if (!/^[0-9]{10}$/.test(mobile)) {
+    showErr('signupError', 'Mobile must be a 10-digit number.');
+    return false;
+  }
+  if (pass.length < 6) {
+    showErr('signupError', 'Password must be at least 6 characters.');
+    return false;
+  }
+  if (pass !== pass2) {
+    showErr('signupError', 'Passwords do not match.');
+    return false;
+  }
+  if (!isValidRef(ref)) {
+    showErr('signupError', 'Invalid Reference ID. Use a code from your Epay Gallery / partner (e.g. REF-GAL-PUNE, EPAY-PARTNER-01).');
+    return false;
+  }
+  if (!document.getElementById('suTerms').checked) {
+    showErr('signupError', 'Please accept the terms.');
+    return false;
+  }
+
+  var list = getVendors();
+  if (list.some(function(v){ return v.email === email; })) {
+    showErr('signupError', 'An account with this email already exists. Please login.');
+    return false;
+  }
+  if (list.some(function(v){ return v.mobile === mobile; })) {
+    showErr('signupError', 'An account with this mobile already exists.');
+    return false;
+  }
+
+  var vendorId = nextVendorId();
+  var user = {
+    vendorId: vendorId,
+    business: business,
+    name: name,
+    mobile: mobile,
+    email: email,
+    password: pass,
+    referenceId: ref,
+    category: category,
+    createdAt: new Date().toISOString()
+  };
+  list.push(user);
+  saveVendors(list);
+
+  showOk('signupSuccess', 'Account created! Vendor ID: ' + vendorId + ' · You can login now.');
+  document.getElementById('loginId').value = email;
+  setTimeout(function(){ switchTab('login'); showOk('loginSuccess', 'Account ready. Sign in with your email and password.'); }, 1400);
+  e.target.reset();
+  return false;
+}
+
+// ========== FORGOT / RESET ==========
+function handleForgot(e) {
+  e.preventDefault();
+  clearMessages();
+  var id = (document.getElementById('fgId').value || '').trim().toLowerCase();
+  var ref = normalizeRef(document.getElementById('fgRef').value);
+  var mobile = (document.getElementById('fgMobile').value || '').trim();
+  var pass = document.getElementById('fgPass').value || '';
+  var pass2 = document.getElementById('fgPass2').value || '';
+
+  if (!id || !ref || !mobile || !pass) {
+    showErr('forgotError', 'All fields are required for account recovery.');
+    return false;
+  }
+  if (pass !== pass2) {
+    showErr('forgotError', 'New passwords do not match.');
+    return false;
+  }
+  if (pass.length < 6) {
+    showErr('forgotError', 'Password must be at least 6 characters.');
+    return false;
+  }
+
+  var list = getVendors();
+  var idx = list.findIndex(function(v) {
+    return v.email.toLowerCase() === id || String(v.vendorId).toLowerCase() === id;
+  });
+  if (idx === -1) {
+    showErr('forgotError', 'No account found for this Email / Vendor ID.');
+    return false;
+  }
+  var user = list[idx];
+  if (normalizeRef(user.referenceId) !== ref) {
+    showErr('forgotError', 'Reference ID does not match our records for this account.');
+    return false;
+  }
+  if (user.mobile !== mobile) {
+    showErr('forgotError', 'Mobile number does not match the registered number.');
+    return false;
+  }
+
+  list[idx].password = pass;
+  list[idx].passwordUpdatedAt = new Date().toISOString();
+  saveVendors(list);
+
+  showOk('forgotSuccess', 'Password updated successfully. You can login now.');
+  document.getElementById('loginId').value = user.email;
+  setTimeout(function(){ switchTab('login'); showOk('loginSuccess', 'Password reset. Sign in with your new password.'); }, 1200);
+  e.target.reset();
+  return false;
+}
+
+// ========== PORTAL ==========
+function enterPortal() {
+  var raw = sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY + '_remember');
+  if (!raw) return;
+  var s = JSON.parse(raw);
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('portalScreen').classList.add('active');
+  document.getElementById('portalName').textContent = s.business || s.name;
+  document.getElementById('portalHello').textContent = (s.name || 'Vendor').split(' ')[0];
+  document.getElementById('portalId').textContent = s.vendorId;
+  document.getElementById('portalRef').textContent = s.referenceId || '—';
+  document.getElementById('portalAvatar').textContent = (s.name || 'V').charAt(0).toUpperCase();
+  document.title = 'Vendor Portal — ' + (s.business || s.vendorId);
+}
+function handleLogout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(SESSION_KEY + '_remember');
+  document.getElementById('portalScreen').classList.remove('active');
+  document.getElementById('authScreen').style.display = 'flex';
+  document.title = 'Epay Vendor Portal — Login';
+  switchTab('login');
+  clearMessages();
+  showOk('loginSuccess', 'Logged out successfully.');
+}
+
+// ========== INIT ==========
+seedDemo();
+(function() {
+  var raw = sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY + '_remember');
+  if (raw) {
+    try { enterPortal(); } catch(e) {}
+  }
+})();
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,1845 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ePay · Customer Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
+    <style>
+
+
+
+        /* ===== RESET & ROOT ===== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --green-400: #34d399;
+            --green-500: #10b981;
+            --green-600: #059669;
+            --green-700: #047857;
+            --dark: #0b1121;
+            --dark2: #111c2f;
+            --dark3: #1a2a44;
+            --gray: #6b7a8f;
+            --gray2: #8a9bb0;
+            --light: #e8edf5;
+            --border: rgba(255, 255, 255, 0.06);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.25s ease;
+            --sidebar-width: 260px;
+        }
+        html {
+            font-size: 14px;
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: var(--dark);
+            color: #f0f4fa;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        button {
+            cursor: pointer;
+            font-family: inherit;
+            border: none;
+            background: none;
+            color: inherit;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--green-500);
+            border-radius: 10px;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: rgba(11, 17, 33, 0.95);
+            backdrop-filter: blur(16px);
+            border-right: 1px solid var(--border);
+            padding: 20px 0 30px;
+            overflow-y: auto;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 20px 24px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+        .sidebar-brand img {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--green-500);
+            object-fit: contain;
+            padding: 4px;
+        }
+        .sidebar-brand h1 {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+        .sidebar-brand h1 span {
+            color: var(--green-500);
+        }
+        .sidebar-brand small {
+            font-size: 9px;
+            opacity: 0.4;
+            display: block;
+            font-weight: 400;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 0 10px;
+        }
+        .sidebar-nav .nav-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.3;
+            padding: 14px 12px 6px;
+            font-weight: 600;
+        }
+        .sidebar-nav .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 9px 14px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.55);
+            cursor: pointer;
+            position: relative;
+            margin-bottom: 1px;
+        }
+        .sidebar-nav .nav-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+        }
+        .sidebar-nav .nav-item.active {
+            background: rgba(16, 185, 129, 0.15);
+            color: #6ee7b7;
+            box-shadow: inset 3px 0 0 var(--green-500);
+        }
+        .sidebar-nav .nav-item i {
+            width: 20px;
+            font-size: 15px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .sidebar-nav .nav-item .badge {
+            margin-left: auto;
+            font-size: 10px;
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+            padding: 1px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .sidebar-nav .nav-item .arrow {
+            margin-left: auto;
+            font-size: 10px;
+            opacity: 0.3;
+            transition: var(--transition);
+        }
+        .sidebar-nav .nav-item.expanded .arrow {
+            transform: rotate(90deg);
+        }
+        .sidebar-nav .sub-nav {
+            padding-left: 28px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .sidebar-nav .sub-nav.open {
+            max-height: 500px;
+        }
+        .sidebar-nav .sub-nav .nav-item {
+            font-size: 12px;
+            padding: 6px 14px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+        .sidebar-nav .sub-nav .nav-item:hover {
+            color: #fff;
+        }
+        .sidebar-nav .sub-nav .nav-item.active {
+            color: #6ee7b7;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .sidebar-footer {
+            padding: 16px 20px 0;
+            border-top: 1px solid var(--border);
+            font-size: 11px;
+            opacity: 0.35;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        /* ===== MAIN ===== */
+        .main {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 24px 32px 40px;
+            min-height: 100vh;
+            max-width: calc(100vw - var(--sidebar-width));
+        }
+
+        /* ===== TOP BAR ===== */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .topbar-left .menu-toggle {
+            display: none;
+            font-size: 20px;
+            opacity: 0.6;
+            cursor: pointer;
+        }
+        .topbar-left h2 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .topbar-left h2 span {
+            color: var(--green-500);
+        }
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .topbar-right .greeting {
+            font-size: 13px;
+            opacity: 0.6;
+            font-weight: 400;
+        }
+        .topbar-right .greeting strong {
+            color: #fff;
+            opacity: 0.9;
+        }
+        .topbar-right .icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            position: relative;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .topbar-right .icon-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+        }
+        .topbar-right .icon-btn .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #ef4444;
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            border: 2px solid var(--dark);
+        }
+        .topbar-right .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-500), var(--green-700));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* ===== SECTION CONTAINER ===== */
+        .section {
+            display: none;
+            animation: fadeIn 0.35s ease;
+        }
+        .section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== DASHBOARD ===== */
+        .dash-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .dash-header h2 {
+            font-size: 26px;
+            font-weight: 700;
+        }
+        .dash-header h2 small {
+            font-size: 15px;
+            font-weight: 400;
+            opacity: 0.5;
+            display: block;
+            margin-top: 2px;
+        }
+        .dash-header .ai-btn {
+            background: linear-gradient(135deg, var(--green-500), var(--green-700));
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35);
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .dash-header .ai-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5);
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px 20px;
+            transition: var(--transition);
+        }
+        .kpi-card:hover {
+            background: rgba(255, 255, 255, 0.07);
+            transform: translateY(-2px);
+        }
+        .kpi-card .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.4;
+            font-weight: 600;
+        }
+        .kpi-card .value {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 4px 0 2px;
+            letter-spacing: -0.5px;
+        }
+        .kpi-card .sub {
+            font-size: 12px;
+            opacity: 0.5;
+        }
+        .kpi-card .icon {
+            float: right;
+            font-size: 28px;
+            opacity: 0.15;
+        }
+        .kpi-card.green .value {
+            color: var(--green-500);
+        }
+        .kpi-card.gold .value {
+            color: #fbbf24;
+        }
+        .kpi-card.blue .value {
+            color: #60a5fa;
+        }
+        .kpi-card.pink .value {
+            color: #f472b6;
+        }
+
+        /* ===== UPCOMING TRIP CARD ===== */
+        .trip-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(5, 150, 105, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: var(--radius);
+            padding: 24px 28px;
+            margin-bottom: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .trip-card .trip-info {
+            flex: 1;
+        }
+        .trip-card .trip-info .flag {
+            font-size: 28px;
+            margin-right: 6px;
+        }
+        .trip-card .trip-info h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .trip-card .trip-info .meta {
+            font-size: 13px;
+            opacity: 0.6;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 4px;
+        }
+        .trip-card .trip-info .meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .trip-card .trip-info .confirmed-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 14px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        .trip-card .trip-info .confirmed-items .item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #6ee7b7;
+        }
+        .trip-card .trip-info .confirmed-items .item i {
+            font-size: 11px;
+        }
+        .trip-card .trip-actions {
+            text-align: right;
+            min-width: 140px;
+        }
+        .trip-card .trip-actions .countdown {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+        .trip-card .trip-actions .countdown-label {
+            font-size: 11px;
+            opacity: 0.5;
+            display: block;
+        }
+        .trip-card .trip-actions .btn-view {
+            margin-top: 10px;
+            background: var(--green-500);
+            padding: 8px 22px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 13px;
+            display: inline-block;
+            transition: var(--transition);
+        }
+        .trip-card .trip-actions .btn-view:hover {
+            background: var(--green-600);
+            transform: translateY(-1px);
+        }
+
+        /* ===== TIMELINE ===== */
+        .timeline-section {
+            margin-bottom: 28px;
+        }
+        .timeline-section h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            opacity: 0.7;
+        }
+        .timeline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 0;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            border: 1px solid var(--border);
+        }
+        .timeline .step {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            padding: 4px 12px 4px 6px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.04);
+            opacity: 0.4;
+            transition: var(--transition);
+        }
+        .timeline .step.done {
+            opacity: 1;
+            color: #6ee7b7;
+            background: rgba(16, 185, 129, 0.1);
+        }
+        .timeline .step.active {
+            opacity: 1;
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+        }
+        .timeline .step i {
+            font-size: 12px;
+        }
+        .timeline .step .sep {
+            color: rgba(255, 255, 255, 0.1);
+            margin: 0 2px;
+        }
+
+        /* ===== QUICK ACTIONS ===== */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .quick-actions .qa {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 16px 14px;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .quick-actions .qa:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-3px);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+        .quick-actions .qa i {
+            font-size: 24px;
+            color: var(--green-500);
+            margin-bottom: 6px;
+            display: block;
+        }
+        .quick-actions .qa span {
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        /* ===== GENERIC CARDS ===== */
+        .page-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .page-header h2 {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        .page-header .sub {
+            font-size: 13px;
+            opacity: 0.5;
+            font-weight: 400;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 22px;
+            transition: var(--transition);
+        }
+        .card:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .card .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .card .card-sub {
+            font-size: 12px;
+            opacity: 0.4;
+        }
+        .card .card-body {
+            margin-top: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+        .card .card-body .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .card .card-body .row .label {
+            opacity: 0.5;
+        }
+        .card .card-body .row .val {
+            font-weight: 500;
+        }
+
+        .badge-status {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge-status.confirmed {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+        }
+        .badge-status.pending {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+        .badge-status.cancelled {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+        .badge-status.new {
+            background: rgba(96, 165, 250, 0.2);
+            color: #60a5fa;
+        }
+
+        /* ===== AI TRAVEL ADVISOR ===== */
+        .ai-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .ai-form .field label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            opacity: 0.5;
+            margin-bottom: 4px;
+        }
+        .ai-form .field input,
+        .ai-form .field select {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            transition: var(--transition);
+        }
+        .ai-form .field input:focus,
+        .ai-form .field select:focus {
+            border-color: var(--green-500);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .ai-form .field input::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+        }
+        .ai-form .field .check-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 4px;
+        }
+        .ai-form .field .check-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            font-weight: 400;
+            text-transform: none;
+            opacity: 0.7;
+            cursor: pointer;
+        }
+        .ai-form .field .check-group input[type="checkbox"] {
+            width: auto;
+            accent-color: var(--green-500);
+        }
+
+        .ai-recs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 10px;
+        }
+        .ai-recs .rec {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px 20px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .ai-recs .rec:hover {
+            background: rgba(255, 255, 255, 0.07);
+            transform: translateY(-2px);
+        }
+        .ai-recs .rec .tag {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: rgba(16, 185, 129, 0.15);
+            color: #6ee7b7;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+        .ai-recs .rec .tag.premium {
+            background: rgba(251, 191, 36, 0.15);
+            color: #fbbf24;
+        }
+        .ai-recs .rec .tag.luxury {
+            background: rgba(244, 114, 182, 0.15);
+            color: #f472b6;
+        }
+        .ai-recs .rec h4 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .ai-recs .rec .price {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--green-500);
+            margin: 4px 0 6px;
+        }
+        .ai-recs .rec .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .ai-recs .rec .actions button {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .ai-recs .rec .actions button:hover {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: var(--green-500);
+            color: #6ee7b7;
+        }
+
+        /* ===== TABLES ===== */
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .table-wrap table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .table-wrap th {
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            opacity: 0.5;
+            border-bottom: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .table-wrap td {
+            padding: 10px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .table-wrap tr:last-child td {
+            border-bottom: none;
+        }
+        .table-wrap .action-link {
+            color: var(--green-500);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .table-wrap .action-link:hover {
+            color: #6ee7b7;
+        }
+
+        /* ===== NOTIFICATIONS ===== */
+        .notif-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .notif-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid transparent;
+            transition: var(--transition);
+        }
+        .notif-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .notif-item .notif-icon {
+            font-size: 16px;
+            width: 28px;
+            text-align: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .notif-item .notif-content {
+            flex: 1;
+        }
+        .notif-item .notif-content .text {
+            font-size: 13px;
+        }
+        .notif-item .notif-content .time {
+            font-size: 11px;
+            opacity: 0.35;
+            display: block;
+            margin-top: 2px;
+        }
+        .notif-item .notif-badge {
+            font-size: 10px;
+            padding: 1px 10px;
+            border-radius: 20px;
+            background: rgba(16, 185, 129, 0.15);
+            color: #6ee7b7;
+            flex-shrink: 0;
+        }
+        .notif-item.booking {
+            border-left-color: #60a5fa;
+        }
+        .notif-item.payment {
+            border-left-color: #fbbf24;
+        }
+        .notif-item.travel {
+            border-left-color: #6ee7b7;
+        }
+        .notif-item.documents {
+            border-left-color: #f472b6;
+        }
+        .notif-item.offers {
+            border-left-color: #a78bfa;
+        }
+
+        /* ===== SUPPORT TICKET ===== */
+        .ticket-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 24px;
+            margin-bottom: 24px;
+        }
+        .ticket-form .full {
+            grid-column: 1 / -1;
+        }
+        .ticket-form label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            opacity: 0.5;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .ticket-form input,
+        .ticket-form select,
+        .ticket-form textarea {
+            width: 100%;
+            padding: 9px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .ticket-form textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .ticket-form input:focus,
+        .ticket-form select:focus,
+        .ticket-form textarea:focus {
+            border-color: var(--green-500);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .ticket-form .submit-btn {
+            grid-column: 1 / -1;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            background: var(--green-500);
+            font-weight: 600;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        .ticket-form .submit-btn:hover {
+            background: var(--green-600);
+        }
+
+        /* ===== PROFILE ===== */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+        .profile-grid .full {
+            grid-column: 1 / -1;
+        }
+        .profile-grid .field label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            opacity: 0.4;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .profile-grid .field input,
+        .profile-grid .field select {
+            width: 100%;
+            padding: 9px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            transition: var(--transition);
+        }
+        .profile-grid .field input:focus,
+        .profile-grid .field select:focus {
+            border-color: var(--green-500);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main {
+                margin-left: 0;
+                max-width: 100vw;
+                padding: 16px;
+            }
+            .topbar-left .menu-toggle {
+                display: block;
+            }
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+            .ticket-form {
+                grid-template-columns: 1fr;
+            }
+            .ticket-form .full {
+                grid-column: 1;
+            }
+            .ticket-form .submit-btn {
+                grid-column: 1;
+            }
+        }
+        @media (max-width: 600px) {
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .quick-actions {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+            .ai-recs {
+                grid-template-columns: 1fr;
+            }
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            .trip-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            .trip-card .trip-actions {
+                text-align: center;
+            }
+            .trip-card .trip-info .confirmed-items {
+                justify-content: center;
+            }
+            .dash-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .dash-header .ai-btn {
+                justify-content: center;
+            }
+            .timeline {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+        }
+        @media (max-width: 420px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+            .quick-actions {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* ===== OVERLAY ===== */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 90;
+        }
+        .sidebar-overlay.open {
+            display: block;
+        }
+    </style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z'/%3E%3C/svg%3E" alt="ePay" />
+            <div>
+                <h1>ePay <span>Travel</span></h1>
+                <small>Customer Portal</small>
+            </div>
+        </div>
+        <nav class="sidebar-nav" id="sidebarNav">
+            <!-- nav items rendered by JS -->
+        </nav>
+        <div class="sidebar-footer">© 2026 ePay Travel · v4.0</div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ===== MAIN ===== -->
+    <main class="main" id="mainContent">
+
+        <!-- TOP BAR -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <span class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></span>
+                <h2 id="pageTitle">Dashboard</h2>
+            </div>
+            <div class="topbar-right">
+                <span class="greeting">Good Morning, <strong>Rahul</strong> 👋</span>
+                <button class="icon-btn" title="Notifications"><i class="fas fa-bell"></i><span class="dot"></span></button>
+                <button class="icon-btn" title="Profile"><i class="fas fa-user-cog"></i></button>
+                <div class="avatar">R</div>
+            </div>
+        </div>
+
+        <!-- ===== SECTIONS ===== -->
+
+        <!-- DASHBOARD -->
+        <section class="section active" id="section-dashboard">
+            <div class="dash-header">
+                <div>
+                    <h2>Where would you like to go next? <small>Plan your dream trip with ePay</small></h2>
+                </div>
+                <button class="ai-btn" onclick="navigateTo('ai-advisor')"><i class="fas fa-robot"></i> Plan My Trip with AI</button>
+            </div>
+
+            <!-- KPI -->
+            <div class="kpi-grid">
+                <div class="kpi-card green"><span class="icon"><i class="fas fa-plane-departure"></i></span><div class="label">Active Trip</div><div class="value">Dubai</div><div class="sub">15 Oct 2026 · Confirmed</div></div>
+                <div class="kpi-card gold"><span class="icon"><i class="fas fa-calendar-check"></i></span><div class="label">Upcoming Trip</div><div class="value">32</div><div class="sub">Days until departure</div></div>
+                <div class="kpi-card pink"><span class="icon"><i class="fas fa-credit-card"></i></span><div class="label">Pending Payment</div><div class="value">₹49,999</div><div class="sub">Due on 20 Sept</div></div>
+                <div class="kpi-card blue"><span class="icon"><i class="fas fa-file-invoice"></i></span><div class="label">Active Quotations</div><div class="value">2</div><div class="sub">Awaiting response</div></div>
+                <div class="kpi-card"><span class="icon"><i class="fas fa-suitcase"></i></span><div class="label">My Bookings</div><div class="value">4</div><div class="sub">Total bookings</div></div>
+                <div class="kpi-card gold"><span class="icon"><i class="fas fa-star"></i></span><div class="label">Rewards</div><div class="value">1,250</div><div class="sub">ePay Travel Points</div></div>
+            </div>
+
+            <!-- Upcoming Trip -->
+            <div class="trip-card">
+                <div class="trip-info">
+                    <h3><span class="flag">🇦🇪</span> Dubai Premium Holiday</h3>
+                    <div class="meta">
+                        <span><i class="far fa-calendar-alt"></i> 15 Oct – 20 Oct 2026</span>
+                        <span><i class="far fa-clock"></i> 5 Nights / 6 Days</span>
+                        <span><i class="fas fa-user-friends"></i> 4 Travellers</span>
+                    </div>
+                    <div class="confirmed-items">
+                        <span class="item"><i class="fas fa-check-circle"></i> Hotel Confirmed</span>
+                        <span class="item"><i class="fas fa-check-circle"></i> Transfer Confirmed</span>
+                        <span class="item"><i class="fas fa-check-circle"></i> Desert Safari Confirmed</span>
+                        <span class="item"><i class="fas fa-check-circle"></i> Burj Khalifa Confirmed</span>
+                    </div>
+                </div>
+                <div class="trip-actions">
+                    <div class="countdown">32 <span class="countdown-label">Days to Go</span></div>
+                    <button class="btn-view" onclick="navigateTo('bookings')">View Trip</button>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="timeline-section">
+                <h4>Travel Status Timeline</h4>
+                <div class="timeline">
+                    <span class="step done"><i class="fas fa-check-circle"></i> Enquiry</span>
+                    <span class="step done"><i class="fas fa-check-circle"></i> Quotation</span>
+                    <span class="step done"><i class="fas fa-check-circle"></i> Customer Accepted</span>
+                    <span class="step done"><i class="fas fa-check-circle"></i> Payment</span>
+                    <span class="step done"><i class="fas fa-check-circle"></i> Booking Confirmed</span>
+                    <span class="step done"><i class="fas fa-check-circle"></i> Documents</span>
+                    <span class="step active"><i class="fas fa-spinner"></i> Trip <span class="sep">·</span> <span style="opacity:0.5;">In Progress</span></span>
+                    <span class="step"><i class="far fa-circle"></i> Completed</span>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <h4 style="margin-bottom:12px;font-weight:600;opacity:0.7;">Quick Actions</h4>
+            <div class="quick-actions">
+                <div class="qa" onclick="navigateTo('ai-advisor')"><i class="fas fa-robot"></i><span>Plan with AI</span></div>
+                <div class="qa" onclick="navigateTo('search')"><i class="fas fa-search"></i><span>Search Holidays</span></div>
+                <div class="qa" onclick="navigateTo('packages')"><i class="fas fa-box"></i><span>My Packages</span></div>
+                <div class="qa" onclick="navigateTo('enquiries')"><i class="fas fa-file-signature"></i><span>Request Quote</span></div>
+                <div class="qa" onclick="navigateTo('bookings')"><i class="fas fa-calendar-alt"></i><span>My Bookings</span></div>
+                <div class="qa" onclick="navigateTo('payments')"><i class="fas fa-credit-card"></i><span>Pay Balance</span></div>
+                <div class="qa" onclick="navigateTo('documents')"><i class="fas fa-file-download"></i><span>Download Docs</span></div>
+                <div class="qa" onclick="navigateTo('support')"><i class="fas fa-headset"></i><span>Contact Expert</span></div>
+            </div>
+        </section>
+
+        <!-- AI ADVISOR -->
+        <section class="section" id="section-ai-advisor">
+            <div class="page-header"><h2>🤖 AI Travel Advisor</h2><span class="sub">Let AI plan your perfect trip</span></div>
+            <div class="ai-form">
+                <div class="field"><label>Destination</label><input type="text" placeholder="Dubai" value="Dubai" /></div>
+                <div class="field"><label>Travel Date</label><input type="date" value="2026-10-15" /></div>
+                <div class="field"><label>Travellers</label><input type="text" placeholder="Adults: 2, Children: 2" value="Adults: 2, Children: 2" /></div>
+                <div class="field"><label>Budget (₹)</label><input type="text" placeholder="₹1,50,000" value="₹1,50,000" /></div>
+                <div class="field"><label>Trip Type</label>
+                    <select><option>Family</option><option>Couple</option><option>Friends</option><option>Solo</option></select>
+                </div>
+                <div class="field" style="grid-column:1/-1;">
+                    <label>Preferences</label>
+                    <div class="check-group">
+                        <label><input type="checkbox" checked /> Hotel</label>
+                        <label><input type="checkbox" checked /> Sightseeing</label>
+                        <label><input type="checkbox" checked /> Activities</label>
+                        <label><input type="checkbox" checked /> Transfers</label>
+                    </div>
+                </div>
+                <button class="login-btn" style="grid-column:1/-1;padding:12px;font-size:15px;" onclick="alert('AI recommendations generated!')"><i class="fas fa-magic"></i> Create My Trip</button>
+            </div>
+
+            <h4 style="margin-bottom:12px;font-weight:600;opacity:0.7;">AI Recommendations</h4>
+            <div class="ai-recs">
+                <div class="rec"><span class="tag">Best Value</span><h4>Dubai Explorer</h4><div class="price">₹1,25,000</div><div>4N / 5D · 4★ Hotel · Half Board</div><div class="actions"><button>Compare</button><button>Customize</button><button>Save</button><button>Request Quote</button></div></div>
+                <div class="rec"><span class="tag premium">Premium</span><h4>Dubai Premium</h4><div class="price">₹1,89,999</div><div>5N / 6D · 5★ Hotel · All Inclusive</div><div class="actions"><button>Compare</button><button>Customize</button><button>Save</button><button>Request Quote</button></div></div>
+                <div class="rec"><span class="tag luxury">Luxury</span><h4>Dubai Royal</h4><div class="price">₹2,85,000</div><div>6N / 7D · 5★ Deluxe · Ultra All Inc.</div><div class="actions"><button>Compare</button><button>Customize</button><button>Save</button><button>Request Quote</button></div></div>
+            </div>
+        </section>
+
+        <!-- SEARCH -->
+        <section class="section" id="section-search">
+            <div class="page-header"><h2>🔍 Travel Search</h2><span class="sub">Find your perfect package</span></div>
+            <div class="ai-form" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));">
+                <div class="field"><label>Destination</label><input placeholder="Dubai" /></div>
+                <div class="field"><label>Country</label><input placeholder="UAE" /></div>
+                <div class="field"><label>City</label><input placeholder="Dubai" /></div>
+                <div class="field"><label>Departure City</label><input placeholder="Mumbai" /></div>
+                <div class="field"><label>Travel Date</label><input type="date" /></div>
+                <div class="field"><label>Return Date</label><input type="date" /></div>
+                <div class="field"><label>Adults</label><input type="number" value="2" /></div>
+                <div class="field"><label>Children</label><input type="number" value="0" /></div>
+                <div class="field"><label>Infants</label><input type="number" value="0" /></div>
+                <div class="field"><label>Rooms</label><input type="number" value="1" /></div>
+                <div class="field"><label>Budget (₹)</label><input placeholder="1,50,000" /></div>
+                <div class="field"><label>Trip Duration</label><select><option>Any</option><option>3-5 Days</option><option>6-10 Days</option><option>10+ Days</option></select></div>
+                <div class="field"><label>Trip Type</label><select><option>Family</option><option>Couple</option><option>Friends</option><option>Solo</option></select></div>
+                <button class="login-btn" style="grid-column:1/-1;padding:12px;" onclick="alert('Search results loaded!')"><i class="fas fa-search"></i> Search Packages</button>
+            </div>
+            <div style="margin-top:12px;font-size:13px;opacity:0.4;">Filters: Price · Hotel Rating · Meal · Activities · Transfers · Cancellation · Supplier · Package Type · Customer Rating</div>
+        </section>
+
+        <!-- PACKAGES -->
+        <section class="section" id="section-packages">
+            <div class="page-header"><h2>📦 Packages</h2><span class="sub">Browse our curated travel packages</span></div>
+            <div class="card-grid">
+                <div class="card"><div class="card-title">🇦🇪 Dubai Premium</div><div class="card-sub">5N / 6D · 4★ Hotel · Half Board</div><div class="card-body"><div class="row"><span class="label">Price</span><span class="val">₹1,49,999</span></div><div class="row"><span class="label">Rating</span><span class="val">⭐ 4.8 (342 reviews)</span></div><div class="row"><span class="label">Availability</span><span class="val" style="color:#6ee7b7;">Available</span></div><div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;"><button class="action-link" onclick="alert('Package details opened')">View Details</button><button class="action-link" onclick="alert('Added to wishlist')">❤️ Save</button><button class="action-link" onclick="alert('Quote requested')">Request Quote</button></div></div></div>
+                <div class="card"><div class="card-title">🇹🇭 Thailand Honeymoon</div><div class="card-sub">6N / 7D · 5★ Resort · All Inclusive</div><div class="card-body"><div class="row"><span class="label">Price</span><span class="val">₹2,15,000</span></div><div class="row"><span class="label">Rating</span><span class="val">⭐ 4.9 (218 reviews)</span></div><div class="row"><span class="label">Availability</span><span class="val" style="color:#fbbf24;">Limited</span></div><div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;"><button class="action-link" onclick="alert('Package details opened')">View Details</button><button class="action-link" onclick="alert('Added to wishlist')">❤️ Save</button><button class="action-link" onclick="alert('Quote requested')">Request Quote</button></div></div></div>
+                <div class="card"><div class="card-title">🇫🇷 Paris Getaway</div><div class="card-sub">4N / 5D · 3★ Hotel · Breakfast</div><div class="card-body"><div class="row"><span class="label">Price</span><span class="val">₹1,85,000</span></div><div class="row"><span class="label">Rating</span><span class="val">⭐ 4.6 (156 reviews)</span></div><div class="row"><span class="label">Availability</span><span class="val" style="color:#6ee7b7;">Available</span></div><div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;"><button class="action-link" onclick="alert('Package details opened')">View Details</button><button class="action-link" onclick="alert('Added to wishlist')">❤️ Save</button><button class="action-link" onclick="alert('Quote requested')">Request Quote</button></div></div></div>
+                <div class="card"><div class="card-title">🇯🇵 Japan Discovery</div><div class="card-sub">8N / 9D · 4★ Hotels · Half Board</div><div class="card-body"><div class="row"><span class="label">Price</span><span class="val">₹3,20,000</span></div><div class="row"><span class="label">Rating</span><span class="val">⭐ 4.9 (89 reviews)</span></div><div class="row"><span class="label">Availability</span><span class="val" style="color:#6ee7b7;">Available</span></div><div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;"><button class="action-link" onclick="alert('Package details opened')">View Details</button><button class="action-link" onclick="alert('Added to wishlist')">❤️ Save</button><button class="action-link" onclick="alert('Quote requested')">Request Quote</button></div></div></div>
+            </div>
+        </section>
+
+        <!-- WISHLIST -->
+        <section class="section" id="section-wishlist">
+            <div class="page-header"><h2>❤️ Wishlist</h2><span class="sub">Your saved items</span></div>
+            <div class="card-grid">
+                <div class="card"><div class="card-title">🇦🇪 Dubai Premium</div><div class="card-sub">Destination: Dubai · ₹1,49,999</div><div class="card-body"><div class="row"><span class="label">Saved</span><span class="val">12 Aug 2026</span></div><div class="row"><span class="label">Price Change</span><span class="val" style="color:#6ee7b7;">⬇ ₹8,000</span></div><div class="row"><span class="label">Availability</span><span class="val" style="color:#6ee7b7;">Available</span></div><div style="margin-top:8px;"><button class="action-link" onclick="alert('Price drop alert set')">🔔 Price Drop Alert</button></div></div></div>
+                <div class="card"><div class="card-title">🇹🇭 Thailand Honeymoon</div><div class="card-sub">Destination: Thailand · ₹2,15,000</div><div class="card-body"><div class="row"><span class="label">Saved</span><span class="val">10 Aug 2026</span></div><div class="row"><span class="label">Price Change</span><span class="val" style="color:#f87171;">⬆ ₹5,000</span></div><div class="row"><span class="label">Availability</span><span class="val" style="color:#fbbf24;">Limited</span></div><div style="margin-top:8px;"><button class="action-link" onclick="alert('Price drop alert set')">🔔 Price Drop Alert</button></div></div></div>
+            </div>
+        </section>
+
+        <!-- ENQUIRIES -->
+        <section class="section" id="section-enquiries">
+            <div class="page-header"><h2>📋 My Enquiries</h2><span class="sub">Track your travel enquiries</span></div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Enquiry ID</th><th>Destination</th><th>Travel Dates</th><th>Pax</th><th>Status</th><th>Last Activity</th><th>Action</th></tr></thead>
+                    <tbody>
+                        <tr><td>ENQ-2026-0042</td><td>Dubai</td><td>15-20 Oct 2026</td><td>4</td><td><span class="badge-status confirmed">Accepted</span></td><td>12 Aug 2026</td><td><span class="action-link" onclick="alert('View enquiry')">View</span></td></tr>
+                        <tr><td>ENQ-2026-0038</td><td>Thailand</td><td>5-12 Dec 2026</td><td>2</td><td><span class="badge-status pending">Quotation Sent</span></td><td>10 Aug 2026</td><td><span class="action-link" onclick="alert('View enquiry')">View</span></td></tr>
+                        <tr><td>ENQ-2026-0029</td><td>Paris</td><td>20-25 Nov 2026</td><td>2</td><td><span class="badge-status new">Under Review</span></td><td>5 Aug 2026</td><td><span class="action-link" onclick="alert('View enquiry')">View</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- QUOTATIONS -->
+        <section class="section" id="section-quotations">
+            <div class="page-header"><h2>📝 My Quotations</h2><span class="sub">Review your quotes</span></div>
+            <div class="card-grid">
+                <div class="card"><div class="card-title">QT-2026-00452</div><div class="card-sub">Dubai Premium · 5N / 6D</div><div class="card-body"><div class="row"><span class="label">Price</span><span class="val" style="font-size:18px;font-weight:700;color:var(--green-500);">₹1,49,999</span></div><div class="row"><span class="label">Valid Until</span><span class="val">20 Aug 2026</span></div><div class="row"><span class="label">Prepared by</span><span class="val">ePay Travel Expert</span></div><div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;"><button class="action-link" onclick="alert('View quotation')">View</button><button class="action-link" onclick="alert('Quotation accepted')">✅ Accept</button><button class="action-link" onclick="alert('Request changes')">✏️ Request Changes</button></div></div></div>
+                <div class="card"><div class="card-title">QT-2026-00389</div><div class="card-sub">Thailand Honeymoon · 6N / 7D</div><div class="card-body"><div class="row"><span class="label">Price</span><span class="val" style="font-size:18px;font-weight:700;color:var(--green-500);">₹2,15,000</span></div><div class="row"><span class="label">Valid Until</span><span class="val">25 Aug 2026</span></div><div class="row"><span class="label">Prepared by</span><span class="val">ePay Travel Expert</span></div><div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;"><button class="action-link" onclick="alert('View quotation')">View</button><button class="action-link" onclick="alert('Quotation accepted')">✅ Accept</button><button class="action-link" onclick="alert('Request changes')">✏️ Request Changes</button></div></div></div>
+            </div>
+        </section>
+
+        <!-- BOOKINGS -->
+        <section class="section" id="section-bookings">
+            <div class="page-header"><h2>📅 My Bookings</h2><span class="sub">All your confirmed bookings</span></div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Booking ID</th><th>Destination</th><th>Travel Date</th><th>Travellers</th><th>Amount</th><th>Payment</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody>
+                        <tr><td>EPTR-10245</td><td>Dubai</td><td>15 Oct 2026</td><td>4</td><td>₹1,49,999</td><td>70% Paid</td><td><span class="badge-status confirmed">Confirmed</span></td><td><span class="action-link" onclick="alert('View booking')">View</span></td></tr>
+                        <tr><td>EPTR-10122</td><td>Goa</td><td>5-10 Jan 2026</td><td>3</td><td>₹78,500</td><td>Paid</td><td><span class="badge-status confirmed">Completed</span></td><td><span class="action-link" onclick="alert('View booking')">View</span></td></tr>
+                        <tr><td>EPTR-10098</td><td>Kerala</td><td>12-18 Mar 2026</td><td>4</td><td>₹95,000</td><td>Paid</td><td><span class="badge-status confirmed">Completed</span></td><td><span class="action-link" onclick="alert('View booking')">View</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- PAYMENTS -->
+        <section class="section" id="section-payments">
+            <div class="page-header"><h2>💳 Payment Center</h2><span class="sub">Manage your payments</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px;">
+                <div class="card"><div class="card-title">Summary</div><div class="card-body"><div class="row"><span class="label">Total Trip Cost</span><span class="val">₹1,49,999</span></div><div class="row"><span class="label">Paid</span><span class="val" style="color:#6ee7b7;">₹1,00,000</span></div><div class="row"><span class="label">Remaining</span><span class="val" style="color:#fbbf24;">₹49,999</span></div><div class="row"><span class="label">Next Due Date</span><span class="val">20 Sept 2026</span></div><button class="login-btn" style="margin-top:12px;padding:10px;" onclick="alert('Payment gateway opened')"><i class="fas fa-credit-card"></i> Pay Now</button></div></div>
+                <div class="card"><div class="card-title">Payment Schedule</div><div class="card-body"><div class="row"><span class="label">Booking Advance</span><span class="val" style="color:#6ee7b7;">✓ ₹50,000</span></div><div class="row"><span class="label">Second Payment</span><span class="val" style="color:#6ee7b7;">✓ ₹50,000</span></div><div class="row"><span class="label">Final Payment</span><span class="val" style="color:#fbbf24;">⏳ ₹49,999</span></div></div></div>
+            </div>
+            <h4 style="margin-bottom:8px;font-weight:600;opacity:0.7;">Payment History</h4>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Status</th></tr></thead>
+                    <tbody>
+                        <tr><td>15 Aug 2026</td><td>Dubai Booking Advance</td><td>₹50,000</td><td><span class="badge-status confirmed">Completed</span></td></tr>
+                        <tr><td>10 Sept 2026</td><td>Dubai Second Payment</td><td>₹50,000</td><td><span class="badge-status confirmed">Completed</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- DOCUMENTS -->
+        <section class="section" id="section-documents">
+            <div class="page-header"><h2>📄 Travel Document Vault</h2><span class="sub">Secure access to your travel documents</span></div>
+            <div class="card-grid">
+                <div class="card"><div class="card-title">🛂 Passport</div><div class="card-sub">Rahul Sharma · Expires: 10 May 2028</div><div class="card-body"><div class="row"><span class="label">Status</span><span class="val" style="color:#6ee7b7;">Verified</span></div><div class="row"><span class="label">Issued</span><span class="val">10 May 2018</span></div><button class="action-link" onclick="alert('Document opened')">View</button> <button class="action-link" onclick="alert('Document downloaded')">Download</button></div></div>
+                <div class="card"><div class="card-title">📜 Dubai Visa</div><div class="card-sub">Rahul Sharma · Expires: 15 Nov 2026</div><div class="card-body"><div class="row"><span class="label">Status</span><span class="val" style="color:#6ee7b7;">Verified</span></div><div class="row"><span class="label">Issued</span><span class="val">10 Aug 2026</span></div><button class="action-link" onclick="alert('Document opened')">View</button> <button class="action-link" onclick="alert('Document downloaded')">Download</button></div></div>
+                <div class="card"><div class="card-title">🏨 Hotel Voucher</div><div class="card-sub">Dubai · 15-20 Oct 2026</div><div class="card-body"><div class="row"><span class="label">Status</span><span class="val" style="color:#6ee7b7;">Ready</span></div><button class="action-link" onclick="alert('Voucher opened')">View</button> <button class="action-link" onclick="alert('Voucher downloaded')">Download</button></div></div>
+                <div class="card"><div class="card-title">🧾 Invoice</div><div class="card-sub">Dubai Premium · INV-2026-0042</div><div class="card-body"><div class="row"><span class="label">Amount</span><span class="val">₹1,49,999</span></div><div class="row"><span class="label">Status</span><span class="val" style="color:#6ee7b7;">Paid</span></div><button class="action-link" onclick="alert('Invoice opened')">View</button> <button class="action-link" onclick="alert('Invoice downloaded')">Download</button></div></div>
+            </div>
+            <div style="margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);font-size:13px;color:#f87171;">
+                ⚠️ Passport expires in 5 months. Please renew before your next trip.
+            </div>
+        </section>
+
+        <!-- SUPPORT -->
+        <section class="section" id="section-support">
+            <div class="page-header"><h2>💬 Customer Support</h2><span class="sub">We're here to help</span></div>
+            <div class="ticket-form">
+                <div class="full"><label>Category</label><select><option>Booking</option><option>Payment</option><option>Hotel</option><option>Transfer</option><option>Activity</option><option>Cancellation</option><option>Refund</option><option>Documents</option><option>Technical</option><option>General</option><option>Emergency</option></select></div>
+                <div class="full"><label>Booking (optional)</label><input placeholder="EPTR-10245" /></div>
+                <div class="full"><label>Subject</label><input placeholder="Brief description of your issue" /></div>
+                <div class="full"><label>Description</label><textarea placeholder="Please provide details about your issue..."></textarea></div>
+                <div><label>Priority</label><select><option>Low</option><option>Medium</option><option>High</option><option>Urgent</option></select></div>
+                <div><label>Contact Method</label><select><option>Email</option><option>Phone</option><option>WhatsApp</option></select></div>
+                <button class="submit-btn" onclick="alert('Ticket submitted! We will get back to you shortly.')"><i class="fas fa-paper-plane"></i> Submit Ticket</button>
+            </div>
+
+            <h4 style="margin-bottom:10px;font-weight:600;opacity:0.7;">Your Travel Expert</h4>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);background:rgba(255,255,255,0.03);">
+                <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#60a5fa,#3b82f6);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;">N</div>
+                <div><strong>Neha Sharma</strong><br /><span style="font-size:13px;opacity:0.6;">ePay Pune Gallery · Travel Expert</span></div>
+                <span style="display:flex;align-items:center;gap:4px;color:#6ee7b7;font-size:13px;"><span style="width:8px;height:8px;border-radius:50%;background:#6ee7b7;display:inline-block;"></span> Available</span>
+                <div style="display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;">
+                    <button class="action-link" onclick="alert('Calling...')"><i class="fas fa-phone"></i> Call</button>
+                    <button class="action-link" onclick="alert('WhatsApp...')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                    <button class="action-link" onclick="alert('Message...')"><i class="fas fa-comment"></i> Message</button>
+                    <button class="action-link" onclick="alert('Callback requested')"><i class="fas fa-phone-alt"></i> Request Callback</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- NOTIFICATIONS -->
+        <section class="section" id="section-notifications">
+            <div class="page-header"><h2>🔔 Notifications</h2><span class="sub">Stay updated on your travel</span></div>
+            <div class="notif-list">
+                <div class="notif-item booking"><span class="notif-icon"><i class="fas fa-check-circle" style="color:#6ee7b7;"></i></span><div class="notif-content"><div class="text">Your Dubai booking is confirmed. <strong>EPTR-10245</strong></div><span class="time">Today, 10:30 AM</span></div><span class="notif-badge">Booking</span></div>
+                <div class="notif-item payment"><span class="notif-icon"><i class="fas fa-credit-card" style="color:#fbbf24;"></i></span><div class="notif-content"><div class="text">₹49,999 payment is due in 7 days. <strong>Final Payment</strong></div><span class="time">Today, 9:15 AM</span></div><span class="notif-badge">Payment</span></div>
+                <div class="notif-item documents"><span class="notif-icon"><i class="fas fa-file-pdf" style="color:#f472b6;"></i></span><div class="notif-content"><div class="text">Your hotel voucher is ready. <strong>Download now</strong></div><span class="time">Yesterday, 4:20 PM</span></div><span class="notif-badge">Documents</span></div>
+                <div class="notif-item travel"><span class="notif-icon"><i class="fas fa-plane-departure" style="color:#60a5fa;"></i></span><div class="notif-content"><div class="text">Your Dubai trip begins in 7 days. <strong>Get ready!</strong></div><span class="time">Yesterday, 11:00 AM</span></div><span class="notif-badge">Travel</span></div>
+                <div class="notif-item offers"><span class="notif-icon"><i class="fas fa-gift" style="color:#a78bfa;"></i></span><div class="notif-content"><div class="text">Your saved Dubai package price dropped by ₹8,000. <strong>Book now!</strong></div><span class="time">2 days ago</span></div><span class="notif-badge">Offers</span></div>
+                <div class="notif-item payment"><span class="notif-icon"><i class="fas fa-undo" style="color:#f87171;"></i></span><div class="notif-content"><div class="text">Your refund has been processed. <strong>₹1,29,999</strong></div><span class="time">3 days ago</span></div><span class="notif-badge">Refund</span></div>
+            </div>
+        </section>
+
+        <!-- PROFILE -->
+        <section class="section" id="section-profile">
+            <div class="page-header"><h2>👤 My Profile</h2><span class="sub">Manage your personal information</span></div>
+            <div class="profile-grid">
+                <div class="field full"><label>Profile Photo</label><input type="file" accept="image/*" style="padding:8px;" /></div>
+                <div class="field"><label>Full Name</label><input value="Rahul Sharma" /></div>
+                <div class="field"><label>Mobile</label><input value="+91 98765 43210" /></div>
+                <div class="field"><label>Email</label><input value="rahul@example.com" /></div>
+                <div class="field"><label>Date of Birth</label><input type="date" value="1990-05-15" /></div>
+                <div class="field"><label>Gender</label><select><option>Male</option><option>Female</option><option>Other</option></select></div>
+                <div class="field"><label>Address</label><input value="123, MG Road, Pune, Maharashtra" /></div>
+                <div class="field"><label>City</label><input value="Pune" /></div>
+                <div class="field"><label>State</label><input value="Maharashtra" /></div>
+                <div class="field"><label>Country</label><input value="India" /></div>
+                <div class="field"><label>PIN Code</label><input value="411001" /></div>
+                <div class="field full"><label>Travel Preferences</label><input value="Fav: Dubai, Bali · 4★+ · Family · Adventure & Relaxation" /></div>
+                <button class="login-btn" style="grid-column:1/-1;padding:12px;" onclick="alert('Profile updated!')"><i class="fas fa-save"></i> Save Profile</button>
+            </div>
+        </section>
+
+        <!-- SETTINGS (hidden in nav but accessible) -->
+        <section class="section" id="section-settings">
+            <div class="page-header"><h2>⚙️ Settings</h2><span class="sub">Account & security preferences</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+                <div class="card"><div class="card-title">Account</div><div class="card-body"><div class="row"><span class="label">Mobile</span><span class="val">+91 98765 43210</span></div><div class="row"><span class="label">Email</span><span class="val">rahul@example.com</span></div><div class="row"><span class="label">Language</span><span class="val">English</span></div><div class="row"><span class="label">Currency</span><span class="val">₹ INR</span></div></div></div>
+                <div class="card"><div class="card-title">Notifications</div><div class="card-body"><div class="row"><span class="label">SMS</span><span class="val" style="color:#6ee7b7;">✓</span></div><div class="row"><span class="label">Email</span><span class="val" style="color:#6ee7b7;">✓</span></div><div class="row"><span class="label">WhatsApp</span><span class="val" style="color:#6ee7b7;">✓</span></div><div class="row"><span class="label">Push</span><span class="val" style="color:#f87171;">✗</span></div></div></div>
+                <div class="card" style="grid-column:1/-1;"><div class="card-title">Security</div><div class="card-body"><div class="row"><span class="label">Active Sessions</span><span class="val">2 devices</span></div><div class="row"><span class="label">Login History</span><span class="val">Last: 12 Aug 2026, 10:30 AM</span></div><button class="action-link" onclick="alert('Logged out from all devices')">Logout all devices</button></div></div>
+            </div>
+        </section>
+
+        <!-- REWARDS -->
+        <section class="section" id="section-rewards">
+            <div class="page-header"><h2>🎁 Rewards & Referrals</h2><span class="sub">Earn & redeem travel points</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px;">
+                <div class="card"><div class="card-title">ePay Travel Points</div><div class="card-body"><div style="font-size:48px;font-weight:800;color:var(--green-500);">1,250</div><div class="row"><span class="label">Points earned</span><span class="val">1,250</span></div><div class="row"><span class="label">Points used</span><span class="val">0</span></div><div class="row"><span class="label">Expiry</span><span class="val" style="color:#f87171;">31 Dec 2026</span></div></div></div>
+                <div class="card"><div class="card-title">Referral Program</div><div class="card-body"><p style="font-size:13px;opacity:0.6;margin-bottom:10px;">Refer a friend and earn 500 ePay Travel Points after their first completed booking.</p><div class="row"><span class="label">Referral Code</span><span class="val" style="color:#6ee7b7;font-weight:600;">EPAY-RAHUL-2026</span></div><div class="row"><span class="label">Referred</span><span class="val">3 customers</span></div><div class="row"><span class="label">Rewards Earned</span><span class="val">1,000 points</span></div><button class="action-link" onclick="alert('Share referral link')"><i class="fas fa-share"></i> Share Referral</button></div></div>
+            </div>
+        </section>
+
+        <!-- REVIEWS -->
+        <section class="section" id="section-reviews">
+            <div class="page-header"><h2>⭐ Reviews & Feedback</h2><span class="sub">Share your travel experience</span></div>
+            <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--radius);padding:24px;max-width:600px;">
+                <p style="opacity:0.6;margin-bottom:12px;">Rate your recent trip to Dubai</p>
+                <div style="display:flex;gap:8px;font-size:28px;margin-bottom:12px;">
+                    <span style="cursor:pointer;" onclick="alert('Rating: 5★')">⭐</span>
+                    <span style="cursor:pointer;" onclick="alert('Rating: 5★')">⭐</span>
+                    <span style="cursor:pointer;" onclick="alert('Rating: 5★')">⭐</span>
+                    <span style="cursor:pointer;" onclick="alert('Rating: 5★')">⭐</span>
+                    <span style="cursor:pointer;" onclick="alert('Rating: 5★')">⭐</span>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+                    <input placeholder="Package" style="padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:rgba(255,255,255,0.06);color:#fff;" />
+                    <input placeholder="Hotel" style="padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:rgba(255,255,255,0.06);color:#fff;" />
+                    <input placeholder="Activities" style="padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:rgba(255,255,255,0.06);color:#fff;" />
+                    <input placeholder="Transfer" style="padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:rgba(255,255,255,0.06);color:#fff;" />
+                </div>
+                <textarea placeholder="Write your feedback..." style="width:100%;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:rgba(255,255,255,0.06);color:#fff;min-height:80px;margin-bottom:12px;font-family:inherit;"></textarea>
+                <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                    <button class="login-btn" style="padding:10px 24px;font-size:13px;" onclick="alert('Review submitted! Thank you.')"><i class="fas fa-star"></i> Submit Review</button>
+                    <label style="font-size:12px;opacity:0.5;"><input type="checkbox" /> I recommend ePay</label>
+                </div>
+            </div>
+        </section>
+
+        <!-- TRAVELLERS -->
+        <section class="section" id="section-travellers">
+            <div class="page-header"><h2>👥 Travellers</h2><span class="sub">Manage traveller profiles</span></div>
+            <div class="card-grid">
+                <div class="card"><div class="card-title">Rahul Sharma</div><div class="card-sub">Primary Traveller · Male · DOB: 15 May 1990</div><div class="card-body"><div class="row"><span class="label">Passport</span><span class="val">Z1234567 · Exp: 10 May 2028</span></div><div class="row"><span class="label">Contact</span><span class="val">+91 98765 43210</span></div><div class="row"><span class="label">Dietary</span><span class="val">Veg</span></div><button class="action-link" onclick="alert('Traveller details')">View</button></div></div>
+                <div class="card"><div class="card-title">Priya Sharma</div><div class="card-sub">Spouse · Female · DOB: 20 Dec 1992</div><div class="card-body"><div class="row"><span class="label">Passport</span><span class="val">Z7654321 · Exp: 12 Aug 2029</span></div><div class="row"><span class="label">Contact</span><span class="val">+91 98765 43211</span></div><div class="row"><span class="label">Dietary</span><span class="val">Non-Veg</span></div><button class="action-link" onclick="alert('Traveller details')">View</button></div></div>
+                <div class="card"><div class="card-title">Aarav Sharma</div><div class="card-sub">Child · Male · DOB: 10 Mar 2018</div><div class="card-body"><div class="row"><span class="label">Passport</span><span class="val">Z9876543 · Exp: 20 Jun 2031</span></div><div class="row"><span class="label">Contact</span><span class="val">+91 98765 43212</span></div><div class="row"><span class="label">Dietary</span><span class="val">Veg</span></div><button class="action-link" onclick="alert('Traveller details')">View</button></div></div>
+            </div>
+            <button class="login-btn" style="max-width:200px;padding:10px;margin-top:12px;" onclick="alert('Add traveller form opened')"><i class="fas fa-user-plus"></i> Add Traveller</button>
+        </section>
+
+        <!-- CANCELLATION (hidden from main nav but accessible) -->
+        <section class="section" id="section-cancellation">
+            <div class="page-header"><h2>❌ Cancellation</h2><span class="sub">Cancel your booking</span></div>
+            <div style="max-width:500px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:var(--radius);padding:24px;">
+                <div class="card-body">
+                    <div class="row"><span class="label">Booking Value</span><span class="val">₹1,49,999</span></div>
+                    <div class="row"><span class="label">Cancellation Charge</span><span class="val" style="color:#f87171;">₹20,000</span></div>
+                    <div class="row"><span class="label" style="font-weight:600;">Estimated Refund</span><span class="val" style="font-size:20px;font-weight:700;color:var(--green-500);">₹1,29,999</span></div>
+                    <div style="font-size:11px;opacity:0.4;margin:8px 0 12px;">Estimated refund — final amount subject to supplier confirmation.</div>
+                    <div><label style="display:block;font-size:12px;font-weight:600;opacity:0.5;margin-bottom:4px;">Reason for cancellation</label>
+                        <select style="width:100%;padding:9px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:rgba(255,255,255,0.06);color:#fff;">
+                            <option>Change of plans</option>
+                            <option>Found better deal</option>
+                            <option>Medical emergency</option>
+                            <option>Work commitment</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <button class="login-btn" style="margin-top:14px;padding:12px;background:linear-gradient(135deg,#ef4444,#b91c1c);" onclick="if(confirm('Are you sure you want to cancel this booking?')){alert('Cancellation request submitted.')}"><i class="fas fa-times-circle"></i> Request Cancellation</button>
+                </div>
+            </div>
+            <div style="margin-top:12px;font-size:12px;opacity:0.4;">Status: Requested → Under Review → Supplier Confirmation → Approved → Refund Processing → Refunded</div>
+        </section>
+
+        <!-- REFUNDS -->
+        <section class="section" id="section-refunds">
+            <div class="page-header"><h2>💸 Refund Center</h2><span class="sub">Track your refunds</span></div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Refund ID</th><th>Booking</th><th>Amount</th><th>Status</th><th>Requested</th></tr></thead>
+                    <tbody>
+                        <tr><td>REF-2026-0012</td><td>EPTR-10056</td><td>₹1,29,999</td><td><span class="badge-status confirmed">Refunded</span></td><td>10 Aug 2026</td></tr>
+                        <tr><td>REF-2026-0008</td><td>EPTR-10023</td><td>₹45,000</td><td><span class="badge-status pending">Processing</span></td><td>5 Aug 2026</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // ============================================================
+        // NAVIGATION DATA
+        // ============================================================
+        const NAV = [{
+            label: '🏠 Dashboard',
+            id: 'dashboard',
+            icon: 'fa-solid fa-house'
+        }, {
+            label: '✈️ Explore',
+            id: 'explore',
+            icon: 'fa-solid fa-compass',
+            children: [
+                { label: 'Search', id: 'search' },
+                { label: 'Packages', id: 'packages' },
+                { label: 'AI Travel Advisor', id: 'ai-advisor' },
+            ]
+        }, {
+            label: '❤️ Wishlist',
+            id: 'wishlist',
+            icon: 'fa-solid fa-heart'
+        }, {
+            label: '📋 My Travel',
+            id: 'mytravel',
+            icon: 'fa-solid fa-suitcase',
+            children: [
+                { label: 'Enquiries', id: 'enquiries' },
+                { label: 'Quotations', id: 'quotations' },
+                { label: 'Bookings', id: 'bookings' },
+            ]
+        }, {
+            label: '💳 Payments',
+            id: 'payments',
+            icon: 'fa-solid fa-credit-card',
+            children: [
+                { label: 'Payment Center', id: 'payments' },
+                { label: 'Refunds', id: 'refunds' },
+            ]
+        }, {
+            label: '📄 Documents',
+            id: 'documents',
+            icon: 'fa-solid fa-folder-open'
+        }, {
+            label: '👥 Travellers',
+            id: 'travellers',
+            icon: 'fa-solid fa-user-friends'
+        }, {
+            label: '🎁 Rewards',
+            id: 'rewards',
+            icon: 'fa-solid fa-gift'
+        }, {
+            label: '💬 Support',
+            id: 'support',
+            icon: 'fa-solid fa-headset'
+        }, {
+            label: '⭐ Reviews',
+            id: 'reviews',
+            icon: 'fa-solid fa-star'
+        }, {
+            label: '🔔 Notifications',
+            id: 'notifications',
+            icon: 'fa-solid fa-bell'
+        }, {
+            label: '👤 Profile',
+            id: 'profile',
+            icon: 'fa-solid fa-user'
+        }, {
+            label: '⚙️ Settings',
+            id: 'settings',
+            icon: 'fa-solid fa-sliders-h'
+        }, {
+            label: '❌ Cancellation',
+            id: 'cancellation',
+            icon: 'fa-solid fa-times-circle'
+        }, ];
+
+        // ============================================================
+        // RENDER SIDEBAR
+        // ============================================================
+        function renderNav() {
+            const container = document.getElementById('sidebarNav');
+            let html = '';
+            NAV.forEach(item => {
+                if (item.children) {
+                    html += `<div class="nav-item expanded" data-id="${item.id}">
+                                <i class="${item.icon}"></i> ${item.label.replace(/^[^\s]+\s/, '')}
+                                <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+                            </div>
+                            <div class="sub-nav open" id="sub-${item.id}">`;
+                    item.children.forEach(child => {
+                        html += `<div class="nav-item" data-id="${child.id}">${child.label}</div>`;
+                    });
+                    html += `</div>`;
+                } else {
+                    html += `<div class="nav-item" data-id="${item.id}">
+                                <i class="${item.icon}"></i> ${item.label.replace(/^[^\s]+\s/, '')}
+                            </div>`;
+                }
+            });
+            container.innerHTML = html;
+
+            // click handlers
+            container.querySelectorAll('.nav-item[data-id]').forEach(el => {
+                el.addEventListener('click', function(e) {
+                    const id = this.dataset.id;
+                    // check if it's a parent
+                    const sub = document.getElementById('sub-' + id);
+                    if (sub) {
+                        this.classList.toggle('expanded');
+                        sub.classList.toggle('open');
+                        return;
+                    }
+                    navigateTo(id);
+                    // close mobile sidebar
+                    closeSidebar();
+                });
+            });
+        }
+
+        // ============================================================
+        // NAVIGATE
+        // ============================================================
+        function navigateTo(id) {
+            // hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById('section-' + id);
+            if (target) {
+                target.classList.add('active');
+                // update page title
+                const navItem = NAV.find(n => n.id === id) || NAV.find(n => n.children && n.children.find(c => c.id === id));
+                let title = id.charAt(0).toUpperCase() + id.slice(1);
+                if (navItem) {
+                    const raw = navItem.label || '';
+                    title = raw.replace(/^[^\s]+\s/, '') || title;
+                } else {
+                    // check children
+                    for (const n of NAV) {
+                        if (n.children) {
+                            const found = n.children.find(c => c.id === id);
+                            if (found) { title = found.label;
+                                break; }
+                        }
+                    }
+                }
+                document.getElementById('pageTitle').textContent = title;
+            }
+            // highlight nav
+            document.querySelectorAll('.sidebar-nav .nav-item').forEach(el => {
+                el.classList.toggle('active', el.dataset.id === id);
+            });
+            // also highlight parent
+            document.querySelectorAll('.sidebar-nav .nav-item[data-id]').forEach(el => {
+                const sub = document.getElementById('sub-' + el.dataset.id);
+                if (sub) {
+                    const hasActive = sub.querySelector('.nav-item.active');
+                    if (hasActive) el.classList.add('active');
+                    else el.classList.remove('active');
+                }
+            });
+        }
+
+        // ============================================================
+        // SIDEBAR TOGGLE (mobile)
+        // ============================================================
+        function openSidebar() {
+            document.getElementById('sidebar').classList.add('open');
+            document.getElementById('sidebarOverlay').classList.add('open');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('open');
+        }
+        document.getElementById('menuToggle').addEventListener('click', openSidebar);
+        document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        renderNav();
+        navigateTo('dashboard');
+
+        // close sidebar on resize to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 992) closeSidebar();
+        });
+
+        console.log('✅ ePay Customer Portal loaded.');
+        console.log('👤 Logged in as Rahul Sharma');
+        console.log('📌 Navigate using the sidebar.');
+    </script>
+
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1855 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marketing Executive CRM Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+
+
+
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --info: #3b82f6;
+    }
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #f1f5f9; }
+    .sidebar { transition: all 0.3s ease; }
+    .nav-item.active { background: linear-gradient(135deg, #4f46e5, #6366f1); color: white; }
+    .nav-item:hover:not(.active) { background: #e0e7ff; color: #4338ca; }
+    .kpi-card { transition: transform 0.2s, box-shadow 0.2s; }
+    .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -8px rgba(79,70,229,0.25); }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .progress-bar { height: 8px; border-radius: 4px; background: #e2e8f0; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+    .tab-btn.active { border-bottom: 3px solid #4f46e5; color: #4f46e5; font-weight: 600; }
+    .alert-critical { border-left: 4px solid #ef4444; background: #fef2f2; }
+    .alert-warning { border-left: 4px solid #f59e0b; background: #fffbeb; }
+    .alert-positive { border-left: 4px solid #10b981; background: #ecfdf5; }
+    .section { display: none; }
+    .section.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .table-row:hover { background: #f8fafc; }
+    .badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 9999px; font-weight: 600; }
+    .glass { background: rgba(255,255,255,0.85); backdrop-filter: blur(8px); }
+    .chart-container { position: relative; height: 280px; }
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); position: fixed; z-index: 50; height: 100vh; }
+      .sidebar.open { transform: translateX(0); }
+    }
+  </style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body class="min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar w-64 bg-white border-r border-slate-200 flex flex-col fixed h-full z-40">
+    <div class="p-5 border-b border-slate-100">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">M</div>
+        <div>
+          <h1 class="font-bold text-slate-800 text-sm">CRM Marketing</h1>
+          <p class="text-xs text-slate-500">Executive Portal</p>
+        </div>
+      </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+      <a href="#" class="nav-item active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium" data-section="dashboard">
+        <i class="fas fa-chart-pie w-5"></i> Dashboard
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600" data-section="campaigns">
+        <i class="fas fa-bullhorn w-5"></i> Campaigns
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600" data-section="leads">
+        <i class="fas fa-users w-5"></i> Lead Generation
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600" data-section="field">
+        <i class="fas fa-map-marker-alt w-5"></i> Field Marketing
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600" data-section="events">
+        <i class="fas fa-calendar-check w-5"></i> Events
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600" data-section="social">
+        <i class="fas fa-share-alt w-5"></i> Social Media
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600" data-section="gallery">
+        <i class="fas fa-store w-5"></i> Gallery Marketing
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600" data-section="budget">
+        <i class="fas fa-wallet w-5"></i> Budget & Expenses
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600" data-section="travel">
+        <i class="fas fa-car w-5"></i> Travel Allowance
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600" data-section="tasks">
+        <i class="fas fa-tasks w-5"></i> Tasks
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600" data-section="reports">
+        <i class="fas fa-file-alt w-5"></i> Reports
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600" data-section="performance">
+        <i class="fas fa-trophy w-5"></i> Performance
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600" data-section="alerts">
+        <i class="fas fa-bell w-5"></i> Alerts
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600" data-section="role">
+        <i class="fas fa-user-tie w-5"></i> Role & Permissions
+      </a>
+    </nav>
+    <div class="p-4 border-t border-slate-100">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-semibold text-sm">RK</div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-slate-800 truncate">Rahul Kumar</p>
+          <p class="text-xs text-slate-500">Marketing Executive</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 ml-64 min-h-screen">
+    <!-- Top Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <button id="menuToggle" class="lg:hidden text-slate-600"><i class="fas fa-bars text-xl"></i></button>
+        <div>
+          <h2 id="pageTitle" class="text-xl font-bold text-slate-800">Marketing Dashboard</h2>
+          <p class="text-xs text-slate-500">HQ / District North / Gallery Zone A • Tuesday, 11 Aug 2026</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="relative">
+          <input type="text" placeholder="Search campaigns, leads..." class="pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          <i class="fas fa-search absolute left-3 top-2.5 text-slate-400 text-sm"></i>
+        </div>
+        <button class="relative p-2 text-slate-500 hover:bg-slate-100 rounded-lg">
+          <i class="fas fa-bell"></i>
+          <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+        <button class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 flex items-center gap-2">
+          <i class="fas fa-plus"></i> New Activity
+        </button>
+      </div>
+    </header>
+
+    <div class="p-6">
+      <!-- ===================== DASHBOARD ===================== -->
+      <section id="dashboard" class="section active">
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-4 mb-6">
+          <div class="kpi-card bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-medium text-slate-500">Active Campaigns</span>
+              <i class="fas fa-bullhorn text-indigo-500"></i>
+            </div>
+            <p class="text-2xl font-bold text-slate-800">12</p>
+            <p class="text-xs text-emerald-600 mt-1"><i class="fas fa-arrow-up"></i> 3 this week</p>
+          </div>
+          <div class="kpi-card bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-medium text-slate-500">Target Achievement</span>
+              <i class="fas fa-bullseye text-amber-500"></i>
+            </div>
+            <p class="text-2xl font-bold text-slate-800">78%</p>
+            <div class="progress-bar mt-2"><div class="progress-fill bg-amber-500" style="width:78%"></div></div>
+          </div>
+          <div class="kpi-card bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-medium text-slate-500">Leads Generated</span>
+              <i class="fas fa-user-plus text-blue-500"></i>
+            </div>
+            <p class="text-2xl font-bold text-slate-800">1,247</p>
+            <p class="text-xs text-emerald-600 mt-1"><i class="fas fa-arrow-up"></i> +18% vs last month</p>
+          </div>
+          <div class="kpi-card bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-medium text-slate-500">Qualified Leads</span>
+              <i class="fas fa-check-circle text-emerald-500"></i>
+            </div>
+            <p class="text-2xl font-bold text-slate-800">486</p>
+            <p class="text-xs text-slate-500 mt-1">39% of total</p>
+          </div>
+          <div class="kpi-card bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-medium text-slate-500">Converted</span>
+              <i class="fas fa-handshake text-purple-500"></i>
+            </div>
+            <p class="text-2xl font-bold text-slate-800">142</p>
+            <p class="text-xs text-emerald-600 mt-1">29.2% conversion</p>
+          </div>
+          <div class="kpi-card bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-medium text-slate-500">Marketing Visits</span>
+              <i class="fas fa-map-marked-alt text-rose-500"></i>
+            </div>
+            <p class="text-2xl font-bold text-slate-800">87</p>
+            <p class="text-xs text-slate-500 mt-1">This month</p>
+          </div>
+          <div class="kpi-card bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-medium text-slate-500">ROI</span>
+              <i class="fas fa-chart-line text-teal-500"></i>
+            </div>
+            <p class="text-2xl font-bold text-slate-800">3.4x</p>
+            <p class="text-xs text-emerald-600 mt-1"><i class="fas fa-arrow-up"></i> +0.4x</p>
+          </div>
+          <div class="kpi-card bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-medium text-slate-500">Performance</span>
+              <i class="fas fa-star text-yellow-500"></i>
+            </div>
+            <p class="text-2xl font-bold text-slate-800">82%</p>
+            <div class="progress-bar mt-2"><div class="progress-fill bg-indigo-500" style="width:82%"></div></div>
+          </div>
+        </div>
+
+        <!-- Today's Overview + Charts -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+          <div class="xl:col-span-2 bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-semibold text-slate-800">Campaign Performance Funnel</h3>
+              <select class="text-xs border border-slate-200 rounded-lg px-2 py-1">
+                <option>This Month</option>
+                <option>Last 30 Days</option>
+                <option>This Quarter</option>
+              </select>
+            </div>
+            <div class="chart-container"><canvas id="funnelChart"></canvas></div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+            <h3 class="font-semibold text-slate-800 mb-4">Today's Overview</h3>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <div class="flex items-center gap-3"><i class="fas fa-bullhorn text-indigo-500"></i><span class="text-sm">Active Campaigns</span></div>
+                <span class="font-semibold text-slate-800">4</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <div class="flex items-center gap-3"><i class="fas fa-map-marker-alt text-rose-500"></i><span class="text-sm">Field Visits</span></div>
+                <span class="font-semibold text-slate-800">3</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <div class="flex items-center gap-3"><i class="fas fa-user-plus text-blue-500"></i><span class="text-sm">Leads Generated</span></div>
+                <span class="font-semibold text-slate-800">28</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <div class="flex items-center gap-3"><i class="fas fa-check-double text-emerald-500"></i><span class="text-sm">Qualified</span></div>
+                <span class="font-semibold text-slate-800">11</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <div class="flex items-center gap-3"><i class="fas fa-calendar text-purple-500"></i><span class="text-sm">Events</span></div>
+                <span class="font-semibold text-slate-800">1</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <div class="flex items-center gap-3"><i class="fas fa-share-alt text-cyan-500"></i><span class="text-sm">Social Posts</span></div>
+                <span class="font-semibold text-slate-800">5</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <div class="flex items-center gap-3"><i class="fas fa-rupee-sign text-amber-500"></i><span class="text-sm">Spend Today</span></div>
+                <span class="font-semibold text-slate-800">₹4,850</span>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
+                <div class="flex items-center gap-3"><i class="fas fa-clipboard-check text-indigo-600"></i><span class="text-sm font-medium">Daily Report</span></div>
+                <span class="badge bg-amber-100 text-amber-700">Pending</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lead Sources + Alerts -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+            <h3 class="font-semibold text-slate-800 mb-4">Lead Sources</h3>
+            <div class="chart-container" style="height:220px"><canvas id="sourceChart"></canvas></div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+            <h3 class="font-semibold text-slate-800 mb-4">Lead Status Distribution</h3>
+            <div class="chart-container" style="height:220px"><canvas id="statusChart"></canvas></div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+            <h3 class="font-semibold text-slate-800 mb-4">Recent Alerts</h3>
+            <div class="space-y-3">
+              <div class="alert-warning p-3 rounded-lg text-sm">
+                <p class="font-medium text-amber-800">Low conversion on Campaign #CMP-042</p>
+                <p class="text-xs text-amber-600 mt-1">2 hours ago</p>
+              </div>
+              <div class="alert-positive p-3 rounded-lg text-sm">
+                <p class="font-medium text-emerald-800">Target achieved for Gallery Zone A</p>
+                <p class="text-xs text-emerald-600 mt-1">Yesterday</p>
+              </div>
+              <div class="alert-critical p-3 rounded-lg text-sm">
+                <p class="font-medium text-red-800">Budget exceeded on Digital Ads</p>
+                <p class="text-xs text-red-600 mt-1">3 days ago</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+          <h3 class="font-semibold text-slate-800 mb-4">Quick Actions</h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            <button class="flex flex-col items-center gap-2 p-4 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition">
+              <i class="fas fa-plus-circle text-indigo-600 text-xl"></i>
+              <span class="text-xs font-medium text-slate-700">New Lead</span>
+            </button>
+            <button class="flex flex-col items-center gap-2 p-4 bg-rose-50 hover:bg-rose-100 rounded-xl transition">
+              <i class="fas fa-map-marker-alt text-rose-600 text-xl"></i>
+              <span class="text-xs font-medium text-slate-700">Log Visit</span>
+            </button>
+            <button class="flex flex-col items-center gap-2 p-4 bg-purple-50 hover:bg-purple-100 rounded-xl transition">
+              <i class="fas fa-calendar-plus text-purple-600 text-xl"></i>
+              <span class="text-xs font-medium text-slate-700">Create Event</span>
+            </button>
+            <button class="flex flex-col items-center gap-2 p-4 bg-cyan-50 hover:bg-cyan-100 rounded-xl transition">
+              <i class="fas fa-share text-cyan-600 text-xl"></i>
+              <span class="text-xs font-medium text-slate-700">Social Post</span>
+            </button>
+            <button class="flex flex-col items-center gap-2 p-4 bg-amber-50 hover:bg-amber-100 rounded-xl transition">
+              <i class="fas fa-receipt text-amber-600 text-xl"></i>
+              <span class="text-xs font-medium text-slate-700">Submit Expense</span>
+            </button>
+            <button class="flex flex-col items-center gap-2 p-4 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition">
+              <i class="fas fa-file-alt text-emerald-600 text-xl"></i>
+              <span class="text-xs font-medium text-slate-700">Daily Report</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== CAMPAIGNS ===================== -->
+      <section id="campaigns" class="section">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex gap-2">
+            <button class="tab-btn active px-4 py-2 text-sm" data-tab="camp-list">All Campaigns</button>
+            <button class="tab-btn px-4 py-2 text-sm text-slate-500" data-tab="camp-perf">Performance</button>
+            <button class="tab-btn px-4 py-2 text-sm text-slate-500" data-tab="camp-create">Create / Edit</button>
+          </div>
+          <button class="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700"><i class="fas fa-plus mr-2"></i>New Campaign</button>
+        </div>
+
+        <div id="camp-list" class="tab-content">
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-slate-600">
+                  <tr>
+                    <th class="text-left px-4 py-3 font-medium">Campaign</th>
+                    <th class="text-left px-4 py-3 font-medium">Type</th>
+                    <th class="text-left px-4 py-3 font-medium">Gallery / District</th>
+                    <th class="text-left px-4 py-3 font-medium">Period</th>
+                    <th class="text-right px-4 py-3 font-medium">Budget</th>
+                    <th class="text-right px-4 py-3 font-medium">Spend</th>
+                    <th class="text-right px-4 py-3 font-medium">Leads</th>
+                    <th class="text-right px-4 py-3 font-medium">Conv.</th>
+                    <th class="text-right px-4 py-3 font-medium">ROI</th>
+                    <th class="text-center px-4 py-3 font-medium">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr class="table-row">
+                    <td class="px-4 py-3"><div class="font-medium text-slate-800">Monsoon Membership Drive</div><div class="text-xs text-slate-500">CMP-042</div></td>
+                    <td class="px-4 py-3"><span class="badge bg-indigo-100 text-indigo-700">Membership</span></td>
+                    <td class="px-4 py-3">Zone A / North</td>
+                    <td class="px-4 py-3 text-xs">01 Aug – 31 Aug</td>
+                    <td class="px-4 py-3 text-right">₹1,50,000</td>
+                    <td class="px-4 py-3 text-right">₹98,400</td>
+                    <td class="px-4 py-3 text-right">312 / 400</td>
+                    <td class="px-4 py-3 text-right">48</td>
+                    <td class="px-4 py-3 text-right text-emerald-600 font-medium">2.8x</td>
+                    <td class="px-4 py-3 text-center"><span class="badge bg-emerald-100 text-emerald-700">Active</span></td>
+                  </tr>
+                  <tr class="table-row">
+                    <td class="px-4 py-3"><div class="font-medium text-slate-800">Local Awareness – Sector 12</div><div class="text-xs text-slate-500">CMP-038</div></td>
+                    <td class="px-4 py-3"><span class="badge bg-blue-100 text-blue-700">Brand Awareness</span></td>
+                    <td class="px-4 py-3">Zone B / North</td>
+                    <td class="px-4 py-3 text-xs">15 Jul – 15 Aug</td>
+                    <td class="px-4 py-3 text-right">₹75,000</td>
+                    <td class="px-4 py-3 text-right">₹72,100</td>
+                    <td class="px-4 py-3 text-right">198 / 200</td>
+                    <td class="px-4 py-3 text-right">31</td>
+                    <td class="px-4 py-3 text-right text-emerald-600 font-medium">3.1x</td>
+                    <td class="px-4 py-3 text-center"><span class="badge bg-emerald-100 text-emerald-700">Active</span></td>
+                  </tr>
+                  <tr class="table-row">
+                    <td class="px-4 py-3"><div class="font-medium text-slate-800">Digital Lead Gen – Q3</div><div class="text-xs text-slate-500">CMP-035</div></td>
+                    <td class="px-4 py-3"><span class="badge bg-purple-100 text-purple-700">Digital</span></td>
+                    <td class="px-4 py-3">All / HQ</td>
+                    <td class="px-4 py-3 text-xs">01 Jul – 30 Sep</td>
+                    <td class="px-4 py-3 text-right">₹2,50,000</td>
+                    <td class="px-4 py-3 text-right">₹1,87,200</td>
+                    <td class="px-4 py-3 text-right">520 / 600</td>
+                    <td class="px-4 py-3 text-right">89</td>
+                    <td class="px-4 py-3 text-right text-emerald-600 font-medium">4.2x</td>
+                    <td class="px-4 py-3 text-center"><span class="badge bg-emerald-100 text-emerald-700">Active</span></td>
+                  </tr>
+                  <tr class="table-row">
+                    <td class="px-4 py-3"><div class="font-medium text-slate-800">Independence Day Event</div><div class="text-xs text-slate-500">CMP-041</div></td>
+                    <td class="px-4 py-3"><span class="badge bg-rose-100 text-rose-700">Event</span></td>
+                    <td class="px-4 py-3">Zone A / North</td>
+                    <td class="px-4 py-3 text-xs">10 Aug – 15 Aug</td>
+                    <td class="px-4 py-3 text-right">₹45,000</td>
+                    <td class="px-4 py-3 text-right">₹38,500</td>
+                    <td class="px-4 py-3 text-right">87 / 100</td>
+                    <td class="px-4 py-3 text-right">12</td>
+                    <td class="px-4 py-3 text-right text-emerald-600 font-medium">2.1x</td>
+                    <td class="px-4 py-3 text-center"><span class="badge bg-amber-100 text-amber-700">Ongoing</span></td>
+                  </tr>
+                  <tr class="table-row">
+                    <td class="px-4 py-3"><div class="font-medium text-slate-800">Referral Boost – July</div><div class="text-xs text-slate-500">CMP-033</div></td>
+                    <td class="px-4 py-3"><span class="badge bg-teal-100 text-teal-700">Referral</span></td>
+                    <td class="px-4 py-3">All Zones</td>
+                    <td class="px-4 py-3 text-xs">01 Jul – 31 Jul</td>
+                    <td class="px-4 py-3 text-right">₹30,000</td>
+                    <td class="px-4 py-3 text-right">₹28,900</td>
+                    <td class="px-4 py-3 text-right">145 / 150</td>
+                    <td class="px-4 py-3 text-right">38</td>
+                    <td class="px-4 py-3 text-right text-emerald-600 font-medium">5.6x</td>
+                    <td class="px-4 py-3 text-center"><span class="badge bg-slate-100 text-slate-600">Completed</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="camp-perf" class="tab-content hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+              <h3 class="font-semibold text-slate-800 mb-4">Campaign Spend → Revenue Flow</h3>
+              <div class="chart-container"><canvas id="campaignFlowChart"></canvas></div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+              <h3 class="font-semibold text-slate-800 mb-4">Key Campaign KPIs</h3>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="p-4 bg-slate-50 rounded-xl">
+                  <p class="text-xs text-slate-500">Cost Per Lead</p>
+                  <p class="text-xl font-bold text-slate-800">₹186</p>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-xl">
+                  <p class="text-xs text-slate-500">Cost Per Qualified Lead</p>
+                  <p class="text-xl font-bold text-slate-800">₹478</p>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-xl">
+                  <p class="text-xs text-slate-500">Conversion Rate</p>
+                  <p class="text-xl font-bold text-slate-800">29.2%</p>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-xl">
+                  <p class="text-xs text-slate-500">Customer Acquisition Cost</p>
+                  <p class="text-xl font-bold text-slate-800">₹1,640</p>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-xl">
+                  <p class="text-xs text-slate-500">Total Revenue</p>
+                  <p class="text-xl font-bold text-emerald-600">₹12.4L</p>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-xl">
+                  <p class="text-xs text-slate-500">Overall ROAS</p>
+                  <p class="text-xl font-bold text-emerald-600">3.4x</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="camp-create" class="tab-content hidden">
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
+            <h3 class="font-semibold text-slate-800 mb-5">Campaign Details</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Campaign Name *</label>
+                <input type="text" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="e.g. Monsoon Membership Drive" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Campaign Type *</label>
+                <select class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                  <option>Lead Generation</option>
+                  <option>Brand Awareness</option>
+                  <option>Gallery Promotion</option>
+                  <option>Membership</option>
+                  <option>Customer Acquisition</option>
+                  <option>Event</option>
+                  <option>Local Promotion</option>
+                  <option>Digital Campaign</option>
+                  <option>Referral Campaign</option>
+                  <option>Seasonal Campaign</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Objective</label>
+                <input type="text" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="Primary goal" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Start Date</label>
+                <input type="date" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">End Date</label>
+                <input type="date" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Target Audience</label>
+                <input type="text" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="e.g. Families 25-45" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Geography / Territory</label>
+                <input type="text" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Gallery</label>
+                <select class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                  <option>Zone A – Sector 12</option>
+                  <option>Zone B – Sector 18</option>
+                  <option>Zone C – Sector 45</option>
+                  <option>All Assigned</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">District</label>
+                <input type="text" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" value="North District" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Budget (₹)</label>
+                <input type="number" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="150000" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Leads Target</label>
+                <input type="number" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="400" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Status</label>
+                <select class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                  <option>Draft</option>
+                  <option>Active</option>
+                  <option>Paused</option>
+                  <option>Completed</option>
+                </select>
+              </div>
+            </div>
+            <div class="mt-6 flex gap-3">
+              <button class="px-5 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700">Save Campaign</button>
+              <button class="px-5 py-2 border border-slate-200 text-sm rounded-lg hover:bg-slate-50">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== LEADS ===================== -->
+      <section id="leads" class="section">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 mb-6">
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm">
+            <p class="text-xs text-slate-500">Total</p>
+            <p class="text-xl font-bold text-slate-800">1,247</p>
+          </div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm">
+            <p class="text-xs text-slate-500">New</p>
+            <p class="text-xl font-bold text-blue-600">86</p>
+          </div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm">
+            <p class="text-xs text-slate-500">Qualified</p>
+            <p class="text-xl font-bold text-emerald-600">486</p>
+          </div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm">
+            <p class="text-xs text-slate-500">Assigned</p>
+            <p class="text-xl font-bold text-indigo-600">412</p>
+          </div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm">
+            <p class="text-xs text-slate-500">Contacted</p>
+            <p class="text-xl font-bold text-purple-600">298</p>
+          </div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm">
+            <p class="text-xs text-slate-500">Follow-up</p>
+            <p class="text-xl font-bold text-amber-600">94</p>
+          </div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm">
+            <p class="text-xs text-slate-500">Converted</p>
+            <p class="text-xl font-bold text-teal-600">142</p>
+          </div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm">
+            <p class="text-xs text-slate-500">Lost</p>
+            <p class="text-xl font-bold text-rose-600">67</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          <div class="lg:col-span-2 bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+              <h3 class="font-semibold text-slate-800">Lead Pipeline</h3>
+              <button class="px-3 py-1.5 bg-indigo-600 text-white text-xs rounded-lg"><i class="fas fa-plus mr-1"></i> Add Lead</button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-slate-600">
+                  <tr>
+                    <th class="text-left px-4 py-3 font-medium">Lead</th>
+                    <th class="text-left px-4 py-3 font-medium">Source</th>
+                    <th class="text-left px-4 py-3 font-medium">Campaign</th>
+                    <th class="text-left px-4 py-3 font-medium">Assigned To</th>
+                    <th class="text-left px-4 py-3 font-medium">Status</th>
+                    <th class="text-left px-4 py-3 font-medium">Quality</th>
+                    <th class="text-center px-4 py-3 font-medium">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr class="table-row">
+                    <td class="px-4 py-3"><div class="font-medium">Priya Sharma</div><div class="text-xs text-slate-500">98765 43210</div></td>
+                    <td class="px-4 py-3"><span class="badge bg-blue-100 text-blue-700">Field</span></td>
+                    <td class="px-4 py-3 text-xs">CMP-042</td>
+                    <td class="px-4 py-3 text-xs">Amit (BDE)</td>
+                    <td class="px-4 py-3"><span class="badge bg-emerald-100 text-emerald-700">Qualified</span></td>
+                    <td class="px-4 py-3"><span class="text-amber-500">★★★★☆</span></td>
+                    <td class="px-4 py-3 text-center"><button class="text-indigo-600 text-xs hover:underline">View</button></td>
+                  </tr>
+                  <tr class="table-row">
+                    <td class="px-4 py-3"><div class="font-medium">Rajesh Patel</div><div class="text-xs text-slate-500">98123 45678</div></td>
+                    <td class="px-4 py-3"><span class="badge bg-purple-100 text-purple-700">Social</span></td>
+                    <td class="px-4 py-3 text-xs">CMP-035</td>
+                    <td class="px-4 py-3 text-xs">Neha (Tele)</td>
+                    <td class="px-4 py-3"><span class="badge bg-blue-100 text-blue-700">Contacted</span></td>
+                    <td class="px-4 py-3"><span class="text-amber-500">★★★☆☆</span></td>
+                    <td class="px-4 py-3 text-center"><button class="text-indigo-600 text-xs hover:underline">View</button></td>
+                  </tr>
+                  <tr class="table-row">
+                    <td class="px-4 py-3"><div class="font-medium">Sneha Gupta</div><div class="text-xs text-slate-500">97654 32109</div></td>
+                    <td class="px-4 py-3"><span class="badge bg-rose-100 text-rose-700">Event</span></td>
+                    <td class="px-4 py-3 text-xs">CMP-041</td>
+                    <td class="px-4 py-3 text-xs">Vikram (BDO)</td>
+                    <td class="px-4 py-3"><span class="badge bg-amber-100 text-amber-700">Follow-up</span></td>
+                    <td class="px-4 py-3"><span class="text-amber-500">★★★★★</span></td>
+                    <td class="px-4 py-3 text-center"><button class="text-indigo-600 text-xs hover:underline">View</button></td>
+                  </tr>
+                  <tr class="table-row">
+                    <td class="px-4 py-3"><div class="font-medium">Ankit Verma</div><div class="text-xs text-slate-500">99001 22334</div></td>
+                    <td class="px-4 py-3"><span class="badge bg-teal-100 text-teal-700">Referral</span></td>
+                    <td class="px-4 py-3 text-xs">CMP-033</td>
+                    <td class="px-4 py-3 text-xs">Amit (BDE)</td>
+                    <td class="px-4 py-3"><span class="badge bg-teal-100 text-teal-700">Converted</span></td>
+                    <td class="px-4 py-3"><span class="text-amber-500">★★★★★</span></td>
+                    <td class="px-4 py-3 text-center"><button class="text-indigo-600 text-xs hover:underline">View</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+              <h3 class="font-semibold text-slate-800 mb-3">Lead Routing Flow</h3>
+              <div class="space-y-2 text-sm">
+                <div class="flex items-center gap-2 p-2 bg-indigo-50 rounded-lg"><span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center">1</span> Marketing Activity</div>
+                <div class="flex justify-center text-slate-400"><i class="fas fa-arrow-down"></i></div>
+                <div class="flex items-center gap-2 p-2 bg-blue-50 rounded-lg"><span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center">2</span> Lead Created</div>
+                <div class="flex justify-center text-slate-400"><i class="fas fa-arrow-down"></i></div>
+                <div class="flex items-center gap-2 p-2 bg-cyan-50 rounded-lg"><span class="w-6 h-6 rounded-full bg-cyan-600 text-white text-xs flex items-center justify-center">3</span> Validation</div>
+                <div class="flex justify-center text-slate-400"><i class="fas fa-arrow-down"></i></div>
+                <div class="flex items-center gap-2 p-2 bg-purple-50 rounded-lg"><span class="w-6 h-6 rounded-full bg-purple-600 text-white text-xs flex items-center justify-center">4</span> Assignment (BDE/BDO/Tele)</div>
+                <div class="flex justify-center text-slate-400"><i class="fas fa-arrow-down"></i></div>
+                <div class="flex items-center gap-2 p-2 bg-emerald-50 rounded-lg"><span class="w-6 h-6 rounded-full bg-emerald-600 text-white text-xs flex items-center justify-center">5</span> Opportunity → Customer</div>
+              </div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+              <h3 class="font-semibold text-slate-800 mb-3">Lead Quality Score</h3>
+              <p class="text-xs text-slate-500 mb-3">Valid + Contact + Requirement + Qualified + Assigned + Potential</p>
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm"><span>Avg Quality Score</span><span class="font-semibold">4.1 / 5</span></div>
+                <div class="progress-bar"><div class="progress-fill bg-indigo-500" style="width:82%"></div></div>
+                <p class="text-xs text-slate-500 mt-2">Prevents quantity-only gaming of KPIs</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== FIELD MARKETING ===================== -->
+      <section id="field" class="section">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+          <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm text-center">
+            <p class="text-xs text-slate-500">Planned</p>
+            <p class="text-2xl font-bold text-slate-800">42</p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm text-center">
+            <p class="text-xs text-slate-500">Completed</p>
+            <p class="text-2xl font-bold text-emerald-600">38</p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm text-center">
+            <p class="text-xs text-slate-500">Locations</p>
+            <p class="text-2xl font-bold text-slate-800">27</p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm text-center">
+            <p class="text-xs text-slate-500">Leads</p>
+            <p class="text-2xl font-bold text-blue-600">156</p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm text-center">
+            <p class="text-xs text-slate-500">Customers</p>
+            <p class="text-2xl font-bold text-teal-600">19</p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm text-center">
+            <p class="text-xs text-slate-500">Verified</p>
+            <p class="text-2xl font-bold text-indigo-600">35</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+            <h3 class="font-semibold text-slate-800 mb-4">Log Verified Marketing Visit</h3>
+            <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4 text-xs text-amber-800">
+              <i class="fas fa-info-circle mr-1"></i> System captures live camera photo + GPS + timestamp. Gallery uploads are blocked.
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Activity Type</label>
+                <select class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                  <option>Market Visit</option>
+                  <option>Local Promotion</option>
+                  <option>Business Visit</option>
+                  <option>Flyer Distribution</option>
+                  <option>Partnership</option>
+                  <option>Gallery Promotion</option>
+                  <option>Customer Awareness</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Purpose</label>
+                <input type="text" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">People Reached</label>
+                <input type="number" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-600 mb-1">Leads Generated</label>
+                <input type="number" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
+              </div>
+              <div class="col-span-2">
+                <label class="block text-xs font-medium text-slate-600 mb-1">Outcome / Remarks</label>
+                <textarea class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" rows="2"></textarea>
+              </div>
+            </div>
+            <div class="mt-4 flex gap-3">
+              <button class="px-4 py-2 bg-rose-600 text-white text-sm rounded-lg hover:bg-rose-700 flex items-center gap-2">
+                <i class="fas fa-camera"></i> Capture Live Photo + GPS
+              </button>
+              <button class="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700">Submit Visit</button>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+            <h3 class="font-semibold text-slate-800 mb-4">Recent Verified Visits</h3>
+            <div class="space-y-3">
+              <div class="flex gap-3 p-3 bg-slate-50 rounded-lg">
+                <div class="w-12 h-12 rounded-lg bg-slate-200 flex items-center justify-center text-slate-400"><i class="fas fa-image"></i></div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between">
+                    <p class="text-sm font-medium">Market Visit – Sector 12 Market</p>
+                    <span class="badge bg-emerald-100 text-emerald-700">Verified</span>
+                  </div>
+                  <p class="text-xs text-slate-500 mt-0.5">11 Aug 2026 • 10:42 AM • GPS: 28.5355, 77.3910</p>
+                  <p class="text-xs text-slate-600 mt-1">People: 45 • Leads: 6 • Outcome: Strong interest</p>
+                </div>
+              </div>
+              <div class="flex gap-3 p-3 bg-slate-50 rounded-lg">
+                <div class="w-12 h-12 rounded-lg bg-slate-200 flex items-center justify-center text-slate-400"><i class="fas fa-image"></i></div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between">
+                    <p class="text-sm font-medium">Flyer Distribution – Sector 18</p>
+                    <span class="badge bg-emerald-100 text-emerald-700">Verified</span>
+                  </div>
+                  <p class="text-xs text-slate-500 mt-0.5">10 Aug 2026 • 04:15 PM • GPS: 28.5700, 77.3200</p>
+                  <p class="text-xs text-slate-600 mt-1">People: 120 • Leads: 11 • Outcome: Good response</p>
+                </div>
+              </div>
+              <div class="flex gap-3 p-3 bg-slate-50 rounded-lg">
+                <div class="w-12 h-12 rounded-lg bg-slate-200 flex items-center justify-center text-slate-400"><i class="fas fa-image"></i></div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between">
+                    <p class="text-sm font-medium">Business Visit – ABC Corp</p>
+                    <span class="badge bg-emerald-100 text-emerald-700">Verified</span>
+                  </div>
+                  <p class="text-xs text-slate-500 mt-0.5">09 Aug 2026 • 11:30 AM • GPS: 28.6100, 77.2100</p>
+                  <p class="text-xs text-slate-600 mt-1">People: 8 • Leads: 3 • Outcome: Follow-up scheduled</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== EVENTS ===================== -->
+      <section id="events" class="section">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="font-semibold text-slate-800">Event Management</h3>
+          <button class="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700"><i class="fas fa-plus mr-2"></i>New Event</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+            <div class="h-32 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center text-white">
+              <i class="fas fa-flag text-4xl opacity-50"></i>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-semibold text-slate-800">Independence Day Activation</h4>
+                <span class="badge bg-amber-100 text-amber-700">Ongoing</span>
+              </div>
+              <p class="text-xs text-slate-500 mb-3">EVT-018 • Zone A • 10–15 Aug 2026</p>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div><span class="text-slate-500">Expected:</span> <span class="font-medium">250</span></div>
+                <div><span class="text-slate-500">Actual:</span> <span class="font-medium">187</span></div>
+                <div><span class="text-slate-500">Leads:</span> <span class="font-medium">87</span></div>
+                <div><span class="text-slate-500">Customers:</span> <span class="font-medium">12</span></div>
+                <div><span class="text-slate-500">Budget:</span> <span class="font-medium">₹45,000</span></div>
+                <div><span class="text-slate-500">Spend:</span> <span class="font-medium">₹38,500</span></div>
+              </div>
+              <div class="mt-3 flex items-center justify-between">
+                <span class="text-sm font-semibold text-emerald-600">ROI 2.1x</span>
+                <button class="text-xs text-indigo-600 hover:underline">View Details</button>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+            <div class="h-32 bg-gradient-to-r from-teal-500 to-emerald-600 flex items-center justify-center text-white">
+              <i class="fas fa-users text-4xl opacity-50"></i>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-semibold text-slate-800">Membership Open House</h4>
+                <span class="badge bg-slate-100 text-slate-600">Completed</span>
+              </div>
+              <p class="text-xs text-slate-500 mb-3">EVT-015 • Zone B • 25 Jul 2026</p>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div><span class="text-slate-500">Expected:</span> <span class="font-medium">150</span></div>
+                <div><span class="text-slate-500">Actual:</span> <span class="font-medium">162</span></div>
+                <div><span class="text-slate-500">Leads:</span> <span class="font-medium">64</span></div>
+                <div><span class="text-slate-500">Customers:</span> <span class="font-medium">21</span></div>
+                <div><span class="text-slate-500">Budget:</span> <span class="font-medium">₹35,000</span></div>
+                <div><span class="text-slate-500">Spend:</span> <span class="font-medium">₹32,800</span></div>
+              </div>
+              <div class="mt-3 flex items-center justify-between">
+                <span class="text-sm font-semibold text-emerald-600">ROI 3.8x</span>
+                <button class="text-xs text-indigo-600 hover:underline">View Details</button>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+            <div class="h-32 bg-gradient-to-r from-rose-500 to-orange-500 flex items-center justify-center text-white">
+              <i class="fas fa-handshake text-4xl opacity-50"></i>
+            </div>
+            <div class="p-5">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-semibold text-slate-800">Partner Meet – Local Clubs</h4>
+                <span class="badge bg-blue-100 text-blue-700">Planned</span>
+              </div>
+              <p class="text-xs text-slate-500 mb-3">EVT-019 • Zone C • 20 Aug 2026</p>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div><span class="text-slate-500">Expected:</span> <span class="font-medium">80</span></div>
+                <div><span class="text-slate-500">Actual:</span> <span class="font-medium">—</span></div>
+                <div><span class="text-slate-500">Leads Target:</span> <span class="font-medium">40</span></div>
+                <div><span class="text-slate-500">Budget:</span> <span class="font-medium">₹25,000</span></div>
+              </div>
+              <div class="mt-3 flex items-center justify-between">
+                <span class="text-sm text-slate-400">Upcoming</span>
+                <button class="text-xs text-indigo-600 hover:underline">Edit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SOCIAL MEDIA ===================== -->
+      <section id="social" class="section">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 mb-6">
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Planned</p><p class="text-xl font-bold">24</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Published</p><p class="text-xl font-bold text-emerald-600">18</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Reels</p><p class="text-xl font-bold">7</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Stories</p><p class="text-xl font-bold">12</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Reach</p><p class="text-xl font-bold">48.2K</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Engagement</p><p class="text-xl font-bold">3.8K</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Leads</p><p class="text-xl font-bold text-blue-600">94</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Pending</p><p class="text-xl font-bold text-amber-600">6</p></div>
+        </div>
+        <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+          <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
+            <h3 class="font-semibold text-slate-800">Content Calendar</h3>
+            <button class="px-3 py-1.5 bg-indigo-600 text-white text-xs rounded-lg"><i class="fas fa-plus mr-1"></i> Add Content</button>
+          </div>
+          <table class="w-full text-sm">
+            <thead class="bg-slate-50 text-slate-600">
+              <tr>
+                <th class="text-left px-4 py-3 font-medium">Content</th>
+                <th class="text-left px-4 py-3 font-medium">Platform</th>
+                <th class="text-left px-4 py-3 font-medium">Type</th>
+                <th class="text-left px-4 py-3 font-medium">Campaign</th>
+                <th class="text-left px-4 py-3 font-medium">Scheduled</th>
+                <th class="text-right px-4 py-3 font-medium">Reach</th>
+                <th class="text-right px-4 py-3 font-medium">Engagement</th>
+                <th class="text-right px-4 py-3 font-medium">Leads</th>
+                <th class="text-center px-4 py-3 font-medium">Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr class="table-row">
+                <td class="px-4 py-3 font-medium">Monsoon Offer Reel</td>
+                <td class="px-4 py-3"><i class="fab fa-instagram text-pink-500 mr-1"></i> Instagram</td>
+                <td class="px-4 py-3">Reel</td>
+                <td class="px-4 py-3 text-xs">CMP-042</td>
+                <td class="px-4 py-3 text-xs">11 Aug 6:00 PM</td>
+                <td class="px-4 py-3 text-right">12.4K</td>
+                <td class="px-4 py-3 text-right">1.2K</td>
+                <td class="px-4 py-3 text-right">18</td>
+                <td class="px-4 py-3 text-center"><span class="badge bg-emerald-100 text-emerald-700">Published</span></td>
+              </tr>
+              <tr class="table-row">
+                <td class="px-4 py-3 font-medium">Gallery Walkthrough</td>
+                <td class="px-4 py-3"><i class="fab fa-facebook text-blue-600 mr-1"></i> Facebook</td>
+                <td class="px-4 py-3">Video</td>
+                <td class="px-4 py-3 text-xs">CMP-038</td>
+                <td class="px-4 py-3 text-xs">12 Aug 11:00 AM</td>
+                <td class="px-4 py-3 text-right">—</td>
+                <td class="px-4 py-3 text-right">—</td>
+                <td class="px-4 py-3 text-right">—</td>
+                <td class="px-4 py-3 text-center"><span class="badge bg-amber-100 text-amber-700">Scheduled</span></td>
+              </tr>
+              <tr class="table-row">
+                <td class="px-4 py-3 font-medium">Customer Testimonial</td>
+                <td class="px-4 py-3"><i class="fab fa-youtube text-red-600 mr-1"></i> YouTube</td>
+                <td class="px-4 py-3">Short</td>
+                <td class="px-4 py-3 text-xs">CMP-035</td>
+                <td class="px-4 py-3 text-xs">10 Aug 3:00 PM</td>
+                <td class="px-4 py-3 text-right">8.7K</td>
+                <td class="px-4 py-3 text-right">640</td>
+                <td class="px-4 py-3 text-right">9</td>
+                <td class="px-4 py-3 text-center"><span class="badge bg-emerald-100 text-emerald-700">Published</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== GALLERY MARKETING ===================== -->
+      <section id="gallery" class="section">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="font-semibold text-slate-800">Gallery Zone A</h4>
+              <span class="badge bg-emerald-100 text-emerald-700">Top</span>
+            </div>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between"><span class="text-slate-500">Leads</span><span class="font-medium">1,250</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Walk-ins</span><span class="font-medium">342</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">New Customers</span><span class="font-medium">120</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Membership Conv.</span><span class="font-medium">48</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Spend</span><span class="font-medium">₹2.1L</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Revenue</span><span class="font-medium text-emerald-600">₹8.4L</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">ROI</span><span class="font-semibold text-emerald-600">4.0x</span></div>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="font-semibold text-slate-800">Gallery Zone B</h4>
+            </div>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between"><span class="text-slate-500">Leads</span><span class="font-medium">980</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Walk-ins</span><span class="font-medium">278</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">New Customers</span><span class="font-medium">105</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Membership Conv.</span><span class="font-medium">36</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Spend</span><span class="font-medium">₹1.8L</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Revenue</span><span class="font-medium text-emerald-600">₹6.2L</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">ROI</span><span class="font-semibold text-emerald-600">3.4x</span></div>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="font-semibold text-slate-800">Gallery Zone C</h4>
+            </div>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between"><span class="text-slate-500">Leads</span><span class="font-medium">720</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Walk-ins</span><span class="font-medium">195</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">New Customers</span><span class="font-medium">61</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Membership Conv.</span><span class="font-medium">22</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Spend</span><span class="font-medium">₹1.4L</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Revenue</span><span class="font-medium text-emerald-600">₹3.9L</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">ROI</span><span class="font-semibold text-emerald-600">2.8x</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+          <h3 class="font-semibold text-slate-800 mb-4">Gallery Comparison</h3>
+          <div class="chart-container"><canvas id="galleryChart"></canvas></div>
+        </div>
+      </section>
+
+      <!-- ===================== BUDGET ===================== -->
+      <section id="budget" class="section">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+            <p class="text-xs text-slate-500">Allocated Budget</p>
+            <p class="text-2xl font-bold text-slate-800">₹8,50,000</p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+            <p class="text-xs text-slate-500">Used</p>
+            <p class="text-2xl font-bold text-indigo-600">₹5,92,400</p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+            <p class="text-xs text-slate-500">Remaining</p>
+            <p class="text-2xl font-bold text-emerald-600">₹2,57,600</p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+            <p class="text-xs text-slate-500">Utilization</p>
+            <p class="text-2xl font-bold text-slate-800">69.7%</p>
+            <div class="progress-bar mt-2"><div class="progress-fill bg-indigo-500" style="width:70%"></div></div>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+            <h3 class="font-semibold text-slate-800 mb-4">Expense by Category</h3>
+            <div class="chart-container"><canvas id="expenseChart"></canvas></div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+            <h3 class="font-semibold text-slate-800 mb-4">Recent Expenses</h3>
+            <div class="space-y-3">
+              <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg text-sm">
+                <div><p class="font-medium">Digital Ads – Meta</p><p class="text-xs text-slate-500">10 Aug • Pending Approval</p></div>
+                <span class="font-semibold">₹28,500</span>
+              </div>
+              <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg text-sm">
+                <div><p class="font-medium">Printing – Flyers</p><p class="text-xs text-slate-500">09 Aug • Approved</p></div>
+                <span class="font-semibold">₹12,400</span>
+              </div>
+              <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg text-sm">
+                <div><p class="font-medium">Event Setup</p><p class="text-xs text-slate-500">08 Aug • Paid</p></div>
+                <span class="font-semibold">₹18,000</span>
+              </div>
+              <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg text-sm">
+                <div><p class="font-medium">Travel – Field</p><p class="text-xs text-slate-500">07 Aug • Approved</p></div>
+                <span class="font-semibold">₹3,200</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== TRAVEL ===================== -->
+      <section id="travel" class="section">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 mb-6">
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Monthly Allowance</p><p class="text-lg font-bold">₹15,000</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Opening</p><p class="text-lg font-bold">₹15,000</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Spent</p><p class="text-lg font-bold text-rose-600">₹9,450</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Claimed</p><p class="text-lg font-bold">₹8,200</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Approved</p><p class="text-lg font-bold text-emerald-600">₹7,100</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Paid</p><p class="text-lg font-bold text-teal-600">₹6,400</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Remaining</p><p class="text-lg font-bold text-indigo-600">₹5,550</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><p class="text-xs text-slate-500">Pending</p><p class="text-lg font-bold text-amber-600">₹1,100</p></div>
+        </div>
+        <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+          <h3 class="font-semibold text-slate-800 mb-4">Submit Travel / Field Expense</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Date</label>
+              <input type="date" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Activity</label>
+              <input type="text" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="Linked visit / event" />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Amount (₹)</label>
+              <input type="number" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Purpose</label>
+              <input type="text" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Location (auto GPS)</label>
+              <input type="text" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="Captured automatically" readonly />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Receipt Upload</label>
+              <input type="file" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
+            </div>
+          </div>
+          <div class="mt-4 flex gap-3">
+            <button class="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg">Submit Claim</button>
+            <button class="px-4 py-2 border border-slate-200 text-sm rounded-lg">Save Draft</button>
+          </div>
+          <p class="text-xs text-slate-500 mt-3">Workflow: Activity → Verified Location → Expense → Manager Verification → Finance Approval → Payment</p>
+        </div>
+      </section>
+
+      <!-- ===================== TASKS ===================== -->
+      <section id="tasks" class="section">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><span class="status-dot bg-emerald-500 mr-1"></span><span class="text-xs">Completed</span><p class="text-xl font-bold mt-1">24</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><span class="status-dot bg-blue-500 mr-1"></span><span class="text-xs">In Progress</span><p class="text-xl font-bold mt-1">8</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><span class="status-dot bg-amber-500 mr-1"></span><span class="text-xs">Pending</span><p class="text-xl font-bold mt-1">5</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><span class="status-dot bg-orange-500 mr-1"></span><span class="text-xs">Overdue</span><p class="text-xl font-bold mt-1">2</p></div>
+          <div class="bg-white rounded-xl p-3 border border-slate-100 text-center shadow-sm"><span class="status-dot bg-red-500 mr-1"></span><span class="text-xs">Critical</span><p class="text-xl font-bold mt-1">1</p></div>
+        </div>
+        <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-slate-50 text-slate-600">
+              <tr>
+                <th class="text-left px-4 py-3 font-medium">Task</th>
+                <th class="text-left px-4 py-3 font-medium">Category</th>
+                <th class="text-left px-4 py-3 font-medium">Due</th>
+                <th class="text-left px-4 py-3 font-medium">Priority</th>
+                <th class="text-center px-4 py-3 font-medium">Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr class="table-row">
+                <td class="px-4 py-3 font-medium">Execute Monsoon Drive – Zone A</td>
+                <td class="px-4 py-3">Campaign Execution</td>
+                <td class="px-4 py-3">12 Aug</td>
+                <td class="px-4 py-3"><span class="badge bg-red-100 text-red-700">High</span></td>
+                <td class="px-4 py-3 text-center"><span class="badge bg-blue-100 text-blue-700">In Progress</span></td>
+              </tr>
+              <tr class="table-row">
+                <td class="px-4 py-3 font-medium">Submit Daily Report</td>
+                <td class="px-4 py-3">Reporting</td>
+                <td class="px-4 py-3">Today</td>
+                <td class="px-4 py-3"><span class="badge bg-amber-100 text-amber-700">Medium</span></td>
+                <td class="px-4 py-3 text-center"><span class="badge bg-amber-100 text-amber-700">Pending</span></td>
+              </tr>
+              <tr class="table-row">
+                <td class="px-4 py-3 font-medium">Independence Day Event Setup</td>
+                <td class="px-4 py-3">Event Management</td>
+                <td class="px-4 py-3">10 Aug</td>
+                <td class="px-4 py-3"><span class="badge bg-red-100 text-red-700">Critical</span></td>
+                <td class="px-4 py-3 text-center"><span class="badge bg-orange-100 text-orange-700">Overdue</span></td>
+              </tr>
+              <tr class="table-row">
+                <td class="px-4 py-3 font-medium">Field Visit – Sector 45 Market</td>
+                <td class="px-4 py-3">Field Activity</td>
+                <td class="px-4 py-3">13 Aug</td>
+                <td class="px-4 py-3"><span class="badge bg-blue-100 text-blue-700">Normal</span></td>
+                <td class="px-4 py-3 text-center"><span class="badge bg-slate-100 text-slate-600">Pending</span></td>
+              </tr>
+              <tr class="table-row">
+                <td class="px-4 py-3 font-medium">Post 3 Reels for Membership</td>
+                <td class="px-4 py-3">Social Media</td>
+                <td class="px-4 py-3">14 Aug</td>
+                <td class="px-4 py-3"><span class="badge bg-amber-100 text-amber-700">Medium</span></td>
+                <td class="px-4 py-3 text-center"><span class="badge bg-blue-100 text-blue-700">In Progress</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== REPORTS ===================== -->
+      <section id="reports" class="section">
+        <div class="flex gap-2 mb-6 flex-wrap">
+          <button class="tab-btn active px-4 py-2 text-sm border-b-2 border-indigo-600 text-indigo-600 font-semibold" data-tab="rep-daily">Daily</button>
+          <button class="tab-btn px-4 py-2 text-sm text-slate-500" data-tab="rep-weekly">Weekly</button>
+          <button class="tab-btn px-4 py-2 text-sm text-slate-500" data-tab="rep-monthly">Monthly</button>
+          <button class="tab-btn px-4 py-2 text-sm text-slate-500" data-tab="rep-mis">MIS / Advanced</button>
+        </div>
+
+        <div id="rep-daily" class="tab-content">
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
+            <div class="flex items-center justify-between mb-5">
+              <h3 class="font-semibold text-slate-800">Daily Marketing Report – 11 Aug 2026</h3>
+              <div class="flex gap-2">
+                <button class="px-3 py-1.5 border border-slate-200 text-xs rounded-lg">Save Draft</button>
+                <button class="px-3 py-1.5 bg-indigo-600 text-white text-xs rounded-lg">Submit Report</button>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div><label class="block text-xs font-medium text-slate-600 mb-1">Territory</label><input type="text" value="North District" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" /></div>
+              <div><label class="block text-xs font-medium text-slate-600 mb-1">Gallery</label><select class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"><option>Zone A</option><option>Zone B</option><option>Zone C</option></select></div>
+              <div><label class="block text-xs font-medium text-slate-600 mb-1">Campaign Focus</label><input type="text" value="CMP-042 Monsoon Drive" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" /></div>
+              <div><label class="block text-xs font-medium text-slate-600 mb-1">Activities Completed</label><input type="number" value="5" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" /></div>
+              <div><label class="block text-xs font-medium text-slate-600 mb-1">Locations Covered</label><input type="number" value="3" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" /></div>
+              <div><label class="block text-xs font-medium text-slate-600 mb-1">Visits</label><input type="number" value="3" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" /></div>
+              <div><label class="block text-xs font-medium text-slate-600 mb-1">Leads Generated</label><input type="number" value="28" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" /></div>
+              <div><label class="block text-xs font-medium text-slate-600 mb-1">Qualified Leads</label><input type="number" value="11" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" /></div>
+              <div><label class="block text-xs font-medium text-slate-600 mb-1">Follow-ups</label><input type="number" value="7" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" /></div>
+              <div><label class="block text-xs font-medium text-slate-600 mb-1">Events</label><input type="number" value="1" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" /></div>
+              <div><label class="block text-xs font-medium text-slate-600 mb-1">Social Activities</label><input type="number" value="5" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" /></div>
+              <div><label class="block text-xs font-medium text-slate-600 mb-1">Marketing Spend (₹)</label><input type="number" value="4850" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" /></div>
+              <div><label class="block text-xs font-medium text-slate-600 mb-1">Customers Generated</label><input type="number" value="2" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" /></div>
+              <div><label class="block text-xs font-medium text-slate-600 mb-1">Revenue Contribution (₹)</label><input type="number" value="45000" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" /></div>
+              <div class="md:col-span-2"><label class="block text-xs font-medium text-slate-600 mb-1">Problems / Challenges</label><textarea class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" rows="2"></textarea></div>
+              <div class="md:col-span-2"><label class="block text-xs font-medium text-slate-600 mb-1">Support Required</label><textarea class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" rows="2"></textarea></div>
+              <div class="md:col-span-2"><label class="block text-xs font-medium text-slate-600 mb-1">Tomorrow's Plan</label><textarea class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" rows="2"></textarea></div>
+              <div class="md:col-span-2"><label class="block text-xs font-medium text-slate-600 mb-1">Remarks</label><textarea class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" rows="2"></textarea></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="rep-weekly" class="tab-content hidden">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-chart-bar text-indigo-500 text-xl"></i><h4 class="font-semibold text-slate-800">Campaign Performance</h4></div>
+              <p class="text-xs text-slate-500">Weekly campaign ROI, leads, conversions & spend analysis</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-star text-amber-500 text-xl"></i><h4 class="font-semibold text-slate-800">Lead Quality Report</h4></div>
+              <p class="text-xs text-slate-500">Quality scores, invalid leads, conversion potential</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-exchange-alt text-emerald-500 text-xl"></i><h4 class="font-semibold text-slate-800">Lead Conversion</h4></div>
+              <p class="text-xs text-slate-500">Funnel conversion rates by source & campaign</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-store text-purple-500 text-xl"></i><h4 class="font-semibold text-slate-800">Gallery Marketing</h4></div>
+              <p class="text-xs text-slate-500">Gallery-wise leads, walk-ins, memberships, ROI</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-map-marked-alt text-rose-500 text-xl"></i><h4 class="font-semibold text-slate-800">Field Marketing</h4></div>
+              <p class="text-xs text-slate-500">Visits, coverage, verified activities, outcomes</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-calendar-check text-cyan-500 text-xl"></i><h4 class="font-semibold text-slate-800">Event Performance</h4></div>
+              <p class="text-xs text-slate-500">Attendance, leads, revenue & ROI per event</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-wallet text-teal-500 text-xl"></i><h4 class="font-semibold text-slate-800">Budget Utilization</h4></div>
+              <p class="text-xs text-slate-500">Spend vs budget, variance, category breakdown</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-chart-line text-blue-500 text-xl"></i><h4 class="font-semibold text-slate-800">Marketing ROI</h4></div>
+              <p class="text-xs text-slate-500">Overall and campaign-level ROI & ROAS</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="rep-monthly" class="tab-content hidden">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-file-invoice text-indigo-500 text-xl"></i><h4 class="font-semibold text-slate-800">Marketing MIS</h4></div>
+              <p class="text-xs text-slate-500">Complete monthly management information system</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-bullhorn text-purple-500 text-xl"></i><h4 class="font-semibold text-slate-800">Campaign Performance</h4></div>
+              <p class="text-xs text-slate-500">Full campaign scorecard with quality scores</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-user-plus text-blue-500 text-xl"></i><h4 class="font-semibold text-slate-800">Lead Generation</h4></div>
+              <p class="text-xs text-slate-500">Volume, sources, quality & routing metrics</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-handshake text-emerald-500 text-xl"></i><h4 class="font-semibold text-slate-800">Customer Acquisition</h4></div>
+              <p class="text-xs text-slate-500">New customers, CAC, LTV contribution</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-rupee-sign text-teal-500 text-xl"></i><h4 class="font-semibold text-slate-800">Revenue Contribution</h4></div>
+              <p class="text-xs text-slate-500">Marketing-attributed revenue by channel</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-balance-scale text-amber-500 text-xl"></i><h4 class="font-semibold text-slate-800">Budget vs Actual</h4></div>
+              <p class="text-xs text-slate-500">Detailed variance analysis by category</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-map text-rose-500 text-xl"></i><h4 class="font-semibold text-slate-800">Territory Performance</h4></div>
+              <p class="text-xs text-slate-500">District / zone performance comparison</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-search text-cyan-500 text-xl"></i><h4 class="font-semibold text-slate-800">Competitor Intelligence</h4></div>
+              <p class="text-xs text-slate-500">Market observations & competitor activities</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-trophy text-yellow-500 text-xl"></i><h4 class="font-semibold text-slate-800">Employee Performance</h4></div>
+              <p class="text-xs text-slate-500">KPI scorecard & weighted performance %</p>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition cursor-pointer">
+              <div class="flex items-center gap-3 mb-3"><i class="fas fa-star text-indigo-500 text-xl"></i><h4 class="font-semibold text-slate-800">Overall Marketing Score</h4></div>
+              <p class="text-xs text-slate-500">Composite score across all KPIs</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="rep-mis" class="tab-content hidden">
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
+            <h3 class="font-semibold text-slate-800 mb-4">Advanced MIS & Drill-Down Path</h3>
+            <div class="flex flex-wrap items-center gap-2 text-sm mb-6">
+              <span class="px-3 py-1.5 bg-indigo-100 text-indigo-700 rounded-lg font-medium">Marketing Dashboard</span>
+              <i class="fas fa-chevron-right text-slate-400"></i>
+              <span class="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg">Campaign</span>
+              <i class="fas fa-chevron-right text-slate-400"></i>
+              <span class="px-3 py-1.5 bg-cyan-100 text-cyan-700 rounded-lg">Activity</span>
+              <i class="fas fa-chevron-right text-slate-400"></i>
+              <span class="px-3 py-1.5 bg-purple-100 text-purple-700 rounded-lg">Leads</span>
+              <i class="fas fa-chevron-right text-slate-400"></i>
+              <span class="px-3 py-1.5 bg-pink-100 text-pink-700 rounded-lg">Qualified</span>
+              <i class="fas fa-chevron-right text-slate-400"></i>
+              <span class="px-3 py-1.5 bg-amber-100 text-amber-700 rounded-lg">BDE / BDO / Tele</span>
+              <i class="fas fa-chevron-right text-slate-400"></i>
+              <span class="px-3 py-1.5 bg-emerald-100 text-emerald-700 rounded-lg">Customer</span>
+              <i class="fas fa-chevron-right text-slate-400"></i>
+              <span class="px-3 py-1.5 bg-teal-100 text-teal-700 rounded-lg">Revenue</span>
+              <i class="fas fa-chevron-right text-slate-400"></i>
+              <span class="px-3 py-1.5 bg-green-100 text-green-700 rounded-lg font-medium">ROI</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="p-4 bg-slate-50 rounded-xl">
+                <h4 class="font-medium text-slate-800 mb-2">Export Options</h4>
+                <div class="flex gap-2 flex-wrap">
+                  <button class="px-3 py-1.5 bg-white border border-slate-200 text-xs rounded-lg hover:bg-slate-100"><i class="fas fa-file-pdf text-red-500 mr-1"></i> PDF</button>
+                  <button class="px-3 py-1.5 bg-white border border-slate-200 text-xs rounded-lg hover:bg-slate-100"><i class="fas fa-file-excel text-emerald-500 mr-1"></i> Excel</button>
+                  <button class="px-3 py-1.5 bg-white border border-slate-200 text-xs rounded-lg hover:bg-slate-100"><i class="fas fa-file-csv text-blue-500 mr-1"></i> CSV</button>
+                </div>
+              </div>
+              <div class="p-4 bg-slate-50 rounded-xl">
+                <h4 class="font-medium text-slate-800 mb-2">Schedule Reports</h4>
+                <p class="text-xs text-slate-500">Auto-email daily / weekly / monthly reports to Manager & HQ</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== PERFORMANCE ===================== -->
+      <section id="performance" class="section">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6 text-center">
+            <p class="text-sm text-slate-500 mb-2">Overall Performance Score</p>
+            <p class="text-5xl font-bold text-indigo-600">82%</p>
+            <div class="progress-bar mt-4 max-w-xs mx-auto"><div class="progress-fill bg-indigo-500" style="width:82%"></div></div>
+            <p class="text-xs text-slate-500 mt-2">Weighted KPI Score</p>
+          </div>
+          <div class="lg:col-span-2 bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+            <h3 class="font-semibold text-slate-800 mb-4">KPI Breakdown (Weights)</h3>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3">
+                <div class="w-40 text-xs text-slate-600">Qualified Lead Generation</div>
+                <div class="flex-1 progress-bar"><div class="progress-fill bg-emerald-500" style="width:85%"></div></div>
+                <span class="text-xs font-medium w-12 text-right">20%</span>
+                <span class="text-xs text-emerald-600 w-10">85%</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-40 text-xs text-slate-600">Campaign Target Achievement</div>
+                <div class="flex-1 progress-bar"><div class="progress-fill bg-blue-500" style="width:78%"></div></div>
+                <span class="text-xs font-medium w-12 text-right">15%</span>
+                <span class="text-xs text-blue-600 w-10">78%</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-40 text-xs text-slate-600">Lead Conversion</div>
+                <div class="flex-1 progress-bar"><div class="progress-fill bg-purple-500" style="width:72%"></div></div>
+                <span class="text-xs font-medium w-12 text-right">10%</span>
+                <span class="text-xs text-purple-600 w-10">72%</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-40 text-xs text-slate-600">Marketing Activities Completed</div>
+                <div class="flex-1 progress-bar"><div class="progress-fill bg-indigo-500" style="width:90%"></div></div>
+                <span class="text-xs font-medium w-12 text-right">10%</span>
+                <span class="text-xs text-indigo-600 w-10">90%</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-40 text-xs text-slate-600">Field Coverage</div>
+                <div class="flex-1 progress-bar"><div class="progress-fill bg-rose-500" style="width:80%"></div></div>
+                <span class="text-xs font-medium w-12 text-right">10%</span>
+                <span class="text-xs text-rose-600 w-10">80%</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-40 text-xs text-slate-600">Customer Acquisition</div>
+                <div class="flex-1 progress-bar"><div class="progress-fill bg-teal-500" style="width:75%"></div></div>
+                <span class="text-xs font-medium w-12 text-right">10%</span>
+                <span class="text-xs text-teal-600 w-10">75%</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-40 text-xs text-slate-600">Campaign ROI</div>
+                <div class="flex-1 progress-bar"><div class="progress-fill bg-cyan-500" style="width:88%"></div></div>
+                <span class="text-xs font-medium w-12 text-right">10%</span>
+                <span class="text-xs text-cyan-600 w-10">88%</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-40 text-xs text-slate-600">Daily Report Compliance</div>
+                <div class="flex-1 progress-bar"><div class="progress-fill bg-amber-500" style="width:95%"></div></div>
+                <span class="text-xs font-medium w-12 text-right">5%</span>
+                <span class="text-xs text-amber-600 w-10">95%</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-40 text-xs text-slate-600">CRM / Data Accuracy</div>
+                <div class="flex-1 progress-bar"><div class="progress-fill bg-slate-500" style="width:92%"></div></div>
+                <span class="text-xs font-medium w-12 text-right">5%</span>
+                <span class="text-xs text-slate-600 w-10">92%</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-40 text-xs text-slate-600">Budget Compliance</div>
+                <div class="flex-1 progress-bar"><div class="progress-fill bg-green-500" style="width:86%"></div></div>
+                <span class="text-xs font-medium w-12 text-right">5%</span>
+                <span class="text-xs text-green-600 w-10">86%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+            <h3 class="font-semibold text-slate-800 mb-3">Lead Quality Score Formula</h3>
+            <div class="bg-slate-50 rounded-lg p-4 text-sm font-mono text-slate-700">
+              Valid Lead + Correct Contact + Relevant Requirement<br>
+              + Qualified Customer + Assigned Correctly + Conversion Potential<br>
+              = <span class="text-indigo-600 font-bold">Quality Lead</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+            <h3 class="font-semibold text-slate-800 mb-3">Campaign Quality Score Formula</h3>
+            <div class="bg-slate-50 rounded-lg p-4 text-sm font-mono text-slate-700">
+              Campaign Execution + Lead Quality + Conversion<br>
+              + Customer Acquisition + Budget Control + Revenue + ROI<br>
+              = <span class="text-indigo-600 font-bold">Campaign Score</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== ALERTS ===================== -->
+      <section id="alerts" class="section">
+        <div class="space-y-4">
+          <div>
+            <h3 class="font-semibold text-red-600 mb-3 flex items-center gap-2"><span class="status-dot bg-red-500"></span> Critical Alerts</h3>
+            <div class="space-y-2">
+              <div class="alert-critical p-4 rounded-lg flex items-start justify-between">
+                <div><p class="font-medium text-red-800">Budget exceeded on Digital Ads – CMP-035</p><p class="text-xs text-red-600 mt-1">Spend 112% of allocated. Immediate review required.</p></div>
+                <span class="text-xs text-red-500">3d ago</span>
+              </div>
+              <div class="alert-critical p-4 rounded-lg flex items-start justify-between">
+                <div><p class="font-medium text-red-800">Daily reports missing for 2 consecutive days</p><p class="text-xs text-red-600 mt-1">Compliance risk. Manager notified.</p></div>
+                <span class="text-xs text-red-500">5d ago</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-semibold text-amber-600 mb-3 flex items-center gap-2"><span class="status-dot bg-amber-500"></span> Warnings</h3>
+            <div class="space-y-2">
+              <div class="alert-warning p-4 rounded-lg flex items-start justify-between">
+                <div><p class="font-medium text-amber-800">Low conversion on Campaign #CMP-042</p><p class="text-xs text-amber-600 mt-1">Conversion at 15% vs target 25%.</p></div>
+                <span class="text-xs text-amber-500">2h ago</span>
+              </div>
+              <div class="alert-warning p-4 rounded-lg flex items-start justify-between">
+                <div><p class="font-medium text-amber-800">Low field coverage this week</p><p class="text-xs text-amber-600 mt-1">Only 4 of 8 planned locations visited.</p></div>
+                <span class="text-xs text-amber-500">1d ago</span>
+              </div>
+              <div class="alert-warning p-4 rounded-lg flex items-start justify-between">
+                <div><p class="font-medium text-amber-800">Pending campaign tasks overdue</p><p class="text-xs text-amber-600 mt-1">Independence Day setup pending.</p></div>
+                <span class="text-xs text-amber-500">1d ago</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-semibold text-emerald-600 mb-3 flex items-center gap-2"><span class="status-dot bg-emerald-500"></span> Positive Highlights</h3>
+            <div class="space-y-2">
+              <div class="alert-positive p-4 rounded-lg flex items-start justify-between">
+                <div><p class="font-medium text-emerald-800">Target achieved for Gallery Zone A</p><p class="text-xs text-emerald-600 mt-1">Leads target hit 3 days early. Great work!</p></div>
+                <span class="text-xs text-emerald-500">Yesterday</span>
+              </div>
+              <div class="alert-positive p-4 rounded-lg flex items-start justify-between">
+                <div><p class="font-medium text-emerald-800">High-quality leads from Event EVT-015</p><p class="text-xs text-emerald-600 mt-1">Average quality score 4.6/5. Conversion 33%.</p></div>
+                <span class="text-xs text-emerald-500">4d ago</span>
+              </div>
+              <div class="alert-positive p-4 rounded-lg flex items-start justify-between">
+                <div><p class="font-medium text-emerald-800">Excellent Campaign ROI – Referral Boost</p><p class="text-xs text-emerald-600 mt-1">ROI 5.6x. Best performing campaign this quarter.</p></div>
+                <span class="text-xs text-emerald-500">1w ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== ROLE & PERMISSIONS ===================== -->
+      <section id="role" class="section">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
+            <h3 class="font-semibold text-slate-800 mb-4">Role Overview</h3>
+            <table class="w-full text-sm">
+              <tbody class="divide-y divide-slate-100">
+                <tr><td class="py-2 text-slate-500">Role</td><td class="py-2 font-medium">Marketing Executive</td></tr>
+                <tr><td class="py-2 text-slate-500">Level</td><td class="py-2 font-medium">Executive</td></tr>
+                <tr><td class="py-2 text-slate-500">Department</td><td class="py-2 font-medium">Marketing</td></tr>
+                <tr><td class="py-2 text-slate-500">Scope</td><td class="py-2 font-medium">Assigned HQ / District / Gallery / Territory</td></tr>
+                <tr><td class="py-2 text-slate-500">Reports To</td><td class="py-2 font-medium">Marketing Manager / HQ Manager / Gallery District Manager</td></tr>
+                <tr><td class="py-2 text-slate-500">Primary Objective</td><td class="py-2 font-medium">Generate qualified leads, execute marketing activities, increase customer acquisition and support business growth</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
+            <h3 class="font-semibold text-slate-800 mb-4">Core Responsibilities</h3>
+            <div class="grid grid-cols-1 gap-3 text-sm">
+              <div class="p-3 bg-indigo-50 rounded-lg"><strong class="text-indigo-700">Marketing Operations</strong> — Execute plans, local activities, gallery campaigns, events, market visits, lead generation, daily reports</div>
+              <div class="p-3 bg-blue-50 rounded-lg"><strong class="text-blue-700">Lead Generation</strong> — Campaign & field leads, qualify, route to BDE/BDO/Tele, track conversions & effectiveness</div>
+              <div class="p-3 bg-purple-50 rounded-lg"><strong class="text-purple-700">Gallery Marketing</strong> — Promote galleries, local awareness, membership campaigns, events, approved offers</div>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
+            <h3 class="font-semibold text-emerald-700 mb-4 flex items-center gap-2"><i class="fas fa-check-circle"></i> Can Do</h3>
+            <ul class="space-y-2 text-sm text-slate-700">
+              <li class="flex items-start gap-2"><i class="fas fa-check text-emerald-500 mt-1"></i> Create marketing activities & execute assigned campaigns</li>
+              <li class="flex items-start gap-2"><i class="fas fa-check text-emerald-500 mt-1"></i> Generate & update marketing leads</li>
+              <li class="flex items-start gap-2"><i class="fas fa-check text-emerald-500 mt-1"></i> Conduct field marketing with live photo + GPS verification</li>
+              <li class="flex items-start gap-2"><i class="fas fa-check text-emerald-500 mt-1"></i> Create events & submit campaign / daily reports</li>
+              <li class="flex items-start gap-2"><i class="fas fa-check text-emerald-500 mt-1"></i> Submit marketing expenses & travel claims</li>
+              <li class="flex items-start gap-2"><i class="fas fa-check text-emerald-500 mt-1"></i> View assigned campaign performance & leads</li>
+              <li class="flex items-start gap-2"><i class="fas fa-check text-emerald-500 mt-1"></i> Coordinate with BDE / BDO / Telecalling</li>
+              <li class="flex items-start gap-2"><i class="fas fa-check text-emerald-500 mt-1"></i> Submit market intelligence & competitor observations</li>
+            </ul>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
+            <h3 class="font-semibold text-red-700 mb-4 flex items-center gap-2"><i class="fas fa-times-circle"></i> Cannot Do</h3>
+            <ul class="space-y-2 text-sm text-slate-700">
+              <li class="flex items-start gap-2"><i class="fas fa-times text-red-500 mt-1"></i> Delete historical campaign data</li>
+              <li class="flex items-start gap-2"><i class="fas fa-times text-red-500 mt-1"></i> Modify verified GPS evidence or change timestamps</li>
+              <li class="flex items-start gap-2"><i class="fas fa-times text-red-500 mt-1"></i> Approve own expenses or financial transactions</li>
+              <li class="flex items-start gap-2"><i class="fas fa-times text-red-500 mt-1"></i> Modify invoices or change marketing budgets beyond authorization</li>
+              <li class="flex items-start gap-2"><i class="fas fa-times text-red-500 mt-1"></i> Change CRM workflows or system configuration</li>
+              <li class="flex items-start gap-2"><i class="fas fa-times text-red-500 mt-1"></i> Change user permissions</li>
+              <li class="flex items-start gap-2"><i class="fas fa-times text-red-500 mt-1"></i> Access unauthorized campaigns</li>
+              <li class="flex items-start gap-2"><i class="fas fa-times text-red-500 mt-1"></i> Override Finance / CFO controls</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // Navigation
+    const navItems = document.querySelectorAll('.nav-item');
+    const sections = document.querySelectorAll('.section');
+    const pageTitle = document.getElementById('pageTitle');
+    const titles = {
+      dashboard: 'Marketing Dashboard',
+      campaigns: 'Campaign Management',
+      leads: 'Lead Generation',
+      field: 'Field Marketing',
+      events: 'Event Management',
+      social: 'Social Media Activity',
+      gallery: 'Gallery Marketing',
+      budget: 'Budget & Expenses',
+      travel: 'Travel / Field Allowance',
+      tasks: 'Task Management',
+      reports: 'Marketing Reports',
+      performance: 'Performance Dashboard',
+      alerts: 'Marketing Alerts',
+      role: 'Role & Permissions'
+    };
+
+    navItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const sectionId = item.dataset.section;
+        navItems.forEach(n => n.classList.remove('active'));
+        item.classList.add('active');
+        sections.forEach(s => s.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+        pageTitle.textContent = titles[sectionId] || 'Dashboard';
+        // Re-init charts if needed when switching
+        if (sectionId === 'dashboard') initDashboardCharts();
+        if (sectionId === 'campaigns') initCampaignCharts();
+        if (sectionId === 'gallery') initGalleryChart();
+        if (sectionId === 'budget') initExpenseChart();
+      });
+    });
+
+    // Tabs
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const parent = btn.closest('section') || btn.parentElement.parentElement;
+        const tabId = btn.dataset.tab;
+        parent.querySelectorAll('.tab-btn').forEach(b => {
+          b.classList.remove('active', 'border-b-2', 'border-indigo-600', 'text-indigo-600', 'font-semibold');
+          b.classList.add('text-slate-500');
+        });
+        btn.classList.add('active', 'border-b-2', 'border-indigo-600', 'text-indigo-600', 'font-semibold');
+        btn.classList.remove('text-slate-500');
+        parent.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+        const target = document.getElementById(tabId);
+        if (target) target.classList.remove('hidden');
+      });
+    });
+
+    // Mobile menu
+    document.getElementById('menuToggle')?.addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+
+    // Charts
+    let charts = {};
+
+    function initDashboardCharts() {
+      if (charts.funnel) charts.funnel.destroy();
+      const funnelCtx = document.getElementById('funnelChart')?.getContext('2d');
+      if (funnelCtx) {
+        charts.funnel = new Chart(funnelCtx, {
+          type: 'bar',
+          data: {
+            labels: ['Spend (₹L)', 'Leads', 'Qualified', 'Opportunities', 'Conversions', 'Revenue (₹L)'],
+            datasets: [{
+              label: 'Funnel Metrics',
+              data: [5.9, 1247, 486, 298, 142, 12.4],
+              backgroundColor: ['#6366f1', '#3b82f6', '#10b981', '#8b5cf6', '#14b8a6', '#22c55e'],
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }
+          }
+        });
+      }
+
+      if (charts.source) charts.source.destroy();
+      const sourceCtx = document.getElementById('sourceChart')?.getContext('2d');
+      if (sourceCtx) {
+        charts.source = new Chart(sourceCtx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Field', 'Social', 'Campaign', 'Event', 'Referral', 'Website', 'Other'],
+            datasets: [{
+              data: [28, 22, 18, 12, 8, 7, 5],
+              backgroundColor: ['#f43f5e', '#8b5cf6', '#6366f1', '#ec4899', '#14b8a6', '#3b82f6', '#94a3b8']
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } } }
+        });
+      }
+
+      if (charts.status) charts.status.destroy();
+      const statusCtx = document.getElementById('statusChart')?.getContext('2d');
+      if (statusCtx) {
+        charts.status = new Chart(statusCtx, {
+          type: 'doughnut',
+          data: {
+            labels: ['New', 'Qualified', 'Assigned', 'Contacted', 'Follow-up', 'Converted', 'Lost'],
+            datasets: [{
+              data: [86, 486, 412, 298, 94, 142, 67],
+              backgroundColor: ['#3b82f6', '#10b981', '#6366f1', '#8b5cf6', '#f59e0b', '#14b8a6', '#f43f5e']
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } } }
+        });
+      }
+    }
+
+    function initCampaignCharts() {
+      if (charts.campaignFlow) charts.campaignFlow.destroy();
+      const ctx = document.getElementById('campaignFlowChart')?.getContext('2d');
+      if (ctx) {
+        charts.campaignFlow = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['Spend', 'Leads', 'Qualified', 'Opps', 'Conv', 'Revenue'],
+            datasets: [{
+              label: 'Value Index',
+              data: [100, 85, 62, 48, 28, 210],
+              borderColor: '#6366f1',
+              backgroundColor: 'rgba(99,102,241,0.1)',
+              fill: true,
+              tension: 0.4
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+      }
+    }
+
+    function initGalleryChart() {
+      if (charts.gallery) charts.gallery.destroy();
+      const ctx = document.getElementById('galleryChart')?.getContext('2d');
+      if (ctx) {
+        charts.gallery = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Zone A', 'Zone B', 'Zone C'],
+            datasets: [
+              { label: 'Leads', data: [1250, 980, 720], backgroundColor: '#6366f1', borderRadius: 4 },
+              { label: 'Customers', data: [120, 105, 61], backgroundColor: '#10b981', borderRadius: 4 }
+            ]
+          },
+          options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+        });
+      }
+    }
+
+    function initExpenseChart() {
+      if (charts.expense) charts.expense.destroy();
+      const ctx = document.getElementById('expenseChart')?.getContext('2d');
+      if (ctx) {
+        charts.expense = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Digital Ads', 'Printing', 'Events', 'Travel', 'Promo Materials', 'Outdoor', 'Content', 'Misc'],
+            datasets: [{
+              data: [32, 12, 18, 8, 10, 7, 6, 7],
+              backgroundColor: ['#6366f1', '#f59e0b', '#ec4899', '#3b82f6', '#14b8a6', '#f43f5e', '#8b5cf6', '#94a3b8']
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } } } }
+        });
+      }
+    }
+
+    // Init on load
+    document.addEventListener('DOMContentLoaded', () => {
+      initDashboardCharts();
+    });
+  </script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
+

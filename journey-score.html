@@ -1,0 +1,704 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ePay Journey Score — Know How Ready You Are</title>
+<meta name="description" content="Track your international job, study or travel readiness. Documents, skills, language, finance and travel — complete actions to become Journey Ready." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+
+
+
+:root {
+  --blue: #2563eb; --blue-d: #1d4ed8; --blue-l: #60a5fa;
+  --green: #10b981; --amber: #f59e0b; --red: #ef4444; --violet: #7c3aed;
+  --navy: #0f172a; --text: #0f172a; --muted: #64748b;
+  --bg: #f1f5f9; --white: #fff; --radius: 18px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{text-decoration:none;color:inherit}
+.container{max-width:960px;margin:0 auto;padding:0 20px}
+
+.nav{background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:40}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:8px}
+.logo-mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--blue-l),var(--blue-d));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.72rem}
+.logo span{color:var(--blue-d)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;font-size:.88rem;font-weight:600;border-radius:100px;border:none;cursor:pointer;transition:.25s;font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,var(--blue-l),var(--blue-d));color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.3)}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-ghost{background:#fff;border:1.5px solid #e2e8f0;color:var(--text)}
+.btn-ghost:hover{border-color:var(--blue)}
+.btn-success{background:var(--green);color:#fff}
+.btn-sm{padding:7px 14px;font-size:.8rem}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+.hero{padding:32px 0 8px;text-align:center}
+.hero-badge{display:inline-block;font-size:.75rem;font-weight:700;color:var(--blue-d);background:#dbeafe;padding:5px 12px;border-radius:100px;margin-bottom:10px}
+.hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.5rem,3.5vw,2rem);font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
+.hero p{color:var(--muted);font-size:.95rem}
+
+/* Score ring */
+.score-panel{background:#fff;border-radius:24px;border:1px solid #e2e8f0;padding:28px 24px;margin:20px 0;box-shadow:0 8px 30px rgba(37,99,235,.06)}
+.score-top{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center}
+@media(max-width:640px){.score-top{grid-template-columns:1fr;text-align:center}}
+
+.ring-wrap{position:relative;width:160px;height:160px;margin:0 auto}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:#e2e8f0;stroke-width:12}
+.ring-fg{fill:none;stroke:url(#ringGrad);stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset 1s ease}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-center .num{font-family:'Plus Jakarta Sans',sans-serif;font-size:2.4rem;font-weight:800;line-height:1;color:var(--navy)}
+.ring-center .den{font-size:.85rem;color:var(--muted);font-weight:600}
+.ring-center .label{font-size:.7rem;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
+
+.score-info h2{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.score-info .status{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:600;padding:4px 12px;border-radius:100px;margin-bottom:10px}
+.status-ready{background:#d1fae5;color:#065f46}
+.status-almost{background:#fef3c7;color:#92400e}
+.status-building{background:#dbeafe;color:#1e40af}
+.status-start{background:#f1f5f9;color:#475569}
+.score-info p{font-size:.9rem;color:var(--muted);margin-bottom:12px}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px}
+.pill{font-size:.75rem;font-weight:600;background:#f1f5f9;padding:5px 10px;border-radius:100px;color:var(--muted)}
+.pill strong{color:var(--text)}
+
+/* Category bars */
+.cats{display:grid;gap:14px;margin-top:24px}
+.cat{background:#f8fafc;border-radius:14px;padding:14px 16px;border:1px solid #e2e8f0;cursor:pointer;transition:.2s}
+.cat:hover{border-color:var(--blue-l)}
+.cat-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px}
+.cat-name{font-weight:700;font-size:.92rem;display:flex;align-items:center;gap:8px}
+.cat-pct{font-weight:800;font-size:.95rem}
+.bar{height:10px;background:#e2e8f0;border-radius:100px;overflow:hidden}
+.bar-fill{height:100%;border-radius:100px;transition:width .8s ease}
+.cat-actions{margin-top:10px;display:none;font-size:.85rem}
+.cat.open .cat-actions{display:block}
+.cat-actions li{list-style:none;padding:6px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px dashed #e2e8f0}
+.cat-actions li:last-child{border-bottom:none}
+.check{width:20px;height:20px;border-radius:6px;border:2px solid #cbd5e1;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.7rem;transition:.15s}
+.check.done{background:var(--green);border-color:var(--green);color:#fff}
+
+/* Remaining actions */
+.remain-card{background:#fff;border-radius:18px;border:1px solid #e2e8f0;padding:20px;margin:16px 0}
+.remain-card h3{font-size:1rem;font-weight:800;margin-bottom:4px}
+.remain-card .sub{font-size:.88rem;color:var(--muted);margin-bottom:14px}
+.action-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border:1.5px solid #e2e8f0;border-radius:12px;margin-bottom:10px;transition:.2s;background:#fff}
+.action-item:hover{border-color:var(--blue-l)}
+.action-item.done{opacity:.65;background:#f0fdf4;border-color:#bbf7d0}
+.action-item .rank{width:28px;height:28px;border-radius:8px;background:#dbeafe;color:var(--blue-d);font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.action-item.done .rank{background:#d1fae5;color:#065f46}
+.action-item .body{flex:1}
+.action-item .body h4{font-size:.92rem;font-weight:700;margin-bottom:2px}
+.action-item .body p{font-size:.8rem;color:var(--muted)}
+.action-item .pts{font-size:.75rem;font-weight:700;color:var(--blue-d);white-space:nowrap}
+
+/* Journey types */
+.type-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:16px 0 8px}
+.type-btn{padding:8px 16px;border-radius:100px;border:1.5px solid #e2e8f0;background:#fff;font-size:.85rem;font-weight:600;cursor:pointer;font-family:inherit;transition:.2s}
+.type-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* Badges / levels */
+.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
+@media(max-width:640px){.levels{grid-template-columns:1fr 1fr}}
+.level{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px;text-align:center;font-size:.8rem}
+.level .ic{font-size:1.3rem}
+.level .n{font-weight:700;margin-top:4px}
+.level .r{color:var(--muted);font-size:.72rem}
+.level.current{border-color:var(--blue);background:#eff6ff;box-shadow:0 0 0 2px rgba(37,99,235,.15)}
+
+.toast-box{position:fixed;bottom:20px;right:20px;z-index:50}
+.toast{background:#fff;border-radius:12px;padding:12px 16px;box-shadow:0 8px 24px rgba(0,0,0,.12);border-left:4px solid var(--green);font-size:.88rem;margin-top:8px;animation:in .3s ease;min-width:200px}
+@keyframes in{from{transform:translateX(80px);opacity:0}to{transform:none;opacity:1}}
+
+.cta-band{background:linear-gradient(135deg,#1e3a8a,#2563eb);border-radius:20px;padding:28px;text-align:center;color:#fff;margin:24px 0}
+.cta-band h3{font-size:1.2rem;font-weight:800;margin-bottom:6px}
+.cta-band p{opacity:.9;font-size:.9rem;margin-bottom:14px}
+
+footer{text-align:center;padding:24px;font-size:.8rem;color:var(--muted)}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <div class="logo"><div class="logo-mark">JS</div> ePay <span>Journey Score</span></div>
+    <button class="btn btn-ghost btn-sm" onclick="resetDemo()">Reset demo</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="hero">
+    <div class="hero-badge">📊 Gamified readiness</div>
+    <h1>Your Journey Score</h1>
+    <p>See how ready you are — then complete actions to level up.</p>
+  </div>
+
+  <div class="type-row">
+    <button class="type-btn active" data-type="job" onclick="setType('job',this)">International Job</button>
+    <button class="type-btn" data-type="study" onclick="setType('study',this)">Study Abroad</button>
+    <button class="type-btn" data-type="travel" onclick="setType('travel',this)">Travel / Holiday</button>
+    <button class="type-btn" data-type="relocate" onclick="setType('relocate',this)">Relocation</button>
+  </div>
+
+  <div class="score-panel">
+    <div class="score-top">
+      <div class="ring-wrap">
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <defs>
+            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#60a5fa"/>
+              <stop offset="100%" stop-color="#2563eb"/>
+            </linearGradient>
+          </defs>
+          <circle class="ring-bg" cx="80" cy="80" r="70"/>
+          <circle class="ring-fg" id="ringFg" cx="80" cy="80" r="70"
+            stroke-dasharray="439.8" stroke-dashoffset="439.8"/>
+        </svg>
+        <div class="ring-center">
+          <div class="num" id="scoreNum">78</div>
+          <div class="den">/ 100</div>
+          <div class="label" id="scoreLabel">Job readiness</div>
+        </div>
+      </div>
+      <div class="score-info">
+        <h2 id="scoreTitle">International Job Readiness</h2>
+        <div class="status status-almost" id="scoreStatus">⚡ Almost ready — finish key actions</div>
+        <p id="scoreMsg">Complete <b id="remainCount">3</b> remaining high-impact actions to become <b>Journey Ready</b>.</p>
+        <div class="pill-row">
+          <span class="pill">Profile · <strong id="pillProfile">Rahul S.</strong></span>
+          <span class="pill">Goal · <strong id="pillGoal">Work abroad</strong></span>
+          <span class="pill">Target · <strong id="pillTarget">Germany · IT</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cats" id="catList"></div>
+  </div>
+
+  <div class="levels">
+    <div class="level" id="lv0"><div class="ic">🌱</div><div class="n">Starter</div><div class="r">0–39</div></div>
+    <div class="level" id="lv1"><div class="ic">🧭</div><div class="n">Building</div><div class="r">40–64</div></div>
+    <div class="level current" id="lv2"><div class="ic">⚡</div><div class="n">Almost Ready</div><div class="r">65–84</div></div>
+    <div class="level" id="lv3"><div class="ic">🚀</div><div class="n">Journey Ready</div><div class="r">85–100</div></div>
+  </div>
+
+  <div class="remain-card">
+    <h3>🎯 Priority actions</h3>
+    <p class="sub">Each completed action boosts your score. Focus on these next.</p>
+    <div id="actionList"></div>
+  </div>
+
+  <div class="cta-band">
+    <h3 id="ctaTitle">Ready to push past 85?</h3>
+    <p id="ctaSub">Talk to an ePay Gallery consultant to close documents, language and finance gaps.</p>
+    <button class="btn btn-primary" style="background:#fff;color:#1d4ed8" onclick="startJourney()">Start / continue journey</button>
+    <button class="btn btn-ghost btn-sm" style="border-color:rgba(255,255,255,.4);color:#fff;margin-left:8px" onclick="toast('Linked to AI Assistant (demo)')">Open AI Assistant</button>
+  </div>
+</div>
+
+<footer>© 2026 ePay Digital Gallery · Journey Score is a planning tool, not a guarantee of jobs or visas.</footer>
+<div class="toast-box" id="toasts"></div>
+
+<script>
+var CIRC = 2 * Math.PI * 70; // ~439.8
+
+var TYPES = {
+  job: {
+    title: 'International Job Readiness',
+    label: 'Job readiness',
+    goal: 'Work abroad',
+    target: 'Germany · IT',
+    cats: [
+      {id:'docs', name:'Documents', icon:'📄', weight:25, score:90, items:[
+        {id:'d1', label:'Passport valid 6+ months', pts:8, done:true},
+        {id:'d2', label:'Degree / certificates scanned', pts:7, done:true},
+        {id:'d3', label:'Experience letters ready', pts:5, done:true},
+        {id:'d4', label:'Police clearance (if required)', pts:5, done:false}
+      ]},
+      {id:'skills', name:'Skills', icon:'🛠️', weight:20, score:72, items:[
+        {id:'s1', label:'Updated resume (ATS-friendly)', pts:6, done:true},
+        {id:'s2', label:'Portfolio / project links', pts:5, done:true},
+        {id:'s3', label:'Role-specific skill checklist', pts:5, done:false},
+        {id:'s4', label:'Interview practice session', pts:4, done:false}
+      ]},
+      {id:'lang', name:'Language', icon:'🗣️', weight:20, score:80, items:[
+        {id:'l1', label:'Language level self-assessed', pts:5, done:true},
+        {id:'l2', label:'Test booked / score available', pts:8, done:true},
+        {id:'l3', label:'Practice plan for target level', pts:7, done:false}
+      ]},
+      {id:'finance', name:'Financial readiness', icon:'💰', weight:20, score:65, items:[
+        {id:'f1', label:'Budget estimate for destination', pts:5, done:true},
+        {id:'f2', label:'Funds / sponsor plan documented', pts:8, done:false},
+        {id:'f3', label:'Fee & travel cost buffer', pts:7, done:false}
+      ]},
+      {id:'travel', name:'Travel readiness', icon:'✈️', weight:15, score:85, items:[
+        {id:'t1', label:'Target city shortlisted', pts:4, done:true},
+        {id:'t2', label:'Relocation checklist reviewed', pts:5, done:true},
+        {id:'t3', label:'Temp stay options researched', pts:3, done:true},
+        {id:'t4', label:'Emergency contacts saved', pts:3, done:false}
+      ]}
+    ]
+  },
+  study: {
+    title: 'Study Abroad Readiness',
+    label: 'Study readiness',
+    goal: 'Study abroad',
+    target: 'Canada · Masters',
+    cats: [
+      {id:'docs', name:'Documents', icon:'📄', weight:25, score:70, items:[
+        {id:'d1', label:'Passport ready', pts:8, done:true},
+        {id:'d2', label:'Transcripts & marksheets', pts:7, done:true},
+        {id:'d3', label:'LOR / SOP drafts', pts:6, done:false},
+        {id:'d4', label:'Test scores uploaded', pts:4, done:false}
+      ]},
+      {id:'skills', name:'Academic profile', icon:'🎓', weight:20, score:75, items:[
+        {id:'s1', label:'Course shortlist (3–5)', pts:6, done:true},
+        {id:'s2', label:'University applications started', pts:7, done:false},
+        {id:'s3', label:'SOP reviewed', pts:7, done:false}
+      ]},
+      {id:'lang', name:'Language', icon:'🗣️', weight:20, score:60, items:[
+        {id:'l1', label:'English test chosen', pts:5, done:true},
+        {id:'l2', label:'Test date booked', pts:8, done:false},
+        {id:'l3', label:'Target band plan', pts:7, done:false}
+      ]},
+      {id:'finance', name:'Financial readiness', icon:'💰', weight:20, score:55, items:[
+        {id:'f1', label:'Tuition + living estimate', pts:6, done:true},
+        {id:'f2', label:'Funds proof plan', pts:8, done:false},
+        {id:'f3', label:'Scholarship search', pts:6, done:false}
+      ]},
+      {id:'travel', name:'Travel readiness', icon:'✈️', weight:15, score:40, items:[
+        {id:'t1', label:'Study permit pathway reviewed', pts:5, done:false},
+        {id:'t2', label:'Arrival checklist', pts:5, done:false},
+        {id:'t3', label:'Housing research', pts:5, done:false}
+      ]}
+    ]
+  },
+  travel: {
+    title: 'Travel Readiness',
+    label: 'Travel readiness',
+    goal: 'Holiday',
+    target: 'Dubai · Family',
+    cats: [
+      {id:'docs', name:'Documents', icon:'📄', weight:25, score:88, items:[
+        {id:'d1', label:'Passports valid', pts:10, done:true},
+        {id:'d2', label:'Visa status checked', pts:8, done:true},
+        {id:'d3', label:'Travel insurance', pts:7, done:false}
+      ]},
+      {id:'skills', name:'Trip plan', icon:'🗺️', weight:20, score:70, items:[
+        {id:'s1', label:'Dates fixed', pts:5, done:true},
+        {id:'s2', label:'Itinerary draft', pts:5, done:true},
+        {id:'s3', label:'Activities shortlisted', pts:5, done:false}
+      ]},
+      {id:'lang', name:'Local prep', icon:'🗣️', weight:10, score:80, items:[
+        {id:'l1', label:'Basic destination info', pts:5, done:true},
+        {id:'l2', label:'Emergency phrases / apps', pts:5, done:true}
+      ]},
+      {id:'finance', name:'Budget', icon:'💰', weight:25, score:75, items:[
+        {id:'f1', label:'Trip budget set', pts:8, done:true},
+        {id:'f2', label:'Payment method for abroad', pts:7, done:true},
+        {id:'f3', label:'Buffer for extras', pts:5, done:false}
+      ]},
+      {id:'travel', name:'Bookings', icon:'✈️', weight:20, score:60, items:[
+        {id:'t1', label:'Flights booked', pts:8, done:false},
+        {id:'t2', label:'Hotel booked', pts:7, done:false},
+        {id:'t3', label:'Transfers planned', pts:5, done:true}
+      ]}
+    ]
+  },
+  relocate: {
+    title: 'Relocation Readiness',
+    label: 'Move readiness',
+    goal: 'Domestic move',
+    target: 'Pune → Hyderabad',
+    cats: [
+      {id:'docs', name:'Documents', icon:'📄', weight:20, score:85, items:[
+        {id:'d1', label:'Joining letter / offer', pts:8, done:true},
+        {id:'d2', label:'ID proofs copied', pts:6, done:true},
+        {id:'d3', label:'Address change checklist', pts:6, done:false}
+      ]},
+      {id:'skills', name:'Logistics plan', icon:'📦', weight:20, score:70, items:[
+        {id:'s1', label:'Move date fixed', pts:5, done:true},
+        {id:'s2', label:'Packing plan', pts:5, done:false},
+        {id:'s3', label:'Workplace route checked', pts:5, done:true}
+      ]},
+      {id:'lang', name:'Local setup', icon:'📱', weight:15, score:50, items:[
+        {id:'l1', label:'SIM / number plan', pts:5, done:false},
+        {id:'l2', label:'Local apps / transport', pts:5, done:false}
+      ]},
+      {id:'finance', name:'Financial readiness', icon:'💰', weight:20, score:75, items:[
+        {id:'f1', label:'Deposit / rent budget', pts:8, done:true},
+        {id:'f2', label:'First-month buffer', pts:7, done:true},
+        {id:'f3', label:'Bank branch / KYC if needed', pts:5, done:false}
+      ]},
+      {id:'travel', name:'Travel & stay', icon:'✈️', weight:25, score:55, items:[
+        {id:'t1', label:'Travel booked', pts:8, done:false},
+        {id:'t2', label:'Temp stay confirmed', pts:8, done:false},
+        {id:'t3', label:'Pickup arranged', pts:5, done:true},
+        {id:'t4', label:'Longer stay shortlist', pts:4, done:false}
+      ]}
+    ]
+  }
+};
+
+var currentType = 'job';
+var data = JSON.parse(JSON.stringify(TYPES.job));
+
+function toast(msg){
+  var box=document.getElementById('toasts');
+  var t=document.createElement('div');
+  t.className='toast';
+  t.textContent=msg;
+  box.appendChild(t);
+  setTimeout(function(){t.style.opacity='0';t.style.transition='.3s';setTimeout(function(){t.remove();},300);},2500);
+}
+
+function calcCategoryScore(cat){
+  var total=0, done=0;
+  cat.items.forEach(function(it){ total+=it.pts; if(it.done) done+=it.pts; });
+  if(total===0) return 0;
+  return Math.round(done/total*100);
+}
+
+function calcOverall(){
+  var sum=0, w=0;
+  data.cats.forEach(function(c){
+    c.score = calcCategoryScore(c);
+    sum += c.score * c.weight;
+    w += c.weight;
+  });
+  return w ? Math.round(sum/w) : 0;
+}
+
+function pendingActions(){
+  var list=[];
+  data.cats.forEach(function(c){
+    c.items.forEach(function(it){
+      if(!it.done) list.push({cat:c.name, catId:c.id, item:it});
+    });
+  });
+  list.sort(function(a,b){return b.item.pts - a.item.pts;});
+  return list;
+}
+
+function setRing(score){
+  var offset = CIRC - (score/100)*CIRC;
+  var ring=document.getElementById('ringFg');
+  ring.style.strokeDasharray = CIRC;
+  ring.style.strokeDashoffset = offset;
+  document.getElementById('scoreNum').textContent = score;
+}
+
+function statusFor(score){
+  if(score>=85) return {cls:'status-ready', text:'🚀 Journey Ready', lv:3};
+  if(score>=65) return {cls:'status-almost', text:'⚡ Almost ready — finish key actions', lv:2};
+  if(score>=40) return {cls:'status-building', text:'🧭 Building your journey', lv:1};
+  return {cls:'status-start', text:'🌱 Getting started', lv:0};
+}
+
+function barColor(pct){
+  if(pct>=85) return 'var(--green)';
+  if(pct>=65) return 'var(--blue)';
+  if(pct>=40) return 'var(--amber)';
+  return 'var(--red)';
+}
+
+function render(){
+  var score = calcOverall();
+  setRing(score);
+  var st = statusFor(score);
+  var statusEl=document.getElementById('scoreStatus');
+  statusEl.className='status '+st.cls;
+  statusEl.textContent=st.text;
+
+  document.getElementById('scoreTitle').textContent=data.title;
+  document.getElementById('scoreLabel').textContent=data.label;
+  document.getElementById('pillGoal').textContent=data.goal;
+  document.getElementById('pillTarget').textContent=data.target;
+
+  for(var i=0;i<4;i++){
+    document.getElementById('lv'+i).classList.toggle('current', i===st.lv);
+  }
+
+  var pending=pendingActions();
+  var highImpact=pending.filter(function(p){return p.item.pts>=5;}).slice(0,5);
+  var remainN = Math.min(3, pending.length);
+  document.getElementById('remainCount').textContent = remainN;
+  if(score>=85){
+    document.getElementById('scoreMsg').innerHTML='You\'re <b>Journey Ready</b>. Keep documents updated and talk to your Gallery for next steps.';
+    document.getElementById('ctaTitle').textContent='You\'re Journey Ready';
+    document.getElementById('ctaSub').textContent='Connect with ePay Gallery to move from ready → active applications / bookings.';
+  } else {
+    document.getElementById('scoreMsg').innerHTML='Complete <b id="remainCount">'+remainN+'</b> remaining high-impact actions to become <b>Journey Ready</b>.';
+    document.getElementById('ctaTitle').textContent='Ready to push past 85?';
+    document.getElementById('ctaSub').textContent='Talk to an ePay Gallery consultant to close remaining gaps.';
+  }
+
+  // categories
+  var catHtml='';
+  data.cats.forEach(function(c){
+    catHtml+='<div class="cat" id="cat-'+c.id+'" onclick="toggleCat(\''+c.id+'\')">'+
+      '<div class="cat-head"><div class="cat-name">'+c.icon+' '+c.name+'</div><div class="cat-pct" style="color:'+barColor(c.score)+'">'+c.score+'%</div></div>'+
+      '<div class="bar"><div class="bar-fill" style="width:'+c.score+'%;background:'+barColor(c.score)+'"></div></div>'+
+      '<ul class="cat-actions">'+c.items.map(function(it){
+        return '<li><span style="display:flex;align-items:center;gap:8px">'+
+          '<span class="check '+(it.done?'done':'')+'" onclick="event.stopPropagation();toggleItem(\''+c.id+'\',\''+it.id+'\')">'+(it.done?'✓':'')+'</span>'+
+          '<span style="'+(it.done?'text-decoration:line-through;color:#94a3b8':'')+'">'+it.label+'</span></span>'+
+          '<span style="font-size:.75rem;font-weight:700;color:var(--blue-d)">+'+it.pts+'</span></li>';
+      }).join('')+'</ul></div>';
+  });
+  document.getElementById('catList').innerHTML=catHtml;
+
+  // priority actions
+  var actHtml='';
+  if(pending.length===0){
+    actHtml='<div style="padding:16px;text-align:center;color:var(--green);font-weight:600">All actions complete — Journey Ready 🎉</div>';
+  } else {
+    pending.slice(0,6).forEach(function(p,i){
+      actHtml+='<div class="action-item" id="act-'+p.item.id+'">'+
+        '<div class="rank">'+(i+1)+'</div>'+
+        '<div class="body"><h4>'+p.item.label+'</h4><p>'+p.cat+' · complete to boost score</p></div>'+
+        '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">'+
+          '<span class="pts">+'+p.item.pts+' pts</span>'+
+          '<button class="btn btn-primary btn-sm" onclick="toggleItem(\''+p.catId+'\',\''+p.item.id+'\')">Mark done</button>'+
+        '</div></div>';
+    });
+  }
+  document.getElementById('actionList').innerHTML=actHtml;
+
+  try{ localStorage.setItem('epay-journey-score', JSON.stringify({type:currentType, data:data, score:score})); }catch(e){}
+}
+
+function toggleCat(id){
+  var el=document.getElementById('cat-'+id);
+  if(!el) return;
+  var open=el.classList.contains('open');
+  document.querySelectorAll('.cat').forEach(function(c){c.classList.remove('open');});
+  if(!open) el.classList.add('open');
+}
+
+function toggleItem(catId, itemId){
+  var cat=data.cats.find(function(c){return c.id===catId;});
+  if(!cat) return;
+  var item=cat.items.find(function(i){return i.id===itemId;});
+  if(!item) return;
+  item.done = !item.done;
+  var before=calcOverall();
+  render();
+  var after=calcOverall();
+  if(item.done) toast('✓ '+item.label+' · Score '+(after>before?'+':'')+(after-before)+' → '+after);
+  else toast('Unchecked · Score now '+after);
+}
+
+function setType(type, btn){
+  currentType=type;
+  data=JSON.parse(JSON.stringify(TYPES[type]));
+  document.querySelectorAll('.type-btn').forEach(function(b){b.classList.remove('active');});
+  if(btn) btn.classList.add('active');
+  render();
+  // animate ring from 0
+  setRing(0);
+  setTimeout(function(){ setRing(calcOverall()); }, 50);
+}
+
+function startJourney(){
+  var score=calcOverall();
+  try{
+    var arr=JSON.parse(localStorage.getItem('epay-journey-starts')||'[]');
+    arr.push({ts:new Date().toISOString(), type:currentType, score:score, title:data.title});
+    localStorage.setItem('epay-journey-starts', JSON.stringify(arr));
+  }catch(e){}
+  alert('Journey continued!\\n\\n'+data.title+': '+score+'/100\\n\\nRef: JRN-'+Date.now().toString().slice(-6)+'\\n\\nAn ePay Gallery can help close remaining actions.');
+}
+
+function resetDemo(){
+  data=JSON.parse(JSON.stringify(TYPES[currentType]));
+  render();
+  toast('Demo reset');
+}
+
+// boot
+(function(){
+  try{
+    var saved=JSON.parse(localStorage.getItem('epay-journey-score')||'null');
+    if(saved && saved.data && saved.type){
+      currentType=saved.type;
+      data=saved.data;
+      document.querySelectorAll('.type-btn').forEach(function(b){
+        b.classList.toggle('active', b.getAttribute('data-type')===currentType);
+      });
+    }
+  }catch(e){}
+  render();
+  setTimeout(function(){ setRing(calcOverall()); }, 100);
+})();
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
+

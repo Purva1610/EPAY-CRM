@@ -1,0 +1,44 @@
+name: Daily Security Scan
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Run daily at 6 AM UTC
+  workflow_dispatch:
+
+jobs:
+  security-scan:
+    name: Daily Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy filesystem scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-scan.sarif'
+          severity: 'CRITICAL,HIGH,MEDIUM'
+          ignore-unfixed: true
+          exit-code: '0'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-scan.sarif'
+
+      - name: Send scan summary to Slack (optional)
+        if: ${{ secrets.SLACK_WEBHOOK_URL }}
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook_type: 'incoming-webhook'
+          text: |
+            :shield: Daily Security Scan Complete
+            *Repository*: ${{ github.repository }}
+            *Branch*: ${{ github.ref_name }}
+            *Run URL*: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            *Scan Date*: ${{ github.event.head_commit.timestamp }}

@@ -1,0 +1,745 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ePay Emergency Assistance — Help When You’re Abroad</title>
+<meta name="description" content="Lost passport, travel disruption, accommodation or document issues abroad? ePay coordinates guidance and connects you with verified providers and embassy information." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+
+
+
+:root {
+  --red: #dc2626; --red-d: #991b1b; --red-l: #f87171;
+  --orange: #ea580c; --amber: #f59e0b;
+  --navy: #0f172a; --text: #0f172a; --muted: #64748b;
+  --green: #10b981; --bg: #f8fafc; --white: #fff; --radius: 18px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+.container{width:100%;max-width:1080px;margin:0 auto;padding:0 20px}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid #fecaca}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:8px}
+.logo-mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--red-l),var(--red-d));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.75rem}
+.logo span{color:var(--red)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;font-size:.9rem;font-weight:600;border-radius:100px;border:none;cursor:pointer;transition:.3s;font-family:inherit}
+.btn-emergency{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;box-shadow:0 4px 18px rgba(220,38,38,.35);animation:pulse 2s infinite}
+.btn-emergency:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(220,38,38,.45)}
+@keyframes pulse{0%,100%{box-shadow:0 4px 18px rgba(220,38,38,.35)}50%{box-shadow:0 4px 28px rgba(220,38,38,.55)}}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-ghost{background:transparent;border:1.5px solid #cbd5e1;color:var(--text)}
+.btn-ghost:hover{border-color:var(--red);color:var(--red)}
+.btn-sm{padding:8px 16px;font-size:.82rem}
+.btn-outline-red{background:#fff;border:1.5px solid var(--red);color:var(--red)}
+.btn-outline-red:hover{background:#fef2f2}
+
+.hero{padding:110px 0 50px;background:linear-gradient(165deg,#fef2f2 0%,#fff7ed 40%,#fff 80%)}
+.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:36px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:#fee2e2;color:var(--red-d);font-size:.78rem;font-weight:700;padding:6px 14px;border-radius:100px;margin-bottom:14px;border:1px solid #fecaca}
+.hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.9rem,4vw,2.8rem);font-weight:800;line-height:1.15;letter-spacing:-.03em;margin-bottom:12px}
+.hero h1 .em{color:var(--red)}
+.hero-sub{font-size:1.02rem;color:var(--muted);margin-bottom:22px;max-width:500px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+.hero-note{font-size:.8rem;color:var(--muted);max-width:480px}
+.sos-card{background:#fff;border:2px solid #fecaca;border-radius:20px;padding:24px;box-shadow:0 16px 40px rgba(220,38,38,.12);text-align:center}
+.sos-card .big{font-size:3rem;margin-bottom:8px}
+.sos-card h3{font-size:1.15rem;font-weight:800;margin-bottom:6px}
+.sos-card p{font-size:.88rem;color:var(--muted);margin-bottom:16px}
+
+section{padding:64px 0}
+.section-label{display:inline-block;font-size:.72rem;font-weight:700;color:var(--red-d);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;background:#fee2e2;padding:5px 12px;border-radius:100px}
+.section-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.45rem,3vw,2rem);font-weight:800;margin-bottom:8px;letter-spacing:-.02em}
+.section-sub{color:var(--muted);max-width:540px;margin-bottom:28px}
+.text-center{text-align:center}
+.text-center .section-sub{margin-left:auto;margin-right:auto}
+.bg-soft{background:#f8fafc}
+.bg-red{background:linear-gradient(180deg,#fef2f2,#fff)}
+
+.help-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.help-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:16px;padding:20px 16px;cursor:pointer;transition:.25s;text-align:left}
+.help-card:hover,.help-card.selected{border-color:var(--red);box-shadow:0 10px 28px rgba(220,38,38,.12);transform:translateY(-3px)}
+.help-card .ic{font-size:1.6rem;margin-bottom:8px}
+.help-card h3{font-size:.95rem;font-weight:700;margin-bottom:4px}
+.help-card p{font-size:.8rem;color:var(--muted)}
+
+.flow{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;align-items:center}
+.flow-step{background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:10px 14px;font-size:.82rem;font-weight:600;color:var(--red-d)}
+.flow-arrow{color:var(--red)}
+
+.guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.guide-card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:22px}
+.guide-card h3{font-size:1.05rem;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.guide-card ol{padding-left:18px;font-size:.9rem;color:var(--muted)}
+.guide-card ol li{margin-bottom:6px}
+.guide-card .tip{margin-top:12px;font-size:.82rem;background:#fef3c7;border-radius:8px;padding:8px 12px;color:#92400e}
+
+.embassy-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.embassy-table th{text-align:left;padding:10px 12px;background:#f8fafc;font-size:.72rem;text-transform:uppercase;color:var(--muted);border-bottom:1px solid #e2e8f0}
+.embassy-table td{padding:12px;border-bottom:1px solid #f1f5f9}
+.embassy-table tr:hover td{background:#fafafa}
+
+.contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.contact-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:18px}
+.contact-card h4{font-size:.95rem;font-weight:700;margin-bottom:6px}
+.contact-card p{font-size:.85rem;color:var(--muted)}
+.contact-card .num{font-weight:700;color:var(--red);margin-top:8px;font-size:.95rem}
+
+.pkg-note{background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;padding:16px 18px;font-size:.88rem;color:#9a3412;margin-top:20px}
+
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:20px;max-width:500px;width:100%;max-height:92vh;overflow-y:auto;padding:26px;position:relative}
+.modal h2{font-size:1.25rem;margin-bottom:4px}
+.modal .sub{font-size:.88rem;color:var(--muted);margin-bottom:16px}
+.modal-x{position:absolute;top:12px;right:12px;border:none;background:#f1f5f9;width:30px;height:30px;border-radius:50%;cursor:pointer}
+.form-g{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-g .full{grid-column:1/-1}
+.form-g label{font-size:.78rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px}
+.form-g input,.form-g select,.form-g textarea{width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:.9rem;font-family:inherit;outline:none}
+.form-g input:focus,.form-g select:focus,.form-g textarea:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.1)}
+.priority{display:flex;gap:8px;flex-wrap:wrap}
+.priority label{display:flex;align-items:center;gap:6px;padding:8px 12px;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;font-size:.85rem;font-weight:600}
+.priority input{width:auto}
+.priority label:has(input:checked){border-color:var(--red);background:#fef2f2;color:var(--red-d)}
+
+.ticket{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:16px;margin-top:12px;display:none}
+.ticket.show{display:block}
+.ticket h4{color:#166534;margin-bottom:6px}
+
+footer{background:var(--navy);color:#94a3b8;padding:32px 0;text-align:center;font-size:.85rem}
+footer .logo{justify-content:center;margin-bottom:10px;color:#fff}
+footer .logo span{color:var(--red-l)}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s,transform .6s}
+.reveal.visible{opacity:1;transform:none}
+
+@media(max-width:900px){
+  .hero-grid,.guide-grid{grid-template-columns:1fr}
+  .help-grid{grid-template-columns:1fr 1fr}
+  .contact-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .help-grid,.form-g{grid-template-columns:1fr}
+}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo"><div class="logo-mark">SOS</div> ePay <span>Emergency</span></a>
+    <div class="nav-cta">
+      <button class="btn btn-outline-red btn-sm" onclick="openModal('request')">Request help</button>
+      <button class="btn btn-emergency btn-sm" onclick="openModal('urgent')">Urgent assistance</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-badge">🆘 For international students &amp; workers</div>
+      <h1>When something goes wrong abroad,<br/><span class="em">you’re not alone.</span></h1>
+      <p class="hero-sub">Lost passport, travel disruption, stay problems, employer or document issues — ePay helps you understand next steps and coordinates with verified partners and official information channels.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-emergency" onclick="openModal('urgent')">Get Emergency Help</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('types').scrollIntoView({behavior:'smooth'})">See help types</button>
+      </div>
+      <p class="hero-note">ePay coordinates guidance and connections. We do not replace embassies, police, hospitals or insurers. In life-threatening situations, call local emergency services first.</p>
+    </div>
+    <div class="sos-card reveal">
+      <div class="big">🆘</div>
+      <h3>Need help now?</h3>
+      <p>Tell us what happened. We’ll open a priority case and guide your next actions.</p>
+      <button class="btn btn-emergency" style="width:100%" onclick="openModal('urgent')">Open emergency request</button>
+      <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:8px" onclick="openModal('contacts')">Emergency contacts</button>
+    </div>
+  </div>
+</section>
+
+<section id="types" class="bg-soft">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Help categories</span>
+      <h2 class="section-title">What do you need help with?</h2>
+      <p class="section-sub">Select a category to start a structured request. ePay coordinates — partners and authorities deliver official services.</p>
+    </div>
+    <div class="help-grid">
+      <div class="help-card" data-type="Lost passport" onclick="selectHelp(this)"><div class="ic">🛂</div><h3>Lost passport</h3><p>Guidance on police report, embassy/consulate steps and travel docs.</p></div>
+      <div class="help-card" data-type="Travel emergency" onclick="selectHelp(this)"><div class="ic">✈️</div><h3>Travel emergency</h3><p>Missed flights, cancellations, stranded transit, rebooking orientation.</p></div>
+      <div class="help-card" data-type="Accommodation emergency" onclick="selectHelp(this)"><div class="ic">🏠</div><h3>Accommodation</h3><p>Unsafe stay, sudden eviction, need temporary lodging options.</p></div>
+      <div class="help-card" data-type="Employer issue" onclick="selectHelp(this)"><div class="ic">🏢</div><h3>Employer issue</h3><p>Contract disputes, unpaid wages, workplace concerns — orientation only.</p></div>
+      <div class="help-card" data-type="Document issue" onclick="selectHelp(this)"><div class="ic">📄</div><h3>Document issue</h3><p>Lost IDs, visa papers, attestation, translation coordination.</p></div>
+      <div class="help-card" data-type="Medical assistance" onclick="selectHelp(this)"><div class="ic">🏥</div><h3>Medical coordination</h3><p>Help finding care options and insurer contacts — not medical advice.</p></div>
+      <div class="help-card" data-type="Embassy information" onclick="selectHelp(this)"><div class="ic">🏛️</div><h3>Embassy / consulate</h3><p>Official contact pointers and typical documentation for citizens.</p></div>
+      <div class="help-card" data-type="Other emergency" onclick="selectHelp(this)"><div class="ic">📞</div><h3>Other / contacts</h3><p>General emergency contacts and Gallery follow-up.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="container text-center">
+    <span class="section-label">How it works</span>
+    <h2 class="section-title">Coordination, not replacement</h2>
+    <p class="section-sub">ePay’s role is to guide, document your case and connect you with the right channel.</p>
+    <div class="flow reveal">
+      <div class="flow-step">You report issue</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Priority triage</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Checklist &amp; guidance</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Partner / official info</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Gallery follow-up</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Case update</div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-red" id="guides">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Quick guides</span>
+      <h2 class="section-title">First steps you can take</h2>
+      <p class="section-sub">General orientation only. Always follow local law and official instructions.</p>
+    </div>
+    <div class="guide-grid">
+      <div class="guide-card reveal">
+        <h3>🛂 Lost passport</h3>
+        <ol>
+          <li>File a police report where required.</li>
+          <li>Contact your embassy/consulate for emergency travel document process.</li>
+          <li>Keep copies/photos of passport and visas if available.</li>
+          <li>Inform employer/university and your insurer.</li>
+          <li>Request ePay case support for checklist &amp; Gallery follow-up.</li>
+        </ol>
+        <div class="tip">Tip: Digital copies in secure cloud help speed embassy processes.</div>
+      </div>
+      <div class="guide-card reveal">
+        <h3>✈️ Travel disruption</h3>
+        <ol>
+          <li>Contact the airline/operator for rebooking rules.</li>
+          <li>Check travel insurance coverage for delays.</li>
+          <li>Secure safe temporary stay if stranded overnight.</li>
+          <li>Keep receipts for potential claims.</li>
+          <li>Open an ePay case if you need coordination help.</li>
+        </ol>
+        <div class="tip">Tip: Screenshot booking refs and gate changes as evidence.</div>
+      </div>
+      <div class="guide-card reveal">
+        <h3>🏠 Accommodation emergency</h3>
+        <ol>
+          <li>Prioritise personal safety — leave if unsafe.</li>
+          <li>Document the issue (photos, messages, contract).</li>
+          <li>Contact local emergency services if threatened.</li>
+          <li>Seek temporary lodging via hotels / verified partners.</li>
+          <li>Notify ePay for orientation and partner options where available.</li>
+        </ol>
+        <div class="tip">Tip: Share only necessary details; keep originals of contracts.</div>
+      </div>
+      <div class="guide-card reveal">
+        <h3>🏥 Medical coordination</h3>
+        <ol>
+          <li>For emergencies call local emergency number first.</li>
+          <li>Contact your travel/health insurer helpline.</li>
+          <li>Carry policy number and ID copies.</li>
+          <li>ePay can help you locate insurer contacts and next admin steps.</li>
+          <li>We do not provide medical diagnosis or treatment.</li>
+        </ol>
+        <div class="tip">Tip: Save embassy and insurer numbers offline before travel.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="embassy">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Official channels</span>
+      <h2 class="section-title">Embassy &amp; consulate information</h2>
+      <p class="section-sub">Illustrative pointers for Indian citizens abroad. Always verify on official government websites.</p>
+    </div>
+    <div style="overflow-x:auto;background:#fff;border:1px solid #e2e8f0;border-radius:14px" class="reveal">
+      <table class="embassy-table">
+        <thead>
+          <tr><th>Country / region</th><th>Typical help</th><th>How to find official contact</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>UAE</b></td>
+            <td>Passport, emergency certificate, welfare</td>
+            <td>mea.gov.in · Indian Embassy/Consulate UAE pages</td>
+            <td><button class="btn btn-ghost btn-sm" onclick="openModal('request');prefill('Embassy information','UAE')">Request info</button></td>
+          </tr>
+          <tr>
+            <td><b>UK</b></td>
+            <td>Lost passport, emergency services list</td>
+            <td>mea.gov.in · HCI London / CG Birmingham etc.</td>
+            <td><button class="btn btn-ghost btn-sm" onclick="openModal('request');prefill('Embassy information','UK')">Request info</button></td>
+          </tr>
+          <tr>
+            <td><b>Germany</b></td>
+            <td>Consular services, emergency travel docs</td>
+            <td>mea.gov.in · Embassy Berlin / CG Munich etc.</td>
+            <td><button class="btn btn-ghost btn-sm" onclick="openModal('request');prefill('Embassy information','Germany')">Request info</button></td>
+          </tr>
+          <tr>
+            <td><b>Canada</b></td>
+            <td>Passport, welfare, local guidance</td>
+            <td>mea.gov.in · HCI Ottawa / CG Toronto etc.</td>
+            <td><button class="btn btn-ghost btn-sm" onclick="openModal('request');prefill('Embassy information','Canada')">Request info</button></td>
+          </tr>
+          <tr>
+            <td><b>Other</b></td>
+            <td>Depends on mission</td>
+            <td>Search “Indian Embassy [country]” on official MEA site</td>
+            <td><button class="btn btn-ghost btn-sm" onclick="openModal('request');prefill('Embassy information','Other')">Request info</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:.8rem;color:var(--muted);margin-top:12px">ePay does not operate embassies. We help you locate official information and document your case for follow-up.</p>
+  </div>
+</section>
+
+<section class="bg-soft" id="contacts">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Contacts</span>
+      <h2 class="section-title">Keep these handy</h2>
+      <p class="section-sub">Local emergency numbers vary by country. Save them before you travel.</p>
+    </div>
+    <div class="contact-grid reveal">
+      <div class="contact-card">
+        <h4>Local emergency</h4>
+        <p>Police, ambulance, fire — use the country’s official emergency number first for threats to life or safety.</p>
+        <div class="num">Know before you fly</div>
+      </div>
+      <div class="contact-card">
+        <h4>Your embassy / consulate</h4>
+        <p>For lost passports, emergency travel documents and citizen welfare services.</p>
+        <div class="num">Verify on MEA / official site</div>
+      </div>
+      <div class="contact-card">
+        <h4>Travel / health insurer</h4>
+        <p>Policy helpline for medical, delay and baggage claims.</p>
+        <div class="num">Save policy number offline</div>
+      </div>
+      <div class="contact-card">
+        <h4>Employer / university</h4>
+        <p>HR or international student office for visa and joining issues.</p>
+        <div class="num">Keep offer / ID copies</div>
+      </div>
+      <div class="contact-card">
+        <h4>ePay Emergency desk</h4>
+        <p>Coordination, checklists and Gallery follow-up for registered travellers.</p>
+        <div class="num"><button class="btn btn-emergency btn-sm" onclick="openModal('urgent')">Open case</button></div>
+      </div>
+      <div class="contact-card">
+        <h4>Family / emergency contact</h4>
+        <p>Someone at home who can share documents or funds if needed.</p>
+        <div class="num">Share your itinerary</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">What ePay does / doesn’t</span>
+      <h2 class="section-title">Clear boundaries</h2>
+    </div>
+    <div class="guide-grid reveal">
+      <div class="guide-card" style="border-color:#bbf7d0;background:#f0fdf4">
+        <h3 style="color:#166534">✓ ePay can help with</h3>
+        <ol>
+          <li>Structured case intake &amp; priority triage</li>
+          <li>Step-by-step checklists for common issues</li>
+          <li>Pointers to embassy / insurer / partner contacts</li>
+          <li>Coordination with verified service partners where available</li>
+          <li>Gallery follow-up for ongoing document support</li>
+        </ol>
+      </div>
+      <div class="guide-card" style="border-color:#fecaca;background:#fef2f2">
+        <h3 style="color:#991b1b">✗ ePay does not</h3>
+        <ol>
+          <li>Replace police, hospitals or embassies</li>
+          <li>Provide medical treatment or legal representation</li>
+          <li>Guarantee visa, refund or employer outcomes</li>
+          <li>Issue passports or official government documents</li>
+          <li>Act as your insurer or bail authority</li>
+        </ol>
+      </div>
+    </div>
+    <div class="pkg-note reveal">
+      <b>Partner model:</b> Where temporary stay, local transport or documentation support is available, ePay may coordinate with verified providers. You remain responsible for verifying costs, contracts and eligibility.
+    </div>
+  </div>
+</section>
+
+<section class="bg-red">
+  <div class="container" style="text-align:center">
+    <h2 class="section-title">Facing an issue right now?</h2>
+    <p class="section-sub" style="margin-left:auto;margin-right:auto">Open a case. If it is life-threatening, contact local emergency services first, then update ePay.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-emergency" onclick="openModal('urgent')">Urgent assistance</button>
+      <button class="btn btn-primary" onclick="openModal('request')">Standard help request</button>
+      <button class="btn btn-ghost" onclick="openModal('contacts')">View contacts</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo" style="margin-bottom:10px"><div class="logo-mark">SOS</div> ePay <span>Emergency</span></div>
+    <p>© 2026 ePay Digital Gallery · Emergency assistance is coordination &amp; guidance only. Not a substitute for official emergency services.</p>
+  </div>
+</footer>
+
+<!-- URGENT MODAL -->
+<div class="modal-bg" id="modal-urgent">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('urgent')">×</button>
+    <h2>🆘 Urgent assistance</h2>
+    <p class="sub">For active emergencies. If in danger, call local emergency services first.</p>
+    <form onsubmit="return submitCase(event,'urgent')">
+      <div class="form-g">
+        <div class="full"><label>Priority</label>
+          <div class="priority">
+            <label><input type="radio" name="priority" value="Critical" checked /> Critical</label>
+            <label><input type="radio" name="priority" value="High" /> High</label>
+            <label><input type="radio" name="priority" value="Medium" /> Medium</label>
+          </div>
+        </div>
+        <div class="full"><label>Issue type *</label>
+          <select name="type" id="urgentType" required>
+            <option value="">Select</option>
+            <option>Lost passport</option>
+            <option>Travel emergency</option>
+            <option>Accommodation emergency</option>
+            <option>Employer issue</option>
+            <option>Document issue</option>
+            <option>Medical assistance</option>
+            <option>Embassy information</option>
+            <option>Other emergency</option>
+          </select>
+        </div>
+        <div><label>Your name *</label><input name="name" required /></div>
+        <div><label>Mobile / WhatsApp *</label><input name="mobile" required type="tel" /></div>
+        <div><label>Country you are in *</label><input name="country" required placeholder="e.g. UAE" /></div>
+        <div><label>City</label><input name="city" placeholder="e.g. Dubai" /></div>
+        <div class="full"><label>What happened? *</label><textarea name="details" rows="3" required placeholder="Brief facts only"></textarea></div>
+        <div class="full"><label>Are you safe right now?</label>
+          <select name="safe"><option>Yes</option><option>No — need local emergency first</option><option>Unsure</option></select>
+        </div>
+        <div class="full"><button type="submit" class="btn btn-emergency" style="width:100%">Submit urgent case</button></div>
+      </div>
+    </form>
+    <div class="ticket" id="ticketUrgent"></div>
+  </div>
+</div>
+
+<!-- STANDARD REQUEST -->
+<div class="modal-bg" id="modal-request">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('request')">×</button>
+    <h2>Help request</h2>
+    <p class="sub">We will triage and send guidance / partner options where available.</p>
+    <form onsubmit="return submitCase(event,'standard')">
+      <div class="form-g">
+        <div class="full"><label>Issue type *</label>
+          <select name="type" id="reqType" required>
+            <option value="">Select</option>
+            <option>Lost passport</option>
+            <option>Travel emergency</option>
+            <option>Accommodation emergency</option>
+            <option>Employer issue</option>
+            <option>Document issue</option>
+            <option>Medical assistance</option>
+            <option>Embassy information</option>
+            <option>Other emergency</option>
+          </select>
+        </div>
+        <div><label>Name *</label><input name="name" required /></div>
+        <div><label>Mobile *</label><input name="mobile" required type="tel" /></div>
+        <div><label>Country</label><input name="country" id="reqCountry" /></div>
+        <div><label>Email</label><input name="email" type="email" /></div>
+        <div class="full"><label>Details</label><textarea name="details" rows="3"></textarea></div>
+        <div class="full"><button type="submit" class="btn btn-primary" style="width:100%">Submit request</button></div>
+      </div>
+    </form>
+    <div class="ticket" id="ticketStandard"></div>
+  </div>
+</div>
+
+<!-- CONTACTS MODAL -->
+<div class="modal-bg" id="modal-contacts">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('contacts')">×</button>
+    <h2>Emergency contacts checklist</h2>
+    <p class="sub">Save these before or during travel.</p>
+    <ul style="font-size:.92rem;line-height:1.9;padding-left:18px;color:var(--muted)">
+      <li>Local emergency number (police / medical)</li>
+      <li>Embassy / consulate of your nationality</li>
+      <li>Travel insurance 24×7 helpline + policy no.</li>
+      <li>Employer HR or university international office</li>
+      <li>Family emergency contact</li>
+      <li>ePay case desk (via this page)</li>
+      <li>Airline / hotel booking references</li>
+    </ul>
+    <button class="btn btn-emergency" style="width:100%;margin-top:16px" onclick="closeModal('contacts');openModal('urgent')">I need help now</button>
+  </div>
+</div>
+
+<script>
+function openModal(id){
+  document.getElementById('modal-'+id).classList.add('open');
+  document.body.style.overflow='hidden';
+  var t=document.getElementById('ticketUrgent'); if(t) t.classList.remove('show');
+  var t2=document.getElementById('ticketStandard'); if(t2) t2.classList.remove('show');
+}
+function closeModal(id){document.getElementById('modal-'+id).classList.remove('open');document.body.style.overflow='';}
+document.querySelectorAll('.modal-bg').forEach(function(m){
+  m.addEventListener('click',function(e){if(e.target===m){m.classList.remove('open');document.body.style.overflow='';}});
+});
+
+function selectHelp(el){
+  document.querySelectorAll('.help-card').forEach(function(c){c.classList.remove('selected');});
+  el.classList.add('selected');
+  var type=el.getAttribute('data-type');
+  openModal('urgent');
+  var sel=document.getElementById('urgentType');
+  if(sel) sel.value=type;
+}
+
+function prefill(type, country){
+  var t=document.getElementById('reqType'); if(t) t.value=type;
+  var c=document.getElementById('reqCountry'); if(c) c.value=country;
+}
+
+function saveCase(data){
+  try{
+    var arr=JSON.parse(localStorage.getItem('epay-emergency-cases')||'[]');
+    arr.push(Object.assign({ts:new Date().toISOString()}, data));
+    localStorage.setItem('epay-emergency-cases', JSON.stringify(arr));
+  }catch(e){}
+}
+
+function submitCase(e, kind){
+  e.preventDefault();
+  var fd=new FormData(e.target);
+  var ref='SOS-'+Date.now().toString().slice(-6);
+  var payload={
+    kind:kind,
+    ref:ref,
+    priority:fd.get('priority')||'Medium',
+    type:fd.get('type'),
+    name:fd.get('name'),
+    mobile:fd.get('mobile'),
+    country:fd.get('country'),
+    city:fd.get('city')||'',
+    email:fd.get('email')||'',
+    details:fd.get('details'),
+    safe:fd.get('safe')||''
+  };
+  saveCase(payload);
+
+  var ticketId=kind==='urgent'?'ticketUrgent':'ticketStandard';
+  var box=document.getElementById(ticketId);
+  var nextSteps=getNextSteps(payload.type);
+  box.innerHTML='<h4>Case opened · '+ref+'</h4><p style="font-size:.88rem;color:#166534;margin-bottom:8px">Priority: <b>'+(payload.priority||'Standard')+'</b> · Type: '+payload.type+'</p><p style="font-size:.85rem;color:#14532d"><b>Suggested next steps:</b></p><ol style="font-size:.85rem;color:#166534;padding-left:18px">'+nextSteps.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ol><p style="font-size:.8rem;color:#64748b;margin-top:10px">An ePay coordinator will follow up on '+payload.mobile+'. If you are in danger, contact local emergency services immediately.</p>';
+  box.classList.add('show');
+  e.target.reset();
+  return false;
+}
+
+function getNextSteps(type){
+  var map={
+    'Lost passport':['If required, file a local police report','Contact your embassy/consulate for emergency travel document process','Share case ref with family and employer/university','Keep digital copies of passport/visa if available'],
+    'Travel emergency':['Contact airline for rebooking options','Check travel insurance delay coverage','Secure safe overnight stay if needed','Keep all receipts and booking references'],
+    'Accommodation emergency':['Prioritise safety — leave if location is unsafe','Document the issue (photos, messages)','Seek temporary lodging','Contact local authorities if threatened'],
+    'Employer issue':['Document contracts and communications','Contact employer HR in writing where safe','Note local labour helpline if available','ePay can orient — not legal representation'],
+    'Document issue':['List missing documents','Check embassy attestation / reissue options','Use digital backups if any','Request Gallery checklist support'],
+    'Medical assistance':['Call local emergency number if critical','Contact insurer helpline with policy number','ePay helps with contacts — not medical care'],
+    'Embassy information':['Use official MEA / embassy website for contacts','Prepare ID copies and travel details','Open ePay case for checklist support'],
+    'Other emergency':['Ensure personal safety first','Collect facts and contacts','Submit case for triage']
+  };
+  return map[type]||map['Other emergency'];
+}
+
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('visible');obs.unobserve(en.target);}});
+},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')['urgent','request','contacts'].forEach(closeModal);});
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
+

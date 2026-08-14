@@ -1,0 +1,1226 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ePay · HQ Head</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+
+
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #f1f5f9;
+        }
+        .sidebar-link {
+            transition: all 0.15s;
+            cursor: pointer;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.75rem !important;
+            padding: 0.5rem 0.75rem !important;
+            border-radius: 0.5rem !important;
+        }
+        .sidebar-link:hover {
+            background: #1e293b;
+        }
+        .sidebar-link.active {
+            background: #1e3a5f;
+            color: white;
+        }
+        .sidebar-link.active i {
+            color: #818cf8;
+        }
+        .sidebar-nav::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 20px;
+        }
+        .card-hover {
+            transition: all 0.2s;
+        }
+        .card-hover:hover {
+            box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+        .fade-in {
+            animation: fadeIn 0.25s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #0b0f19;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 13px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(120px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .toast i {
+            color: #34d399;
+            font-size: 18px;
+        }
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 600px;
+            width: 92%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+        .modal-box input,
+        .modal-box select,
+        .modal-box textarea {
+            width: 100%;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 14px;
+            margin-top: 6px;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .modal-box input:focus,
+        .modal-box select:focus,
+        .modal-box textarea:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        .modal-box label {
+            font-weight: 500;
+            font-size: 13px;
+            color: #334155;
+            margin-top: 14px;
+            display: block;
+        }
+        .modal-box .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        @media (max-width: 480px) {
+            .modal-box .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        .status-badge {
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .status-badge.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.completed {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.review {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+        .status-badge.error {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.verified {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.missing {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.rejected {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.approved {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.critical {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.positive {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .delete-btn {
+            color: #ef4444;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .delete-btn:hover {
+            color: #dc2626;
+            transform: scale(1.1);
+        }
+        .edit-btn {
+            color: #4f46e5;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .edit-btn:hover {
+            color: #4338ca;
+        }
+        .scrollable-table {
+            overflow-x: auto;
+        }
+        .scrollable-table table {
+            min-width: 600px;
+        }
+        .empty-state {
+            padding: 40px 20px;
+            text-align: center;
+            color: #94a3b8;
+        }
+        .empty-state i {
+            font-size: 40px;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .drill-card {
+            cursor: pointer;
+        }
+        .drill-card:hover {
+            box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.15);
+        }
+        .chart-bar {
+            height: 8px;
+            border-radius: 999px;
+            background: #e2e8f0;
+            overflow: hidden;
+        }
+        .chart-bar .fill {
+            height: 100%;
+            border-radius: 999px;
+        }
+        .progress-ring {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            position: relative;
+        }
+        .progress-ring .bg {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: conic-gradient(var(--color) var(--pct), #e2e8f0 var(--pct));
+        }
+        .progress-ring .inner {
+            position: relative;
+            z-index: 2;
+            background: white;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: #0b0f19;
+        }
+    </style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-[#0b0f19] text-white/80 flex flex-col shrink-0 h-full border-r border-slate-800/60 fixed inset-y-0 left-0 z-50">
+        <div class="px-5 py-5 border-b border-slate-800/50 flex items-center gap-3 shrink-0">
+            <i class="fa-solid fa-building text-indigo-400 text-xl"></i>
+            <span class="text-white font-bold tracking-tight">ePay <span class="text-indigo-300">·</span> HQ</span>
+            <span class="ml-auto text-[10px] bg-indigo-600/30 text-indigo-200 px-2 py-0.5 rounded-full">v1</span>
+        </div>
+        <nav class="flex-1 px-3 py-4 space-y-5 text-sm overflow-y-auto sidebar-nav" id="sidebarNav">
+            <!-- rendered by JS -->
+        </nav>
+        <div class="p-4 border-t border-slate-800/50 text-xs text-slate-400 flex items-center gap-3 shrink-0">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=40&auto=format&fit=crop&q=80" class="w-7 h-7 rounded-full" alt="profile" />
+            <div>
+                <p class="text-white text-sm font-medium" id="userNameDisplay">Vikram</p>
+                <p class="text-[10px] text-slate-400">HQ Head</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="ml-64 flex flex-col h-screen overflow-hidden">
+        <!-- TOP NAV -->
+        <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
+            <div class="relative w-80">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input id="globalSearch" type="text" placeholder="Search galleries, employees, reports..." class="w-full bg-slate-50 border border-slate-200 rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-indigo-500 transition" />
+            </div>
+            <div class="flex items-center gap-4">
+                <button id="switchRoleBtn" class="flex items-center gap-2 border border-slate-200 hover:bg-slate-50 text-xs font-semibold px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-arrow-right-arrow-left text-indigo-600"></i> Switch</button>
+                <div class="relative">
+                    <button id="notifBtn" class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition relative">
+                        <i class="fa-regular fa-bell text-lg"></i>
+                        <span id="notifBadge" class="absolute -top-0.5 -right-0.5 bg-rose-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">5</span>
+                    </button>
+                </div>
+                <div class="h-6 w-px bg-slate-200"></div>
+                <div class="flex items-center gap-2">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80" class="w-8 h-8 rounded-full object-cover ring-2 ring-indigo-300" alt="" />
+                </div>
+            </div>
+        </header>
+
+        <!-- SCROLLABLE MAIN -->
+        <main class="flex-1 overflow-y-auto p-5 space-y-6 bg-slate-50/80" id="mainContent">
+            <!-- dynamic content -->
+        </main>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast"><i class="fa-regular fa-circle-check"></i><span id="toastMsg">Done!</span></div>
+
+    <!-- MODAL -->
+    <div id="modalOverlay" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+        <div class="modal-box" id="modalBox">
+            <!-- filled by JS -->
+        </div>
+    </div>
+
+    <script>
+        // ================================================================
+        // DATA STORE
+        // ================================================================
+        const STORAGE_KEY = 'hqHeadData_v1';
+        let AppData = {};
+
+        function initDefaultData() {
+            AppData = {
+                user: { name: 'Vikram', role: 'HQ Head' },
+                hqs: [
+                    { id: 1, name: 'HQ North', region: 'North', districts: 3, galleries: 8, revenue: 4500000,
+                        target: 5000000, employees: 45, present: 38, absent: 5, leave: 2, newCustomers: 120,
+                        leads: 85, collections: 3800000, outstanding: 700000, tasks: 23, criticalIssues: 1 },
+                    { id: 2, name: 'HQ South', region: 'South', districts: 2, galleries: 5, revenue: 3200000,
+                        target: 3500000, employees: 30, present: 27, absent: 2, leave: 1, newCustomers: 80,
+                        leads: 60, collections: 2800000, outstanding: 400000, tasks: 15, criticalIssues: 0 },
+                ],
+                districts: [
+                    { id: 1, hqId: 1, name: 'District A', galleries: 4, revenue: 2500000, target: 2800000,
+                        achievement: 89, employees: 22, customers: 340, leads: 45, visits: 120, collections: 2100000,
+                        outstanding: 400000, performance: 85 },
+                    { id: 2, hqId: 1, name: 'District B', galleries: 4, revenue: 2000000, target: 2200000,
+                        achievement: 91, employees: 23, customers: 290, leads: 40, visits: 95, collections: 1700000,
+                        outstanding: 300000, performance: 88 },
+                    { id: 3, hqId: 2, name: 'District C', galleries: 5, revenue: 3200000, target: 3500000,
+                        achievement: 91, employees: 30, customers: 400, leads: 60, visits: 150, collections: 2800000,
+                        outstanding: 400000, performance: 90 },
+                ],
+                galleries: [
+                    { id: 1, districtId: 1, name: 'Gallery Alpha', manager: 'Rajesh', revenue: 600000, target: 700000,
+                        achievement: 86, customers: 85, newCustomers: 12, leads: 18, conversion: 67, expenses: 45000,
+                        collection: 500000, outstanding: 100000, complaints: 2, staffPresent: 8, performance: 84 },
+                    { id: 2, districtId: 1, name: 'Gallery Beta', manager: 'Sneha', revenue: 700000, target: 750000,
+                        achievement: 93, customers: 95, newCustomers: 15, leads: 22, conversion: 68, expenses: 52000,
+                        collection: 620000, outstanding: 80000, complaints: 1, staffPresent: 7, performance: 91 },
+                    { id: 3, districtId: 2, name: 'Gallery Gamma', manager: 'Amit', revenue: 500000, target: 550000,
+                        achievement: 91, customers: 75, newCustomers: 10, leads: 15, conversion: 67, expenses: 38000,
+                        collection: 450000, outstanding: 50000, complaints: 0, staffPresent: 6, performance: 88 },
+                    { id: 4, districtId: 2, name: 'Gallery Delta', manager: 'Priya', revenue: 550000, target: 600000,
+                        achievement: 92, customers: 80, newCustomers: 14, leads: 20, conversion: 70, expenses: 42000,
+                        collection: 490000, outstanding: 60000, complaints: 1, staffPresent: 7, performance: 90 },
+                    { id: 5, districtId: 3, name: 'Gallery Epsilon', manager: 'Vikram', revenue: 650000, target: 700000,
+                        achievement: 93, customers: 90, newCustomers: 18, leads: 25, conversion: 72, expenses: 48000,
+                        collection: 580000, outstanding: 70000, complaints: 0, staffPresent: 8, performance: 92 },
+                    { id: 6, districtId: 3, name: 'Gallery Zeta', manager: 'Anita', revenue: 550000, target: 600000,
+                        achievement: 92, customers: 85, newCustomers: 16, leads: 22, conversion: 73, expenses: 44000,
+                        collection: 490000, outstanding: 60000, complaints: 1, staffPresent: 7, performance: 90 },
+                ],
+                employees: [
+                    { id: 1, name: 'Rajesh', role: 'Gallery Manager', galleryId: 1, present: true, tasks: 5,
+                        revenue: 600000, leads: 18, visits: 25, dailyReport: true },
+                    { id: 2, name: 'Sneha', role: 'Gallery Manager', galleryId: 2, present: true, tasks: 4,
+                        revenue: 700000, leads: 22, visits: 20, dailyReport: true },
+                    { id: 3, name: 'Amit', role: 'Gallery Manager', galleryId: 3, present: false, tasks: 3,
+                        revenue: 500000, leads: 15, visits: 18, dailyReport: false },
+                    { id: 4, name: 'Priya', role: 'Gallery Manager', galleryId: 4, present: true, tasks: 6,
+                        revenue: 550000, leads: 20, visits: 22, dailyReport: true },
+                    { id: 5, name: 'Vikram', role: 'Gallery Manager', galleryId: 5, present: true, tasks: 5,
+                        revenue: 650000, leads: 25, visits: 30, dailyReport: true },
+                    { id: 6, name: 'Anita', role: 'Gallery Manager', galleryId: 6, present: true, tasks: 4,
+                        revenue: 550000, leads: 22, visits: 24, dailyReport: true },
+                    { id: 7, name: 'Suresh', role: 'BDE', galleryId: null, present: true, tasks: 8, revenue: 0,
+                        leads: 30, visits: 40, dailyReport: true },
+                    { id: 8, name: 'Meena', role: 'BDO', galleryId: null, present: true, tasks: 6, revenue: 0,
+                        leads: 20, visits: 35, dailyReport: true },
+                    { id: 9, name: 'Arjun', role: 'Marketing Executive', galleryId: null, present: true, tasks: 7,
+                        revenue: 0, leads: 45, visits: 15, dailyReport: true },
+                ],
+                tasks: [
+                    { id: 1, title: 'Review district performance', assignedTo: 'Rajesh', due: '2025-05-20',
+                        priority: 'High', status: 'Pending', category: 'Review' },
+                    { id: 2, title: 'Submit monthly report', assignedTo: 'Sneha', due: '2025-05-18', priority: 'Medium',
+                        status: 'In Progress', category: 'Reporting' },
+                    { id: 3, title: 'Field visit to Gallery Gamma', assignedTo: 'Amit', due: '2025-05-17',
+                        priority: 'Low', status: 'Pending', category: 'Visit' },
+                ],
+                complaints: [
+                    { id: 1, galleryId: 1, customer: 'Ravi', issue: 'Billing error', status: 'Open', priority: 'High',
+                        created: '2025-05-15' },
+                    { id: 2, galleryId: 2, customer: 'Sita', issue: 'Delay in delivery', status: 'In Progress',
+                        priority: 'Medium', created: '2025-05-14' },
+                ],
+                leads: [
+                    { id: 1, customer: 'ABC Corp', source: 'Marketing', status: 'Interested', assignedTo: 'Suresh',
+                        value: 50000, created: '2025-05-15' },
+                    { id: 2, customer: 'XYZ Ltd', source: 'Referral', status: 'Follow-up', assignedTo: 'Meena',
+                        value: 30000, created: '2025-05-14' },
+                ],
+                collections: [
+                    { id: 1, customer: 'Art Gallery', amount: 25000, date: '2025-05-15', status: 'Paid' },
+                    { id: 2, customer: 'Modern Arts', amount: 15000, date: '2025-05-14', status: 'Overdue' },
+                ],
+                dailyReports: [
+                    { employeeId: 1, date: '2025-05-16', tasksCompleted: 4, visits: 5, revenue: 120000, leads: 3,
+                        status: 'Submitted' },
+                ],
+                stats: {}
+            };
+            updateStats();
+            saveData();
+        }
+
+        function loadData() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    AppData = JSON.parse(stored);
+                    // Ensure arrays
+                    if (!AppData.hqs) AppData.hqs = [];
+                    if (!AppData.districts) AppData.districts = [];
+                    if (!AppData.galleries) AppData.galleries = [];
+                    if (!AppData.employees) AppData.employees = [];
+                    if (!AppData.tasks) AppData.tasks = [];
+                    if (!AppData.complaints) AppData.complaints = [];
+                    if (!AppData.leads) AppData.leads = [];
+                    if (!AppData.collections) AppData.collections = [];
+                    if (!AppData.dailyReports) AppData.dailyReports = [];
+                    if (!AppData.stats) AppData.stats = {};
+                    if (!AppData.user) AppData.user = { name: 'Vikram', role: 'HQ Head' };
+                    updateStats();
+                    saveData();
+                } else {
+                    initDefaultData();
+                    saveData();
+                }
+            } catch (e) {
+                console.warn('Data load error, resetting', e);
+                initDefaultData();
+                saveData();
+            }
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(AppData));
+            } catch (e) {}
+        }
+
+        function updateStats() {
+            const hqs = AppData.hqs || [];
+            const districts = AppData.districts || [];
+            const galleries = AppData.galleries || [];
+            const employees = AppData.employees || [];
+            const tasks = AppData.tasks || [];
+            const complaints = AppData.complaints || [];
+            const leads = AppData.leads || [];
+            const collections = AppData.collections || [];
+
+            const totalRevenue = hqs.reduce((s, h) => s + h.revenue, 0);
+            const totalTarget = hqs.reduce((s, h) => s + h.target, 0);
+            const totalEmployees = employees.length;
+            const present = employees.filter(e => e.present).length;
+            const absent = employees.filter(e => !e.present).length;
+            const totalGalleries = galleries.length;
+            const totalDistricts = districts.length;
+            const totalLeads = leads.length;
+            const totalCollections = collections.reduce((s, c) => s + (c.status === 'Paid' ? c.amount : 0), 0);
+            const totalOutstanding = collections.reduce((s, c) => s + (c.status === 'Overdue' ? c.amount : 0), 0);
+            const pendingTasks = tasks.filter(t => t.status === 'Pending').length;
+            const criticalIssues = complaints.filter(c => c.priority === 'High' && c.status !== 'Resolved').length;
+
+            AppData.stats = {
+                hqs: hqs.length,
+                districts: totalDistricts,
+                galleries: totalGalleries,
+                employees: totalEmployees,
+                present: present,
+                absent: absent,
+                todayRevenue: 450000, // simulated
+                monthlyRevenue: totalRevenue,
+                monthlyTarget: totalTarget,
+                targetAchievement: totalTarget ? Math.round((totalRevenue / totalTarget) * 100) : 0,
+                newCustomers: 45,
+                newLeads: totalLeads,
+                collections: totalCollections,
+                outstanding: totalOutstanding,
+                pendingTasks: pendingTasks,
+                criticalIssues: criticalIssues,
+                totalTasks: tasks.length,
+            };
+            saveData();
+        }
+
+        // ================================================================
+        // SIDEBAR
+        // ================================================================
+        const menuStructure = [
+            { section: 'Overview', items: [{ id: 'dashboard', label: 'Dashboard', icon: 'fa-house' }] },
+            { section: 'HQ', items: [
+                    { id: 'hq-performance', label: 'HQ Performance', icon: 'fa-regular fa-building' },
+                    { id: 'district-performance', label: 'District Performance', icon: 'fa-regular fa-layer-group' },
+                    { id: 'gallery-performance', label: 'Gallery Performance', icon: 'fa-regular fa-images' },
+                ] },
+            { section: 'Team', items: [
+                    { id: 'team-performance', label: 'Team Performance', icon: 'fa-regular fa-users' },
+                    { id: 'bde-performance', label: 'BDE Performance', icon: 'fa-regular fa-user-tie' },
+                    { id: 'bdo-performance', label: 'BDO Performance', icon: 'fa-regular fa-user-check' },
+                    { id: 'marketing-performance', label: 'Marketing Executive', icon: 'fa-regular fa-bullhorn' },
+                ] },
+            { section: 'Field', items: [
+                    { id: 'field-visits', label: 'Field Visit Monitoring', icon: 'fa-regular fa-location-dot' },
+                ] },
+            { section: 'Operations', items: [
+                    { id: 'tasks', label: 'Daily Tasks', icon: 'fa-regular fa-list-check' },
+                    { id: 'daily-reports', label: 'Daily Reports', icon: 'fa-regular fa-file-lines' },
+                    { id: 'complaints', label: 'Complaints', icon: 'fa-regular fa-message' },
+                    { id: 'leads', label: 'Leads', icon: 'fa-regular fa-user-plus' },
+                    { id: 'collections', label: 'Collections', icon: 'fa-regular fa-hand-holding-usd' },
+                    { id: 'expenses', label: 'Expense Monitoring', icon: 'fa-regular fa-coins' },
+                ] },
+            { section: 'Settings', items: [
+                    { id: 'settings', label: 'Settings', icon: 'fa-regular fa-gear' },
+                ] },
+        ];
+
+        let currentPage = 'dashboard';
+        let drillContext = null; // for drill-down
+
+        function renderSidebar() {
+            const nav = document.getElementById('sidebarNav');
+            if (!nav) return;
+            nav.innerHTML = '';
+            menuStructure.forEach(group => {
+                const div = document.createElement('div');
+                const label = document.createElement('span');
+                label.className = 'text-[10px] uppercase tracking-wider text-slate-500 font-semibold';
+                label.textContent = group.section;
+                div.appendChild(label);
+                const ul = document.createElement('ul');
+                ul.className = 'mt-2 space-y-1';
+                group.items.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className =
+                        `sidebar-link ${currentPage === item.id ? 'active' : ''}`;
+                    li.dataset.page = item.id;
+                    li.innerHTML = `<i class="${item.icon} w-4"></i>${item.label}`;
+                    li.addEventListener('click', () => {
+                        drillContext = null;
+                        navigateTo(item.id);
+                    });
+                    ul.appendChild(li);
+                });
+                div.appendChild(ul);
+                nav.appendChild(div);
+            });
+        }
+
+        function navigateTo(pageId) {
+            currentPage = pageId;
+            renderSidebar();
+            renderPage(pageId);
+        }
+
+        // ================================================================
+        // PAGE RENDERER
+        // ================================================================
+        function renderPage(pageId) {
+            const main = document.getElementById('mainContent');
+            if (!main) return;
+            main.className = 'flex-1 overflow-y-auto p-5 space-y-6 bg-slate-50/80 fade-in';
+            updateStats();
+            switch (pageId) {
+                case 'dashboard':
+                    renderDashboard(main);
+                    break;
+                case 'hq-performance':
+                    renderHQPerformance(main);
+                    break;
+                case 'district-performance':
+                    renderDistrictPerformance(main);
+                    break;
+                case 'gallery-performance':
+                    renderGalleryPerformance(main);
+                    break;
+                case 'team-performance':
+                    renderTeamPerformance(main);
+                    break;
+                case 'bde-performance':
+                    renderBDEPerformance(main);
+                    break;
+                case 'bdo-performance':
+                    renderBDOPerformance(main);
+                    break;
+                case 'marketing-performance':
+                    renderMarketingPerformance(main);
+                    break;
+                case 'field-visits':
+                    renderFieldVisits(main);
+                    break;
+                case 'tasks':
+                    renderTasks(main);
+                    break;
+                case 'daily-reports':
+                    renderDailyReports(main);
+                    break;
+                case 'complaints':
+                    renderComplaints(main);
+                    break;
+                case 'leads':
+                    renderLeads(main);
+                    break;
+                case 'collections':
+                    renderCollections(main);
+                    break;
+                case 'expenses':
+                    renderExpenses(main);
+                    break;
+                default:
+                    renderDashboard(main);
+            }
+        }
+
+        // ---------- DASHBOARD ----------
+        function renderDashboard(container) {
+            const s = AppData.stats;
+            container.innerHTML = `
+            <!-- Top KPI Cards -->
+            <section class="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-8 gap-3">
+              ${[
+                ['Assigned HQs', s.hqs, 'fa-building', 'indigo'],
+                ['Total Galleries', s.galleries, 'fa-images', 'blue'],
+                ['Total Employees', s.employees, 'fa-users', 'purple'],
+                ['Present Today', s.present, 'fa-user-check', 'emerald'],
+                ['Absent Today', s.absent, 'fa-user-xmark', 'rose'],
+                ['Today\'s Revenue', '₹'+formatNum(s.todayRevenue), 'fa-arrow-trend-up', 'teal'],
+                ['Monthly Revenue', '₹'+formatNum(s.monthlyRevenue), 'fa-calendar', 'cyan'],
+                ['Monthly Target', '₹'+formatNum(s.monthlyTarget), 'fa-bullseye', 'amber'],
+                ['Target Achieved', s.targetAchievement+'%', 'fa-percent', 'violet'],
+                ['New Customers', s.newCustomers, 'fa-user-plus', 'emerald'],
+                ['New Leads', s.newLeads, 'fa-user-plus', 'sky'],
+                ['Collections', '₹'+formatNum(s.collections), 'fa-hand-holding-usd', 'green'],
+                ['Outstanding', '₹'+formatNum(s.outstanding), 'fa-circle-exclamation', 'rose'],
+                ['Pending Tasks', s.pendingTasks, 'fa-clock', 'orange'],
+                ['Critical Issues', s.criticalIssues, 'fa-triangle-exclamation', 'red'],
+              ].map(([label, value, icon, color]) => `
+                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm card-hover drill-card" onclick="drill('${label}')">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-${color}-50 text-${color}-600 flex items-center justify-center"><i class="fa-regular ${icon}"></i></div>
+                    <div><p class="text-[10px] text-slate-400">${label}</p><h4 class="font-bold text-sm">${value}</h4></div>
+                  </div>
+                </div>
+              `).join('')}
+            </section>
+
+            <!-- HQ Performance Overview -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <h4 class="font-bold text-sm text-slate-800">Revenue Trend</h4>
+                <div class="h-32 flex items-end gap-2 pt-4">
+                  ${AppData.hqs.map((h, i) => {
+                    const pct = Math.round((h.revenue / h.target) * 100);
+                    return `<div class="flex-1 flex flex-col items-center"><div class="w-full bg-indigo-600 rounded-t" style="height:${Math.min(pct, 100)}%; max-height:100px;"></div><span class="text-[10px] text-slate-400 mt-1">${h.name.slice(-5)}</span></div>`;
+                  }).join('')}
+                </div>
+                <div class="flex justify-between text-xs text-slate-500 mt-2"><span>Target vs Achievement</span><span class="font-medium">${AppData.stats.targetAchievement}%</span></div>
+              </div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <h4 class="font-bold text-sm text-slate-800">HQ Performance Score</h4>
+                <div class="flex items-center justify-around mt-2">
+                  ${AppData.hqs.map(h => {
+                    const score = Math.round((h.revenue / h.target) * 100);
+                    return `<div class="text-center"><div class="progress-ring" style="--color:#4f46e5;--pct:${score}%;"><div class="bg"></div><div class="inner">${score}%</div></div><p class="text-xs text-slate-500 mt-1">${h.name}</p></div>`;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Drill -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+              <h4 class="font-bold text-sm text-slate-800"><i class="fa-regular fa-arrow-pointer mr-2 text-indigo-500"></i>Drill-Down</h4>
+              <div class="flex flex-wrap gap-2 mt-2">
+                ${['View HQ Details','View Districts','View Galleries','View Employees','View BDE','View BDO','View Marketing'].map(label => `
+                  <button onclick="quickAction('${label}')" class="border border-slate-200 rounded-lg px-3 py-1.5 text-xs hover:bg-indigo-50 transition"><i class="fa-regular fa-arrow-right text-indigo-500 mr-1"></i>${label}</button>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Recent Alerts -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+              <h4 class="font-bold text-sm text-slate-800"><i class="fa-regular fa-triangle-exclamation mr-2 text-amber-500"></i>Critical Alerts</h4>
+              <div class="space-y-2 mt-2 text-sm">
+                <div class="flex items-center gap-3 border-b pb-2"><span class="status-badge critical">Critical</span><span>Gallery Alpha target below 70%</span></div>
+                <div class="flex items-center gap-3 border-b pb-2"><span class="status-badge warning">Warning</span><span>Low attendance in District B</span></div>
+                <div class="flex items-center gap-3"><span class="status-badge positive">Positive</span><span>HQ South achieved 105% revenue</span></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // ---------- HQ PERFORMANCE ----------
+        function renderHQPerformance(container) {
+            const hqs = AppData.hqs;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-building mr-2 text-indigo-500"></i>HQ Performance</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">HQ</th><th class="pb-3 text-left">Revenue</th><th class="pb-3 text-left">Target</th><th class="pb-3 text-left">Achievement</th><th class="pb-3 text-left">Galleries</th><th class="pb-3 text-left">Employees</th><th class="pb-3 text-left">Outstanding</th></tr></thead>
+                <tbody>${hqs.map(h => `
+                  <tr><td>${h.name}</td><td>₹${formatNum(h.revenue)}</td><td>₹${formatNum(h.target)}</td><td>${Math.round((h.revenue/h.target)*100)}%</td><td>${h.galleries}</td><td>${h.employees}</td><td>₹${formatNum(h.outstanding)}</td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- DISTRICT PERFORMANCE ----------
+        function renderDistrictPerformance(container) {
+            const districts = AppData.districts;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-layer-group mr-2 text-blue-500"></i>District Performance</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">District</th><th class="pb-3 text-left">HQ</th><th class="pb-3 text-left">Revenue</th><th class="pb-3 text-left">Target</th><th class="pb-3 text-left">Achievement</th><th class="pb-3 text-left">Galleries</th><th class="pb-3 text-left">Performance</th></tr></thead>
+                <tbody>${districts.map(d => {
+                  const hq = AppData.hqs.find(h => h.id === d.hqId);
+                  return `<tr><td>${d.name}</td><td>${hq ? hq.name : '—'}</td><td>₹${formatNum(d.revenue)}</td><td>₹${formatNum(d.target)}</td><td>${d.achievement}%</td><td>${d.galleries}</td><td><span class="status-badge ${d.performance >= 90 ? 'positive' : d.performance >= 80 ? 'warning' : 'critical'}">${d.performance}%</span></td></tr>`;
+                }).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- GALLERY PERFORMANCE ----------
+        function renderGalleryPerformance(container) {
+            const galleries = AppData.galleries;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-images mr-2 text-purple-500"></i>Gallery Performance</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Gallery</th><th class="pb-3 text-left">Manager</th><th class="pb-3 text-left">Revenue</th><th class="pb-3 text-left">Target</th><th class="pb-3 text-left">Achievement</th><th class="pb-3 text-left">Customers</th><th class="pb-3 text-left">Leads</th><th class="pb-3 text-left">Complaints</th><th class="pb-3 text-left">Performance</th></tr></thead>
+                <tbody>${galleries.map(g => `
+                  <tr><td>${g.name}</td><td>${g.manager}</td><td>₹${formatNum(g.revenue)}</td><td>₹${formatNum(g.target)}</td><td>${g.achievement}%</td><td>${g.customers}</td><td>${g.leads}</td><td>${g.complaints}</td><td><span class="status-badge ${g.performance >= 90 ? 'positive' : g.performance >= 80 ? 'warning' : 'critical'}">${g.performance}%</span></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- TEAM PERFORMANCE ----------
+        function renderTeamPerformance(container) {
+            const employees = AppData.employees;
+            const present = employees.filter(e => e.present).length;
+            const absent = employees.filter(e => !e.present).length;
+            const roles = {};
+            employees.forEach(e => { roles[e.role] = (roles[e.role] || 0) + 1; });
+            container.innerHTML = `
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Total Employees</p><h3 class="text-2xl font-bold">${employees.length}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Present</p><h3 class="text-2xl font-bold text-emerald-600">${present}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Absent</p><h3 class="text-2xl font-bold text-rose-500">${absent}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">On Leave</p><h3 class="text-2xl font-bold text-amber-500">${employees.filter(e=>!e.present).length - absent}</h3></div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h3 class="font-bold text-sm text-slate-800">Role-wise</h3>
+              <div class="flex flex-wrap gap-4 mt-2">
+                ${Object.entries(roles).map(([role, count]) => `<div class="bg-slate-50 px-4 py-2 rounded-lg text-sm"><span class="font-semibold">${role}</span> : ${count}</div>`).join('')}
+              </div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h3 class="font-bold text-sm text-slate-800">Employee List</h3>
+              <div class="overflow-x-auto mt-2"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-2 text-left">Name</th><th class="pb-2 text-left">Role</th><th class="pb-2 text-left">Tasks</th><th class="pb-2 text-left">Revenue</th><th class="pb-2 text-left">Status</th></tr></thead>
+                <tbody>${employees.map(e => `
+                  <tr><td>${e.name}</td><td>${e.role}</td><td>${e.tasks}</td><td>₹${formatNum(e.revenue)}</td><td><span class="status-badge ${e.present ? 'positive' : 'error'}">${e.present ? 'Present' : 'Absent'}</span></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- BDE PERFORMANCE ----------
+        function renderBDEPerformance(container) {
+            const bdes = AppData.employees.filter(e => e.role === 'BDE');
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-user-tie mr-2 text-emerald-500"></i>BDE Performance</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Name</th><th class="pb-3 text-left">Leads</th><th class="pb-3 text-left">Visits</th><th class="pb-3 text-left">Revenue</th><th class="pb-3 text-left">Tasks</th><th class="pb-3 text-left">Status</th></tr></thead>
+                <tbody>${bdes.length ? bdes.map(e => `
+                  <tr><td>${e.name}</td><td>${e.leads}</td><td>${e.visits}</td><td>₹${formatNum(e.revenue)}</td><td>${e.tasks}</td><td><span class="status-badge ${e.present ? 'positive' : 'error'}">${e.present ? 'Active' : 'Inactive'}</span></td></tr>
+                `).join('') : '<tr><td colspan="6" class="text-center text-slate-400 py-4">No BDEs assigned</td></tr>'}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- BDO PERFORMANCE ----------
+        function renderBDOPerformance(container) {
+            const bdos = AppData.employees.filter(e => e.role === 'BDO');
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-user-check mr-2 text-blue-500"></i>BDO Performance</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Name</th><th class="pb-3 text-left">Visits Planned</th><th class="pb-3 text-left">Visits Done</th><th class="pb-3 text-left">Customers</th><th class="pb-3 text-left">Leads</th><th class="pb-3 text-left">Status</th></tr></thead>
+                <tbody>${bdos.length ? bdos.map(e => `
+                  <tr><td>${e.name}</td><td>${e.visits}</td><td>${Math.floor(e.visits * 0.8)}</td><td>${e.leads}</td><td>${e.leads}</td><td><span class="status-badge ${e.present ? 'positive' : 'error'}">${e.present ? 'Active' : 'Inactive'}</span></td></tr>
+                `).join('') : '<tr><td colspan="6" class="text-center text-slate-400 py-4">No BDOs assigned</td></tr>'}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- MARKETING PERFORMANCE ----------
+        function renderMarketingPerformance(container) {
+            const marketers = AppData.employees.filter(e => e.role === 'Marketing Executive');
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-bullhorn mr-2 text-purple-500"></i>Marketing Executive Performance</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Name</th><th class="pb-3 text-left">Leads Generated</th><th class="pb-3 text-left">Visits</th><th class="pb-3 text-left">Campaigns</th><th class="pb-3 text-left">Status</th></tr></thead>
+                <tbody>${marketers.length ? marketers.map(e => `
+                  <tr><td>${e.name}</td><td>${e.leads}</td><td>${e.visits}</td><td>3</td><td><span class="status-badge ${e.present ? 'positive' : 'error'}">${e.present ? 'Active' : 'Inactive'}</span></td></tr>
+                `).join('') : '<tr><td colspan="5" class="text-center text-slate-400 py-4">No Marketing Executives assigned</td></tr>'}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- FIELD VISITS ----------
+        function renderFieldVisits(container) {
+            container.innerHTML = `
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Employees in Field</p><h3 class="text-2xl font-bold">12</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Visits Planned</p><h3 class="text-2xl font-bold">45</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Visits Completed</p><h3 class="text-2xl font-bold text-emerald-600">32</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">GPS Verified</p><h3 class="text-2xl font-bold text-blue-600">28</h3></div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h3 class="font-bold text-sm text-slate-800">Field Activity</h3>
+              <div class="overflow-x-auto mt-2"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-2 text-left">Employee</th><th class="pb-2 text-left">Role</th><th class="pb-2 text-left">Visits Planned</th><th class="pb-2 text-left">Completed</th><th class="pb-2 text-left">GPS Verified</th></tr></thead>
+                <tbody>${AppData.employees.filter(e => e.visits).map(e => `
+                  <tr><td>${e.name}</td><td>${e.role}</td><td>${e.visits}</td><td>${Math.floor(e.visits * 0.7)}</td><td><span class="status-badge positive">Yes</span></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- TASKS ----------
+        function renderTasks(container) {
+            const tasks = AppData.tasks;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-list-check mr-2 text-indigo-500"></i>Daily Tasks</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Title</th><th class="pb-3 text-left">Assigned To</th><th class="pb-3 text-left">Due</th><th class="pb-3 text-left">Priority</th><th class="pb-3 text-left">Status</th></tr></thead>
+                <tbody>${tasks.map(t => `
+                  <tr><td>${t.title}</td><td>${t.assignedTo}</td><td>${t.due}</td><td><span class="status-badge ${t.priority === 'High' ? 'critical' : t.priority === 'Medium' ? 'warning' : 'positive'}">${t.priority}</span></td><td><span class="status-badge ${t.status.toLowerCase()}">${t.status}</span></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- DAILY REPORTS ----------
+        function renderDailyReports(container) {
+            const reports = AppData.dailyReports;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-file-lines mr-2 text-amber-500"></i>Daily Reports</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Employee</th><th class="pb-3 text-left">Date</th><th class="pb-3 text-left">Tasks</th><th class="pb-3 text-left">Visits</th><th class="pb-3 text-left">Revenue</th><th class="pb-3 text-left">Status</th></tr></thead>
+                <tbody>${reports.map(r => {
+                  const emp = AppData.employees.find(e => e.id === r.employeeId);
+                  return `<tr><td>${emp ? emp.name : '—'}</td><td>${r.date}</td><td>${r.tasksCompleted}</td><td>${r.visits}</td><td>₹${formatNum(r.revenue)}</td><td><span class="status-badge ${r.status === 'Submitted' ? 'positive' : 'pending'}">${r.status}</span></td></tr>`;
+                }).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- COMPLAINTS ----------
+        function renderComplaints(container) {
+            const complaints = AppData.complaints;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-message mr-2 text-rose-500"></i>Complaints</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Customer</th><th class="pb-3 text-left">Issue</th><th class="pb-3 text-left">Gallery</th><th class="pb-3 text-left">Priority</th><th class="pb-3 text-left">Status</th></tr></thead>
+                <tbody>${complaints.map(c => {
+                  const gallery = AppData.galleries.find(g => g.id === c.galleryId);
+                  return `<tr><td>${c.customer}</td><td>${c.issue}</td><td>${gallery ? gallery.name : '—'}</td><td><span class="status-badge ${c.priority === 'High' ? 'critical' : 'warning'}">${c.priority}</span></td><td><span class="status-badge ${c.status === 'Resolved' ? 'positive' : c.status === 'In Progress' ? 'warning' : 'error'}">${c.status}</span></td></tr>`;
+                }).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- LEADS ----------
+        function renderLeads(container) {
+            const leads = AppData.leads;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-user-plus mr-2 text-blue-500"></i>Leads</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Customer</th><th class="pb-3 text-left">Source</th><th class="pb-3 text-left">Status</th><th class="pb-3 text-left">Assigned To</th><th class="pb-3 text-left">Value</th></tr></thead>
+                <tbody>${leads.map(l => `
+                  <tr><td>${l.customer}</td><td>${l.source}</td><td><span class="status-badge ${l.status === 'Converted' ? 'positive' : l.status === 'Interested' ? 'warning' : 'pending'}">${l.status}</span></td><td>${l.assignedTo}</td><td>₹${formatNum(l.value)}</td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- COLLECTIONS ----------
+        function renderCollections(container) {
+            const collections = AppData.collections;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-hand-holding-usd mr-2 text-emerald-500"></i>Collections</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Customer</th><th class="pb-3 text-left">Amount</th><th class="pb-3 text-left">Date</th><th class="pb-3 text-left">Status</th></tr></thead>
+                <tbody>${collections.map(c => `
+                  <tr><td>${c.customer}</td><td>₹${formatNum(c.amount)}</td><td>${c.date}</td><td><span class="status-badge ${c.status === 'Paid' ? 'positive' : 'critical'}">${c.status}</span></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- EXPENSES ----------
+        function renderExpenses(container) {
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-coins mr-2 text-amber-500"></i>Expense Monitoring</h2>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
+                <div class="bg-slate-50 p-3 rounded"><span class="text-xs text-slate-400">HQ Expenses</span><p class="font-bold">₹2,45,000</p></div>
+                <div class="bg-slate-50 p-3 rounded"><span class="text-xs text-slate-400">District Expenses</span><p class="font-bold">₹1,20,000</p></div>
+                <div class="bg-slate-50 p-3 rounded"><span class="text-xs text-slate-400">Marketing Expenses</span><p class="font-bold">₹85,000</p></div>
+                <div class="bg-slate-50 p-3 rounded"><span class="text-xs text-slate-400">Travel Expenses</span><p class="font-bold">₹42,000</p></div>
+                <div class="bg-slate-50 p-3 rounded"><span class="text-xs text-slate-400">Budget</span><p class="font-bold">₹5,00,000</p></div>
+                <div class="bg-slate-50 p-3 rounded"><span class="text-xs text-slate-400">Variance</span><p class="font-bold text-rose-500">-₹8,000</p></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // ================================================================
+        // UTILITY
+        // ================================================================
+        function formatNum(n) {
+            if (n >= 10000000) return (n / 10000000).toFixed(1) + 'Cr';
+            if (n >= 100000) return (n / 100000).toFixed(1) + 'L';
+            if (n >= 1000) return (n / 1000).toFixed(1) + 'k';
+            return n;
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            t.classList.add('show');
+            clearTimeout(t._timer);
+            t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+        }
+
+        function quickAction(action) {
+            showToast('⚡ ' + action);
+            if (action.includes('View HQ')) navigateTo('hq-performance');
+            else if (action.includes('View Districts')) navigateTo('district-performance');
+            else if (action.includes('View Galleries')) navigateTo('gallery-performance');
+            else if (action.includes('View Employees')) navigateTo('team-performance');
+            else if (action.includes('View BDE')) navigateTo('bde-performance');
+            else if (action.includes('View BDO')) navigateTo('bdo-performance');
+            else if (action.includes('View Marketing')) navigateTo('marketing-performance');
+        }
+
+        function drill(label) {
+            showToast('🔍 Drilling into: ' + label);
+            // simple drill - navigate to relevant page
+            if (label.includes('HQ')) navigateTo('hq-performance');
+            else if (label.includes('Gallery')) navigateTo('gallery-performance');
+            else if (label.includes('District')) navigateTo('district-performance');
+            else if (label.includes('Employee')) navigateTo('team-performance');
+            else if (label.includes('Lead')) navigateTo('leads');
+            else if (label.includes('Task')) navigateTo('tasks');
+            else if (label.includes('Complaint')) navigateTo('complaints');
+            else if (label.includes('Collection')) navigateTo('collections');
+        }
+
+        // ================================================================
+        // SEARCH
+        // ================================================================
+        document.getElementById('globalSearch').addEventListener('input', function(e) {
+            const q = e.target.value.toLowerCase().trim();
+            if (!q) { renderPage(currentPage); return; }
+            const all = [...AppData.galleries, ...AppData.employees, ...AppData.districts, ...AppData.hqs];
+            const results = all.filter(item => JSON.stringify(item).toLowerCase().includes(q));
+            showToast(`🔍 Found ${results.length} matches`);
+        });
+
+        // ================================================================
+        // NOTIFICATIONS
+        // ================================================================
+        document.getElementById('notifBtn').addEventListener('click', function() {
+            const badge = document.getElementById('notifBadge');
+            if (badge.textContent !== '0') {
+                badge.textContent = '0';
+                showToast('📬 Notifications cleared');
+            } else {
+                showToast('🔔 No new notifications');
+            }
+        });
+
+        // ================================================================
+        // SWITCH ROLE
+        // ================================================================
+        document.getElementById('switchRoleBtn').addEventListener('click', function() {
+            const name = document.getElementById('userNameDisplay');
+            if (name.textContent === 'Vikram') {
+                name.textContent = 'Admin';
+                showToast('🔄 Switched to Admin');
+            } else {
+                name.textContent = 'Vikram';
+                showToast('🔄 Switched to HQ Head');
+            }
+        });
+
+        // ================================================================
+        // INIT
+        // ================================================================
+        loadData();
+        renderSidebar();
+        renderPage('dashboard');
+
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        console.log('🚀 HQ Head Dashboard loaded');
+        console.log('💾 Data:', AppData);
+    </script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

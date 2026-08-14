@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuthService Unit Tests</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #34d399;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        
+        button:hover {
+            background: #059669;
+        }
+        
+        button:disabled {
+            background: #6b7280;
+            cursor: not-allowed;
+        }
+        
+        .output {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            max-height: 600px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .log-line {
+            margin: 4px 0;
+        }
+        
+        .log-pass {
+            color: #34d399;
+        }
+        
+        .log-fail {
+            color: #ef4444;
+        }
+        
+        .log-info {
+            color: #60a5fa;
+        }
+        
+        .log-warn {
+            color: #fbbf24;
+        }
+        
+        .summary {
+            margin-top: 20px;
+            padding: 20px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .summary.show {
+            display: block;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-weight: 600;
+        }
+        
+        .summary-total { color: #94a3b8; }
+        .summary-passed { color: #34d399; }
+        .summary-failed { color: #ef4444; }
+        .summary-rate { color: #60a5fa; }
+        
+        .test-status {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .test-status.show {
+            display: block;
+        }
+        
+        .test-status.success {
+            background: #064e3b;
+            color: #34d399;
+        }
+        
+        .test-status.failure {
+            background: #7f1d1d;
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 AuthService Unit Tests</h1>
+        
+        <div class="controls">
+            <button id="runTests" onclick="runTests()">Run All Tests</button>
+            <button id="clearOutput" onclick="clearOutput()">Clear Output</button>
+        </div>
+        
+        <div class="output" id="output"></div>
+        
+        <div class="summary" id="summary">
+            <div class="summary-row summary-total">
+                Total Tests: <span id="totalCount">0</span>
+            </div>
+            <div class="summary-row summary-passed">
+                ✓ Passed: <span id="passedCount">0</span>
+            </div>
+            <div class="summary-row summary-failed">
+                ✗ Failed: <span id="failedCount">0</span>
+            </div>
+            <div class="summary-row summary-rate">
+                Success Rate: <span id="successRate">0%</span>
+            </div>
+        </div>
+        
+        <div class="test-status" id="status"></div>
+    </div>
+    
+    <!-- Load AuthService -->
+    <script src="auth-service.js"></script>
+    <!-- Load Tests -->
+    <script src="auth-service.test.js"></script>
+    
+    <script>
+        const outputDiv = document.getElementById('output');
+        const summaryDiv = document.getElementById('summary');
+        const statusDiv = document.getElementById('status');
+        const runButton = document.getElementById('runTests');
+        
+        // Override console methods to capture output
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        const originalInfo = console.info;
+        
+        function addToOutput(text, className = '') {
+            const line = document.createElement('div');
+            line.className = `log-line ${className}`;
+            line.textContent = text;
+            outputDiv.appendChild(line);
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog(...args);
+            addToOutput(args.join(' '), 'log-info');
+        };
+        
+        console.error = function(...args) {
+            originalError(...args);
+            addToOutput(args.join(' '), 'log-fail');
+        };
+        
+        console.warn = function(...args) {
+            originalWarn(...args);
+            addToOutput(args.join(' '), 'log-warn');
+        };
+        
+        console.info = function(...args) {
+            originalInfo(...args);
+            addToOutput(args.join(' '), 'log-info');
+        };
+        
+        async function runTests() {
+            clearOutput();
+            runButton.disabled = true;
+            
+            try {
+                const tests = new AuthServiceTests();
+                await tests.runAllTests();
+                
+                // Show summary
+                summaryDiv.classList.add('show');
+                document.getElementById('totalCount').textContent = tests.totalTests;
+                document.getElementById('passedCount').textContent = tests.passedTests;
+                document.getElementById('failedCount').textContent = tests.failedTests;
+                document.getElementById('successRate').textContent = 
+                    ((tests.passedTests / tests.totalTests) * 100).toFixed(1) + '%';
+                
+                // Show status
+                statusDiv.classList.add('show');
+                if (tests.failedTests === 0) {
+                    statusDiv.classList.add('success');
+                    statusDiv.classList.remove('failure');
+                    statusDiv.textContent = '✓ All tests passed!';
+                } else {
+                    statusDiv.classList.add('failure');
+                    statusDiv.classList.remove('success');
+                    statusDiv.textContent = `✗ ${tests.failedTests} test(s) failed`;
+                }
+            } catch (error) {
+                console.error('Test execution failed:', error);
+                statusDiv.classList.add('show', 'failure');
+                statusDiv.textContent = '✗ Test execution failed';
+            } finally {
+                runButton.disabled = false;
+            }
+        }
+        
+        function clearOutput() {
+            outputDiv.innerHTML = '';
+            summaryDiv.classList.remove('show');
+            statusDiv.classList.remove('show');
+        }
+    </script>
+</body>
+</html>

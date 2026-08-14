@@ -1,0 +1,49 @@
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
+  import { getFirestore, collection, query, where, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc, orderBy } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js';
+  import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-functions.js';
+
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const functions = getFunctions(app);
+
+  // Login
+  async function loginAdmin(email, password) {
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
+    return userCred.user;
+  }
+
+  // Get employees (callable)
+  async function getEmployees(filters) {
+    const getEmployeesFn = httpsCallable(functions, 'getEmployees');
+    const result = await getEmployeesFn(filters);
+    return result.data;
+  }
+
+  // Create employee
+  async function createEmployee(data) {
+    const createFn = httpsCallable(functions, 'createEmployee');
+    const result = await createFn(data);
+    return result.data;
+  }
+
+  // Send welcome
+  async function sendWelcome(employeeId, subject, body, template) {
+    const sendFn = httpsCallable(functions, 'sendWelcomeEmail');
+    const result = await sendFn({ employeeId, subject, body, template });
+    return result.data;
+  }
+
+  // ... similar for other functions
+</script>

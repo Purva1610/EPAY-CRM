@@ -1,0 +1,133 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "users",
+      "queryScope": "Collection",
+      "fields": [
+        {
+          "fieldPath": "role",
+          "order": "Ascending"
+        },
+        {
+          "fieldPath": "isActive",
+          "order": "Ascending"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "users",
+      "queryScope": "Collection",
+      "fields": [
+        {
+          "fieldPath": "createdAt",
+          "order": "Descending"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "users",
+      "queryScope": "Collection",
+      "fields": [
+        {
+          "fieldPath": "lastLogin",
+          "order": "Descending"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "audit_logs",
+      "queryScope": "Collection",
+      "fields": [
+        {
+          "fieldPath": "timestamp",
+          "order": "Descending"
+        },
+        {
+          "fieldPath": "userId",
+          "order": "Ascending"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "audit_logs",
+      "queryScope": "Collection",
+      "fields": [
+        {
+          "fieldPath": "timestamp",
+          "order": "Descending"
+        },
+        {
+          "fieldPath": "action",
+          "order": "Ascending"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "audit_logs",
+      "queryScope": "Collection",
+      "fields": [
+        {
+          "fieldPath": "action",
+          "order": "Ascending"
+        },
+        {
+          "fieldPath": "timestamp",
+          "order": "Descending"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "failed_login_attempts",
+      "queryScope": "Collection",
+      "fields": [
+        {
+          "fieldPath": "email",
+          "order": "Ascending"
+        },
+        {
+          "fieldPath": "timestamp",
+          "order": "Descending"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "presence",
+      "queryScope": "Collection",
+      "fields": [
+        {
+          "fieldPath": "online",
+          "order": "Ascending"
+        },
+        {
+          "fieldPath": "loginTime",
+          "order": "Descending"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "sessions",
+      "queryScope": "Collection",
+      "fields": [
+        {
+          "fieldPath": "userId",
+          "order": "Ascending"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "Descending"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "sessions",
+      "queryScope": "Collection",
+      "fields": [
+        {
+          "fieldPath": "expiresAt",
+          "order": "Ascending"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

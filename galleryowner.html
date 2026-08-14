@@ -1,0 +1,1060 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery Owner · ePay Travel — Pune Gallery</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+
+
+
+    * { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f1f5f9; margin: 0; padding: 0; height: 100vh; overflow: hidden; display: flex; }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    #sidebar { width: 270px; background: #0f172a; color: #e2e8f0; display: flex; flex-direction: column; flex-shrink: 0; height: 100vh; overflow-y: auto; position: sticky; top: 0; border-right: 1px solid #1e293b; transition: transform 0.3s ease; z-index: 50; }
+    #sidebar .brand { padding: 18px 20px; font-size: 16px; font-weight: 700; color: #fff; border-bottom: 1px solid #1e293b; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    #sidebar .brand i { font-size: 22px; color: #38bdf8; }
+    #sidebar .brand small { display: block; font-size: 11px; font-weight: 500; color: #94a3b8; }
+    #sidebar .nav { flex: 1; padding: 8px 0 20px; overflow-y: auto; }
+    #sidebar .nav-section { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; padding: 14px 20px 6px; color: #64748b; font-weight: 600; }
+    #sidebar .nav-item { display: flex; align-items: center; gap: 11px; padding: 8px 20px; color: #cbd5e1; font-size: 13px; font-weight: 500; cursor: pointer; border-left: 3px solid transparent; transition: all 0.15s; text-decoration: none; }
+    #sidebar .nav-item:hover { background: #1e293b; color: #fff; border-left-color: #38bdf8; }
+    #sidebar .nav-item.active { background: #1e293b; color: #fff; border-left-color: #38bdf8; }
+    #sidebar .nav-item i { width: 18px; text-align: center; font-size: 13px; }
+    #sidebar .nav-item .badge { margin-left: auto; background: #38bdf8; color: #0f172a; font-size: 9px; padding: 2px 7px; border-radius: 12px; font-weight: 700; }
+    .nav-sub .nav-item { padding-left: 42px; font-size: 12px; }
+    #main { flex: 1; overflow-y: auto; padding: 18px 24px 40px; background: #f1f5f9; display: flex; flex-direction: column; }
+    .top-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 20px; background: #fff; padding: 12px 20px; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; }
+    .top-header .hamburger { display: none; background: none; border: none; font-size: 22px; color: #0f172a; cursor: pointer; }
+    .top-header .search-wrap { position: relative; flex: 1 1 280px; }
+    .top-header .search-wrap input { width: 100%; padding: 9px 14px 9px 40px; border: 1px solid #e2e8f0; border-radius: 40px; font-size: 13px; outline: none; background: #f8fafc; }
+    .top-header .search-wrap input:focus { border-color: #38bdf8; background: #fff; box-shadow: 0 0 0 3px rgba(56,189,248,0.15); }
+    .top-header .search-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+    .top-header .actions { display: flex; align-items: center; gap: 16px; }
+    .top-header .actions .avatar { width: 36px; height: 36px; border-radius: 50%; background: #38bdf8; display: flex; align-items: center; justify-content: center; color: #0f172a; font-weight: 700; font-size: 13px; cursor: pointer; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+    .page-header h1 { font-size: 22px; font-weight: 700; color: #0f172a; margin: 0; }
+    .page-header .sub { color: #64748b; font-size: 13px; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .kpi-card { background: #fff; border-radius: 12px; padding: 14px 16px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: all 0.2s; cursor: pointer; }
+    .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); border-color: #38bdf8; }
+    .kpi-card .label { font-size: 11px; color: #64748b; font-weight: 500; text-transform: uppercase; letter-spacing: 0.3px; }
+    .kpi-card .value { font-size: 22px; font-weight: 700; color: #0f172a; margin: 4px 0 2px; }
+    .kpi-card .trend { font-size: 11px; }
+    .kpi-card .trend.up { color: #10b981; }
+    .kpi-card .trend.down { color: #ef4444; }
+    .filter-bar { background: #fff; border-radius: 12px; padding: 12px 16px; border: 1px solid #e2e8f0; display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: flex-end; margin-bottom: 18px; }
+    .filter-group { display: flex; flex-direction: column; gap: 4px; }
+    .filter-group label { font-size: 11px; font-weight: 600; color: #334155; }
+    .filter-group select, .filter-group input { padding: 7px 11px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 12px; background: #fff; outline: none; min-width: 120px; }
+    .filter-group select:focus, .filter-group input:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56,189,248,0.12); }
+    .table-wrap { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 16px; }
+    .table-scroll { overflow-x: auto; }
+    .table-wrap table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .table-wrap th { background: #f8fafc; text-align: left; padding: 11px 12px; font-weight: 600; color: #1e293b; border-bottom: 1px solid #e2e8f0; white-space: nowrap; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; }
+    .table-wrap td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    .table-wrap tr:hover td { background: #f8fafc; }
+    .status-badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 10px; font-weight: 600; }
+    .status-badge.success { background: #d1fae5; color: #065f46; }
+    .status-badge.danger { background: #fee2e2; color: #991b1b; }
+    .status-badge.warning { background: #fef3c7; color: #92400e; }
+    .status-badge.info { background: #dbeafe; color: #1e40af; }
+    .status-badge.secondary { background: #e2e8f0; color: #475569; }
+    .tabs { display: flex; border-bottom: 2px solid #e2e8f0; margin-bottom: 16px; gap: 4px; flex-wrap: wrap; }
+    .tabs button { padding: 8px 16px; font-weight: 600; font-size: 12px; background: transparent; border: none; color: #64748b; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; }
+    .tabs button:hover { color: #0f172a; }
+    .tabs button.active { color: #0284c7; border-bottom-color: #38bdf8; }
+    .tab-pane { display: none; animation: fadeIn 0.25s ease; }
+    .tab-pane.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0.5; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .report-card { background: #fff; border-radius: 12px; padding: 18px 20px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
+    .field-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 4px 20px; }
+    .field-grid .field-item { font-size: 12px; padding: 6px 0; border-bottom: 1px dashed #f1f5f9; display: flex; justify-content: space-between; }
+    .field-grid .field-item .fname { color: #64748b; }
+    .field-grid .field-item .fvalue { font-weight: 500; color: #0f172a; }
+    .btn { padding: 7px 16px; border-radius: 8px; font-weight: 600; font-size: 12px; border: none; cursor: pointer; transition: 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-primary { background: #0ea5e9; color: #fff; }
+    .btn-primary:hover { background: #0284c7; }
+    .btn-outline { background: transparent; border: 1px solid #d1d5db; color: #1e293b; }
+    .btn-outline:hover { background: #f1f5f9; }
+    .btn-success { background: #10b981; color: #fff; }
+    .btn-danger { background: #ef4444; color: #fff; }
+    .btn-sm { padding: 4px 10px; font-size: 11px; }
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+    .toast { background: #fff; border-radius: 12px; padding: 12px 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border-left: 4px solid #0ea5e9; min-width: 220px; animation: slideIn 0.3s ease; font-size: 13px; display: flex; align-items: center; gap: 10px; }
+    .toast.success { border-left-color: #10b981; }
+    .toast.error { border-left-color: #ef4444; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 999; backdrop-filter: blur(4px); }
+    .modal-overlay.active { display: flex; }
+    .modal-box { background: #fff; border-radius: 16px; max-width: 720px; width: 95%; max-height: 90vh; overflow-y: auto; padding: 24px 28px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    .modal-box h2 { font-size: 18px; font-weight: 700; margin-top: 0; }
+    .score-bar { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin-top: 4px; }
+    .score-bar > div { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #0ea5e9, #10b981); }
+    .pkg-result { border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; background: #fff; cursor: pointer; transition: 0.15s; }
+    .pkg-result:hover { border-color: #38bdf8; box-shadow: 0 4px 12px rgba(14,165,233,0.12); }
+    .alert-item { padding: 10px 12px; border-radius: 8px; border-left: 3px solid; background: #fff; margin-bottom: 8px; font-size: 13px; }
+    .alert-item.critical { border-left-color: #ef4444; }
+    .alert-item.warning { border-left-color: #f59e0b; }
+    .alert-item.success { border-left-color: #10b981; }
+    @media (max-width: 768px) {
+      #sidebar { position: fixed; transform: translateX(-100%); z-index: 100; }
+      #sidebar.open { transform: translateX(0); }
+      .top-header .hamburger { display: block; }
+      #main { padding: 14px; }
+    }
+    .backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 90; }
+    .backdrop.open { display: block; }
+  </style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+  <div class="backdrop" id="backdrop" onclick="toggleSidebar()"></div>
+
+  <aside id="sidebar">
+    <div class="brand">
+      <i class="fas fa-store"></i>
+      <div>ePay Travel<span><small>Pune Gallery · Owner</small></span></div>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">Command</div>
+      <a class="nav-item active" data-tab="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a class="nav-item" data-tab="alerts"><i class="fas fa-bell"></i> Alerts <span class="badge">7</span></a>
+
+      <div class="nav-section">Pipeline</div>
+      <a class="nav-item" data-tab="leads"><i class="fas fa-bullseye"></i> Travel Leads</a>
+      <a class="nav-item nav-sub" data-tab="enquiries"><i class="fas fa-inbox"></i> Enquiries</a>
+      <a class="nav-item nav-sub" data-tab="followups"><i class="fas fa-phone"></i> Follow-ups <span class="badge">12</span></a>
+
+      <div class="nav-section">Sell</div>
+      <a class="nav-item" data-tab="search"><i class="fas fa-search"></i> Package Search</a>
+      <a class="nav-item nav-sub" data-tab="compare"><i class="fas fa-balance-scale"></i> Compare</a>
+      <a class="nav-item nav-sub" data-tab="customize"><i class="fas fa-puzzle-piece"></i> Customize</a>
+      <a class="nav-item" data-tab="quotations"><i class="fas fa-file-invoice"></i> Quotations</a>
+
+      <div class="nav-section">Operations</div>
+      <a class="nav-item" data-tab="bookings"><i class="fas fa-calendar-check"></i> Bookings</a>
+      <a class="nav-item nav-sub" data-tab="trips"><i class="fas fa-suitcase-rolling"></i> Upcoming Trips</a>
+      <a class="nav-item nav-sub" data-tab="history"><i class="fas fa-history"></i> Booking History</a>
+
+      <div class="nav-section">Money</div>
+      <a class="nav-item" data-tab="payments"><i class="fas fa-credit-card"></i> Payments</a>
+      <a class="nav-item nav-sub" data-tab="commission"><i class="fas fa-coins"></i> Commission</a>
+      <a class="nav-item nav-sub" data-tab="settlements"><i class="fas fa-university"></i> Settlements</a>
+
+      <div class="nav-section">Changes</div>
+      <a class="nav-item" data-tab="cancellations"><i class="fas fa-ban"></i> Cancellations</a>
+      <a class="nav-item nav-sub" data-tab="refunds"><i class="fas fa-hand-holding-usd"></i> Refunds</a>
+
+      <div class="nav-section">People</div>
+      <a class="nav-item" data-tab="customers"><i class="fas fa-users"></i> Customers</a>
+      <a class="nav-item nav-sub" data-tab="travellers"><i class="fas fa-user-friends"></i> Travellers</a>
+
+      <div class="nav-section">Docs & Support</div>
+      <a class="nav-item" data-tab="documents"><i class="fas fa-folder-open"></i> Documents</a>
+      <a class="nav-item nav-sub" data-tab="vouchers"><i class="fas fa-ticket-alt"></i> Vouchers</a>
+      <a class="nav-item" data-tab="support"><i class="fas fa-headset"></i> Support</a>
+      <a class="nav-item nav-sub" data-tab="reviews"><i class="fas fa-star"></i> Reviews</a>
+
+      <div class="nav-section">Intelligence</div>
+      <a class="nav-item" data-tab="ai"><i class="fas fa-robot"></i> AI Travel Advisor</a>
+      <a class="nav-item" data-tab="reports"><i class="fas fa-chart-bar"></i> Reports</a>
+      <a class="nav-item nav-sub" data-tab="scorecard"><i class="fas fa-trophy"></i> Scorecard</a>
+
+      <div class="nav-section">System</div>
+      <a class="nav-item" data-tab="settings"><i class="fas fa-cog"></i> Settings</a>
+    </nav>
+  </aside>
+
+  <div id="main">
+    <header class="top-header">
+      <button class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="search-wrap">
+        <i class="fas fa-search"></i>
+        <input type="text" id="globalSearch" placeholder="Search Customer / Booking / Package / Enquiry..." oninput="globalSearch(this.value)" />
+      </div>
+      <div class="actions">
+        <span class="text-sm text-gray-500 hidden sm:inline">Pune Gallery · <span id="lastUpdated">Just now</span></span>
+        <i class="far fa-bell text-gray-500 text-lg cursor-pointer" onclick="switchTab('alerts')"></i>
+        <i class="fas fa-check-double text-sky-500 text-lg cursor-pointer" onclick="showToast('2 quotes await your review')"></i>
+        <div class="avatar" onclick="showToast('Gallery Owner · Pune')">GO</div>
+      </div>
+    </header>
+
+    <!-- DASHBOARD -->
+    <div id="tab-dashboard" class="tab-pane active">
+      <div class="page-header">
+        <div><h1>🏪 Gallery Travel Command Center</h1><div class="sub">Pune Gallery · Sell · Book · Earn commission</div></div>
+        <button class="btn btn-primary" onclick="refreshDash()"><i class="fas fa-sync"></i> Refresh</button>
+      </div>
+      <div class="kpi-grid" id="dashKpis">
+        <div class="kpi-card" onclick="switchTab('leads')"><span class="label">Today's Leads</span><span class="value" id="kLeads">14</span><span class="trend up">+3 vs yesterday</span></div>
+        <div class="kpi-card" onclick="switchTab('enquiries')"><span class="label">New Enquiries</span><span class="value">8</span><span class="trend up">2 overdue</span></div>
+        <div class="kpi-card" onclick="switchTab('followups')"><span class="label">Pending Follow-ups</span><span class="value">12</span><span class="trend down">4 overdue</span></div>
+        <div class="kpi-card" onclick="switchTab('quotations')"><span class="label">Today's Quotations</span><span class="value">6</span><span class="trend up">2 accepted</span></div>
+        <div class="kpi-card" onclick="switchTab('bookings')"><span class="label">Today's Bookings</span><span class="value" id="kBk">3</span><span class="trend up">₹1.32L</span></div>
+        <div class="kpi-card"><span class="label">Today Booking Value</span><span class="value">₹1.32L</span><span class="trend up">+18%</span></div>
+        <div class="kpi-card"><span class="label">Monthly Travel GMV</span><span class="value" id="kGmv">₹18.5L</span><span class="trend up">+12% MoM</span></div>
+        <div class="kpi-card"><span class="label">Monthly Revenue</span><span class="value">₹2.4L</span><span class="trend up">Margin 13%</span></div>
+        <div class="kpi-card" onclick="switchTab('commission')"><span class="label">Commission Earned</span><span class="value">₹1.85L</span><span class="trend up">This month</span></div>
+        <div class="kpi-card" onclick="switchTab('commission')"><span class="label">Pending Commission</span><span class="value">₹45k</span><span class="trend down">Awaiting settlement</span></div>
+        <div class="kpi-card" onclick="switchTab('trips')"><span class="label">Upcoming Trips</span><span class="value">18</span><span class="trend up">7 days: 6</span></div>
+        <div class="kpi-card" onclick="switchTab('payments')"><span class="label">Pending Payments</span><span class="value">₹2.1L</span><span class="trend down">5 bookings</span></div>
+        <div class="kpi-card" onclick="switchTab('cancellations')"><span class="label">Cancel Requests</span><span class="value">2</span><span class="trend down">1 needs SA</span></div>
+        <div class="kpi-card" onclick="switchTab('refunds')"><span class="label">Refund Pending</span><span class="value">₹48k</span><span class="trend down">3 cases</span></div>
+        <div class="kpi-card"><span class="label">Customer CSAT</span><span class="value">4.7</span><span class="trend up">+0.2</span></div>
+        <div class="kpi-card"><span class="label">Conversion Rate</span><span class="value">18.4%</span><span class="trend up">+2.1 pts</span></div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+        <div class="report-card lg:col-span-2">
+          <h4 class="font-semibold text-sm mb-3"><i class="fas fa-chart-line text-sky-500 mr-2"></i>Gallery Performance</h4>
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-center text-sm mb-3">
+            <div><div class="text-gray-500 text-xs">Travel GMV</div><div class="font-bold text-lg">₹18.5L</div></div>
+            <div><div class="text-gray-500 text-xs">Bookings</div><div class="font-bold text-lg">42</div></div>
+            <div><div class="text-gray-500 text-xs">Conversion</div><div class="font-bold text-lg">18.4%</div></div>
+            <div><div class="text-gray-500 text-xs">Commission</div><div class="font-bold text-lg">₹1.85L</div></div>
+            <div><div class="text-gray-500 text-xs">Avg Value</div><div class="font-bold text-lg">₹44,047</div></div>
+          </div>
+          <canvas id="perfChart" height="90"></canvas>
+        </div>
+        <div class="report-card">
+          <h4 class="font-semibold text-sm mb-3"><i class="fas fa-bell text-amber-500 mr-2"></i>Live Alerts</h4>
+          <div class="alert-item critical">🔴 Payment overdue · EPTR-P102</div>
+          <div class="alert-item warning">🟠 Quote expires tomorrow · Q-884</div>
+          <div class="alert-item critical">🔴 Supplier confirm missing · EPTR-P098</div>
+          <div class="alert-item warning">🟠 Follow-up overdue · 4 leads</div>
+          <div class="alert-item success">🟢 Customer accepted Q-881</div>
+          <button class="btn btn-outline btn-sm mt-2 w-full" onclick="switchTab('alerts')">View all</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="report-card">
+          <h4 class="font-semibold text-sm mb-2">Today's Follow-ups</h4>
+          <ul class="text-sm space-y-2">
+            <li class="flex justify-between border-b pb-1"><span>Vikram Shah · Dubai · Call</span><span class="text-red-500 text-xs">Overdue</span></li>
+            <li class="flex justify-between border-b pb-1"><span>Neha Joshi · Bali · WhatsApp</span><span class="text-amber-600 text-xs">11:30</span></li>
+            <li class="flex justify-between"><span>Karan Mehta · Kashmir · Call</span><span class="text-gray-500 text-xs">16:00</span></li>
+          </ul>
+          <button class="btn btn-primary btn-sm mt-3" onclick="switchTab('followups')">Open Follow-up Center</button>
+        </div>
+        <div class="report-card">
+          <h4 class="font-semibold text-sm mb-2">Upcoming Trips (Risk)</h4>
+          <ul class="text-sm space-y-2">
+            <li>🔴 EPTR-P110 · Docs incomplete · +2d</li>
+            <li>🟠 EPTR-P108 · Partial payment · +4d</li>
+            <li>🟢 EPTR-P105 · Ready · +1d</li>
+          </ul>
+          <button class="btn btn-outline btn-sm mt-3" onclick="switchTab('trips')">Trip Control</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALERTS -->
+    <div id="tab-alerts" class="tab-pane">
+      <div class="page-header"><h1>🔔 Gallery Alerts</h1></div>
+      <div class="alert-item critical">🔴 Booking payment overdue · EPTR-P102 · ₹49,999 due</div>
+      <div class="alert-item warning">🟠 Quotation Q-884 expires tomorrow</div>
+      <div class="alert-item critical">🔴 Supplier confirmation missing · EPTR-P098</div>
+      <div class="alert-item warning">🟠 Customer follow-up overdue · 4 leads</div>
+      <div class="alert-item success">🟢 Customer accepted quotation Q-881</div>
+      <div class="alert-item success">🟢 Payment received · EPTR-P115 · ₹1.12L</div>
+      <div class="alert-item critical">🔴 Cancellation requires Super Admin approval · CN-22</div>
+    </div>
+
+    <!-- LEADS -->
+    <div id="tab-leads" class="tab-pane">
+      <div class="page-header">
+        <div><h1>🎯 Travel Leads</h1><div class="sub">New → Contacted → Quoted → Won / Lost</div></div>
+        <button class="btn btn-primary" onclick="showToast('New lead form opened','success')"><i class="fas fa-plus"></i> Add Lead</button>
+      </div>
+      <div class="filter-bar">
+        <div class="filter-group"><label>Status</label><select onchange="filterTable('leadTable', this.value)"><option value="">All</option><option>New</option><option>Contacted</option><option>Quotation</option><option>Hot</option></select></div>
+        <div class="filter-group"><label>Source</label><select><option>All</option><option>Walk-in</option><option>WhatsApp</option><option>Website</option><option>Referral</option></select></div>
+        <div class="filter-group"><label>Search</label><input type="text" placeholder="Name / mobile" oninput="filterTable('leadTable', this.value)" /></div>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table id="leadTable"><thead><tr>
+          <th>Lead ID</th><th>Customer</th><th>Mobile</th><th>Source</th><th>Destination</th><th>Travel</th><th>Pax</th><th>Budget</th><th>Score</th><th>Status</th><th>Owner</th><th>Next FU</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>PL-501</td><td>Vikram Shah</td><td>98765 11101</td><td>Walk-in</td><td>Dubai</td><td>15 Sep</td><td>2</td><td>₹1.5L</td><td>92</td><td><span class="status-badge danger">Hot</span></td><td>Rahul</td><td>Today</td></tr>
+          <tr><td>PL-502</td><td>Neha Joshi</td><td>98765 11102</td><td>WhatsApp</td><td>Bali</td><td>02 Oct</td><td>2</td><td>₹1.2L</td><td>78</td><td><span class="status-badge warning">Quotation</span></td><td>Priya</td><td>Tomorrow</td></tr>
+          <tr><td>PL-503</td><td>Karan Mehta</td><td>98765 11103</td><td>Website</td><td>Kashmir</td><td>20 Sep</td><td>4</td><td>₹80k</td><td>65</td><td><span class="status-badge info">Contacted</span></td><td>Rahul</td><td>Today 16:00</td></tr>
+          <tr><td>PL-504</td><td>Ananya Rao</td><td>98765 11104</td><td>Referral</td><td>Goa</td><td>05 Sep</td><td>3</td><td>₹45k</td><td>70</td><td><span class="status-badge secondary">New</span></td><td>Unassigned</td><td>—</td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- ENQUIRIES -->
+    <div id="tab-enquiries" class="tab-pane">
+      <div class="page-header"><h1>📩 Customer Enquiries</h1></div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">
+        <div class="kpi-card"><span class="label">New</span><span class="value">8</span></div>
+        <div class="kpi-card"><span class="label">Open</span><span class="value">22</span></div>
+        <div class="kpi-card"><span class="label">Overdue</span><span class="value">2</span></div>
+        <div class="kpi-card"><span class="label">Converted</span><span class="value">61%</span></div>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>ID</th><th>Customer</th><th>Channel</th><th>Subject</th><th>Created</th><th>SLA</th><th>Status</th><th>Owner</th></tr></thead>
+        <tbody>
+          <tr><td>ENQ-P01</td><td>Vikram S.</td><td>Walk-in</td><td>Dubai honeymoon</td><td>09:40</td><td><span class="status-badge success">OK</span></td><td>Open</td><td>Rahul</td></tr>
+          <tr><td>ENQ-P02</td><td>Walk-in</td><td>Gallery</td><td>Family Kerala</td><td>10:15</td><td><span class="status-badge danger">15m+</span></td><td>Overdue</td><td>—</td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- FOLLOW-UPS -->
+    <div id="tab-followups" class="tab-pane">
+      <div class="page-header">
+        <div><h1>📞 Follow-up Center</h1><div class="sub">Call · WhatsApp · SMS · Email · In-person</div></div>
+        <button class="btn btn-primary" onclick="showToast('Log follow-up','success')"><i class="fas fa-plus"></i> Log Follow-up</button>
+      </div>
+      <div class="tabs">
+        <button class="active" onclick="filterFU('all')">All</button>
+        <button onclick="filterFU('today')">Today</button>
+        <button onclick="filterFU('overdue')">Overdue</button>
+        <button onclick="filterFU('hot')">Hot</button>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table id="fuTable"><thead><tr><th>FU ID</th><th>Customer</th><th>Lead</th><th>Method</th><th>When</th><th>Outcome</th><th>Next</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr data-fu="overdue"><td>FU-101</td><td>Vikram Shah</td><td>PL-501</td><td>Call</td><td>Yesterday</td><td>—</td><td>Today</td><td><span class="status-badge danger">Overdue</span></td><td><button class="btn btn-sm btn-primary" onclick="showToast('Calling...','success')">Call</button></td></tr>
+          <tr data-fu="today"><td>FU-102</td><td>Neha Joshi</td><td>PL-502</td><td>WhatsApp</td><td>Today 11:30</td><td>—</td><td>—</td><td><span class="status-badge warning">Due</span></td><td><button class="btn btn-sm btn-outline" onclick="showToast('WhatsApp opened')">WA</button></td></tr>
+          <tr data-fu="hot"><td>FU-103</td><td>Corporate lead</td><td>PL-510</td><td>Call</td><td>Today 15:00</td><td>—</td><td>—</td><td><span class="status-badge danger">Hot</span></td><td><button class="btn btn-sm btn-primary">Call</button></td></tr>
+          <tr data-fu="today"><td>FU-104</td><td>Karan Mehta</td><td>PL-503</td><td>Call</td><td>Today 16:00</td><td>—</td><td>—</td><td><span class="status-badge info">Scheduled</span></td><td><button class="btn btn-sm btn-outline">Prep</button></td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- PACKAGE SEARCH -->
+    <div id="tab-search" class="tab-pane">
+      <div class="page-header"><h1>🔎 Package Search</h1></div>
+      <div class="filter-bar">
+        <div class="filter-group"><label>Destination</label><select id="srchDest"><option>Dubai</option><option>Bali</option><option>Goa</option><option>Kashmir</option><option>Singapore</option></select></div>
+        <div class="filter-group"><label>Travel date</label><input type="date" value="2026-09-15" /></div>
+        <div class="filter-group"><label>Nights</label><select><option>3</option><option selected>5</option><option>7</option></select></div>
+        <div class="filter-group"><label>Pax</label><input type="number" value="2" min="1" style="width:70px" /></div>
+        <div class="filter-group"><label>Budget max</label><input type="number" value="150000" style="width:110px" /></div>
+        <div class="filter-group"><label>Type</label><select><option>All</option><option>ePay</option><option>API</option><option>Dynamic</option></select></div>
+        <button class="btn btn-primary" onclick="runSearch()"><i class="fas fa-search"></i> Search</button>
+      </div>
+      <div id="searchResults" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="pkg-result" onclick="selectPkg('ePay Dubai Premium 5N',149999)">
+          <div class="flex justify-between"><strong>ePay Dubai Premium 5N/6D</strong><span class="status-badge info">ePay</span></div>
+          <div class="text-xs text-gray-500 mt-1">5★ · Breakfast · Safari · Burj · Transfer</div>
+          <div class="flex justify-between mt-2 items-center"><span class="font-bold text-sky-600">₹1,49,999</span><span class="text-xs">Your commission ≈ ₹12,000</span></div>
+        </div>
+        <div class="pkg-result" onclick="selectPkg('Dubai Best Value 4N',99999)">
+          <div class="flex justify-between"><strong>Dubai Best Value 4N/5D</strong><span class="status-badge secondary">API</span></div>
+          <div class="text-xs text-gray-500 mt-1">3★ · Breakfast · City tour · Transfer</div>
+          <div class="flex justify-between mt-2 items-center"><span class="font-bold text-sky-600">₹99,999</span><span class="text-xs">Commission ≈ ₹8,000</span></div>
+        </div>
+        <div class="pkg-result" onclick="selectPkg('Bali Honeymoon 6N',112000)">
+          <div class="flex justify-between"><strong>Bali Honeymoon 6N</strong><span class="status-badge info">ePay</span></div>
+          <div class="text-xs text-gray-500 mt-1">Villa · Spa · Sunset cruise</div>
+          <div class="flex justify-between mt-2 items-center"><span class="font-bold text-sky-600">₹1,12,000</span><span class="text-xs">Commission ≈ ₹9,000</span></div>
+        </div>
+        <div class="pkg-result" onclick="selectPkg('Kashmir Paradise 5N',42999)">
+          <div class="flex justify-between"><strong>Kashmir Paradise 5N</strong><span class="status-badge info">ePay</span></div>
+          <div class="text-xs text-gray-500 mt-1">Houseboat · Gulmarg · Pahalgam</div>
+          <div class="flex justify-between mt-2 items-center"><span class="font-bold text-sky-600">₹42,999</span><span class="text-xs">Commission ≈ ₹3,400</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPARE -->
+    <div id="tab-compare" class="tab-pane">
+      <div class="page-header"><h1>⚖️ Compare Packages</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Feature</th><th>ePay Dubai Premium</th><th>Dubai Best Value</th><th>Dubai Luxury</th></tr></thead>
+        <tbody>
+          <tr><td>Price</td><td>₹1,49,999</td><td>₹99,999</td><td>₹1,85,000</td></tr>
+          <tr><td>Hotel</td><td>5★</td><td>3★</td><td>5★ Private</td></tr>
+          <tr><td>Meals</td><td>Breakfast</td><td>Breakfast</td><td>All meals</td></tr>
+          <tr><td>Safari</td><td>Yes</td><td>No</td><td>Yes</td></tr>
+          <tr><td>Burj</td><td>Yes</td><td>No</td><td>Yes</td></tr>
+          <tr><td>Your commission</td><td>₹12,000</td><td>₹8,000</td><td>₹14,800</td></tr>
+          <tr><td></td><td><button class="btn btn-primary btn-sm" onclick="switchTab('customize')">Customize</button></td>
+              <td><button class="btn btn-outline btn-sm" onclick="switchTab('quotations')">Quote</button></td>
+              <td><button class="btn btn-outline btn-sm">Quote</button></td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- CUSTOMIZE -->
+    <div id="tab-customize" class="tab-pane">
+      <div class="page-header"><h1>🧩 Package Customization</h1></div>
+      <div class="report-card">
+        <h4 class="font-semibold mb-3">Dubai 5N/6D · Base selected</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-2 text-sm">
+            <label class="flex items-center gap-2"><input type="checkbox" checked onchange="recalcGalPkg()"> Hotel 5N · ₹72,000</label>
+            <label class="flex items-center gap-2"><input type="checkbox" checked onchange="recalcGalPkg()"> Airport Transfer · ₹4,500</label>
+            <label class="flex items-center gap-2"><input type="checkbox" checked onchange="recalcGalPkg()"> Desert Safari · ₹9,000</label>
+            <label class="flex items-center gap-2"><input type="checkbox" onchange="recalcGalPkg()"> Burj Khalifa · ₹7,000</label>
+            <label class="flex items-center gap-2"><input type="checkbox" onchange="recalcGalPkg()"> City Tour · ₹5,000</label>
+            <label class="flex items-center gap-2"><input type="checkbox" checked onchange="recalcGalPkg()"> Insurance · ₹2,200</label>
+            <div class="mt-3">
+              <label class="text-xs font-semibold">Discount (max 5% without approval)</label>
+              <input type="number" id="galDiscount" value="0" min="0" max="20" class="border rounded p-1 w-20 ml-2" onchange="recalcGalPkg()" /> %
+            </div>
+          </div>
+          <div>
+            <div class="field-grid text-sm" id="galCalc">
+              <div class="field-item"><span class="fname">Supplier Cost</span><span class="fvalue" id="gcCost">₹87,700</span></div>
+              <div class="field-item"><span class="fname">Markup</span><span class="fvalue" id="gcMarkup">₹10,524</span></div>
+              <div class="field-item"><span class="fname">Your Commission (8%)</span><span class="fvalue" id="gcComm">₹7,858</span></div>
+              <div class="field-item"><span class="fname">Tax</span><span class="fvalue" id="gcTax">₹5,304</span></div>
+              <div class="field-item"><span class="fname">Discount</span><span class="fvalue" id="gcDisc">₹0</span></div>
+              <div class="field-item"><span class="fname"><b>Selling Price</b></span><span class="fvalue font-bold text-sky-600" id="gcSell">₹1,11,386</span></div>
+              <div class="field-item"><span class="fname">Approval needed?</span><span class="fvalue" id="gcAppr">No</span></div>
+            </div>
+            <button class="btn btn-primary mt-3" onclick="createQuoteFromCustom()">Create Quotation</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUOTATIONS -->
+    <div id="tab-quotations" class="tab-pane">
+      <div class="page-header">
+        <div><h1>📝 Quotations</h1><div class="sub">Draft → Review → Sent → Accepted</div></div>
+        <button class="btn btn-primary" onclick="showToast('New quotation','success')"><i class="fas fa-plus"></i> New Quote</button>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Quote ID</th><th>Customer</th><th>Package</th><th>Price</th><th>Commission</th><th>Valid</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr><td>Q-884</td><td>Vikram Shah</td><td>Dubai Premium 5N</td><td>₹1,49,999</td><td>₹12,000</td><td>Tomorrow</td><td><span class="status-badge warning">Sent</span></td>
+            <td><button class="btn btn-sm btn-outline" onclick="showToast('WhatsApp resent')">Resend</button> <button class="btn btn-sm btn-primary" onclick="showToast('PDF downloaded')">PDF</button></td></tr>
+          <tr><td>Q-881</td><td>Neha Joshi</td><td>Bali Honeymoon</td><td>₹1,12,000</td><td>₹9,000</td><td>5 days</td><td><span class="status-badge success">Accepted</span></td>
+            <td><button class="btn btn-sm btn-success" onclick="switchTab('bookings')">Book</button></td></tr>
+          <tr><td>Q-879</td><td>Karan Mehta</td><td>Kashmir 5N</td><td>₹42,999</td><td>₹3,400</td><td>3 days</td><td><span class="status-badge info">Draft</span></td>
+            <td><button class="btn btn-sm btn-primary" onclick="showToast('Sent via WhatsApp','success')">Send</button></td></tr>
+          <tr><td>Q-870</td><td>Ananya Rao</td><td>Goa 3N</td><td>₹28,000</td><td>₹2,200</td><td>Expired</td><td><span class="status-badge secondary">Expired</span></td>
+            <td><button class="btn btn-sm btn-outline">Revise</button></td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div id="tab-bookings" class="tab-pane">
+      <div class="page-header"><h1>📅 Bookings</h1></div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))">
+        <div class="kpi-card"><span class="label">New</span><span class="value">3</span></div>
+        <div class="kpi-card"><span class="label">Confirmed</span><span class="value">36</span></div>
+        <div class="kpi-card"><span class="label">Pay pending</span><span class="value">5</span></div>
+        <div class="kpi-card"><span class="label">Supplier pending</span><span class="value">2</span></div>
+        <div class="kpi-card"><span class="label">Completed</span><span class="value">28</span></div>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Booking</th><th>Customer</th><th>Package</th><th>Travel</th><th>Value</th><th>Paid</th><th>Balance</th><th>Commission</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>EPTR-P115</td><td>Neha Joshi</td><td>Bali Honeymoon</td><td>02 Oct</td><td>₹1,12,000</td><td>₹1,12,000</td><td>₹0</td><td>₹9,000</td><td><span class="status-badge success">Confirmed</span></td></tr>
+          <tr><td>EPTR-P110</td><td>Vikram Shah</td><td>Dubai Premium</td><td>15 Sep</td><td>₹1,49,999</td><td>₹1,00,000</td><td>₹49,999</td><td>₹12,000</td><td><span class="status-badge warning">Pay pending</span></td></tr>
+          <tr><td>EPTR-P108</td><td>Family Group</td><td>Goa 3N</td><td>08 Sep</td><td>₹72,000</td><td>₹40,000</td><td>₹32,000</td><td>₹5,760</td><td><span class="status-badge warning">Partial</span></td></tr>
+          <tr><td>EPTR-P098</td><td>Karan Mehta</td><td>Kashmir 5N</td><td>20 Sep</td><td>₹42,999</td><td>₹42,999</td><td>₹0</td><td>₹3,400</td><td><span class="status-badge info">Supplier pending</span></td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- TRIPS -->
+    <div id="tab-trips" class="tab-pane">
+      <div class="page-header"><h1>🧳 Upcoming Trips</h1></div>
+      <div class="filter-bar">
+        <div class="filter-group"><label>Window</label><select><option>Next 7 days</option><option>Next 30 days</option><option>Today</option></select></div>
+        <button class="btn btn-primary" onclick="showToast('Filtered')">Apply</button>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Booking</th><th>Customer</th><th>Destination</th><th>Departure</th><th>Risk</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>EPTR-P105</td><td>Amit P.</td><td>Goa</td><td>+1d</td><td>🟢 Clear</td><td><span class="status-badge success">Ready</span></td></tr>
+          <tr><td>EPTR-P110</td><td>Vikram S.</td><td>Dubai</td><td>+3d</td><td>🔴 Payment + Docs</td><td><span class="status-badge danger">At risk</span></td></tr>
+          <tr><td>EPTR-P108</td><td>Family</td><td>Goa</td><td>+4d</td><td>🟠 Partial pay</td><td><span class="status-badge warning">Watch</span></td></tr>
+          <tr><td>EPTR-P098</td><td>Karan M.</td><td>Kashmir</td><td>+8d</td><td>🟠 Supplier</td><td><span class="status-badge warning">Pending</span></td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- HISTORY -->
+    <div id="tab-history" class="tab-pane">
+      <div class="page-header"><h1>📚 Booking History</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Booking</th><th>Customer</th><th>Package</th><th>Travelled</th><th>Value</th><th>Commission</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>EPTR-P080</td><td>Rajesh K.</td><td>Singapore 4N</td><td>Jun 2026</td><td>₹89,999</td><td>₹7,200</td><td><span class="status-badge success">Completed</span></td></tr>
+          <tr><td>EPTR-P072</td><td>Priya S.</td><td>Kerala 4N</td><td>May 2026</td><td>₹35,999</td><td>₹2,880</td><td><span class="status-badge success">Completed</span></td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- PAYMENTS -->
+    <div id="tab-payments" class="tab-pane">
+      <div class="page-header"><h1>💳 Payment Management</h1></div>
+      <div class="report-card mb-4">
+        <h4 class="font-semibold text-sm mb-2">Collect Payment · EPTR-P110</h4>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm mb-3">
+          <div><span class="text-gray-500">Total</span><div class="font-bold">₹1,49,999</div></div>
+          <div><span class="text-gray-500">Paid</span><div class="font-bold text-emerald-600">₹1,00,000</div></div>
+          <div><span class="text-gray-500">Balance</span><div class="font-bold text-red-600">₹49,999</div></div>
+          <div><span class="text-gray-500">Due</span><div class="font-bold">20 Sep 2026</div></div>
+        </div>
+        <button class="btn btn-primary" onclick="showToast('Payment link / QR generated','success')"><i class="fas fa-qrcode"></i> Collect Payment</button>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Payment ID</th><th>Booking</th><th>Amount</th><th>Method</th><th>Txn</th><th>Date</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>PAY-P201</td><td>EPTR-P115</td><td>₹1,12,000</td><td>UPI</td><td>upi_…991</td><td>2026-08-10</td><td><span class="status-badge success">Success</span></td></tr>
+          <tr><td>PAY-P198</td><td>EPTR-P110</td><td>₹1,00,000</td><td>Card</td><td>rzp_…882</td><td>2026-08-08</td><td><span class="status-badge success">Success</span></td></tr>
+          <tr><td>PAY-P195</td><td>EPTR-P108</td><td>₹40,000</td><td>Cash</td><td>—</td><td>2026-08-05</td><td><span class="status-badge success">Success</span></td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- COMMISSION -->
+    <div id="tab-commission" class="tab-pane">
+      <div class="page-header"><h1>💵 Gallery Commission</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Today</span><span class="value">₹18,500</span></div>
+        <div class="kpi-card"><span class="label">This Month</span><span class="value">₹1,85,000</span></div>
+        <div class="kpi-card"><span class="label">Pending</span><span class="value">₹45,000</span></div>
+        <div class="kpi-card"><span class="label">Paid</span><span class="value">₹1,40,000</span></div>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Booking</th><th>Customer</th><th>Value</th><th>%</th><th>Commission</th><th>Adjustment</th><th>Final</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>EPTR-P115</td><td>Neha Joshi</td><td>₹1,12,000</td><td>8%</td><td>₹9,000</td><td>₹0</td><td>₹9,000</td><td><span class="status-badge warning">Pending</span></td></tr>
+          <tr><td>EPTR-P080</td><td>Rajesh K.</td><td>₹89,999</td><td>8%</td><td>₹7,200</td><td>₹0</td><td>₹7,200</td><td><span class="status-badge success">Paid</span></td></tr>
+          <tr><td>EPTR-P072</td><td>Priya S.</td><td>₹35,999</td><td>8%</td><td>₹2,880</td><td>−₹200</td><td>₹2,680</td><td><span class="status-badge success">Paid</span></td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- SETTLEMENTS -->
+    <div id="tab-settlements" class="tab-pane">
+      <div class="page-header"><h1>🏦 Settlements</h1></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="report-card"><h4 class="text-sm font-semibold">Receivable (Commission)</h4><div class="text-2xl font-bold mt-1">₹45,000</div><div class="text-xs text-gray-500">Pending from ePay</div></div>
+        <div class="report-card"><h4 class="text-sm font-semibold">Customer balances</h4><div class="text-2xl font-bold mt-1">₹81,999</div><div class="text-xs text-gray-500">Across open bookings</div></div>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Settlement ID</th><th>Period</th><th>Bookings</th><th>GMV</th><th>Commission</th><th>Net</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>SET-P-Jul</td><td>Jul 2026</td><td>18</td><td>₹9.2L</td><td>₹74,000</td><td>₹74,000</td><td><span class="status-badge success">Paid</span></td></tr>
+          <tr><td>SET-P-Aug</td><td>Aug 2026 (MTD)</td><td>12</td><td>₹6.1L</td><td>₹45,000</td><td>₹45,000</td><td><span class="status-badge warning">Pending</span></td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- CANCELLATIONS -->
+    <div id="tab-cancellations" class="tab-pane">
+      <div class="page-header">
+        <div><h1>❌ Cancellations</h1><div class="sub">High-value / policy exceptions → Super Admin</div></div>
+        <button class="btn btn-outline" onclick="showToast('Cancellation request form','success')">Request Cancel</button>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>ID</th><th>Booking</th><th>Customer</th><th>Reason</th><th>Est. Penalty</th><th>Est. Refund</th><th>Approval</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>CN-22</td><td>EPTR-P090</td><td>Guest X</td><td>Medical</td><td>₹15,000</td><td>₹70,000</td><td>Super Admin</td><td><span class="status-badge warning">Awaiting SA</span></td></tr>
+          <tr><td>CN-19</td><td>EPTR-P065</td><td>Guest Y</td><td>Change of plans</td><td>₹8,000</td><td>₹28,000</td><td>Gallery</td><td><span class="status-badge success">Approved</span></td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- REFUNDS -->
+    <div id="tab-refunds" class="tab-pane">
+      <div class="page-header"><h1>💸 Refund Tracking</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Refund ID</th><th>Booking</th><th>Original</th><th>Penalty</th><th>Customer refund</th><th>Stage</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>RF-P12</td><td>EPTR-P065</td><td>₹36,000</td><td>₹8,000</td><td>₹28,000</td><td>Processing</td><td><span class="status-badge info">In progress</span></td></tr>
+          <tr><td>RF-P10</td><td>EPTR-P050</td><td>₹55,000</td><td>₹10,000</td><td>₹45,000</td><td>Customer Refunded</td><td><span class="status-badge success">Done</span></td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div id="tab-customers" class="tab-pane">
+      <div class="page-header">
+        <div><h1>👥 Customers</h1><div class="sub">Only this gallery's customers</div></div>
+        <button class="btn btn-primary" onclick="showToast('Add customer','success')"><i class="fas fa-user-plus"></i> Add</button>
+      </div>
+      <div class="filter-bar">
+        <div class="filter-group"><label>Search</label><input type="text" placeholder="Name / mobile / booking" oninput="filterTable('custTable', this.value)" /></div>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table id="custTable"><thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Trips</th><th>GMV</th><th>Segment</th><th>Last trip</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>PC-101</td><td>Vikram Shah</td><td>98765 11101</td><td>1</td><td>₹1.5L</td><td>New</td><td>—</td><td><span class="status-badge info">Lead</span></td></tr>
+          <tr><td>PC-102</td><td>Neha Joshi</td><td>98765 11102</td><td>2</td><td>₹2.0L</td><td>Repeat</td><td>Bali Oct</td><td><span class="status-badge success">Active</span></td></tr>
+          <tr><td>PC-103</td><td>Rajesh Kumar</td><td>98765 11105</td><td>3</td><td>₹3.1L</td><td>VIP</td><td>Singapore Jun</td><td><span class="status-badge success">Active</span></td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- TRAVELLERS -->
+    <div id="tab-travellers" class="tab-pane">
+      <div class="page-header"><h1>👤 Travellers</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Name</th><th>Customer</th><th>DOB</th><th>Passport</th><th>Expiry</th><th>Docs</th></tr></thead>
+        <tbody>
+          <tr><td>Neha Joshi</td><td>PC-102</td><td>1992-04-12</td><td>Z1234567</td><td>2030-01</td><td><span class="status-badge success">Verified</span></td></tr>
+          <tr><td>Aarav Joshi</td><td>PC-102</td><td>1990-08-20</td><td>Z7654321</td><td>2029-06</td><td><span class="status-badge success">Verified</span></td></tr>
+          <tr><td>Vikram Shah</td><td>PC-101</td><td>1988-11-03</td><td>—</td><td>—</td><td><span class="status-badge danger">Missing</span></td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- DOCUMENTS -->
+    <div id="tab-documents" class="tab-pane">
+      <div class="page-header"><h1>📄 Documents</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Doc</th><th>Booking / Customer</th><th>Type</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>Passport Neha</td><td>PC-102</td><td>ID</td><td><span class="status-badge success">Verified</span></td><td><button class="btn btn-sm btn-outline">View</button></td></tr>
+          <tr><td>Invoice EPTR-P115</td><td>EPTR-P115</td><td>Invoice</td><td><span class="status-badge success">Uploaded</span></td><td><button class="btn btn-sm btn-outline">PDF</button></td></tr>
+          <tr><td>Passport Vikram</td><td>PC-101</td><td>ID</td><td><span class="status-badge danger">Missing</span></td><td><button class="btn btn-sm btn-primary" onclick="showToast('Upload opened')">Upload</button></td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- VOUCHERS -->
+    <div id="tab-vouchers" class="tab-pane">
+      <div class="page-header"><h1>🎫 Vouchers</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Voucher</th><th>Booking</th><th>Type</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>VCH-P115</td><td>EPTR-P115</td><td>Hotel + Transfer</td><td><span class="status-badge success">Issued</span></td><td><button class="btn btn-sm btn-outline">Download</button></td></tr>
+          <tr><td>VCH-P098</td><td>EPTR-P098</td><td>Package</td><td><span class="status-badge warning">Pending supplier</span></td><td>—</td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- SUPPORT -->
+    <div id="tab-support" class="tab-pane">
+      <div class="page-header"><h1>💬 Support</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Ticket</th><th>Customer</th><th>Booking</th><th>Issue</th><th>Priority</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>TS-P41</td><td>Neha J.</td><td>EPTR-P115</td><td>Transfer time change</td><td><span class="status-badge warning">Med</span></td><td>Open</td></tr>
+          <tr><td>TS-P38</td><td>Vikram S.</td><td>EPTR-P110</td><td>Doc upload help</td><td><span class="status-badge info">Low</span></td><td>Resolved</td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div id="tab-reviews" class="tab-pane">
+      <div class="page-header"><h1>⭐ Reviews</h1></div>
+      <div class="report-card">
+        <div class="flex items-center gap-4 mb-3"><span class="text-3xl font-bold">4.7</span><span class="text-sm text-gray-500">from 38 reviews this year</span></div>
+        <div class="space-y-2 text-sm">
+          <div class="border-b pb-2"><b>Neha Joshi</b> · Bali · ★★★★★<br/><span class="text-gray-600">Smooth booking, great follow-up from Priya.</span></div>
+          <div class="border-b pb-2"><b>Rajesh Kumar</b> · Singapore · ★★★★☆<br/><span class="text-gray-600">Good value package.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI -->
+    <div id="tab-ai" class="tab-pane">
+      <div class="page-header"><h1>🤖 AI Travel Advisor</h1></div>
+      <div class="report-card">
+        <p class="text-sm text-gray-600 mb-3">Describe the customer need. AI searches inventory and suggests packages — pricing rules still apply.</p>
+        <textarea id="aiPrompt" class="w-full border rounded-lg p-3 text-sm" rows="3" placeholder="e.g. Family of 4, Dubai, ₹1.5 lakh, 5 nights, October"></textarea>
+        <button class="btn btn-primary mt-2" onclick="runAI()"><i class="fas fa-magic"></i> Get recommendations</button>
+        <div id="aiResults" class="mt-4 space-y-2 text-sm"></div>
+      </div>
+    </div>
+
+    <!-- REPORTS -->
+    <div id="tab-reports" class="tab-pane">
+      <div class="page-header"><h1>📊 Gallery Reports</h1></div>
+      <div class="tabs" id="galReportTabs">
+        <button class="active" onclick="galReport('sales')">Sales</button>
+        <button onclick="galReport('employee')">Employee</button>
+        <button onclick="galReport('customer')">Customer</button>
+        <button onclick="galReport('package')">Package</button>
+        <button onclick="galReport('destination')">Destination</button>
+      </div>
+      <div id="galReportBody" class="report-card">
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+          <div><b>Daily bookings</b> 3</div><div><b>Monthly bookings</b> 42</div><div><b>GMV</b> ₹18.5L</div>
+          <div><b>Revenue</b> ₹2.4L</div><div><b>Avg value</b> ₹44,047</div><div><b>Conversion</b> 18.4%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCORECARD -->
+    <div id="tab-scorecard" class="tab-pane">
+      <div class="page-header"><h1>🏆 Gallery Travel Scorecard</h1></div>
+      <div class="report-card max-w-xl">
+        <div class="text-center mb-4"><div class="text-4xl font-bold text-sky-600">90%</div><div class="text-sm text-gray-500">Overall Score</div></div>
+        <div class="space-y-3 text-sm">
+          <div><div class="flex justify-between"><span>Sales Performance</span><span>92%</span></div><div class="score-bar"><div style="width:92%"></div></div></div>
+          <div><div class="flex justify-between"><span>Lead Conversion</span><span>86%</span></div><div class="score-bar"><div style="width:86%"></div></div></div>
+          <div><div class="flex justify-between"><span>Follow-up</span><span>94%</span></div><div class="score-bar"><div style="width:94%"></div></div></div>
+          <div><div class="flex justify-between"><span>Customer Satisfaction</span><span>96%</span></div><div class="score-bar"><div style="width:96%"></div></div></div>
+          <div><div class="flex justify-between"><span>Revenue Growth</span><span>89%</span></div><div class="score-bar"><div style="width:89%"></div></div></div>
+          <div><div class="flex justify-between"><span>Repeat Customers</span><span>82%</span></div><div class="score-bar"><div style="width:82%"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="tab-settings" class="tab-pane">
+      <div class="page-header"><h1>⚙️ Gallery Settings</h1></div>
+      <div class="bg-white p-5 rounded-lg border space-y-4">
+        <div class="flex justify-between items-center border-b pb-3"><span>Default quote validity (days)</span><span><input type="number" value="5" class="border rounded p-1 w-16" /> <button class="btn btn-primary btn-sm" onclick="showToast('Saved','success')">Save</button></span></div>
+        <div class="flex justify-between items-center border-b pb-3"><span>Max discount without SA approval (%)</span><span><input type="number" value="5" class="border rounded p-1 w-16" disabled /> <span class="text-xs text-gray-500">Set by Super Admin</span></span></div>
+        <div class="flex justify-between items-center"><span>Auto-assign new leads</span><span><input type="checkbox" checked /> Enabled</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+      <h2 id="modalTitle">Details</h2>
+      <div id="modalBody" class="text-sm text-gray-600"></div>
+      <button class="btn btn-outline mt-4" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('backdrop').classList.toggle('open');
+    }
+    function switchTab(id) {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      const nav = document.querySelector('.nav-item[data-tab="' + id + '"]');
+      if (nav) nav.classList.add('active');
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      const pane = document.getElementById('tab-' + id);
+      if (pane) pane.classList.add('active');
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('backdrop').classList.remove('open');
+      }
+      document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+    }
+    document.querySelectorAll('.nav-item[data-tab]').forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        switchTab(this.dataset.tab);
+      });
+    });
+    function showToast(message, type) {
+      type = type || 'success';
+      const c = document.getElementById('toastContainer');
+      const t = document.createElement('div');
+      t.className = 'toast ' + type;
+      t.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'exclamation-circle') + '"></i> ' + message;
+      c.appendChild(t);
+      setTimeout(() => { t.style.opacity = '0'; t.style.transition = '0.3s'; setTimeout(() => t.remove(), 300); }, 2800);
+    }
+    function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+    function globalSearch(q) {
+      q = (q || '').trim().toLowerCase();
+      if (!q) { document.querySelectorAll('.table-wrap tbody tr').forEach(r => r.style.display = ''); return; }
+      document.querySelectorAll('.table-wrap tbody tr').forEach(r => {
+        r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    }
+    function filterTable(tableId, q) {
+      q = (q || '').toLowerCase();
+      const table = document.getElementById(tableId);
+      if (!table) return;
+      table.querySelectorAll('tbody tr').forEach(tr => {
+        tr.style.display = !q || tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    }
+    function filterFU(kind) {
+      document.querySelectorAll('#fuTable tbody tr').forEach(tr => {
+        if (kind === 'all') tr.style.display = '';
+        else tr.style.display = tr.dataset.fu === kind ? '' : 'none';
+      });
+    }
+    function refreshDash() {
+      const el = document.getElementById('kLeads');
+      if (el) el.textContent = String(10 + Math.floor(Math.random() * 10));
+      const bk = document.getElementById('kBk');
+      if (bk) bk.textContent = String(2 + Math.floor(Math.random() * 4));
+      showToast('Dashboard refreshed', 'success');
+      document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+    }
+    function runSearch() {
+      showToast('Inventory searched · 4 packages', 'success');
+      document.getElementById('searchResults').style.opacity = '0.5';
+      setTimeout(() => { document.getElementById('searchResults').style.opacity = '1'; }, 300);
+    }
+    function selectPkg(name, price) {
+      showToast('Selected: ' + name + ' · ₹' + price.toLocaleString('en-IN'), 'success');
+      switchTab('customize');
+    }
+    function recalcGalPkg() {
+      const prices = [72000, 4500, 9000, 7000, 5000, 2200];
+      let cost = 0;
+      document.querySelectorAll('#tab-customize input[type=checkbox]').forEach((b, i) => { if (b.checked) cost += prices[i] || 0; });
+      const markup = Math.round(cost * 0.12);
+      const base = cost + markup;
+      const discPct = parseFloat(document.getElementById('galDiscount').value) || 0;
+      const disc = Math.round(base * discPct / 100);
+      const afterDisc = base - disc;
+      const comm = Math.round(afterDisc * 0.08);
+      const tax = Math.round((afterDisc + comm) * 0.05);
+      const sell = afterDisc + comm + tax;
+      const f = id => document.getElementById(id);
+      if (f('gcCost')) f('gcCost').textContent = '₹' + cost.toLocaleString('en-IN');
+      if (f('gcMarkup')) f('gcMarkup').textContent = '₹' + markup.toLocaleString('en-IN');
+      if (f('gcComm')) f('gcComm').textContent = '₹' + comm.toLocaleString('en-IN');
+      if (f('gcTax')) f('gcTax').textContent = '₹' + tax.toLocaleString('en-IN');
+      if (f('gcDisc')) f('gcDisc').textContent = '₹' + disc.toLocaleString('en-IN');
+      if (f('gcSell')) f('gcSell').textContent = '₹' + sell.toLocaleString('en-IN');
+      if (f('gcAppr')) {
+        f('gcAppr').textContent = discPct > 5 ? 'Yes — Super Admin' : 'No';
+        f('gcAppr').className = 'fvalue ' + (discPct > 5 ? 'text-red-600 font-semibold' : '');
+      }
+    }
+    function createQuoteFromCustom() {
+      const appr = document.getElementById('gcAppr');
+      if (appr && appr.textContent.indexOf('Yes') === 0) {
+        showToast('Quotation submitted for Super Admin approval', 'success');
+      } else {
+        showToast('Quotation created · ready to send', 'success');
+        switchTab('quotations');
+      }
+    }
+    function runAI() {
+      const p = (document.getElementById('aiPrompt').value || '').trim();
+      if (!p) { showToast('Enter a requirement', 'error'); return; }
+      const box = document.getElementById('aiResults');
+      box.innerHTML = '<div class="text-gray-500">Searching inventory…</div>';
+      setTimeout(() => {
+        box.innerHTML = `
+          <div class="pkg-result"><b>1. ePay Dubai Premium 5N</b> — ₹1,49,999 · Fit: High · Commission ≈ ₹12k
+            <button class="btn btn-sm btn-primary ml-2" onclick="switchTab('customize')">Customize</button></div>
+          <div class="pkg-result"><b>2. Dubai Best Value 4N</b> — ₹99,999 · Fit: Budget · Commission ≈ ₹8k
+            <button class="btn btn-sm btn-outline ml-2" onclick="switchTab('quotations')">Quote</button></div>
+          <div class="pkg-result"><b>3. Custom Dynamic</b> — Build from hotel + safari + transfer
+            <button class="btn btn-sm btn-outline ml-2" onclick="switchTab('customize')">Build</button></div>`;
+        showToast('AI recommendations ready', 'success');
+      }, 600);
+    }
+    function galReport(type) {
+      document.querySelectorAll('#galReportTabs button').forEach(b => b.classList.remove('active'));
+      if (event && event.target) event.target.classList.add('active');
+      const body = document.getElementById('galReportBody');
+      const maps = {
+        sales: `<div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm"><div><b>Daily bookings</b> 3</div><div><b>Monthly</b> 42</div><div><b>GMV</b> ₹18.5L</div><div><b>Revenue</b> ₹2.4L</div><div><b>Avg value</b> ₹44,047</div><div><b>Conversion</b> 18.4%</div></div>`,
+        employee: `<div class="table-wrap"><table><thead><tr><th>Employee</th><th>Leads</th><th>FU</th><th>Quotes</th><th>Bookings</th><th>Conv</th></tr></thead><tbody>
+          <tr><td>Rahul</td><td>28</td><td>40</td><td>14</td><td>9</td><td>21%</td></tr>
+          <tr><td>Priya</td><td>22</td><td>31</td><td>11</td><td>6</td><td>18%</td></tr></tbody></table></div>`,
+        customer: `<div class="grid grid-cols-2 gap-3 text-sm"><div><b>New customers</b> 18</div><div><b>Repeat</b> 12</div><div><b>VIP</b> 4</div><div><b>CSAT</b> 4.7</div></div>`,
+        package: `<div class="table-wrap"><table><thead><tr><th>Package</th><th>Sold</th><th>GMV</th><th>Margin</th></tr></thead><tbody>
+          <tr><td>Dubai Premium</td><td>8</td><td>₹12L</td><td>15%</td></tr>
+          <tr><td>Bali Honeymoon</td><td>5</td><td>₹5.6L</td><td>14%</td></tr>
+          <tr><td>Kashmir 5N</td><td>7</td><td>₹3.0L</td><td>18%</td></tr></tbody></table></div>`,
+        destination: `<div class="table-wrap"><table><thead><tr><th>Destination</th><th>Bookings</th><th>GMV</th><th>Conv</th></tr></thead><tbody>
+          <tr><td>Dubai</td><td>14</td><td>₹9.8L</td><td>22%</td></tr>
+          <tr><td>Domestic</td><td>16</td><td>₹4.2L</td><td>19%</td></tr>
+          <tr><td>Bali</td><td>6</td><td>₹3.1L</td><td>17%</td></tr></tbody></table></div>`
+      };
+      body.innerHTML = maps[type] || maps.sales;
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx = document.getElementById('perfChart');
+      if (ctx) {
+        new Chart(ctx.getContext('2d'), {
+          type: 'line',
+          data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{ label: 'GMV (₹k)', data: [42, 55, 38, 70, 62, 48, 58], borderColor: '#0ea5e9', tension: 0.3, fill: false }]
+          },
+          options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+      }
+      document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+      setInterval(function() {
+        if (document.getElementById('tab-dashboard').classList.contains('active') && Math.random() > 0.75) {
+          const el = document.getElementById('kLeads');
+          if (el) el.textContent = String(10 + Math.floor(Math.random() * 10));
+        }
+      }, 10000);
+    });
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 768) {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('backdrop').classList.remove('open');
+      }
+    });
+  </script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,710 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TalentFlow | The Ultimate Recruiter Marketplace</title>
+<meta name="description" content="A complete Recruiter Workspace to source, track, manage and close candidates in one intelligent marketplace." />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+
+
+
+:root {
+  --primary: #4f46e5;
+  --primary-light: #818cf8;
+  --secondary: #ec4899;
+  --dark: #0f172a;
+  --darker: #020617;
+  --light: #f8fafc;
+  --text-gray: #94a3b8;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body {
+  background-color: var(--darker);
+  color: var(--light);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+.bg-glow {
+  position: fixed;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  top: -200px; left: -200px;
+  opacity: 0.15; z-index: -1; filter: blur(50px);
+  pointer-events: none;
+}
+.bg-glow-2 {
+  position: fixed;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+  bottom: 10%; right: -100px;
+  opacity: 0.15; z-index: -1; filter: blur(50px);
+  pointer-events: none;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 5%;
+  background: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--glass-border);
+}
+.logo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  background: linear-gradient(to right, var(--primary-light), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+}
+.nav-links { display: flex; align-items: center; gap: 0; }
+.nav-links a {
+  color: var(--light);
+  text-decoration: none;
+  margin-left: 1.75rem;
+  font-weight: 400;
+  font-size: 0.925rem;
+  transition: color 0.25s;
+}
+.nav-links a:hover { color: var(--primary-light); }
+.mobile-toggle {
+  display: none;
+  background: none; border: none; color: var(--light);
+  font-size: 1.4rem; cursor: pointer; padding: 6px;
+}
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.5);
+}
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  color: var(--light);
+}
+.btn-ghost:hover {
+  border-color: var(--primary-light);
+  background: var(--glass-bg);
+}
+
+.hero {
+  text-align: center;
+  padding: 110px 5% 80px;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+}
+.badge {
+  display: inline-block;
+  padding: 6px 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 50px;
+  font-size: 0.875rem;
+  color: var(--primary-light);
+  margin-bottom: 24px;
+}
+.hero h1 {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  letter-spacing: -0.03em;
+}
+.hero h1 span {
+  background: linear-gradient(to right, var(--primary-light), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero p {
+  font-size: 1.15rem;
+  color: var(--text-gray);
+  margin-bottom: 36px;
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.hero-stats {
+  display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
+  margin-top: 48px; padding-top: 32px;
+  border-top: 1px solid var(--glass-border);
+}
+.hero-stats div { text-align: center; }
+.hero-stats .n { font-size: 1.6rem; font-weight: 800; color: var(--light); }
+.hero-stats .l { font-size: 0.8rem; color: var(--text-gray); }
+
+.features { padding: 80px 5%; }
+.section-header { text-align: center; margin-bottom: 52px; }
+.section-header h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); margin-bottom: 12px; letter-spacing: -0.02em; }
+.section-header p { color: var(--text-gray); font-size: 1.05rem; }
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.feature-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 28px;
+  transition: all 0.3s;
+  backdrop-filter: blur(10px);
+}
+.feature-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--primary-light);
+}
+.feature-icon { font-size: 2.2rem; margin-bottom: 16px; display: inline-block; }
+.feature-card h3 { font-size: 1.15rem; margin-bottom: 10px; font-weight: 700; }
+.feature-card p { color: var(--text-gray); font-size: 0.92rem; }
+
+.pipeline {
+  padding: 90px 5%;
+  background: linear-gradient(to bottom, var(--darker), #0a0f1e, var(--darker));
+  text-align: center;
+}
+.pipeline h2 { font-size: clamp(1.8rem, 3vw, 2.3rem); margin-bottom: 10px; }
+.pipeline-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  max-width: 1100px;
+  margin: 48px auto 0;
+}
+.step {
+  flex: 1;
+  min-width: 140px;
+  max-width: 180px;
+  padding: 28px 16px 20px;
+  background: var(--dark);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  position: relative;
+  transition: border-color 0.25s, transform 0.25s;
+}
+.step:hover { border-color: var(--primary-light); transform: translateY(-4px); }
+.step-num {
+  position: absolute;
+  top: -14px; left: 50%; transform: translateX(-50%);
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.75rem;
+}
+.step h4 { font-size: 0.95rem; margin-bottom: 6px; }
+.step p { font-size: 0.78rem; color: var(--text-gray); }
+
+.pricing { padding: 90px 5%; text-align: center; }
+.pricing-box {
+  background: linear-gradient(145deg, rgba(79, 70, 229, 0.12), rgba(236, 72, 153, 0.1));
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  border-radius: 24px;
+  padding: 52px 36px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.pricing-box h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); margin-bottom: 16px; }
+.pricing-box > p { color: var(--text-gray); font-size: 1.05rem; margin-bottom: 24px; }
+.price-tag {
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  font-weight: 800;
+  color: var(--light);
+  margin-bottom: 8px;
+}
+.price-tag span { font-size: 1.2rem; color: var(--text-gray); font-weight: 400; }
+.pricing-models {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 28px 0 8px;
+  text-align: left;
+}
+.pricing-models div {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.pricing-models h4 { font-size: 0.95rem; margin-bottom: 4px; }
+.pricing-models p { font-size: 0.82rem; color: var(--text-gray); margin: 0; }
+
+.cta-section {
+  padding: 80px 5%;
+  text-align: center;
+}
+.cta-box {
+  max-width: 640px;
+  margin: 0 auto;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 40px 28px;
+}
+.cta-box h2 { font-size: 1.8rem; margin-bottom: 10px; }
+.cta-box p { color: var(--text-gray); margin-bottom: 24px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; text-align: left; margin-bottom: 12px; }
+.form-row.full { grid-template-columns: 1fr; }
+.form-row label { display: block; font-size: 0.78rem; color: var(--text-gray); margin-bottom: 4px; font-weight: 500; }
+.form-row input, .form-row select {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+  background: rgba(0,0,0,0.35);
+  color: var(--light);
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+}
+.form-row input:focus, .form-row select:focus {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+.form-row select option { background: var(--dark); }
+
+.toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 200;
+  background: #1e293b; border: 1px solid var(--primary-light);
+  color: var(--light); padding: 14px 18px; border-radius: 12px;
+  font-size: 0.9rem; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  display: none; max-width: 320px;
+}
+.toast.show { display: block; animation: slideIn 0.3s ease; }
+@keyframes slideIn { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+footer {
+  padding: 36px 5%;
+  border-top: 1px solid var(--glass-border);
+  text-align: center;
+  color: var(--text-gray);
+  font-size: 0.875rem;
+}
+footer .logo { display: inline-block; margin-bottom: 8px; font-size: 1.1rem; }
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: absolute; top: 64px; left: 0; right: 0;
+    flex-direction: column; background: rgba(2,6,23,0.98);
+    padding: 16px 5% 20px; border-bottom: 1px solid var(--glass-border);
+    gap: 12px;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { margin-left: 0; padding: 8px 0; }
+  .mobile-toggle { display: block; }
+  .pricing-models, .form-row { grid-template-columns: 1fr; }
+  .step { max-width: none; min-width: 45%; }
+}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+<div class="bg-glow"></div>
+<div class="bg-glow-2"></div>
+
+<header>
+  <div class="logo">TalentFlow</div>
+  <nav class="nav-links" id="navLinks">
+    <a href="#features">Features</a>
+    <a href="#pipeline">Pipeline</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#signup">Sign up</a>
+  </nav>
+  <div style="display:flex;align-items:center;gap:10px">
+    <a href="#signup" class="btn btn-primary">Start Recruiting</a>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="badge">🚀 The Next Generation of Hiring</div>
+  <h1>Don't just post jobs.<br /><span>Build entire teams.</span></h1>
+  <p>A complete Recruiter Workspace designed to source, track, manage, and close candidates all in one intelligent marketplace. Stop juggling tools and start closing roles.</p>
+  <div class="hero-ctas">
+    <a href="#signup" class="btn btn-primary" style="font-size:1.05rem;padding:15px 28px">Create Free Workspace</a>
+    <a href="#pipeline" class="btn btn-ghost">See the pipeline</a>
+  </div>
+  <div class="hero-stats">
+    <div><div class="n">12K+</div><div class="l">Active recruiters</div></div>
+    <div><div class="n">2.4M</div><div class="l">Candidate profiles</div></div>
+    <div><div class="n">38%</div><div class="l">Faster time-to-hire*</div></div>
+    <div><div class="n">1 workspace</div><div class="l">End-to-end hiring</div></div>
+  </div>
+  <p style="font-size:0.75rem;color:var(--text-gray);margin-top:16px">*Illustrative metrics for positioning. Actual results vary by team and role mix.</p>
+</section>
+
+<section id="features" class="features">
+  <div class="section-header">
+    <h2>Everything you need. Nothing you don't.</h2>
+    <p>A unified ecosystem to power your entire hiring process.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">💼</div>
+      <h3>Recruiter Workspace</h3>
+      <p>Your personalized command center. Manage clients, roles, and daily tasks from a single intuitive dashboard.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🗄️</div>
+      <h3>Candidate Database</h3>
+      <p>Access a rich talent pool. Filter by skills, experience, and intent to find the perfect match instantly.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🤖</div>
+      <h3>AI Matching</h3>
+      <p>Let AI scan profiles and rank the best-fit candidates for your specific role requirements.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>Bulk Hiring Tools</h3>
+      <p>Need 50 agents by next week? Automate outreach, screening, and scheduling at scale.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📅</div>
+      <h3>Interview Management</h3>
+      <p>Two-way calendar sync, automated reminders, and video integrations to handle interviews cleanly.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>Recruitment Analytics</h3>
+      <p>Track time-to-hire, offer acceptance, and pipeline bottlenecks with visual, exportable reports.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🛡️</div>
+      <h3>Candidate Verification</h3>
+      <p>Background checks, document verification, and skill assessments before you make an offer.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <h3>Hiring Campaigns</h3>
+      <p>Run targeted email and SMS drips to attract passive candidates and build talent communities.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pipeline" class="pipeline">
+  <h2>End-to-End Applicant Pipeline</h2>
+  <p style="color:var(--text-gray);margin-bottom:8px">Visually track candidates from the first hello to their first day.</p>
+  <div class="pipeline-container">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>Sourced</h4>
+      <p>AI match &amp; outreach</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>Screening</h4>
+      <p>Assessments &amp; calls</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>Interviews</h4>
+      <p>Scheduling &amp; feedback</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h4>Offer Managed</h4>
+      <p>eSign &amp; negotiation</p>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <h4>Joining Tracked</h4>
+      <p>Onboarding &amp; drop-off prevention</p>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" class="pricing">
+  <div class="pricing-box">
+    <h2>Recruiters shouldn't be penalized for hiring.</h2>
+    <p>Traditional boards charge you just to post. We believe in shared success. Access the workspace without heavy upfront bloat.</p>
+    <div class="price-tag">Minimal <span>Platform Fee</span></div>
+    <div class="pricing-models">
+      <div>
+        <h4>Success fee</h4>
+        <p>Fractional fee on closed roles — aligned with your placements.</p>
+      </div>
+      <div>
+        <h4>Flat subscription</h4>
+        <p>Low monthly rate tailored to agency size and seat count.</p>
+      </div>
+    </div>
+    <p style="margin-top:16px;font-size:0.9rem;color:var(--text-gray)">Talk to us for a model that fits your volume.</p>
+    <a href="#signup" class="btn btn-primary" style="margin-top:18px;display:inline-block">Get pricing for my team</a>
+  </div>
+</section>
+
+<section id="signup" class="cta-section">
+  <div class="cta-box">
+    <h2>Create your free workspace</h2>
+    <p>Start sourcing in minutes. No credit card required for the trial workspace.</p>
+    <form id="signupForm" onsubmit="return submitSignup(event)">
+      <div class="form-row">
+        <div>
+          <label>Full name *</label>
+          <input name="name" required placeholder="Your name" />
+        </div>
+        <div>
+          <label>Work email *</label>
+          <input name="email" type="email" required placeholder="you@agency.com" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div>
+          <label>Company / Agency</label>
+          <input name="company" placeholder="TalentFlow Agency" />
+        </div>
+        <div>
+          <label>Team size</label>
+          <select name="size">
+            <option>Just me</option>
+            <option>2–10 recruiters</option>
+            <option>11–50</option>
+            <option>50+</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row full">
+        <label>What are you hiring for?</label>
+        <input name="focus" placeholder="e.g. Bulk BPO, IT contract, healthcare" />
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;margin-top:8px;padding:14px">Create Free Workspace</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">TalentFlow</div>
+  <p>&copy; 2026 TalentFlow Marketplace. All rights reserved.</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+document.getElementById('mobileToggle').addEventListener('click', function () {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function () { t.classList.remove('show'); }, 4000);
+}
+
+function submitSignup(e) {
+  e.preventDefault();
+  var fd = new FormData(e.target);
+  var data = {
+    ts: new Date().toISOString(),
+    name: fd.get('name'),
+    email: fd.get('email'),
+    company: fd.get('company'),
+    size: fd.get('size'),
+    focus: fd.get('focus')
+  };
+  try {
+    var arr = JSON.parse(localStorage.getItem('talentflow-signups') || '[]');
+    arr.push(data);
+    localStorage.setItem('talentflow-signups', JSON.stringify(arr));
+  } catch (err) {}
+  showToast('Workspace request received for ' + data.email + '. Ref TF-' + Date.now().toString().slice(-6));
+  e.target.reset();
+  return false;
+}
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
+

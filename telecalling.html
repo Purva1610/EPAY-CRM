@@ -1,0 +1,1694 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ePay Telecaller CRM Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+
+
+
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; color: #0f172a; }
+
+        /* ===== SCROLLBARS ===== */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* ===== SIDEBAR (fixed enterprise style) ===== */
+        #crm-sidebar-root {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 260px;
+            z-index: 1000;
+            overflow-y: auto;
+            background: #0f172a;
+            color: #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+        #crm-sidebar-root .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        #crm-sidebar-root .sidebar-brand i { color: #34d399; font-size: 26px; }
+        #crm-sidebar-root .sidebar-brand span { font-size: 20px; font-weight: 700; color: #fff; }
+        #crm-sidebar-root .sidebar-brand small { font-size: 11px; opacity: 0.4; font-weight: 400; margin-left: 4px; }
+
+        #crm-sidebar-root .nav-section {
+            padding: 16px 24px 4px 24px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            opacity: 0.4;
+            font-weight: 600;
+        }
+        #crm-sidebar-root .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 20px;
+            margin: 2px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 500;
+            position: relative;
+        }
+        #crm-sidebar-root .nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+        #crm-sidebar-root .nav-item.active { background: rgba(16,185,129,0.25); color: #fff; }
+        #crm-sidebar-root .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10%;
+            height: 80%;
+            width: 3px;
+            background: #34d399;
+            border-radius: 0 4px 4px 0;
+        }
+        #crm-sidebar-root .nav-item i { width: 20px; text-align: center; font-size: 15px; }
+        #crm-sidebar-root .nav-item .badge {
+            margin-left: auto;
+            background: #ef4444;
+            color: #fff;
+            font-size: 10px;
+            padding: 1px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        #crm-sidebar-root .nav-item .badge.green { background: #22c55e; }
+
+        #crm-sidebar-root .sidebar-footer {
+            padding: 16px 24px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: auto;
+        }
+        #crm-sidebar-root .sidebar-footer .avatar {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: #fff;
+        }
+        #crm-sidebar-root .sidebar-footer .info { flex: 1; }
+        #crm-sidebar-root .sidebar-footer .info .name { color: #fff; font-weight: 500; font-size: 13px; }
+        #crm-sidebar-root .sidebar-footer .info .role { font-size: 11px; opacity: 0.4; }
+        #crm-sidebar-root .sidebar-footer .logout-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+            transition: 0.2s;
+        }
+        #crm-sidebar-root .sidebar-footer .logout-btn:hover { color: #ef4444; }
+
+        /* ===== MAIN CONTENT ===== */
+        #main {
+            margin-left: 260px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            background: #f1f5f9;
+        }
+
+        /* ===== HEADER ===== */
+        #header {
+            height: 72px;
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            padding: 0 32px;
+            gap: 16px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        #header .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: #334155;
+            cursor: pointer;
+        }
+        #header .page-title { font-size: 18px; font-weight: 600; flex: 1; }
+        #header .page-title small { font-weight: 400; color: #94a3b8; font-size: 14px; margin-left: 8px; }
+        .header-actions { display: flex; align-items: center; gap: 12px; }
+        .header-actions .search-box {
+            display: flex;
+            align-items: center;
+            background: #f1f5f9;
+            border-radius: 30px;
+            padding: 6px 16px 6px 14px;
+            gap: 8px;
+            border: 1px solid transparent;
+            transition: 0.2s;
+        }
+        .header-actions .search-box:focus-within {
+            border-color: #10b981;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
+        }
+        .header-actions .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 13px;
+            padding: 6px 0;
+            width: 160px;
+            color: #1e293b;
+        }
+        .header-actions .search-box i { color: #94a3b8; }
+        .header-actions .notif {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #64748b;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+        .header-actions .notif:hover { background: #f1f5f9; }
+        .header-actions .notif .dot {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+
+        /* ===== PAGE CONTENT ===== */
+        #pageContent {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 32px 40px;
+        }
+
+        /* ===== STAT CARDS ===== */
+        .stat-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px 18px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            transition: 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.06); }
+        .stat-card .label { font-size: 12px; color: #64748b; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+        .stat-card .value { font-size: 26px; font-weight: 700; margin-top: 2px; color: #0f172a; }
+        .stat-card .change {
+            font-size: 11px; font-weight: 500; margin-top: 2px;
+            display: inline-block; padding: 1px 10px; border-radius: 20px;
+        }
+        .stat-card .change.up { color: #22c55e; background: #dcfce7; }
+        .stat-card .change.down { color: #ef4444; background: #fee2e2; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 20px; }
+
+        /* ===== SECTION HEADER ===== */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 24px 0 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .section-header h2 { font-size: 18px; font-weight: 700; }
+        .section-header h2 i { color: #10b981; margin-right: 8px; }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+            background: #e2e8f0;
+            color: #334155;
+        }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .btn-primary { background: #10b981; color: #fff; }
+        .btn-primary:hover { background: #059669; }
+        .btn-success { background: #22c55e; color: #fff; }
+        .btn-success:hover { background: #16a34a; }
+        .btn-danger { background: #ef4444; color: #fff; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-warning { background: #f59e0b; color: #fff; }
+        .btn-warning:hover { background: #d97706; }
+        .btn-sm { padding: 4px 12px; font-size: 12px; }
+        .btn-outline { background: transparent; border: 1px solid #d1d5db; }
+        .btn-outline:hover { background: #f1f5f9; }
+
+        /* ===== TABLE ===== */
+        .table-wrap {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .table-scroll { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        table th {
+            background: #f8fafc;
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+        table td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        table tr:last-child td { border-bottom: none; }
+        table tr:hover td { background: #f8fafc; }
+
+        /* ===== CHIPS / BADGES ===== */
+        .chip {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        .chip-green { background: #dcfce7; color: #15803d; }
+        .chip-red { background: #fee2e2; color: #b91c1c; }
+        .chip-amber { background: #fef3c7; color: #b45309; }
+        .chip-blue { background: #dbeafe; color: #1d4ed8; }
+        .chip-purple { background: #f3e8ff; color: #7c3aed; }
+        .chip-slate { background: #f1f5f9; color: #475569; }
+        .chip-emerald { background: #dcfce7; color: #15803d; }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        .status-badge-active { background: #dcfce7; color: #15803d; }
+        .status-badge-pending { background: #fef3c7; color: #b45309; }
+        .status-badge-inactive { background: #fee2e2; color: #b91c1c; }
+        .status-badge-completed { background: #dbeafe; color: #1d4ed8; }
+        .status-badge-on-hold { background: #f3e8ff; color: #7c3aed; }
+        .status-badge-review { background: #e0f2fe; color: #0369a1; }
+
+        /* ===== FILTER BAR ===== */
+        .filter-bar {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px 20px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+        }
+        .filter-bar .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1 1 140px;
+            min-width: 120px;
+        }
+        .filter-bar .filter-group label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .filter-bar .filter-group input,
+        .filter-bar .filter-group select {
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+            background: #fff;
+        }
+        .filter-bar .filter-group input:focus,
+        .filter-bar .filter-group select:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 2px rgba(16,185,129,0.1);
+        }
+        .filter-bar .filter-actions { display: flex; gap: 6px; align-items: center; flex: 0 0 auto; }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 680px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 32px;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.3);
+            animation: modalIn 0.25s ease;
+        }
+        @keyframes modalIn {
+            from { transform: scale(0.95) translateY(20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .modal .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .modal .modal-header h3 { font-size: 20px; font-weight: 600; }
+        .modal .modal-header .close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 4px;
+            transition: 0.2s;
+        }
+        .modal .modal-header .close:hover { color: #1e293b; }
+        .modal .form-group { margin-bottom: 16px; }
+        .modal .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 13px;
+            color: #334155;
+            margin-bottom: 4px;
+        }
+        .modal .form-group input,
+        .modal .form-group select,
+        .modal .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .modal .form-group input:focus,
+        .modal .form-group select:focus,
+        .modal .form-group textarea:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.12);
+        }
+        .modal .form-group textarea { resize: vertical; min-height: 70px; }
+        .modal .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .modal .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* ===== TOAST ===== */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 380px;
+        }
+        .toast {
+            background: #0f172a;
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            animation: slideUp 0.3s ease;
+            border-left: 4px solid #10b981;
+        }
+        .toast.success { border-left-color: #22c55e; }
+        .toast.error { border-left-color: #ef4444; }
+        .toast.warning { border-left-color: #f59e0b; }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .toast i { font-size: 18px; }
+        .toast .toast-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.4);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0 4px;
+        }
+        .toast .toast-close:hover { color: #fff; }
+
+        /* ===== AI INSIGHT BOX ===== */
+        .ai-insight-box {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            color: #fff;
+            border-radius: 12px;
+            padding: 16px 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .ai-insight-box i { font-size: 28px; color: #34d399; }
+        .ai-insight-box .content { flex: 1; }
+        .ai-insight-box .content .title {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.6;
+        }
+        .ai-insight-box .content .message { font-size: 14px; font-weight: 500; }
+        .ai-insight-box .badge-ai {
+            background: rgba(255,255,255,0.12);
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        /* ===== FUNNEL ===== */
+        .funnel-layer { transition: all 0.3s ease; }
+        .funnel-layer:hover { filter: brightness(1.1); transform: scale(1.02); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            #crm-sidebar-root { transform: translateX(-100%); }
+            #crm-sidebar-root.open { transform: translateX(0); }
+            #main { margin-left: 0; }
+            #header .hamburger { display: block; }
+            #header .page-title small { display: none; }
+            .header-actions .search-box input { width: 100px; }
+            #pageContent { padding: 16px; }
+        }
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .modal .form-row { grid-template-columns: 1fr; }
+            .modal { padding: 20px; }
+            .filter-bar .filter-group { flex: 1 1 100%; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .header-actions .search-box { display: none; }
+            #header { padding: 0 14px; }
+        }
+    </style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+    <!-- ===== SIDEBAR (rendered by JS) ===== -->
+    <aside id="crm-sidebar-root"></aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div id="main">
+        <!-- HEADER -->
+        <header id="header">
+            <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
+            <div class="page-title" id="pageTitle">Dashboard <small>overview</small></div>
+            <div class="header-actions">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="globalSearch" placeholder="Search..." />
+                </div>
+                <button class="notif" onclick="toast('Notifications','info')"><i class="fas fa-bell"></i><span class="dot"></span></button>
+            </div>
+        </header>
+
+        <!-- PAGE CONTENT -->
+        <div id="pageContent"></div>
+    </div>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modalContent"></div>
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ============================================================ -->
+    <!--  JAVASCRIPT â€” COMPLETE TELECALLING CRM                       -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        //  DATA STORE (localStorage)
+        // ============================================================
+        const DB_KEY = 'telecrm_data';
+
+        function defaultDB() {
+            return {
+                leads: [
+                    { id: 1, name: 'Rahul Sharma', mobile: '9876543210', email: 'rahul@sharma.in', source: 'Facebook', campaign: 'Membership', score: 78, temperature: 'Warm', status: 'Qualified', assignedTo: 'Yashraj', created: '2026-05-02', lastContact: '2026-05-14', expectedRevenue: 420000, probability: 72, company: 'Sharma Enterprises', city: 'Pune', state: 'Maharashtra', pin: '411038', leadType: 'New', productInterest: 'CRM Suite', nextFollowup: '2026-05-16 11:00' },
+                    { id: 2, name: 'Priya Patel', mobile: '9123456780', email: 'priya@patel.com', source: 'Instagram', campaign: 'Membership', score: 85, temperature: 'Hot', status: 'Qualified', assignedTo: 'Yashraj', created: '2026-05-03', lastContact: '2026-05-14', expectedRevenue: 280000, probability: 78, company: 'Patel Group', city: 'Pune', state: 'Maharashtra', pin: '411045', leadType: 'New', productInterest: 'POS', nextFollowup: '2026-05-15 15:00' },
+                    { id: 3, name: 'Amit Enterprises', mobile: '9988776655', email: 'amit@enterprises.com', source: 'Walk-in', campaign: 'Product', score: 62, temperature: 'Warm', status: 'Contacted', assignedTo: 'Yashraj', created: '2026-05-01', lastContact: '2026-05-13', expectedRevenue: 600000, probability: 55, company: 'Amit Traders', city: 'Pune', state: 'Maharashtra', pin: '411038', leadType: 'New', productInterest: 'Inventory', nextFollowup: '2026-05-16 10:30' },
+                    { id: 4, name: 'Karan Verma', mobile: '9012345678', email: 'karan@verma.com', source: 'Website', campaign: 'Franchise', score: 90, temperature: 'Hot', status: 'Qualified', assignedTo: 'Yashraj', created: '2026-05-05', lastContact: '2026-05-15', expectedRevenue: 850000, probability: 85, company: 'Karan Solutions', city: 'Pune', state: 'Maharashtra', pin: '411033', leadType: 'New', productInterest: 'CRM Suite', nextFollowup: '2026-05-16 14:00' },
+                    { id: 5, name: 'Neha Industries', mobile: '8899001122', email: 'neha@industries.com', source: 'Referral', campaign: 'Renewal', score: 55, temperature: 'Cold', status: 'Fresh', assignedTo: 'Yashraj', created: '2026-05-10', lastContact: '2026-05-12', expectedRevenue: 150000, probability: 40, company: 'Neha Retail', city: 'Pune', state: 'Maharashtra', pin: '411045', leadType: 'Existing', productInterest: 'Membership', nextFollowup: '2026-05-22 11:00' },
+                ],
+                calls: [
+                    { id: 1, leadId: 1, direction: 'Outgoing', startTime: '2026-05-14 10:28:00', duration: '02:18', ringDuration: '00:07', holdDuration: '00:00', outcome: 'Interested', mood: 'Positive', sentiment: 85, recording: 'CL-5001', notes: 'Customer interested in membership, requested brochure.' },
+                    { id: 2, leadId: 2, direction: 'Incoming', startTime: '2026-05-14 09:45:00', duration: '03:42', ringDuration: '00:05', holdDuration: '00:12', outcome: 'Interested', mood: 'Positive', sentiment: 78, recording: 'CL-5002', notes: 'Discussed pricing, will send proposal.' },
+                    { id: 3, leadId: 3, direction: 'Outgoing', startTime: '2026-05-14 09:12:00', duration: '01:38', ringDuration: '00:09', holdDuration: '00:00', outcome: 'Busy', mood: 'Neutral', sentiment: 52, recording: 'CL-5003', notes: 'Customer busy, call back later.' },
+                    { id: 4, leadId: 4, direction: 'Outgoing', startTime: '2026-05-13 16:30:00', duration: '04:21', ringDuration: '00:06', holdDuration: '00:20', outcome: 'Not Interested', mood: 'Negative', sentiment: 22, recording: 'CL-5004', notes: 'Already using competitor.' },
+                    { id: 5, leadId: 5, direction: 'Incoming', startTime: '2026-05-13 14:20:00', duration: '02:05', ringDuration: '00:04', holdDuration: '00:00', outcome: 'Callback', mood: 'Positive', sentiment: 71, recording: 'CL-5005', notes: 'Customer requested callback on 22 May.' },
+                ],
+                followups: [
+                    { id: 1, leadId: 1, purpose: 'Brochure follow-up', priority: 'High', reminder: '2026-05-14 11:00:00', channel: 'Phone', status: 'Pending', completion: 40, notes: '' },
+                    { id: 2, leadId: 2, purpose: 'Pricing discussion', priority: 'High', reminder: '2026-05-14 15:00:00', channel: 'WhatsApp', status: 'Pending', completion: 60, notes: '' },
+                    { id: 3, leadId: 3, purpose: 'Proposal review', priority: 'Medium', reminder: '2026-05-15 10:30:00', channel: 'Email', status: 'Scheduled', completion: 0, notes: '' },
+                    { id: 4, leadId: 4, purpose: 'Demo request', priority: 'Medium', reminder: '2026-05-15 14:00:00', channel: 'Phone', status: 'Scheduled', completion: 0, notes: '' },
+                    { id: 5, leadId: 5, purpose: 'Renewal offer', priority: 'Low', reminder: '2026-05-22 11:00:00', channel: 'SMS', status: 'Completed', completion: 100, notes: '' },
+                ],
+                opportunities: [
+                    { id: 1, leadId: 1, name: 'Sharma Enterprises', product: 'CRM Suite', plan: 'Gold', estimatedValue: 420000, stage: 'Negotiation', winPct: 72, closeDate: '2026-05-20', status: 'Open' },
+                    { id: 2, leadId: 2, name: 'Patel Group', product: 'Point-of-Sale', plan: 'Silver', estimatedValue: 280000, stage: 'Proposal', winPct: 58, closeDate: '2026-05-25', status: 'Open' },
+                    { id: 3, leadId: 3, name: 'Amit Traders', product: 'Inventory', plan: 'Gold', estimatedValue: 600000, stage: 'Qualification', winPct: 45, closeDate: '2026-06-01', status: 'Open' },
+                    { id: 4, leadId: 4, name: 'Karan Solutions', product: 'CRM Suite', plan: 'Platinum', estimatedValue: 850000, stage: 'Won', winPct: 100, closeDate: '2026-05-12', status: 'Won' },
+                    { id: 5, leadId: 5, name: 'Neha Retail', product: 'Membership', plan: 'Silver', estimatedValue: 150000, stage: 'Lost', winPct: 0, closeDate: '2026-05-10', status: 'Lost' },
+                ],
+                appointments: [
+                    { id: 1, leadId: 1, gallery: 'Kothrud', consultant: 'Yashraj', service: 'CRM Demo', date: '2026-05-14', time: '04:00 PM', status: 'Confirmed', checkin: 'Pending' },
+                    { id: 2, leadId: 2, gallery: 'Baner', consultant: 'Meera', service: 'Membership', date: '2026-05-14', time: '05:00 PM', status: 'Confirmed', checkin: 'Visited' },
+                    { id: 3, leadId: 3, gallery: 'Kothrud', consultant: 'Rohit', service: 'POS Demo', date: '2026-05-15', time: '11:00 AM', status: 'Pending', checkin: 'â€”' },
+                    { id: 4, leadId: 4, gallery: 'Hinjewadi', consultant: 'Yashraj', service: 'Inventory', date: '2026-05-15', time: '03:00 PM', status: 'Pending', checkin: 'â€”' },
+                    { id: 5, leadId: 5, gallery: 'Baner', consultant: 'Meera', service: 'Renewal', date: '2026-05-16', time: '10:00 AM', status: 'No-show', checkin: 'â€”' },
+                ],
+                whatsapp: [
+                    { id: 1, leadId: 1, template: 'Membership Offer', campaign: 'Renewal Drive', status: 'Sent', delivered: true, read: true, replied: true, linkClicked: true, autoReply: true },
+                    { id: 2, leadId: 2, template: 'Franchise Pitch', campaign: 'Franchise', status: 'Sent', delivered: true, read: true, replied: false, linkClicked: false, autoReply: false },
+                    { id: 3, leadId: 3, template: 'Festive Greeting', campaign: 'Festival', status: 'Failed', delivered: false, read: false, replied: false, linkClicked: false, autoReply: false },
+                    { id: 4, leadId: 4, template: 'Product Launch', campaign: 'Launch', status: 'Sent', delivered: true, read: true, replied: true, linkClicked: true, autoReply: true },
+                    { id: 5, leadId: 5, template: 'Renewal Reminder', campaign: 'Renewal', status: 'Sent', delivered: true, read: false, replied: false, linkClicked: false, autoReply: false },
+                ],
+                sms: [
+                    { id: 1, leadId: 1, template: 'Welcome Message', type: 'Transactional', campaign: 'Onboarding', delivery: 'Delivered', read: true, gateway: 'MSG91', status: 'Sent' },
+                    { id: 2, leadId: 3, template: 'Festive Offer', type: 'Promotional', campaign: 'Festival', delivery: 'Delivered', read: true, gateway: 'MSG91', status: 'Sent' },
+                    { id: 3, leadId: 5, template: 'Renewal Reminder', type: 'Promotional', campaign: 'Renewal', delivery: 'Failed', read: false, gateway: 'Twilio', status: 'Failed' },
+                    { id: 4, leadId: 2, template: 'Appointment Alert', type: 'Transactional', campaign: 'Appointments', delivery: 'Delivered', read: true, gateway: 'MSG91', status: 'Sent' },
+                    { id: 5, leadId: 4, template: 'Payment Due', type: 'Transactional', campaign: 'Billing', delivery: 'Delivered', read: false, gateway: 'Twilio', status: 'Sent' },
+                ],
+                emailCrm: [
+                    { id: 1, leadId: 1, subject: 'Membership Proposal', template: 'Proposal', sentDate: '2026-05-14', openRate: 58, clickRate: 24, reply: true, attachment: 'Proposal.pdf', campaign: 'Renewal Drive' },
+                    { id: 2, leadId: 2, subject: 'Welcome to ePay', template: 'Welcome', sentDate: '2026-05-13', openRate: 72, clickRate: 31, reply: false, attachment: 'â€”', campaign: 'Onboarding' },
+                    { id: 3, leadId: 3, subject: 'Membership Renewal Offer', template: 'Renewal', sentDate: '2026-05-12', openRate: 49, clickRate: 20, reply: true, attachment: 'Offer.pdf', campaign: 'Renewal Drive' },
+                    { id: 4, leadId: 4, subject: 'Festive Discount', template: 'Promo', sentDate: '2026-05-11', openRate: 38, clickRate: 15, reply: false, attachment: 'â€”', campaign: 'Festival' },
+                    { id: 5, leadId: 5, subject: 'Product Demo Invite', template: 'Demo', sentDate: '2026-05-10', openRate: 61, clickRate: 28, reply: true, attachment: 'â€”', campaign: 'Product Launch' },
+                ],
+                membershipRenewals: [
+                    { id: 1, leadId: 5, plan: 'Silver', expiry: '2026-05-25', value: 150000, probability: 75, payment: 'Pending', status: 'Due' },
+                    { id: 2, leadId: 1, plan: 'Gold', expiry: '2026-05-30', value: 420000, probability: 80, payment: 'Pending', status: 'Due' },
+                    { id: 3, leadId: 2, plan: 'Silver', expiry: '2026-06-01', value: 280000, probability: 70, payment: 'Pending', status: 'Due' },
+                    { id: 4, leadId: 3, plan: 'Gold', expiry: '2026-05-10', value: 600000, probability: 60, payment: 'Paid', status: 'Completed' },
+                    { id: 5, leadId: 4, plan: 'Platinum', expiry: '2026-04-28', value: 850000, probability: 50, payment: 'Overdue', status: 'Expired' },
+                ],
+                teleKpi: {
+                    callsAssigned: 50,
+                    callsAttempted: 45,
+                    callsConnected: 32,
+                    callsAnswered: 28,
+                    avgTalkTime: '02:18',
+                    appointmentsBooked: 5,
+                    membershipsRenewed: 3,
+                    salesClosed: 4,
+                    revenueGenerated: 120000,
+                    customerRating: 4.6,
+                    qualityScore: 92,
+                    attendance: 98,
+                    loginHours: '07:45',
+                    idleTime: '00:32',
+                    breakTime: '00:45'
+                },
+                gamification: [
+                    { rank: 1, name: 'Meera Iyer', converts: 38, revenue: 2400000, rating: 4.8, attendance: 99, badges: 16, score: 96 },
+                    { rank: 2, name: 'Yashraj Sathe', converts: 32, revenue: 1900000, rating: 4.6, attendance: 98, badges: 12, score: 92 },
+                    { rank: 3, name: 'Rohit Mehta', converts: 29, revenue: 1600000, rating: 4.7, attendance: 97, badges: 14, score: 90 },
+                    { rank: 4, name: 'Priya Sharma', converts: 24, revenue: 1200000, rating: 4.5, attendance: 95, badges: 10, score: 85 },
+                    { rank: 5, name: 'Karan Joshi', converts: 20, revenue: 1000000, rating: 4.4, attendance: 94, badges: 9, score: 81 },
+                ],
+                nextId: { lead: 6, call: 6, followup: 6, opportunity: 6, appointment: 6, whatsapp: 6, sms: 6, emailCrm: 6, membershipRenewal: 6 }
+            };
+        }
+
+        function loadDB() {
+            try {
+                const raw = localStorage.getItem(DB_KEY);
+                if (!raw) return defaultDB();
+                const data = JSON.parse(raw);
+                const def = defaultDB();
+                for (const k in def) { if (!data[k]) data[k] = def[k]; }
+                return data;
+            } catch (e) { return defaultDB(); }
+        }
+
+        function saveDB() { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+
+        let db = loadDB();
+        let currentUser = { name: 'Yashraj Sathe', role: 'Telecaller Executive' };
+        let currentPage = 'dashboard';
+
+        // ============================================================
+        //  HELPERS
+        // ============================================================
+        function genId(collection) {
+            const key = collection + 'Id';
+            if (!db.nextId) db.nextId = {};
+            if (!db.nextId[key]) db.nextId[key] = 1;
+            return db.nextId[key]++;
+        }
+
+        function getLead(id) { return db.leads.find(l => l.id === id); }
+        function getLeadName(id) { const l = getLead(id); return l ? l.name : 'Unknown'; }
+        function formatDate(d) { if (!d) return 'â€”'; const dt = new Date(d); return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
+        function formatDateTime(d) { if (!d) return 'â€”'; const dt = new Date(d); return dt.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+        function todayStr() { return new Date().toISOString().slice(0, 10); }
+        function nowStr() { return new Date().toISOString().slice(0, 16).replace('T', ' '); }
+
+        function toast(msg, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const icons = { info: 'fa-circle-info', success: 'fa-check-circle', error: 'fa-exclamation-circle', warning: 'fa-triangle-exclamation' };
+            const el = document.createElement('div');
+            el.className = `toast ${type}`;
+            el.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i><span>${msg}</span><button class="toast-close"><i class="fas fa-xmark"></i></button>`;
+            el.querySelector('.toast-close').addEventListener('click', () => el.remove());
+            container.appendChild(el);
+            setTimeout(() => { if (el.parentNode) el.remove(); }, 4500);
+        }
+
+        function showModal(html) {
+            document.getElementById('modalContent').innerHTML = html;
+            document.getElementById('modalOverlay').classList.add('open');
+        }
+        function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+        document.getElementById('modalOverlay').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal(); });
+
+        function chip(text, color) {
+            const map = { green: 'chip-green', red: 'chip-red', amber: 'chip-amber', blue: 'chip-blue', purple: 'chip-purple', slate: 'chip-slate', emerald: 'chip-emerald' };
+            return `<span class="chip ${map[color] || 'chip-slate'}">${text}</span>`;
+        }
+
+        function statusBadge(status) {
+            const map = {
+                'New': 'status-badge-pending', 'Fresh': 'status-badge-pending',
+                'Contacted': 'status-badge-review', 'Qualified': 'status-badge-active',
+                'Interested': 'status-badge-active', 'Converted': 'status-badge-active',
+                'Lost': 'status-badge-inactive', 'Pending': 'status-badge-pending',
+                'Scheduled': 'status-badge-review', 'Completed': 'status-badge-completed',
+                'Confirmed': 'status-badge-active', 'No-show': 'status-badge-inactive',
+                'Visited': 'status-badge-completed', 'Open': 'status-badge-review',
+                'Won': 'status-badge-active', 'Lost': 'status-badge-inactive'
+            };
+            const cls = map[status] || 'status-badge-pending';
+            return `<span class="status-badge ${cls}">${status}</span>`;
+        }
+
+        // ============================================================
+        //  SIDEBAR & NAVIGATION
+        // ============================================================
+        const NAV_SECTIONS = [
+            { group: 'Dashboard', items: [
+                { id: 'dashboard', label: 'Dashboard', icon: 'fa-home' },
+                { id: 'ai', label: 'AI Command Center', icon: 'fa-robot' },
+            ] },
+            { group: 'Leads', items: [
+                { id: 'leads', label: 'My Leads', icon: 'fa-user-friends' },
+                { id: 'leadprofile', label: 'Lead Profile', icon: 'fa-id-card' },
+                { id: 'qualification', label: 'Lead Qualification', icon: 'fa-clipboard-check' },
+            ] },
+            { group: 'Dialing', items: [
+                { id: 'calls', label: 'Call Log', icon: 'fa-phone-alt' },
+                { id: 'dialer', label: 'Auto Dialer', icon: 'fa-headset' },
+                { id: 'followup', label: 'Follow-ups', icon: 'far fa-calendar-check' },
+                { id: 'opportunities', label: 'Opportunities', icon: 'fa-bullseye' },
+                { id: 'appointments', label: 'Appointments', icon: 'far fa-calendar-alt' },
+                { id: 'timeline', label: 'Timeline', icon: 'fa-stream' },
+                { id: 'membership', label: 'Membership', icon: 'fa-id-badge' },
+            ] },
+            { group: 'Communication', items: [
+                { id: 'whatsapp', label: 'WhatsApp', icon: 'fab fa-whatsapp' },
+                { id: 'sms', label: 'SMS', icon: 'fa-comment-alt' },
+                { id: 'email', label: 'Email', icon: 'fa-envelope' },
+            ] },
+            { group: 'Productivity', items: [
+                { id: 'kpi', label: 'KPI', icon: 'fa-chart-pie' },
+                { id: 'gamification', label: 'Gamification', icon: 'fa-trophy' },
+                { id: 'reports', label: 'Reports', icon: 'fa-chart-bar' },
+                { id: 'performance', label: 'Performance', icon: 'fa-chart-line' },
+                { id: 'quickactions', label: 'Quick Actions', icon: 'fa-bolt' },
+            ] },
+            { group: 'Settings', items: [
+                { id: 'settings', label: 'Settings', icon: 'fa-cog' },
+            ] },
+        ];
+
+        function renderSidebar() {
+            const nav = document.getElementById('crm-sidebar-root');
+            if (!nav) return;
+            let html = `
+            <div class="sidebar-brand">
+                <i class="fas fa-headset"></i>
+                <span>ePay<span style="color:#34d399;">Tele</span></span>
+                <small>v3.0</small>
+            </div>
+            <div style="flex:1;overflow-y:auto;padding:8px 0 20px;">`;
+            for (const sec of NAV_SECTIONS) {
+                html += `<div class="nav-section">${sec.group}</div>`;
+                for (const item of sec.items) {
+                    const active = item.id === currentPage ? 'active' : '';
+                    const count = getCount(item.id);
+                    const badge = count > 0 ? `<span class="badge">${count}</span>` : '';
+                    html += `
+                <div class="nav-item ${active}" data-page="${item.id}">
+                    <i class="fas ${item.icon}"></i>
+                    <span>${item.label}</span>
+                    ${badge}
+                </div>`;
+                }
+            }
+            html += `
+            </div>
+            <div class="sidebar-footer">
+                <div class="avatar">${currentUser.name[0]}</div>
+                <div class="info">
+                    <div class="name">${currentUser.name}</div>
+                    <div class="role">${currentUser.role}</div>
+                </div>
+                <button class="logout-btn" onclick="toast('Logging out...','info')"><i class="fas fa-sign-out-alt"></i></button>
+            </div>`;
+            nav.innerHTML = html;
+
+            nav.querySelectorAll('.nav-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    const id = el.dataset.page;
+                    if (id) navigateTo(id);
+                });
+            });
+
+            // Mobile hamburger toggle
+            document.getElementById('hamburgerBtn').addEventListener('click', () => {
+                document.getElementById('crm-sidebar-root').classList.toggle('open');
+            });
+        }
+
+        function getCount(pageId) {
+            const counts = {
+                leads: db.leads.length,
+                calls: db.calls.length,
+                followup: db.followups.filter(f => f.status === 'Pending' || f.status === 'Scheduled').length,
+                opportunities: db.opportunities.filter(o => o.status === 'Open').length,
+                appointments: db.appointments.filter(a => a.status === 'Pending' || a.status === 'Confirmed').length,
+                membership: db.membershipRenewals.filter(m => m.status === 'Due').length,
+                whatsapp: db.whatsapp.length,
+                sms: db.sms.length,
+                email: db.emailCrm.length,
+            };
+            return counts[pageId] || 0;
+        }
+
+        function navigateTo(page) {
+            currentPage = page;
+            renderSidebar();
+            const container = document.getElementById('pageContent');
+            const viewMap = {
+                dashboard: renderDashboard,
+                ai: renderAI,
+                leads: renderLeads,
+                leadprofile: renderLeadProfile,
+                qualification: renderQualification,
+                calls: renderCalls,
+                dialer: renderDialer,
+                followup: renderFollowup,
+                opportunities: renderOpportunities,
+                appointments: renderAppointments,
+                timeline: renderTimeline,
+                membership: renderMembership,
+                whatsapp: renderWhatsapp,
+                sms: renderSms,
+                email: renderEmail,
+                kpi: renderKPI,
+                gamification: renderGamification,
+                reports: renderReports,
+                performance: renderPerformance,
+                quickactions: renderQuickActions,
+                settings: renderSettings,
+            };
+            const renderer = viewMap[page];
+            if (renderer) renderer(container);
+            else container.innerHTML = '<div class="text-center text-gray-400 py-20">Page not found.</div>';
+
+            // Close mobile sidebar on navigation
+            document.getElementById('crm-sidebar-root').classList.remove('open');
+        }
+
+        // ============================================================
+        //  RENDER FUNCTIONS
+        // ============================================================
+
+        // ----- DASHBOARD -----
+        function renderDashboard(container) {
+            const totalLeads = db.leads.length;
+            const freshLeads = db.leads.filter(l => l.status === 'Fresh' || l.status === 'New').length;
+            const qualified = db.leads.filter(l => l.status === 'Qualified').length;
+            const todayCalls = db.calls.filter(c => c.startTime && c.startTime.startsWith(todayStr())).length;
+            const connected = db.calls.filter(c => c.outcome === 'Interested' || c.outcome === 'Callback').length;
+            const pendingFU = db.followups.filter(f => f.status === 'Pending').length;
+            const openOpps = db.opportunities.filter(o => o.status === 'Open').length;
+
+            container.innerHTML = `
+            <div class="space-y-6">
+                <!-- Stats Row 1 -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <div class="stat-card"><div class="label"><i class="fas fa-phone-volume text-blue-500"></i> Today's Calls</div><div class="value">${todayCalls}</div><span class="change up">Target: 50</span></div>
+                    <div class="stat-card"><div class="label"><i class="fas fa-phone-slash text-emerald-500"></i> Calls Completed</div><div class="value">${db.calls.length}</div><span class="change up">${Math.round(db.calls.filter(c=>c.outcome==='Interested').length/db.calls.length*100||0)}% success</span></div>
+                    <div class="stat-card"><div class="label"><i class="fas fa-phone-alt text-orange-500"></i> Pending Calls</div><div class="value">${db.leads.filter(l=>l.status==='Fresh').length}</div><span class="change down">Requires attention</span></div>
+                    <div class="stat-card"><div class="label"><i class="fas fa-phone-slash text-red-500"></i> Missed Calls</div><div class="value">${db.calls.filter(c=>c.outcome==='No Answer'||c.outcome==='Busy').length}</div><span class="change down">Follow up required</span></div>
+                    <div class="stat-card"><div class="label"><i class="fas fa-user-check text-purple-500"></i> Qualified</div><div class="value">${qualified}</div><span class="change up">${Math.round(qualified/totalLeads*100||0)}% of total</span></div>
+                </div>
+
+                <!-- Stats Row 2 -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <div class="stat-card"><div class="label"><i class="far fa-calendar-check text-blue-500"></i> Follow-up Today</div><div class="value">${db.followups.filter(f=>f.reminder.startsWith(todayStr())).length}</div></div>
+                    <div class="stat-card"><div class="label"><i class="fas fa-check-circle text-emerald-500"></i> Converted</div><div class="value">${db.opportunities.filter(o=>o.status==='Won').length}</div></div>
+                    <div class="stat-card"><div class="label"><i class="fas fa-bullseye text-emerald-500"></i> Daily Target</div><div class="value">${Math.round(db.calls.length/50*100)}%</div><span class="change up">${db.calls.length}/50 calls</span></div>
+                    <div class="stat-card"><div class="label"><i class="far fa-clock text-purple-500"></i> Talk Time</div><div class="value">${db.teleKpi.avgTalkTime || '00:00'}</div></div>
+                    <div class="stat-card"><div class="label"><i class="fas fa-chart-bar text-blue-500"></i> Conversion Rate</div><div class="value">${Math.round(db.opportunities.filter(o=>o.status==='Won').length/db.leads.length*100||0)}%</div></div>
+                </div>
+
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                    <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm lg:col-span-1">
+                        <h3 class="font-semibold text-gray-800 text-sm mb-3">Call Trend</h3>
+                        <div class="h-48"><canvas id="trendChart"></canvas></div>
+                    </div>
+                    <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm lg:col-span-1">
+                        <h3 class="font-semibold text-gray-800 text-sm mb-3">Funnel</h3>
+                        <div class="space-y-1.5">
+                            <div class="funnel-layer bg-blue-600 text-white w-full py-1.5 text-center text-xs font-medium rounded" style="clip-path:polygon(0 0,100% 0,92% 100%,8% 100%);">New ${db.leads.filter(l=>l.status==='Fresh'||l.status==='New').length}</div>
+                            <div class="funnel-layer bg-sky-400 text-white w-[88%] py-1.5 text-center text-xs font-medium rounded" style="clip-path:polygon(0 0,100% 0,90% 100%,10% 100%);">Contacted ${db.leads.filter(l=>l.status==='Contacted').length}</div>
+                            <div class="funnel-layer bg-emerald-400 text-white w-[75%] py-1.5 text-center text-xs font-medium rounded" style="clip-path:polygon(0 0,100% 0,88% 100%,12% 100%);">Interested ${db.calls.filter(c=>c.outcome==='Interested').length}</div>
+                            <div class="funnel-layer bg-amber-400 text-white w-[60%] py-1.5 text-center text-xs font-medium rounded" style="clip-path:polygon(0 0,100% 0,85% 100%,15% 100%);">Follow-up ${db.followups.filter(f=>f.status==='Completed').length}</div>
+                            <div class="funnel-layer bg-rose-400 text-white w-[45%] py-1.5 text-center text-xs font-medium rounded" style="clip-path:polygon(0 0,100% 0,80% 100%,20% 100%);">Qualified ${db.leads.filter(l=>l.status==='Qualified').length}</div>
+                            <div class="funnel-layer bg-pink-500 text-white w-[30%] py-1.5 text-center text-xs font-medium rounded">Converted ${db.opportunities.filter(o=>o.status==='Won').length}</div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm lg:col-span-1">
+                        <h3 class="font-semibold text-gray-800 text-sm mb-3">Call Outcomes</h3>
+                        <div class="h-48"><canvas id="outcomesChart"></canvas></div>
+                    </div>
+                    <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm lg:col-span-1">
+                        <h3 class="font-semibold text-gray-800 text-sm mb-3">AI Assistant</h3>
+                        <div class="text-center">
+                            <div class="w-14 h-14 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-3"><i class="fas fa-robot text-2xl text-indigo-500"></i></div>
+                            <div class="font-semibold text-gray-800 text-sm">Hi ${currentUser.name}! ðŸ‘‹</div>
+                            <div class="text-xs text-gray-400 mb-3">How can I help you?</div>
+                            <div class="space-y-1.5 text-left">
+                                <button class="text-xs w-full border border-gray-200 rounded-lg py-1.5 px-3 hover:bg-gray-50 transition flex items-center gap-2" onclick="toast('AI: Generating script...','info')"><i class="fas fa-pen-nib w-4 text-indigo-500"></i> Generate Script</button>
+                                <button class="text-xs w-full border border-gray-200 rounded-lg py-1.5 px-3 hover:bg-gray-50 transition flex items-center gap-2" onclick="toast('AI: Suggesting follow-up...','info')"><i class="fas fa-comment-dots w-4 text-indigo-500"></i> Suggest Follow-up</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tables -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="px-5 py-3 border-b border-gray-100 flex justify-between items-center"><h3 class="font-semibold text-gray-800 text-sm">Upcoming Follow-ups</h3><a href="#" onclick="navigateTo('followup')" class="text-xs text-indigo-600 hover:underline">View All</a></div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-xs">
+                                <thead><tr class="text-gray-500 border-b border-gray-100"><th class="px-4 py-2 text-left font-medium">Lead</th><th class="px-4 py-2 text-left font-medium">Mobile</th><th class="px-4 py-2 text-left font-medium">Reminder</th><th class="px-4 py-2 text-left font-medium">Status</th></tr></thead>
+                                <tbody>${db.followups.filter(f=>f.status!=='Completed').slice(0,4).map(f => {
+                                    const lead = getLead(f.leadId);
+                                    return `<tr class="border-b border-gray-50"><td class="px-4 py-2 font-medium">${lead?lead.name:'Unknown'}</td><td class="px-4 py-2">${lead?lead.mobile:'â€”'}</td><td class="px-4 py-2 text-gray-500">${formatDateTime(f.reminder)}</td><td class="px-4 py-2">${statusBadge(f.status)}</td></tr>`;
+                                }).join('') || '<tr><td colspan="4" class="text-center text-gray-400 py-4">No upcoming follow-ups</td></tr>'}</tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="px-5 py-3 border-b border-gray-100 flex justify-between items-center"><h3 class="font-semibold text-gray-800 text-sm">Recent Calls</h3><a href="#" onclick="navigateTo('calls')" class="text-xs text-indigo-600 hover:underline">View All</a></div>
+                        <div class="space-y-2 px-4 py-2">${db.calls.slice(-4).reverse().map(c => {
+                            const lead = getLead(c.leadId);
+                            return `<div class="flex items-center justify-between text-xs border-b border-gray-50 py-1.5"><div class="flex items-center gap-2"><i class="fas fa-phone-alt ${c.outcome==='Interested'?'text-emerald-500':'text-gray-400'}"></i><span class="font-medium">${lead?lead.name:'Unknown'}</span></div><div><span class="text-gray-500">${formatDateTime(c.startTime)}</span> <span class="ml-2 font-medium">${c.duration}</span></div></div>`;
+                        }).join('') || '<div class="text-center text-gray-400 py-4">No calls</div>'}</div>
+                    </div>
+                </div>
+            </div>`;
+
+            // Charts
+            setTimeout(() => {
+                const trendCtx = document.getElementById('trendChart');
+                const outcomeCtx = document.getElementById('outcomesChart');
+                if (trendCtx) {
+                    new Chart(trendCtx, {
+                        type: 'line',
+                        data: { labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], datasets: [{ label: 'Calls', data: [18,32,27,49,39,58,45], borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', fill: true, tension: 0.3, pointRadius: 3 }] },
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 10, font: { size: 9 } } }, x: { grid: { display: false }, ticks: { font: { size: 9 } } } } }
+                    });
+                }
+                if (outcomeCtx) {
+                    const outcomes = ['Interested','Not Interested','Busy','Callback'];
+                    const counts = outcomes.map(o => db.calls.filter(c=>c.outcome===o).length);
+                    new Chart(outcomeCtx, {
+                        type: 'doughnut',
+                        data: { labels: outcomes, datasets: [{ data: counts, backgroundColor: ['#22c55e','#f59e0b','#3b82f6','#8b5cf6'], borderWidth: 0, cutout: '70%' }] },
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 9 }, boxWidth: 10 } } } }
+                    });
+                }
+            }, 100);
+        }
+
+        // ----- AI COMMAND CENTER -----
+        function renderAI(container) {
+            const hot = db.leads.filter(l => l.temperature === 'Hot').length;
+            const pendingFU = db.followups.filter(f => f.status === 'Pending').length;
+            const overdue = db.followups.filter(f => f.status === 'Pending' && new Date(f.reminder) < new Date()).length;
+            const qualified = db.leads.filter(l => l.status === 'Qualified').length;
+            const converted = db.opportunities.filter(o => o.status === 'Won').length;
+            const pipelineValue = db.opportunities.filter(o => o.status === 'Open').reduce((sum,o) => sum + o.estimatedValue, 0);
+
+            container.innerHTML = `
+            <div class="space-y-6">
+                <div class="section-header"><h2><i class="fas fa-robot"></i> AI Command Center</h2></div>
+                <div class="ai-insight-box">
+                    <i class="fas fa-brain"></i>
+                    <div class="content">
+                        <div class="title">ðŸ§  AI Analytics Engine</div>
+                        <div class="message">ðŸ”¥ ${hot} hot leads Â· âš ï¸ ${pendingFU} follow-ups (${overdue} overdue) Â· ðŸ“ˆ ${qualified} qualified Â· ðŸ’° â‚¹${(pipelineValue/100000).toFixed(1)}L pipeline</div>
+                    </div>
+                    <span class="badge-ai">${new Date().toLocaleTimeString()}</span>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="stat-card"><div class="label">Hot Leads</div><div class="value">${hot}</div></div>
+                    <div class="stat-card"><div class="label">Overdue Follow-ups</div><div class="value">${overdue}</div></div>
+                    <div class="stat-card"><div class="label">Pipeline Value</div><div class="value">â‚¹${(pipelineValue/100000).toFixed(1)}L</div></div>
+                    <div class="stat-card"><div class="label">Conversion Rate</div><div class="value">${Math.round(converted/db.leads.length*100||0)}%</div></div>
+                </div>
+                <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+                    <h3 class="font-bold text-gray-800 text-sm mb-3">AI Recommendations</h3>
+                    <ul class="space-y-2 text-sm">
+                        ${db.leads.filter(l=>l.temperature==='Hot' && l.status!=='Qualified').slice(0,3).map(l => `
+                            <li class="flex items-center gap-2 p-2 bg-red-50 rounded-lg"><i class="fas fa-fire text-red-500"></i> Call ${l.name} (${l.mobile}) â€” Hot lead, score ${l.score}</li>
+                        `).join('') || '<li class="text-gray-400">No hot leads pending</li>'}
+                        ${db.followups.filter(f=>f.status==='Pending' && new Date(f.reminder) < new Date()).slice(0,2).map(f => {
+                            const lead = getLead(f.leadId);
+                            return `<li class="flex items-center gap-2 p-2 bg-amber-50 rounded-lg"><i class="fas fa-clock text-amber-500"></i> Follow-up overdue for ${lead?lead.name:'Unknown'}</li>`;
+                        }).join('')}
+                    </ul>
+                </div>
+            </div>`;
+        }
+
+        // ----- LEADS (full CRUD) -----
+        function renderLeads(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-user-friends"></i> My Leads</h2><button class="btn btn-primary btn-sm" onclick="openAddLead()"><i class="fas fa-plus"></i> Add Lead</button></div>
+            <div class="filter-bar">
+                <div class="filter-group"><label>Status</label><select id="leadStatusFilter" onchange="filterLeads()"><option value="">All</option><option value="Fresh">Fresh</option><option value="Contacted">Contacted</option><option value="Qualified">Qualified</option></select></div>
+                <div class="filter-group"><label>Temperature</label><select id="leadTempFilter" onchange="filterLeads()"><option value="">All</option><option value="Hot">Hot</option><option value="Warm">Warm</option><option value="Cold">Cold</option></select></div>
+                <div class="filter-actions"><button class="btn btn-primary btn-sm" onclick="filterLeads()"><i class="fas fa-filter"></i> Filter</button><button class="btn btn-outline btn-sm" onclick="resetLeadFilters()"><i class="fas fa-undo"></i> Reset</button></div>
+            </div>
+            <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Name</th><th>Mobile</th><th>Source</th><th>Score</th><th>Temp</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="leadTableBody">
+                    ${db.leads.map(l => `
+                        <tr data-status="${l.status}" data-temp="${l.temperature}">
+                            <td class="font-medium">${l.name}</td><td>${l.mobile}</td><td>${l.source}</td><td>${l.score}</td>
+                            <td>${chip(l.temperature, l.temperature==='Hot'?'red':l.temperature==='Warm'?'amber':'slate')}</td>
+                            <td>${statusBadge(l.status)}</td>
+                            <td><button class="btn btn-sm btn-primary" onclick="openEditLead(${l.id})"><i class="fas fa-pen"></i></button><button class="btn btn-sm btn-danger" onclick="deleteLead(${l.id})"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                    `).join('') || '<tr><td colspan="7" class="text-center text-gray-400 py-8">No leads</td></tr>'}
+                </tbody>
+            </table></div></div>`;
+        }
+
+        function filterLeads() {
+            const status = document.getElementById('leadStatusFilter').value;
+            const temp = document.getElementById('leadTempFilter').value;
+            document.querySelectorAll('#leadTableBody tr').forEach(row => {
+                const s = row.dataset.status || '';
+                const t = row.dataset.temp || '';
+                let show = true;
+                if (status && s !== status) show = false;
+                if (temp && t !== temp) show = false;
+                row.style.display = show ? '' : 'none';
+            });
+        }
+
+        function resetLeadFilters() {
+            document.getElementById('leadStatusFilter').value = '';
+            document.getElementById('leadTempFilter').value = '';
+            filterLeads();
+        }
+
+        function openAddLead() {
+            showModal(`
+            <div class="modal-header"><h3><i class="fas fa-user-plus"></i> Add Lead</h3><button class="close" onclick="closeModal()">&times;</button></div>
+            <form id="leadForm" onsubmit="saveLead(event)">
+                <div class="form-row"><div class="form-group"><label>Name *</label><input type="text" id="leadName" required /></div><div class="form-group"><label>Mobile *</label><input type="text" id="leadMobile" required /></div></div>
+                <div class="form-row"><div class="form-group"><label>Email</label><input type="email" id="leadEmail" /></div><div class="form-group"><label>Source</label><select id="leadSource"><option value="Facebook">Facebook</option><option value="Instagram">Instagram</option><option value="Website">Website</option><option value="Walk-in">Walk-in</option><option value="Referral">Referral</option></select></div></div>
+                <div class="form-row"><div class="form-group"><label>Campaign</label><input type="text" id="leadCampaign" /></div><div class="form-group"><label>Temperature</label><select id="leadTemp"><option value="Hot">Hot</option><option value="Warm">Warm</option><option value="Cold">Cold</option></select></div></div>
+                <div class="form-row"><div class="form-group"><label>Status</label><select id="leadStatus"><option value="Fresh">Fresh</option><option value="Contacted">Contacted</option><option value="Qualified">Qualified</option></select></div><div class="form-group"><label>Score</label><input type="number" id="leadScore" min="0" max="100" value="50" /></div></div>
+                <div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancel</button><button type="submit" class="btn btn-primary">Add</button></div>
+            </form>`);
+        }
+
+        function openEditLead(id) {
+            const l = getLead(id);
+            if (!l) return toast('Not found', 'error');
+            showModal(`
+            <div class="modal-header"><h3><i class="fas fa-edit"></i> Edit Lead</h3><button class="close" onclick="closeModal()">&times;</button></div>
+            <form id="leadForm" onsubmit="saveLead(event, ${id})">
+                <div class="form-row"><div class="form-group"><label>Name *</label><input type="text" id="leadName" value="${l.name}" required /></div><div class="form-group"><label>Mobile *</label><input type="text" id="leadMobile" value="${l.mobile}" required /></div></div>
+                <div class="form-row"><div class="form-group"><label>Email</label><input type="email" id="leadEmail" value="${l.email||''}" /></div><div class="form-group"><label>Source</label><select id="leadSource"><option value="Facebook" ${l.source==='Facebook'?'selected':''}>Facebook</option><option value="Instagram" ${l.source==='Instagram'?'selected':''}>Instagram</option><option value="Website" ${l.source==='Website'?'selected':''}>Website</option><option value="Walk-in" ${l.source==='Walk-in'?'selected':''}>Walk-in</option><option value="Referral" ${l.source==='Referral'?'selected':''}>Referral</option></select></div></div>
+                <div class="form-row"><div class="form-group"><label>Campaign</label><input type="text" id="leadCampaign" value="${l.campaign||''}" /></div><div class="form-group"><label>Temperature</label><select id="leadTemp"><option value="Hot" ${l.temperature==='Hot'?'selected':''}>Hot</option><option value="Warm" ${l.temperature==='Warm'?'selected':''}>Warm</option><option value="Cold" ${l.temperature==='Cold'?'selected':''}>Cold</option></select></div></div>
+                <div class="form-row"><div class="form-group"><label>Status</label><select id="leadStatus"><option value="Fresh" ${l.status==='Fresh'?'selected':''}>Fresh</option><option value="Contacted" ${l.status==='Contacted'?'selected':''}>Contacted</option><option value="Qualified" ${l.status==='Qualified'?'selected':''}>Qualified</option></select></div><div class="form-group"><label>Score</label><input type="number" id="leadScore" min="0" max="100" value="${l.score||50}" /></div></div>
+                <div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancel</button><button type="submit" class="btn btn-primary">Update</button></div>
+            </form>`);
+        }
+
+        function saveLead(event, id) {
+            event.preventDefault();
+            const name = document.getElementById('leadName').value.trim();
+            const mobile = document.getElementById('leadMobile').value.trim();
+            const email = document.getElementById('leadEmail').value.trim();
+            const source = document.getElementById('leadSource').value;
+            const campaign = document.getElementById('leadCampaign').value.trim() || 'General';
+            const temp = document.getElementById('leadTemp').value;
+            const status = document.getElementById('leadStatus').value;
+            const score = parseInt(document.getElementById('leadScore').value) || 50;
+            if (!name || !mobile) return toast('Name and mobile required.', 'warning');
+            if (id) {
+                const idx = db.leads.findIndex(l => l.id === id);
+                if (idx === -1) return toast('Not found', 'error');
+                db.leads[idx] = { ...db.leads[idx], name, mobile, email, source, campaign, temperature: temp, status, score };
+                toast('Lead updated!', 'success');
+            } else {
+                db.leads.push({ id: genId('lead'), name, mobile, email: email || 'â€”', source, campaign, temperature: temp, status, score, assignedTo: 'Yashraj', created: todayStr(), lastContact: todayStr(), expectedRevenue: 0, probability: 0, company: '', city: '', state: '', pin: '', leadType: 'New', productInterest: '', nextFollowup: '' });
+                toast('Lead added!', 'success');
+            }
+            saveDB();
+            closeModal();
+            navigateTo(currentPage);
+        }
+
+        function deleteLead(id) {
+            if (!confirm('Delete this lead?')) return;
+            db.leads = db.leads.filter(l => l.id !== id);
+            saveDB();
+            toast('Lead deleted.', 'info');
+            navigateTo(currentPage);
+        }
+
+        // ----- LEAD PROFILE -----
+        function renderLeadProfile(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-id-card"></i> Lead Profile</h2></div>
+            <div class="filter-bar">
+                <div class="filter-group"><label>Select Lead</label><select id="profileLeadSelect" onchange="loadLeadProfile()"><option value="">Choose...</option>${db.leads.map(l => `<option value="${l.id}">${l.name}</option>`).join('')}</select></div>
+                <div class="filter-actions"><button class="btn btn-primary btn-sm" onclick="loadLeadProfile()"><i class="fas fa-eye"></i> View</button></div>
+            </div>
+            <div id="leadProfileContent" class="text-center text-gray-400 py-20">Select a lead to view profile.</div>`;
+        }
+
+        function loadLeadProfile() {
+            const id = parseInt(document.getElementById('profileLeadSelect').value);
+            if (!id) { document.getElementById('leadProfileContent').innerHTML = '<div class="text-center text-gray-400 py-20">Select a lead.</div>'; return; }
+            const lead = getLead(id);
+            if (!lead) return toast('Not found', 'error');
+            const calls = db.calls.filter(c => c.leadId === id);
+            const followups = db.followups.filter(f => f.leadId === id);
+            document.getElementById('leadProfileContent').innerHTML = `
+            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                <div class="flex items-center gap-4 flex-wrap">
+                    <div class="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center text-2xl font-bold text-indigo-600">${lead.name[0]}</div>
+                    <div><h3 class="text-xl font-bold">${lead.name}</h3><p class="text-gray-500 text-sm">${lead.mobile} Â· ${lead.email}</p></div>
+                    <div class="ml-auto flex gap-2">${chip(lead.temperature, lead.temperature==='Hot'?'red':lead.temperature==='Warm'?'amber':'slate')} ${statusBadge(lead.status)}</div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 text-sm">
+                    <div><div class="text-xs text-gray-400">Source</div><div>${lead.source}</div></div>
+                    <div><div class="text-xs text-gray-400">Campaign</div><div>${lead.campaign}</div></div>
+                    <div><div class="text-xs text-gray-400">Score</div><div>${lead.score}/100</div></div>
+                    <div><div class="text-xs text-gray-400">Created</div><div>${formatDate(lead.created)}</div></div>
+                </div>
+                <div class="mt-4 text-sm"><span class="text-gray-400">Calls (${calls.length})</span> <span class="text-gray-400 ml-4">Follow-ups (${followups.length})</span></div>
+            </div>`;
+        }
+
+        // ----- OTHER VIEWS (minimal but functional) -----
+        function renderQualification(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-clipboard-check"></i> Lead Qualification</h2></div>
+            <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Lead</th><th>Budget</th><th>Decision Maker</th><th>Requirement</th><th>Timeline</th><th>Product</th><th>Sales Ready</th></tr></thead>
+                <tbody>${db.leads.map(l => `
+                    <tr><td>${l.name}</td><td>${chip(l.probability>70?'Yes':'No', l.probability>70?'green':'red')}</td><td>${chip('Yes','green')}</td><td>${chip('Yes','green')}</td><td>${chip(l.probability>60?'Yes':'No', l.probability>60?'green':'red')}</td><td>${l.productInterest||'â€”'}</td><td>${chip(l.status==='Qualified'?'Yes':'No', l.status==='Qualified'?'green':'amber')}</td></tr>
+                `).join('')}</tbody>
+            </table></div></div>`;
+        }
+
+        function renderCalls(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-phone-alt"></i> Call Log</h2><button class="btn btn-primary btn-sm" onclick="openAddCall()"><i class="fas fa-plus"></i> Log Call</button></div>
+            <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Lead</th><th>Direction</th><th>Date/Time</th><th>Duration</th><th>Outcome</th><th>Sentiment</th><th>Actions</th></tr></thead>
+                <tbody>${db.calls.map(c => {
+                    const lead = getLead(c.leadId);
+                    return `<tr><td>${lead?lead.name:'Unknown'}</td><td>${chip(c.direction, c.direction==='Outgoing'?'blue':'green')}</td><td>${formatDateTime(c.startTime)}</td><td>${c.duration}</td><td>${statusBadge(c.outcome)}</td><td>${c.sentiment}%</td><td><button class="btn btn-sm btn-danger" onclick="deleteCall(${c.id})"><i class="fas fa-trash"></i></button></td></tr>`;
+                }).join('') || '<tr><td colspan="7" class="text-center text-gray-400 py-8">No calls</td></tr>'}</tbody>
+            </table></div></div>`;
+        }
+
+        function openAddCall() {
+            const leadOpts = db.leads.map(l => `<option value="${l.id}">${l.name}</option>`).join('');
+            showModal(`
+            <div class="modal-header"><h3><i class="fas fa-phone"></i> Log Call</h3><button class="close" onclick="closeModal()">&times;</button></div>
+            <form id="callForm" onsubmit="saveCall(event)">
+                <div class="form-group"><label>Lead</label><select id="callLead">${leadOpts}</select></div>
+                <div class="form-row"><div class="form-group"><label>Direction</label><select id="callDir"><option value="Outgoing">Outgoing</option><option value="Incoming">Incoming</option></select></div><div class="form-group"><label>Duration</label><input type="text" id="callDuration" placeholder="02:18" /></div></div>
+                <div class="form-row"><div class="form-group"><label>Outcome</label><select id="callOutcome"><option value="Interested">Interested</option><option value="Not Interested">Not Interested</option><option value="Busy">Busy</option><option value="Callback">Callback</option></select></div><div class="form-group"><label>Sentiment</label><input type="number" id="callSentiment" min="0" max="100" value="70" /></div></div>
+                <div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancel</button><button type="submit" class="btn btn-primary">Log</button></div>
+            </form>`);
+        }
+
+        function saveCall(event) {
+            event.preventDefault();
+            const leadId = parseInt(document.getElementById('callLead').value);
+            const direction = document.getElementById('callDir').value;
+            const duration = document.getElementById('callDuration').value.trim() || '02:00';
+            const outcome = document.getElementById('callOutcome').value;
+            const sentiment = parseInt(document.getElementById('callSentiment').value) || 70;
+            if (!leadId) return toast('Select a lead.', 'warning');
+            db.calls.push({ id: genId('call'), leadId, direction, startTime: nowStr(), duration, ringDuration: '00:05', holdDuration: '00:00', outcome, mood: sentiment>60?'Positive':sentiment>30?'Neutral':'Negative', sentiment, recording: 'CL-'+String(db.calls.length+1).padStart(4,'0'), notes: '' });
+            const lead = getLead(leadId);
+            if (lead) lead.lastContact = todayStr();
+            saveDB();
+            toast('Call logged!', 'success');
+            closeModal();
+            navigateTo(currentPage);
+        }
+
+        function deleteCall(id) { if (!confirm('Delete?')) return; db.calls = db.calls.filter(c => c.id !== id); saveDB(); toast('Deleted.', 'info'); navigateTo(currentPage); }
+
+        // ----- FOLLOWUP -----
+        function renderFollowup(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-calendar-check"></i> Follow-ups</h2><button class="btn btn-primary btn-sm" onclick="openAddFollowup()"><i class="fas fa-plus"></i> New</button></div>
+            <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Lead</th><th>Purpose</th><th>Reminder</th><th>Channel</th><th>Priority</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody>${db.followups.map(f => {
+                    const lead = getLead(f.leadId);
+                    return `<tr><td>${lead?lead.name:'Unknown'}</td><td>${f.purpose}</td><td>${formatDateTime(f.reminder)}</td><td>${f.channel}</td><td>${chip(f.priority, f.priority==='High'?'red':f.priority==='Medium'?'amber':'slate')}</td><td>${statusBadge(f.status)}</td><td><button class="btn btn-sm btn-success" onclick="completeFollowup(${f.id})"><i class="fas fa-check"></i></button><button class="btn btn-sm btn-danger" onclick="deleteFollowup(${f.id})"><i class="fas fa-trash"></i></button></td></tr>`;
+                }).join('') || '<tr><td colspan="7" class="text-center text-gray-400 py-8">No follow-ups</td></tr>'}</tbody>
+            </table></div></div>`;
+        }
+
+        function openAddFollowup() {
+            const leadOpts = db.leads.map(l => `<option value="${l.id}">${l.name}</option>`).join('');
+            showModal(`
+            <div class="modal-header"><h3><i class="fas fa-calendar-plus"></i> New Follow-up</h3><button class="close" onclick="closeModal()">&times;</button></div>
+            <form id="fuForm" onsubmit="saveFollowup(event)">
+                <div class="form-group"><label>Lead</label><select id="fuLead">${leadOpts}</select></div>
+                <div class="form-group"><label>Purpose</label><input type="text" id="fuPurpose" required /></div>
+                <div class="form-row"><div class="form-group"><label>Reminder</label><input type="datetime-local" id="fuReminder" required /></div><div class="form-group"><label>Channel</label><select id="fuChannel"><option value="Phone">Phone</option><option value="WhatsApp">WhatsApp</option><option value="Email">Email</option><option value="SMS">SMS</option></select></div></div>
+                <div class="form-row"><div class="form-group"><label>Priority</label><select id="fuPriority"><option value="High">High</option><option value="Medium">Medium</option><option value="Low">Low</option></select></div></div>
+                <div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancel</button><button type="submit" class="btn btn-primary">Create</button></div>
+            </form>`);
+        }
+
+        function saveFollowup(event) {
+            event.preventDefault();
+            const leadId = parseInt(document.getElementById('fuLead').value);
+            const purpose = document.getElementById('fuPurpose').value.trim();
+            const reminder = document.getElementById('fuReminder').value;
+            const channel = document.getElementById('fuChannel').value;
+            const priority = document.getElementById('fuPriority').value;
+            if (!purpose || !reminder) return toast('Purpose and reminder required.', 'warning');
+            db.followups.push({ id: genId('followup'), leadId, purpose, priority, reminder: reminder.replace('T',' '), channel, status: 'Pending', completion: 0, notes: '' });
+            saveDB();
+            toast('Follow-up created!', 'success');
+            closeModal();
+            navigateTo(currentPage);
+        }
+
+        function completeFollowup(id) { const f = db.followups.find(x => x.id === id); if (f) { f.status = 'Completed'; f.completion = 100; saveDB(); toast('Completed!', 'success'); navigateTo(currentPage); } }
+        function deleteFollowup(id) { if (!confirm('Delete?')) return; db.followups = db.followups.filter(f => f.id !== id); saveDB(); toast('Deleted.', 'info'); navigateTo(currentPage); }
+
+        // ----- OTHER RENDERERS (stubbed but functional) -----
+        function renderOpportunities(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-bullseye"></i> Opportunities</h2></div>
+            <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Lead</th><th>Product</th><th>Value</th><th>Stage</th><th>Win %</th><th>Status</th></tr></thead>
+                <tbody>${db.opportunities.map(o => {
+                    const lead = getLead(o.leadId);
+                    return `<tr><td>${lead?lead.name:'Unknown'}</td><td>${o.product}</td><td>â‚¹${(o.estimatedValue/1000).toFixed(1)}K</td><td>${chip(o.stage, o.stage==='Won'?'green':o.stage==='Lost'?'red':'amber')}</td><td>${o.winPct}%</td><td>${statusBadge(o.status)}</td></tr>`;
+                }).join('')}</tbody>
+            </table></div></div>`;
+        }
+
+        function renderAppointments(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-calendar-alt"></i> Appointments</h2></div>
+            <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Lead</th><th>Gallery</th><th>Service</th><th>Date</th><th>Time</th><th>Status</th></tr></thead>
+                <tbody>${db.appointments.map(a => {
+                    const lead = getLead(a.leadId);
+                    return `<tr><td>${lead?lead.name:'Unknown'}</td><td>${a.gallery}</td><td>${a.service}</td><td>${formatDate(a.date)}</td><td>${a.time}</td><td>${statusBadge(a.status)}</td></tr>`;
+                }).join('')}</tbody>
+            </table></div></div>`;
+        }
+
+        function renderTimeline(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-stream"></i> Timeline</h2></div>
+            <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+                ${db.calls.slice(0,5).map(c => {
+                    const lead = getLead(c.leadId);
+                    return `<div class="flex items-start gap-3 pb-3 border-b border-gray-100"><i class="fas fa-phone-alt text-blue-500 mt-1"></i><div><div class="text-sm font-medium">Call with ${lead?lead.name:'Unknown'}</div><div class="text-xs text-gray-500">${formatDateTime(c.startTime)} Â· ${c.duration} Â· ${c.outcome}</div></div></div>`;
+                }).join('') || '<div class="text-center text-gray-400 py-4">No activity</div>'}
+            </div>`;
+        }
+
+        function renderMembership(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-id-badge"></i> Membership</h2></div>
+            <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Lead</th><th>Plan</th><th>Expiry</th><th>Value</th><th>Probability</th><th>Payment</th><th>Status</th></tr></thead>
+                <tbody>${db.membershipRenewals.map(m => {
+                    const lead = getLead(m.leadId);
+                    return `<tr><td>${lead?lead.name:'Unknown'}</td><td>${m.plan}</td><td>${formatDate(m.expiry)}</td><td>â‚¹${(m.value/1000).toFixed(1)}K</td><td>${m.probability}%</td><td>${chip(m.payment, m.payment==='Paid'?'green':m.payment==='Overdue'?'red':'amber')}</td><td>${statusBadge(m.status)}</td></tr>`;
+                }).join('')}</tbody>
+            </table></div></div>`;
+        }
+
+        function renderWhatsapp(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fab fa-whatsapp" style="color:#25D366;"></i> WhatsApp</h2></div>
+            <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Lead</th><th>Template</th><th>Campaign</th><th>Status</th><th>Delivered</th><th>Read</th><th>Replied</th></tr></thead>
+                <tbody>${db.whatsapp.map(w => {
+                    const lead = getLead(w.leadId);
+                    return `<tr><td>${lead?lead.name:'Unknown'}</td><td>${w.template}</td><td>${w.campaign}</td><td>${statusBadge(w.status)}</td><td>${w.delivered?'âœ…':'âŒ'}</td><td>${w.read?'âœ…':'âŒ'}</td><td>${w.replied?'âœ…':'âŒ'}</td></tr>`;
+                }).join('')}</tbody>
+            </table></div></div>`;
+        }
+
+        function renderSms(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-comment-alt"></i> SMS</h2></div>
+            <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Lead</th><th>Template</th><th>Type</th><th>Delivery</th><th>Read</th><th>Status</th></tr></thead>
+                <tbody>${db.sms.map(s => {
+                    const lead = getLead(s.leadId);
+                    return `<tr><td>${lead?lead.name:'Unknown'}</td><td>${s.template}</td><td>${s.type}</td><td>${s.delivery}</td><td>${s.read?'âœ…':'âŒ'}</td><td>${statusBadge(s.status)}</td></tr>`;
+                }).join('')}</tbody>
+            </table></div></div>`;
+        }
+
+        function renderEmail(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-envelope"></i> Email</h2></div>
+            <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Lead</th><th>Subject</th><th>Template</th><th>Open %</th><th>Click %</th><th>Reply</th></tr></thead>
+                <tbody>${db.emailCrm.map(e => {
+                    const lead = getLead(e.leadId);
+                    return `<tr><td>${lead?lead.name:'Unknown'}</td><td>${e.subject}</td><td>${e.template}</td><td>${e.openRate}%</td><td>${e.clickRate}%</td><td>${e.reply?'âœ…':'âŒ'}</td></tr>`;
+                }).join('')}</tbody>
+            </table></div></div>`;
+        }
+
+        function renderKPI(container) {
+            const k = db.teleKpi;
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-chart-pie"></i> Telecaller KPI</h2></div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                ${Object.entries(k).map(([key,val]) => `<div class="stat-card"><div class="label">${key.replace(/([A-Z])/g,' $1').trim()}</div><div class="value">${val}</div></div>`).join('')}
+            </div>`;
+        }
+
+        function renderGamification(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-trophy"></i> Gamification</h2></div>
+            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm text-center mb-6">
+                <div class="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-2"><i class="fas fa-trophy text-2xl text-amber-500"></i></div>
+                <h3 class="font-bold text-gray-800">You are #2 on the Leaderboard</h3>
+                <p class="text-xs text-gray-400">82/100 score Â· Monthly Champion runner-up</p>
+            </div>
+            <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Rank</th><th>Name</th><th>Converts</th><th>Revenue</th><th>Rating</th><th>Attendance</th><th>Badges</th><th>Score</th></tr></thead>
+                <tbody>${db.gamification.map(g => `
+                    <tr><td>${g.rank===1?'ðŸ¥‡':g.rank===2?'ðŸ¥ˆ':g.rank===3?'ðŸ¥‰':'#'+g.rank}</td><td><strong>${g.name}</strong></td><td>${g.converts}</td><td>â‚¹${(g.revenue/100000).toFixed(1)}L</td><td>${g.rating}</td><td>${g.attendance}%</td><td>${g.badges}</td><td><strong>${g.score}</strong></td></tr>
+                `).join('')}</tbody>
+            </table></div></div>`;
+        }
+
+        function renderReports(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-chart-bar"></i> Reports</h2><button class="btn btn-primary btn-sm" onclick="toast('Exporting...','info')"><i class="fas fa-download"></i> Export</button></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                ${[
+                    {title:'Lead Reports', items:['Lead Master','Lead Conversion','Lead Funnel']},
+                    {title:'Call Reports', items:['Call Detail','Call Outcome','Call Duration']},
+                    {title:'Performance Reports', items:['Productivity','SLA Compliance','Incentive']}
+                ].map(cat => `
+                    <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+                        <h4 class="font-bold text-sm text-gray-800 mb-3"><i class="fas fa-folder text-blue-500"></i> ${cat.title}</h4>
+                        <ul>${cat.items.map(item => `<li onclick="toast('Generating ${item}...','info')" class="text-sm text-gray-600 hover:text-blue-600 cursor-pointer p-1.5 hover:bg-gray-50 rounded flex justify-between"><span>${item}</span><i class="fas fa-chevron-right text-xs text-gray-300"></i></li>`).join('')}</ul>
+                    </div>
+                `).join('')}
+            </div>`;
+        }
+
+        function renderPerformance(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-chart-line"></i> Performance</h2></div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="stat-card"><div class="label">Performance Score</div><div class="value">92/100</div></div>
+                <div class="stat-card"><div class="label">SLA Compliance</div><div class="value">96%</div></div>
+                <div class="stat-card"><div class="label">CSAT</div><div class="value">4.6/5</div></div>
+                <div class="stat-card"><div class="label">Quality Score</div><div class="value">89%</div></div>
+                <div class="stat-card"><div class="label">Incentive</div><div class="value">â‚¹8,500</div></div>
+            </div>`;
+        }
+
+        function renderQuickActions(container) {
+            const actions = [
+                {icon:'fa-phone',label:'Click-to-Call',color:'blue'},
+                {icon:'fa-whatsapp',label:'WhatsApp',color:'emerald'},
+                {icon:'fa-comment-alt',label:'Send SMS',color:'purple'},
+                {icon:'fa-envelope',label:'Send Email',color:'amber'},
+                {icon:'fa-calendar-check',label:'Schedule Callback',color:'blue'},
+                {icon:'fa-calendar-plus',label:'Book Appointment',color:'emerald'},
+                {icon:'fa-user-check',label:'Convert Lead',color:'blue'},
+                {icon:'fa-id-badge',label:'Renew Membership',color:'purple'},
+            ];
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-bolt"></i> Quick Actions</h2></div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                ${actions.map(a => `
+                    <button onclick="toast('${a.label}','info')" class="bg-white p-4 rounded-xl border border-gray-200 hover:border-blue-500 hover:shadow-md transition text-center">
+                        <i class="fas ${a.icon} text-${a.color}-500 text-2xl block mx-auto mb-1"></i>
+                        <span class="text-xs font-medium text-gray-700">${a.label}</span>
+                    </button>
+                `).join('')}
+            </div>`;
+        }
+
+        function renderSettings(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-cog"></i> Settings</h2></div>
+            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm max-w-2xl">
+                <div class="space-y-4">
+                    <div><label class="block text-xs font-semibold text-gray-600 mb-1">Name</label><input value="Yashraj Sathe" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                    <div><label class="block text-xs font-semibold text-gray-600 mb-1">Extension</label><input value="1042" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                    <div><label class="block text-xs font-semibold text-gray-600 mb-1">Default Campaign</label><select class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm"><option>Membership Drive</option><option>Franchise Drive</option><option>Product Launch</option></select></div>
+                    <button onclick="toast('Settings saved!','success')" class="btn btn-primary">Save</button>
+                </div>
+            </div>`;
+        }
+
+        // ----- DIALER -----
+        function renderDialer(container) {
+            container.innerHTML = `
+            <div class="section-header"><h2><i class="fas fa-headset"></i> Auto Dialer</h2></div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-1 bg-white rounded-xl p-8 border border-gray-200 shadow-sm text-center">
+                    <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-headset text-4xl text-blue-600"></i></div>
+                    <h3 class="font-bold text-gray-800">Dialer Ready</h3>
+                    <p class="text-xs text-gray-400 mt-1 mb-6">${db.leads.filter(l=>l.status==='Fresh').length} calls waiting</p>
+                    <button onclick="toast('Starting autodial...','info')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl mb-3"><i class="fas fa-phone-volume mr-2"></i> Start</button>
+                    <button onclick="toast('Paused','info')" class="w-full border border-amber-300 text-amber-600 font-semibold py-3 rounded-xl hover:bg-amber-50">Pause</button>
+                </div>
+                <div class="lg:col-span-2">
+                    <div class="table-wrap"><div class="table-scroll"><table>
+                        <thead><tr><th>Queue</th><th>Lead</th><th>Mobile</th><th>Priority</th><th>Status</th></tr></thead>
+                        <tbody>${db.leads.filter(l=>l.status==='Fresh'||l.status==='Contacted').slice(0,5).map((l,i) => `
+                            <tr><td>${i+1}</td><td>${l.name}</td><td>${l.mobile}</td><td>${chip(l.temperature, l.temperature==='Hot'?'red':l.temperature==='Warm'?'amber':'slate')}</td><td>${statusBadge(l.status)}</td></tr>
+                        `).join('')}</tbody>
+                    </table></div></div>
+                </div>
+            </div>`;
+        }
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        renderSidebar();
+        navigateTo('dashboard');
+
+        // Global search
+        document.getElementById('globalSearch').addEventListener('input', function(e) {
+            const q = e.target.value.toLowerCase().trim();
+            document.querySelectorAll('#pageContent table tbody tr').forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = !q || text.includes(q) ? '' : 'none';
+            });
+        });
+
+        // Expose functions globally
+        window.openAddLead = openAddLead;
+        window.openEditLead = openEditLead;
+        window.saveLead = saveLead;
+        window.deleteLead = deleteLead;
+        window.openAddCall = openAddCall;
+        window.saveCall = saveCall;
+        window.deleteCall = deleteCall;
+        window.openAddFollowup = openAddFollowup;
+        window.saveFollowup = saveFollowup;
+        window.completeFollowup = completeFollowup;
+        window.deleteFollowup = deleteFollowup;
+        window.filterLeads = filterLeads;
+        window.resetLeadFilters = resetLeadFilters;
+        window.loadLeadProfile = loadLeadProfile;
+        window.navigateTo = navigateTo;
+        window.toast = toast;
+        window.closeModal = closeModal;
+
+        console.log('ðŸš€ Telecalling CRM loaded with full CRUD and AI features.');
+        console.log(`ðŸ“Š ${db.leads.length} leads, ${db.calls.length} calls, ${db.followups.length} follow-ups.`);
+    </script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1041 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ePay Emergency Assistance · Help When You Need It</title>
+<meta name="description" content="Emergency support for international students and workers — lost passport, travel emergencies, medical assistance, embassy contacts, and more." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+
+
+
+:root {
+  --ink: #0a0b10;
+  --ink-2: #12141c;
+  --ink-3: #1a1d2a;
+  --purple: #8b5cf6;
+  --purple-light: #a78bfa;
+  --purple-dim: rgba(139,92,246,0.15);
+  --cyan: #06b6d4;
+  --cyan-dim: rgba(6,182,212,0.12);
+  --emerald: #10b981;
+  --emerald-dim: rgba(16,185,129,0.12);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.12);
+  --rose: #ef4444;
+  --rose-dim: rgba(239,68,68,0.12);
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --glass: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --radius: 20px;
+  --radius-sm: 12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--ink);
+  color:var(--text);
+  line-height:1.65;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+.container{width:100%;max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* Ambient */
+.ambient{
+  position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+}
+.ambient .orb{
+  position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;
+  animation:floatOrb 18s ease-in-out infinite;
+}
+.orb.o1{width:480px;height:480px;background:radial-gradient(circle,#8b5cf6,transparent 70%);top:-10%;right:-5%}
+.orb.o2{width:360px;height:360px;background:radial-gradient(circle,#06b6d4,transparent 70%);bottom:10%;left:-8%;animation-delay:-6s}
+.orb.o3{width:280px;height:280px;background:radial-gradient(circle,#10b981,transparent 70%);top:45%;left:40%;animation-delay:-12s;opacity:.2}
+@keyframes floatOrb{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(40px,-50px) scale(1.1)}
+  66%{transform:translate(-30px,30px) scale(.95)}
+}
+
+/* Nav */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(10,11,16,.7);backdrop-filter:blur(20px) saturate(160%);
+  border-bottom:1px solid transparent;transition:.4s;
+}
+.nav.scrolled{border-bottom-color:var(--border);box-shadow:0 8px 40px rgba(0,0,0,.4)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem;letter-spacing:-.02em}
+.logo-mark{
+  width:36px;height:36px;border-radius:11px;
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#fff;font-weight:900;
+  box-shadow:0 4px 16px rgba(139,92,246,.4);
+}
+.logo span{background:linear-gradient(135deg,var(--purple-light),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:26px;list-style:none}
+.nav-links a{font-size:.88rem;font-weight:500;color:var(--muted);transition:.25s}
+.nav-links a:hover{color:var(--purple-light)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 24px;font-size:.9rem;font-weight:600;border-radius:100px;border:none;cursor:pointer;
+  transition:.4s cubic-bezier(.34,1.56,.64,1);font-family:inherit;position:relative;overflow:hidden;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  color:#fff;box-shadow:0 4px 24px rgba(139,92,246,.35);
+}
+.btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 36px rgba(139,92,246,.5)}
+.btn-ghost{
+  background:transparent;color:var(--text);border:1.5px solid var(--border);
+}
+.btn-ghost:hover{border-color:var(--purple);color:var(--purple-light);background:var(--purple-dim)}
+.btn-success{
+  background:linear-gradient(135deg,var(--emerald),#059669);
+  color:#fff;box-shadow:0 4px 24px rgba(16,185,129,.35);
+}
+.btn-success:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 36px rgba(16,185,129,.5)}
+.btn-rose{
+  background:linear-gradient(135deg,var(--rose),#dc2626);
+  color:#fff;
+}
+.btn-rose:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 36px rgba(239,68,68,.4)}
+.btn-lg{padding:16px 32px;font-size:1rem}
+.btn-sm{padding:6px 16px;font-size:.8rem}
+.mobile-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.mobile-toggle span{display:block;width:22px;height:2px;background:var(--text);margin:5px 0;border-radius:2px}
+
+/* Hero */
+.hero{
+  min-height:100vh;display:flex;align-items:center;padding:120px 0 60px;position:relative;z-index:1;
+}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--rose-dim);border:1px solid rgba(239,68,68,.3);
+  color:var(--rose);font-size:.78rem;font-weight:600;padding:7px 16px;border-radius:100px;margin-bottom:22px;
+}
+.hero-badge .dot{width:7px;height:7px;background:var(--rose);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.5)}50%{box-shadow:0 0 0 8px transparent}}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.4rem,5vw,3.6rem);font-weight:700;line-height:1.12;letter-spacing:-.03em;margin-bottom:18px;
+}
+.hero h1 .gradient{
+  background:linear-gradient(135deg,var(--rose),var(--amber),var(--purple-light));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{font-size:1.08rem;color:var(--muted);max-width:520px;margin-bottom:28px;line-height:1.7}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:32px}
+.hero-tagline{
+  font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--rose);
+  border-left:3px solid var(--rose);padding-left:16px;opacity:.9;
+}
+.hero-visual{position:relative}
+.hero-card{
+  background:linear-gradient(160deg,rgba(26,29,42,.9),rgba(18,20,28,.95));
+  border:1px solid var(--border);border-radius:24px;padding:24px;backdrop-filter:blur(20px);
+  box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 1px rgba(239,68,68,.08);
+  position:relative;overflow:hidden;
+}
+.hero-card::before{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:conic-gradient(from 0deg,transparent,rgba(239,68,68,.06),transparent 40%);
+  animation:spin 20s linear infinite;pointer-events:none;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-card-img{
+  height:180px;border-radius:16px;background-size:cover;background-position:center;
+  margin-bottom:16px;position:relative;overflow:hidden;
+}
+.hero-card-img .overlay{
+  position:absolute;inset:0;background:linear-gradient(to top,rgba(10,11,16,.8),transparent 50%);
+}
+.metric-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative;z-index:1}
+.metric{
+  background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:12px 14px;
+  transition:.3s;
+}
+.metric:hover{border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.06)}
+.metric .label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.metric .val{font-size:1.25rem;font-weight:800;color:var(--rose);margin-top:2px}
+
+/* Sections */
+section{padding:60px 0;position:relative;z-index:1}
+.section-label{
+  display:inline-block;font-size:.72rem;font-weight:700;color:var(--rose);
+  text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;
+  background:var(--rose-dim);padding:6px 14px;border-radius:100px;border:1px solid rgba(239,68,68,.2);
+}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin-bottom:12px;
+}
+.section-sub{font-size:1.02rem;color:var(--muted);max-width:560px;margin-bottom:40px;line-height:1.7}
+.text-center{text-align:center}
+.text-center .section-sub{margin-left:auto;margin-right:auto}
+
+/* Cards */
+.card{
+  background:linear-gradient(160deg,rgba(26,29,42,.85),rgba(18,20,28,.9));
+  border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;
+  transition:.4s;
+}
+.card:hover{border-color:rgba(239,68,68,.2);box-shadow:0 10px 40px rgba(0,0,0,.3)}
+
+/* Emergency Contact Cards */
+.emergency-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.emergency-card{
+  background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;
+  text-align:center;transition:.4s;cursor:pointer;
+}
+.emergency-card:hover{border-color:rgba(239,68,68,.3);transform:translateY(-4px);box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.emergency-card .icon{font-size:2rem;margin-bottom:8px}
+.emergency-card h3{font-size:1rem;font-weight:700;color:#fff}
+.emergency-card .desc{font-size:.8rem;color:var(--muted);margin-top:4px}
+.emergency-card .phone{font-size:1.1rem;font-weight:700;color:var(--rose);margin-top:8px}
+
+/* Category Grid */
+.category-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.category-card{
+  background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;
+  transition:.4s;cursor:pointer;
+  display:flex;flex-direction:column;
+}
+.category-card:hover{border-color:rgba(239,68,68,.3);transform:translateY(-4px);box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.category-card .top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.category-card .top .icon{font-size:1.8rem}
+.category-card .top h3{font-size:1rem;font-weight:700;color:#fff}
+.category-card .desc{font-size:.85rem;color:var(--muted);line-height:1.5;flex:1}
+.category-card .actions{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+
+/* Embassy Table */
+.embassy-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.embassy-table th{text-align:left;padding:10px 12px;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);font-size:.75rem;text-transform:uppercase;letter-spacing:.04em}
+.embassy-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text-secondary)}
+.embassy-table tr:hover td{background:rgba(255,255,255,.02)}
+.embassy-table .highlight{color:#fff;font-weight:600}
+
+/* CTA band */
+.cta-band{
+  background:linear-gradient(135deg,rgba(239,68,68,.12),rgba(245,158,11,.08));
+  border:1px solid rgba(239,68,68,.25);border-radius:28px;padding:48px 40px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-band::before{
+  content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);
+  animation:shimmer 4s infinite;
+}
+@keyframes shimmer{100%{left:150%}}
+.cta-band h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:12px}
+.cta-band p{color:var(--muted);max-width:480px;margin:0 auto 24px}
+
+/* Modal */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
+  z-index:200;display:none;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--ink-2);border:1px solid var(--border);border-radius:24px;
+  max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:32px;
+  box-shadow:0 40px 100px rgba(0,0,0,.6);animation:modalIn .4s ease;position:relative;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+.modal h2{font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:4px}
+.modal .sub{color:var(--muted);font-size:.85rem;margin-bottom:20px}
+.modal-close{
+  position:absolute;top:16px;right:16px;background:var(--glass);border:1px solid var(--border);
+  width:36px;height:36px;border-radius:50%;color:var(--muted);cursor:pointer;font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid .full{grid-column:1/-1}
+.form-group label{display:block;font-size:.75rem;font-weight:600;color:var(--muted);margin-bottom:4px}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--glass);color:var(--text);font-family:inherit;font-size:.88rem;outline:none;transition:.25s;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  border-color:var(--rose);box-shadow:0 0 0 3px rgba(239,68,68,.15);
+}
+.form-group select option{background:var(--ink-2)}
+
+/* Toast */
+.toast-box{position:fixed;bottom:24px;right:24px;z-index:300}
+.toast{
+  background:var(--ink-3);border:1px solid rgba(239,68,68,.3);border-left:3px solid var(--rose);
+  border-radius:12px;padding:14px 18px;min-width:240px;font-size:.9rem;
+  box-shadow:0 12px 40px rgba(0,0,0,.4);animation:slideIn .35s ease;margin-top:8px;
+}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:none;opacity:1}}
+
+/* FAQ */
+.faq-list{max-width:720px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{
+  width:100%;text-align:left;background:none;border:none;color:var(--text);
+  padding:18px 0;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+}
+.faq-q:hover{color:var(--rose)}
+.faq-q .chev{transition:.3s;color:var(--rose)}
+.faq-item.open .chev{transform:rotate(180deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease;color:var(--muted);font-size:.92rem}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:16px}
+
+/* Footer */
+footer{
+  border-top:1px solid var(--border);padding:32px 0 24px;position:relative;z-index:1;
+  text-align:center;color:var(--muted);font-size:.8rem;
+}
+footer .logo{justify-content:center;margin-bottom:10px}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:none}
+.reveal-d1{transition-delay:.1s}
+.reveal-d2{transition-delay:.2s}
+.reveal-d3{transition-delay:.3s}
+
+/* Responsive */
+@media(max-width:900px){
+  .hero-grid{grid-template-columns:1fr}
+  .emergency-grid{grid-template-columns:1fr 1fr}
+  .category-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:var(--ink-2);padding:20px;border-bottom:1px solid var(--border)}
+}
+@media(max-width:600px){
+  .hero{padding:100px 0 40px;min-height:auto}
+  .hero h1{font-size:1.8rem}
+  .emergency-grid{grid-template-columns:1fr}
+  .cta-band{padding:32px 20px}
+  .form-grid{grid-template-columns:1fr}
+  .form-grid .full{grid-column:1}
+}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+<div class="ambient">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+</div>
+
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo"><div class="logo-mark">eE</div> <span>ePay Emergency</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#contacts">Emergency Contacts</a></li>
+      <li><a href="#categories">Help Categories</a></li>
+      <li><a href="#embassy">Embassy Info</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="btn btn-ghost" onclick="openModal('login')">Sign In</button>
+      <button class="btn btn-rose" onclick="openModal('emergency')"><i class="fas fa-exclamation-triangle"></i> Request Help</button>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-badge"><span class="dot"></span> 24/7 Emergency Support</div>
+      <h1>We're Here When You <span class="gradient">Need Us Most</span></h1>
+      <p class="hero-sub">Lost passport? Travel emergency? Medical assistance? ePay coordinates with verified providers to get you the help you need — fast.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-rose btn-lg" onclick="openModal('emergency')">🆘 Request Emergency Help</button>
+        <button class="btn btn-ghost btn-lg" onclick="document.getElementById('contacts').scrollIntoView({behavior:'smooth'})">📞 View Contacts</button>
+      </div>
+      <p class="hero-tagline">Always available. Always ready to help.</p>
+    </div>
+    <div class="hero-visual reveal">
+      <div class="hero-card">
+        <div class="hero-card-img" style="background-image:url('https://images.unsplash.com/photo-1589998059171-988d887df646?w=800&q=80')">
+          <div class="overlay"></div>
+        </div>
+        <div class="metric-row">
+          <div class="metric"><div class="label">Emergency Types</div><div class="val">8+</div></div>
+          <div class="metric"><div class="label">Verified Providers</div><div class="val">120+</div></div>
+          <div class="metric"><div class="label">Response Time</div><div class="val">30 min</div></div>
+          <div class="metric"><div class="label">Satisfaction</div><div class="val">97%</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMERGENCY CONTACTS -->
+<section id="contacts" style="background:rgba(18,20,28,.3);padding-top:60px;padding-bottom:60px;">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Emergency Contacts</span>
+      <h2 class="section-title">Reach Out Immediately</h2>
+      <p class="section-sub">Available 24/7 for urgent situations. Call or message us anytime.</p>
+    </div>
+    <div class="emergency-grid reveal">
+      <div class="emergency-card" onclick="showToast('📞 Calling +91 98765 43210...')">
+        <div class="icon">📞</div>
+        <h3>Global Emergency Helpline</h3>
+        <div class="desc">For all emergencies — 24/7</div>
+        <div class="phone">+91 98765 43210</div>
+      </div>
+      <div class="emergency-card" onclick="showToast('📞 Calling +91 98765 43211...')">
+        <div class="icon">🛂</div>
+        <h3>Passport &amp; Document Help</h3>
+        <div class="desc">Lost passport or visa issues</div>
+        <div class="phone">+91 98765 43211</div>
+      </div>
+      <div class="emergency-card" onclick="showToast('📞 Calling +91 98765 43212...')">
+        <div class="icon">🏥</div>
+        <h3>Medical Assistance</h3>
+        <div class="desc">Coordination with hospitals &amp; doctors</div>
+        <div class="phone">+91 98765 43212</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:12px;">
+      <span class="glass-tag" style="font-size:.8rem;padding:6px 16px;"><i class="fas fa-clock" style="color:var(--rose);"></i> Available 24/7 · 365 days</span>
+    </div>
+  </div>
+</section>
+
+<!-- HELP CATEGORIES -->
+<section id="categories">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Help Categories</span>
+      <h2 class="section-title">Comprehensive Support</h2>
+      <p class="section-sub">We coordinate with verified providers to assist you with a wide range of emergencies.</p>
+    </div>
+    <div class="category-grid reveal">
+      <div class="category-card">
+        <div class="top"><span class="icon">🛂</span><h3>Lost Passport Guidance</h3></div>
+        <div class="desc">Step-by-step assistance for reporting lost/stolen passports, contacting your embassy, and obtaining emergency travel documents.</div>
+        <div class="actions"><button class="btn btn-sm btn-rose" onclick="openCategory('passport')">Get Help</button><button class="btn btn-sm btn-ghost" onclick="showToast('📄 Passport guidance sent to your email')">Guide</button></div>
+      </div>
+      <div class="category-card">
+        <div class="top"><span class="icon">✈️</span><h3>Travel Emergency</h3></div>
+        <div class="desc">Flight cancellations, missed connections, lost luggage, medical emergencies abroad — we coordinate with airlines and local providers.</div>
+        <div class="actions"><button class="btn btn-sm btn-rose" onclick="openCategory('travel')">Get Help</button><button class="btn btn-sm btn-ghost" onclick="showToast('📄 Travel emergency checklist sent')">Guide</button></div>
+      </div>
+      <div class="category-card">
+        <div class="top"><span class="icon">🏠</span><h3>Accommodation Emergency</h3></div>
+        <div class="desc">Issues with your housing — unsafe conditions, eviction threats, or disputes with landlords. We connect you with legal and housing support.</div>
+        <div class="actions"><button class="btn btn-sm btn-rose" onclick="openCategory('accommodation')">Get Help</button><button class="btn btn-sm btn-ghost" onclick="showToast('📄 Housing rights guide sent')">Guide</button></div>
+      </div>
+      <div class="category-card">
+        <div class="top"><span class="icon">💼</span><h3>Employer Issue</h3></div>
+        <div class="desc">Workplace harassment, contract violations, unpaid wages, or termination disputes. We provide legal referral and support.</div>
+        <div class="actions"><button class="btn btn-sm btn-rose" onclick="openCategory('employer')">Get Help</button><button class="btn btn-sm btn-ghost" onclick="showToast('📄 Employment rights guide sent')">Guide</button></div>
+      </div>
+      <div class="category-card">
+        <div class="top"><span class="icon">📄</span><h3>Document Issue</h3></div>
+        <div class="desc">Lost or expired visas, work permits, health insurance cards, or other essential documents. We guide you through the renewal/replacement process.</div>
+        <div class="actions"><button class="btn btn-sm btn-rose" onclick="openCategory('document')">Get Help</button><button class="btn btn-sm btn-ghost" onclick="showToast('📄 Document recovery steps sent')">Guide</button></div>
+      </div>
+      <div class="category-card">
+        <div class="top"><span class="icon">🏥</span><h3>Medical Assistance Coordination</h3></div>
+        <div class="desc">Connect with hospitals, clinics, and doctors. We help with appointment scheduling, language support, and insurance coordination.</div>
+        <div class="actions"><button class="btn btn-sm btn-rose" onclick="openCategory('medical')">Get Help</button><button class="btn btn-sm btn-ghost" onclick="showToast('📄 Medical guide sent')">Guide</button></div>
+      </div>
+      <div class="category-card">
+        <div class="top"><span class="icon">🏛️</span><h3>Embassy/Consulate Information</h3></div>
+        <div class="desc">Quick access to contact details, locations, and services of embassies and consulates for your country.</div>
+        <div class="actions"><button class="btn btn-sm btn-rose" onclick="openCategory('embassy')">Get Help</button><button class="btn btn-sm btn-ghost" onclick="showToast('📄 Embassy contact list sent')">Guide</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMBASSY INFO -->
+<section id="embassy" style="background:rgba(18,20,28,.3);padding-top:60px;padding-bottom:60px;">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Embassy &amp; Consulate</span>
+      <h2 class="section-title">Embassy Contacts</h2>
+      <p class="section-sub">Quick reference for embassies and consulates in major destinations.</p>
+    </div>
+    <div class="card reveal" style="padding:0;overflow:hidden;">
+      <div class="table-scroll">
+        <table class="embassy-table">
+          <thead>
+            <tr><th>Country</th><th>City</th><th>Address</th><th>Phone</th><th>Emergency</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="highlight">🇮🇳 India</span></td><td>Dubai, UAE</td><td>Dubai World Trade Centre</td><td>+971 4 123 4567</td><td>+971 50 123 4567</td></tr>
+            <tr><td><span class="highlight">🇬🇧 UK</span></td><td>Dubai, UAE</td><td>Al Moosa Tower, Sheikh Zayed Rd</td><td>+971 4 123 4568</td><td>+971 50 123 4568</td></tr>
+            <tr><td><span class="highlight">🇺🇸 USA</span></td><td>Dubai, UAE</td><td>U.S. Consulate General</td><td>+971 4 123 4569</td><td>+971 50 123 4569</td></tr>
+            <tr><td><span class="highlight">🇨🇦 Canada</span></td><td>Dubai, UAE</td><td>Canadian Consulate</td><td>+971 4 123 4570</td><td>+971 50 123 4570</td></tr>
+            <tr><td><span class="highlight">🇦🇺 Australia</span></td><td>Dubai, UAE</td><td>Australian Consulate</td><td>+971 4 123 4571</td><td>+971 50 123 4571</td></tr>
+            <tr><td><span class="highlight">🇸🇬 Singapore</span></td><td>Singapore</td><td>Singapore Consulate</td><td>+65 1234 5678</td><td>+65 9876 5432</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:8px;">
+      <span class="glass-tag" style="font-size:.7rem;">More embassies available in the full directory</span>
+    </div>
+  </div>
+</section>
+
+<!-- COORDINATION PARTNERS -->
+<section style="padding-top:40px;padding-bottom:40px;">
+  <div class="container">
+    <div class="cta-band" style="background:linear-gradient(135deg,rgba(239,68,68,.12),rgba(139,92,246,.08));border:1px solid rgba(239,68,68,.25);border-radius:28px;padding:40px;text-align:center;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);animation:shimmer 4s infinite;"></div>
+      <span class="section-label" style="background:var(--cyan-dim);border-color:rgba(6,182,212,.3);color:var(--cyan);">Verified Providers</span>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.4rem,2.5vw,1.8rem);margin-bottom:10px;">We Coordinate with Trusted Partners</h2>
+      <p style="color:var(--muted);max-width:480px;margin:0 auto 20px;">ePay doesn't provide every service directly. We connect you with verified, reliable providers for medical care, legal support, embassy liaison, travel assistance, and more.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;">
+        <span class="glass-tag"><i class="fas fa-check-circle" style="color:var(--emerald);"></i> Medical</span>
+        <span class="glass-tag"><i class="fas fa-check-circle" style="color:var(--emerald);"></i> Legal</span>
+        <span class="glass-tag"><i class="fas fa-check-circle" style="color:var(--emerald);"></i> Travel</span>
+        <span class="glass-tag"><i class="fas fa-check-circle" style="color:var(--emerald);"></i> Embassy</span>
+        <span class="glass-tag"><i class="fas fa-check-circle" style="color:var(--emerald);"></i> Housing</span>
+        <span class="glass-tag"><i class="fas fa-check-circle" style="color:var(--emerald);"></i> Legal</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="padding-top:40px;padding-bottom:60px;">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title">Emergency Assistance Questions</h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What should I do if I lose my passport? <span class="chev">▾</span></button><div class="faq-a">Report to the local police, contact your embassy immediately, and reach out to ePay Emergency Assistance for guidance on obtaining an emergency travel document.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How quickly can ePay respond to an emergency? <span class="chev">▾</span></button><div class="faq-a">Our emergency team responds within 30 minutes. We coordinate with local providers to get you the help you need as quickly as possible.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Does ePay provide medical services directly? <span class="chev">▾</span></button><div class="faq-a">No. ePay coordinates with verified hospitals, clinics, and doctors to ensure you receive appropriate care. We help with appointments, language support, and insurance matters.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is there a cost for emergency assistance? <span class="chev">▾</span></button><div class="faq-a">Basic guidance and coordination are free. Any direct costs from third-party providers (e.g., medical treatment, legal fees) are the user's responsibility unless covered by insurance or other arrangements.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What if I'm in a country where ePay doesn't have partners? <span class="chev">▾</span></button><div class="faq-a">We will still provide guidance and refer you to local resources, including embassy contacts and international organizations.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can ePay help with visa or work permit issues? <span class="chev">▾</span></button><div class="faq-a">Yes. We provide guidance on visa-related emergencies, including renewals, extensions, and legal advice through our partner network.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="text-center" style="padding-bottom:80px;">
+  <div class="container reveal">
+    <h2 class="section-title" style="font-size:clamp(1.8rem,3.5vw,2.6rem);">Don't Face It Alone</h2>
+    <p class="section-sub">We're here 24/7. Reach out anytime, from anywhere.</p>
+    <button class="btn btn-rose btn-lg" onclick="openModal('emergency')">🆘 Request Help Now</button>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo" style="margin-bottom:10px;justify-content:center;"><div class="logo-mark">eE</div> <span>ePay Emergency Assistance</span></div>
+    <p>© 2026 ePay Emergency · Always Available</p>
+    <p style="font-size:.65rem;margin-top:6px;color:var(--muted);">Coordination with verified providers. Not a direct service provider.</p>
+  </div>
+</footer>
+
+<!-- ===== MODALS ===== -->
+
+<!-- EMERGENCY REQUEST MODAL -->
+<div class="modal-overlay" id="modal-emergency">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('emergency')">×</button>
+    <h2>Request Emergency Help</h2>
+    <p class="sub">Fill out this form and our team will contact you immediately.</p>
+    <form onsubmit="return submitEmergency(event)">
+      <div class="form-grid">
+        <div class="form-group full"><label>Full Name *</label><input name="name" required placeholder="Your full name" /></div>
+        <div class="form-group"><label>Mobile (with country code) *</label><input name="mobile" required type="tel" placeholder="+91 98765 43210" /></div>
+        <div class="form-group"><label>Email</label><input name="email" type="email" placeholder="you@email.com" /></div>
+        <div class="form-group full"><label>Current Location *</label><input name="location" required placeholder="City, Country" /></div>
+        <div class="form-group full"><label>Emergency Type *</label>
+          <select name="type" required>
+            <option value="">Select type</option>
+            <option value="passport">Lost Passport</option>
+            <option value="travel">Travel Emergency</option>
+            <option value="accommodation">Accommodation Emergency</option>
+            <option value="employer">Employer Issue</option>
+            <option value="document">Document Issue</option>
+            <option value="medical">Medical Assistance</option>
+            <option value="embassy">Embassy/Consulate</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group full"><label>Description *</label><textarea name="description" required rows="4" placeholder="Describe your emergency in detail..."></textarea></div>
+        <div class="form-group full">
+          <div style="display:flex;gap:8px;align-items:center;font-size:.85rem;color:var(--muted);">
+            <input type="checkbox" required /> I confirm this is an emergency and I need immediate assistance.
+          </div>
+        </div>
+        <div class="form-group full"><button type="submit" class="btn btn-rose btn-lg" style="width:100%"><i class="fas fa-paper-plane"></i> Submit Emergency Request</button></div>
+      </div>
+      <div style="font-size:.7rem;color:var(--muted);background:var(--glass);border-radius:var(--radius-sm);padding:10px;margin-top:8px;border:1px solid var(--border);">
+        <i class="fas fa-clock" style="color:var(--rose);margin-right:4px;"></i> Our team will respond within 30 minutes.
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- CATEGORY DETAIL MODAL -->
+<div class="modal-overlay" id="modal-category">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('category')">×</button>
+    <div id="categoryContent">
+      <!-- Rendered dynamically -->
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('login')">×</button>
+    <h2>Sign In</h2>
+    <p class="sub">Access your emergency history and preferences.</p>
+    <form onsubmit="return submitLogin(event)">
+      <div class="form-grid">
+        <div class="form-group full"><label>Email</label><input name="email" required type="email" placeholder="you@email.com" /></div>
+        <div class="form-group full"><label>Password</label><input name="pass" type="password" required /></div>
+        <div class="form-group full"><button type="submit" class="btn btn-primary btn-lg" style="width:100%">Sign In</button></div>
+        <div class="form-group full text-center" style="font-size:.8rem;color:var(--muted);">Don't have an account? <a href="#" onclick="closeModal('login');openModal('emergency');return false" style="color:var(--purple-light);">Request emergency help</a></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-box" id="toasts"></div>
+
+<script>
+// ============================================================
+// CATEGORY DATA
+// ============================================================
+var categoryData = {
+  passport: {
+    title: '🛂 Lost Passport Guidance',
+    description: 'Immediate steps if you lose your passport.',
+    steps: [
+      '1. File a police report immediately.',
+      '2. Contact your country\'s embassy or consulate.',
+      '3. Obtain an emergency travel document (if needed).',
+      '4. Report the loss to your home country authorities.',
+      '5. Apply for a new passport upon return.'
+    ],
+    contacts: 'Embassy: +971 4 123 4567 | Police: 999'
+  },
+  travel: {
+    title: '✈️ Travel Emergency',
+    description: 'Assistance for flight disruptions, lost luggage, and travel-related issues.',
+    steps: [
+      '1. Contact your airline for rebooking or compensation.',
+      '2. File a lost luggage report at the airport.',
+      '3. Reach out to ePay for local support and guidance.',
+      '4. Check your travel insurance coverage.',
+      '5. If medical, seek immediate local care.'
+    ],
+    contacts: 'ePay Travel Support: +91 98765 43210 | Airline helplines'
+  },
+  accommodation: {
+    title: '🏠 Accommodation Emergency',
+    description: 'Issues with housing, eviction, or unsafe conditions.',
+    steps: [
+      '1. Document the issue with photos and written records.',
+      '2. Contact your landlord or property manager in writing.',
+      '3. Reach out to local tenant rights organizations.',
+      '4. Contact ePay for legal referral and support.',
+      '5. If unsafe, seek immediate alternate accommodation.'
+    ],
+    contacts: 'Tenant helpline: +91 98765 43211 | Local housing authority'
+  },
+  employer: {
+    title: '💼 Employer Issue',
+    description: 'Workplace harassment, contract violations, unpaid wages.',
+    steps: [
+      '1. Document all incidents and communications.',
+      '2. Review your employment contract.',
+      '3. Contact HR or your manager in writing.',
+      '4. Seek legal advice through ePay\'s partner network.',
+      '5. File a complaint with local labor authorities if needed.'
+    ],
+    contacts: 'Labor board: +91 98765 43212 | Legal aid: +91 98765 43213'
+  },
+  document: {
+    title: '📄 Document Issue',
+    description: 'Lost or expired visas, permits, or identification.',
+    steps: [
+      '1. Report loss to local authorities.',
+      '2. Contact the issuing authority for replacement.',
+      '3. Check visa validity and renewal procedures.',
+      '4. Contact your embassy for assistance.',
+      '5. ePay can guide you through the process.'
+    ],
+    contacts: 'Embassy: +971 4 123 4567 | Visa office: +971 4 123 4568'
+  },
+  medical: {
+    title: '🏥 Medical Assistance Coordination',
+    description: 'Connect with hospitals, doctors, and insurance support.',
+    steps: [
+      '1. In an emergency, call 911 or local emergency number.',
+      '2. Contact ePay for hospital coordination and language support.',
+      '3. Provide your insurance details to the hospital.',
+      '4. ePay can arrange for translation services if needed.',
+      '5. Follow up with your doctor for ongoing care.'
+    ],
+    contacts: 'ePay Medical: +91 98765 43212 | Emergency: 911'
+  },
+  embassy: {
+    title: '🏛️ Embassy/Consulate Information',
+    description: 'Contact details and services of embassies and consulates.',
+    steps: [
+      '1. Locate your country\'s embassy/consulate in the destination.',
+      '2. Contact them for consular services and assistance.',
+      '3. ePay provides a directory of embassy contacts.',
+      '4. Visit the embassy in person for urgent matters.',
+      '5. Keep a copy of your passport and visa information.'
+    ],
+    contacts: 'Embassy directory available in the table above.'
+  }
+};
+
+// ============================================================
+// OPEN CATEGORY MODAL
+// ============================================================
+function openCategory(key) {
+  var data = categoryData[key];
+  if (!data) return;
+  var content = document.getElementById('categoryContent');
+  content.innerHTML = `
+    <h2>${data.title}</h2>
+    <p style="color:var(--muted);font-size:.9rem;margin-bottom:12px;">${data.description}</p>
+    <h4 style="font-size:.9rem;font-weight:600;color:var(--text);margin-top:12px;">📋 Steps to Follow</h4>
+    <ul style="list-style:none;padding:0;margin:8px 0 12px;">
+      ${data.steps.map(function(s) { return '<li style="padding:4px 0;font-size:.85rem;color:var(--text-secondary);display:flex;align-items:center;gap:8px;"><span style="color:var(--rose);">•</span> ' + s + '</li>'; }).join('')}
+    </ul>
+    <div style="background:var(--glass);border-radius:var(--radius-sm);padding:12px;border:1px solid var(--border);margin-top:8px;">
+      <span style="font-weight:600;color:var(--rose);">📞 Emergency Contacts:</span>
+      <span style="color:var(--muted);font-size:.85rem;">${data.contacts}</span>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-rose btn-sm" onclick="closeModal('category');openModal('emergency');">Request Help</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('category')">Close</button>
+    </div>
+  `;
+  document.getElementById('modal-category').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function openModal(id) {
+  var el = document.getElementById('modal-' + id);
+  if (el) {
+    el.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeModal(id) {
+  var el = document.getElementById('modal-' + id);
+  if (el) {
+    el.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+// ============================================================
+// FORM SUBMISSIONS
+// ============================================================
+function submitEmergency(e) {
+  e.preventDefault();
+  closeModal('emergency');
+  showToast('✅ Emergency request submitted! Our team will contact you within 30 minutes.');
+  return false;
+}
+
+function submitLogin(e) {
+  e.preventDefault();
+  closeModal('login');
+  showToast('Signed in successfully');
+  return false;
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg) {
+  var box = document.getElementById('toasts');
+  var t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  box.appendChild(t);
+  setTimeout(function() {
+    t.style.opacity = '0';
+    t.style.transition = '.3s';
+    setTimeout(function() { t.remove(); }, 300);
+  }, 3000);
+}
+
+// ============================================================
+// FAQ TOGGLE
+// ============================================================
+function toggleFaq(btn) {
+  var item = btn.parentElement;
+  var isOpen = item.classList.contains('open');
+  var allItems = document.querySelectorAll('.faq-item');
+  for (var i = 0; i < allItems.length; i++) {
+    allItems[i].classList.remove('open');
+    var ans = allItems[i].querySelector('.faq-a');
+    if (ans) ans.style.maxHeight = '0';
+    var ch = allItems[i].querySelector('.chev');
+    if (ch) ch.style.transform = 'rotate(0)';
+  }
+  if (!isOpen) {
+    item.classList.add('open');
+    var answer = item.querySelector('.faq-a');
+    if (answer) answer.style.maxHeight = answer.scrollHeight + 'px';
+    var chev = item.querySelector('.chev');
+    if (chev) chev.style.transform = 'rotate(180deg)';
+  }
+}
+
+// ============================================================
+// MODAL OVERLAY CLOSE
+// ============================================================
+document.querySelectorAll('.modal-overlay').forEach(function(o) {
+  o.addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+});
+
+// ============================================================
+// NAV SCROLL
+// ============================================================
+window.addEventListener('scroll', function() {
+  var nav = document.getElementById('nav');
+  if (window.scrollY > 40) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+});
+
+// ============================================================
+// MOBILE TOGGLE
+// ============================================================
+document.getElementById('mobileToggle').addEventListener('click', function() {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// ============================================================
+// REVEAL ANIMATION
+// ============================================================
+var revealObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(en) {
+    if (en.isIntersecting) {
+      en.target.classList.add('visible');
+      revealObserver.unobserve(en.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+
+document.querySelectorAll('.reveal').forEach(function(el) {
+  revealObserver.observe(el);
+});
+
+// ============================================================
+// ESCAPE KEY
+// ============================================================
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeModal('emergency');
+    closeModal('category');
+    closeModal('login');
+  }
+});
+
+// ============================================================
+// INIT
+// ============================================================
+console.log('ePay Emergency Assistance loaded successfully.');
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1606 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ePay Digital Marketing Portal + Reports</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Shared Dynamic Sidebar -->
+    <link rel="stylesheet" href="crm-sidebar.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js">
+    </script>
+    <style>
+
+
+
+        /* --- Base --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #CBD5E1;
+            border-radius: 4px;
+        }
+        .sidebar-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #334155;
+            border-radius: 4px;
+        }
+
+        /* Sidebar active transition */
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-icon-arrow {
+            transition: transform 0.2s ease-in-out;
+        }
+        .nav-link.active .nav-icon-arrow {
+            transform: rotate(90deg);
+        }
+
+        /* Toast Animation */
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        .toast-enter {
+            animation: slideInRight 0.3s ease-out forwards;
+        }
+
+        /* Dynamic Modal Transition */
+        .modal-active {
+            display: flex !important;
+        }
+
+        /* --- New Reports Dashboard Styles (merged from second HTML) --- */
+        .reports-filter-container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+        .reports-filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .reports-filter-group label {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #555;
+        }
+        .reports-filter-group input {
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+            min-width: 180px;
+            background: #fff;
+            transition: border 0.2s;
+        }
+        .reports-filter-group input:focus {
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        .btn-reports-search {
+            background-color: #3B82F6;
+            color: #fff;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            height: 42px;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+        .btn-reports-search:hover {
+            background-color: #2563EB;
+        }
+        .btn-reports-reset {
+            background-color: #e5e7eb;
+            color: #333;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            height: 42px;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+        .btn-reports-reset:hover {
+            background-color: #d1d5db;
+        }
+
+        .reports-table-responsive {
+            overflow-x: auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eef2f6;
+        }
+        .reports-table-responsive table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+        .reports-table-responsive th,
+        .reports-table-responsive td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid #eef2f6;
+            font-size: 13px;
+        }
+        .reports-table-responsive th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        .reports-table-responsive tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        .reports-table-responsive .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .reports-table-responsive .status-badge.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .reports-table-responsive .status-badge.failed {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .reports-table-responsive .status-badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .reports-table-responsive .status-badge.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        @media screen and (max-width: 768px) {
+            .reports-filter-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .reports-filter-group input {
+                min-width: 100%;
+            }
+        }
+
+        /* ensure existing enterprise cards don't break */
+        .enterprise-module-card {
+            transition: all 0.2s ease;
+        }
+        .enterprise-module-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body class="flex h-screen overflow-hidden text-gray-800">
+
+
+    <!-- Sidebar (rendered dynamically by crm-engine.js) -->
+    <aside id="crm-sidebar-root"></aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col min-w-0 bg-[#F4F7FE]">
+        <!-- Top Header -->
+        <header class="h-20 bg-white flex items-center justify-between px-8 border-b border-gray-200 z-10 shrink-0">
+            <!-- Search -->
+            <div class="relative w-[400px]">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                <input type="text" placeholder="Search employees, leads, invoices, tickets..."
+                class="w-full bg-gray-50 border border-gray-200 rounded-full pl-10 pr-4 py-2.5 text-[13px] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" />
+            </div>
+
+            <!-- Right Actions -->
+            <div class="flex items-center gap-6">
+                <button class="flex items-center gap-2 border border-gray-200 hover:bg-gray-50 px-4 py-2 rounded-full text-[13px] font-medium transition">
+                    <i class="fas fa-exchange-alt"></i> Switch Role
+                </button>
+
+                <div class="flex items-center gap-5 border-r border-gray-200 pr-6">
+                    <button class="relative text-gray-500 hover:text-gray-700 transition">
+                        <i class="far fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1.5 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">15</span>
+                    </button>
+                    <button class="relative text-gray-500 hover:text-gray-700 transition">
+                        <i class="far fa-comment-dots text-xl"></i>
+                        <span class="absolute -top-1 -right-1.5 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">8</span>
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-3 cursor-pointer">
+                    <img src="https://i.pravatar.cc/150?img=11" alt="Yashraj Sathe" class="w-10 h-10 rounded-full border border-gray-200" />
+                    <div>
+                        <div class="text-[13px] font-semibold text-gray-800 leading-tight">Yashraj Sathe</div>
+                        <div class="text-[11px] text-gray-500 leading-tight">Full enterprise access &<br />system control</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Body (Scrollable) -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6">
+
+            <!-- Page Title & Actions -->
+            <div class="flex justify-between items-end">
+                <div>
+                    <h1 class="text-xl font-bold text-gray-900">Digital Marketing Dashboard</h1>
+                    <p class="text-sm text-gray-500 mt-1">Track performance, optimize campaigns & generate more leads</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 text-[13px] px-3 py-2 rounded-lg shadow-sm">
+                        <span>01 May 2025 - 31 May 2025</span>
+                        <i class="far fa-calendar-alt text-gray-400 ml-2"></i>
+                    </div>
+                    <button class="bg-white border border-gray-200 text-gray-600 p-2.5 rounded-lg shadow-sm hover:bg-gray-50"><i class="fas fa-filter"></i></button>
+                    <button class="bg-white border border-gray-200 text-gray-600 p-2.5 rounded-lg shadow-sm hover:bg-gray-50"><i class="fas fa-ellipsis-h"></i></button>
+                </div>
+            </div>
+
+            <!-- Top Stats Grid (6 columns) -->
+            <div class="grid grid-cols-6 gap-4">
+                <!-- Card 1 -->
+                <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between">
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-lg"><i class="fas fa-bullhorn"></i></div>
+                        <div class="text-right">
+                            <div class="text-[11px] text-gray-500 font-medium">Active Campaigns</div>
+                            <div class="text-xl font-bold text-gray-800">8</div>
+                        </div>
+                    </div>
+                    <div class="text-[10px] font-medium text-emerald-500 mb-2"><i class="fas fa-arrow-up"></i> 14% <span class="text-gray-400 font-normal">vs last month</span></div>
+                    <div class="h-8 w-full"><canvas id="spark1"></canvas></div>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between">
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg"><i class="fas fa-globe"></i></div>
+                        <div class="text-right">
+                            <div class="text-[11px] text-gray-500 font-medium">Website Traffic</div>
+                            <div class="text-xl font-bold text-gray-800">12,500</div>
+                        </div>
+                    </div>
+                    <div class="text-[10px] font-medium text-emerald-500 mb-2"><i class="fas fa-arrow-up"></i> 28.5% <span class="text-gray-400 font-normal">vs last month</span></div>
+                    <div class="h-8 w-full"><canvas id="spark2"></canvas></div>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between">
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg"><i class="fas fa-user-friends"></i></div>
+                        <div class="text-right">
+                            <div class="text-[11px] text-gray-500 font-medium">Leads Generated</div>
+                            <div class="text-xl font-bold text-gray-800">420</div>
+                        </div>
+                    </div>
+                    <div class="text-[10px] font-medium text-emerald-500 mb-2"><i class="fas fa-arrow-up"></i> 36.4% <span class="text-gray-400 font-normal">vs last month</span></div>
+                    <div class="h-8 w-full"><canvas id="spark3"></canvas></div>
+                </div>
+                <!-- Card 4 -->
+                <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between">
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="w-10 h-10 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center text-lg"><i class="fas fa-wallet"></i></div>
+                        <div class="text-right">
+                            <div class="text-[11px] text-gray-500 font-medium">Ad Spend</div>
+                            <div class="text-xl font-bold text-gray-800">â‚¹85,000</div>
+                        </div>
+                    </div>
+                    <div class="text-[10px] font-medium text-red-500 mb-2"><i class="fas fa-arrow-down"></i> 8.2% <span class="text-gray-400 font-normal">vs last month</span></div>
+                    <div class="h-8 w-full"><canvas id="spark4"></canvas></div>
+                </div>
+                <!-- Card 5 -->
+                <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between">
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="w-10 h-10 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center text-lg"><i class="fas fa-bullseye"></i></div>
+                        <div class="text-right">
+                            <div class="text-[11px] text-gray-500 font-medium">ROAS</div>
+                            <div class="text-xl font-bold text-gray-800">3.5x</div>
+                        </div>
+                    </div>
+                    <div class="text-[10px] font-medium text-emerald-500 mb-2"><i class="fas fa-arrow-up"></i> 22.1% <span class="text-gray-400 font-normal">vs last month</span></div>
+                    <div class="h-8 w-full"><canvas id="spark5"></canvas></div>
+                </div>
+                <!-- Card 6 -->
+                <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex flex-col justify-between">
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-lg"><i class="fas fa-shopping-cart"></i></div>
+                        <div class="text-right">
+                            <div class="text-[11px] text-gray-500 font-medium">Conversions</div>
+                            <div class="text-xl font-bold text-gray-800">156</div>
+                        </div>
+                    </div>
+                    <div class="text-[10px] font-medium text-emerald-500 mb-2"><i class="fas fa-arrow-up"></i> 18.7% <span class="text-gray-400 font-normal">vs last month</span></div>
+                    <div class="h-8 w-full"><canvas id="spark6"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Middle Row 1: Charts (12 cols) -->
+            <div class="grid grid-cols-12 gap-6">
+                <!-- Channel Performance (Line Chart) -->
+                <div class="col-span-5 bg-white rounded-xl p-5 border border-gray-100 shadow-sm flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-semibold text-gray-800 text-[15px]">Channel Performance</h3>
+                        <select class="text-[11px] border border-gray-200 rounded px-2 py-1 outline-none text-gray-600 bg-white">
+                            <option>This Month</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-4 mb-2 justify-center text-[11px] font-medium">
+                        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-[#3B82F6]"></span> Traffic</div>
+                        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-[#10B981]"></span> Leads</div>
+                        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-[#8B5CF6]"></span> Conversions</div>
+                    </div>
+                    <div class="flex-1 relative w-full min-h-[220px]">
+                        <canvas id="channelChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Leads by Source (Donut Chart) -->
+                <div class="col-span-3 bg-white rounded-xl p-5 border border-gray-100 shadow-sm flex flex-col">
+                    <h3 class="font-semibold text-gray-800 text-[15px] mb-4">Leads by Source</h3>
+                    <div class="flex-1 flex flex-col justify-center">
+                        <div class="relative w-40 h-40 mx-auto mb-4">
+                            <canvas id="sourceChart"></canvas>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                                <span class="text-xl font-bold text-gray-800 leading-none">420</span>
+                                <span class="text-[10px] text-gray-500">Total Leads</span>
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-[11px] w-full px-2">
+                            <div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#3B82F6]"></span> Google Ads</div> <span class="text-gray-500">35% (147)</span></div>
+                            <div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#10B981]"></span> Meta Ads</div> <span class="text-gray-500">28% (118)</span></div>
+                            <div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#F59E0B]"></span> Organic Search</div> <span class="text-gray-500">18% (76)</span></div>
+                            <div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> LinkedIn Ads</div> <span class="text-gray-500">10% (42)</span></div>
+                            <div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#EC4899]"></span> Email Campaign</div> <span class="text-gray-500">5% (21)</span></div>
+                            <div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#06B6D4]"></span> Others</div> <span class="text-gray-500">4% (16)</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Performing Campaigns (Bar Chart) -->
+                <div class="col-span-4 bg-white rounded-xl p-5 border border-gray-100 shadow-sm flex flex-col">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-semibold text-gray-800 text-[15px]">Top Performing Campaigns</h3>
+                        <select class="text-[11px] border border-gray-200 rounded px-2 py-1 outline-none text-gray-600 bg-white">
+                            <option>By Leads</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 relative w-full">
+                        <canvas id="campaignsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle Row 2: Tables & Notifications (12 cols) -->
+            <div class="grid grid-cols-12 gap-6">
+                <!-- Active Campaigns Table -->
+                <div class="col-span-8 bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
+                    <h3 class="font-semibold text-gray-800 text-[15px] mb-4">Active Campaigns</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="text-[11px] text-gray-500 border-b border-gray-100">
+                                    <th class="pb-3 font-medium">Campaign</th>
+                                    <th class="pb-3 font-medium">Platform</th>
+                                    <th class="pb-3 font-medium">Budget</th>
+                                    <th class="pb-3 font-medium">Spent</th>
+                                    <th class="pb-3 font-medium">Leads</th>
+                                    <th class="pb-3 font-medium">CTR</th>
+                                    <th class="pb-3 font-medium">CPC</th>
+                                    <th class="pb-3 font-medium">Status</th>
+                                    <th class="pb-3 font-medium">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-[12px] text-gray-700">
+                                <tr class="border-b border-gray-50">
+                                    <td class="py-3 font-medium text-gray-800">Q3 Franchise Push</td>
+                                    <td class="py-3 flex items-center gap-2"><i class="fab fa-meta text-blue-600"></i> Meta Ads</td>
+                                    <td class="py-3">â‚¹1,50,000</td>
+                                    <td class="py-3">â‚¹72,500</td>
+                                    <td class="py-3 font-medium">420</td>
+                                    <td class="py-3">2.45%</td>
+                                    <td class="py-3">â‚¹8.45</td>
+                                    <td class="py-3"><span class="bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded text-[10px] font-medium border border-emerald-100">Active</span></td>
+                                    <td class="py-3 text-gray-400 space-x-2"><i class="far fa-eye hover:text-blue-500 cursor-pointer"></i> <i class="fas fa-chart-line hover:text-blue-500 cursor-pointer"></i> <i class="fas fa-ellipsis-v hover:text-gray-600 cursor-pointer pl-1"></i></td>
+                                </tr>
+                                <tr class="border-b border-gray-50">
+                                    <td class="py-3 font-medium text-gray-800">Enterprise CRM Webinar</td>
+                                    <td class="py-3 flex items-center gap-2"><img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" class="w-3 h-3" /> Google Ads</td>
+                                    <td class="py-3">â‚¹85,000</td>
+                                    <td class="py-3">â‚¹48,300</td>
+                                    <td class="py-3 font-medium">185</td>
+                                    <td class="py-3">3.12%</td>
+                                    <td class="py-3">â‚¹12.36</td>
+                                    <td class="py-3"><span class="bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded text-[10px] font-medium border border-emerald-100">Active</span></td>
+                                    <td class="py-3 text-gray-400 space-x-2"><i class="far fa-eye hover:text-blue-500 cursor-pointer"></i> <i class="fas fa-chart-line hover:text-blue-500 cursor-pointer"></i> <i class="fas fa-ellipsis-v hover:text-gray-600 cursor-pointer pl-1"></i></td>
+                                </tr>
+                                <tr class="border-b border-gray-50">
+                                    <td class="py-3 font-medium text-gray-800">LinkedIn B2B Outreach</td>
+                                    <td class="py-3 flex items-center gap-2"><i class="fab fa-linkedin text-blue-700"></i> LinkedIn Ads</td>
+                                    <td class="py-3">â‚¹1,20,000</td>
+                                    <td class="py-3">â‚¹63,200</td>
+                                    <td class="py-3 font-medium">95</td>
+                                    <td class="py-3">1.78%</td>
+                                    <td class="py-3">â‚¹16.22</td>
+                                    <td class="py-3"><span class="bg-orange-50 text-orange-600 px-2 py-0.5 rounded text-[10px] font-medium border border-orange-100">Paused</span></td>
+                                    <td class="py-3 text-gray-400 space-x-2"><i class="far fa-eye hover:text-blue-500 cursor-pointer"></i> <i class="fas fa-chart-line hover:text-blue-500 cursor-pointer"></i> <i class="fas fa-ellipsis-v hover:text-gray-600 cursor-pointer pl-1"></i></td>
+                                </tr>
+                                <tr class="border-b border-gray-50">
+                                    <td class="py-3 font-medium text-gray-800">Email Nurture Series</td>
+                                    <td class="py-3 flex items-center gap-2"><i class="far fa-envelope text-gray-500"></i> Email</td>
+                                    <td class="py-3">â‚¹25,000</td>
+                                    <td class="py-3">â‚¹12,400</td>
+                                    <td class="py-3 font-medium">63</td>
+                                    <td class="py-3">12.45%</td>
+                                    <td class="py-3">â‚¹1.25</td>
+                                    <td class="py-3"><span class="bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded text-[10px] font-medium border border-emerald-100">Active</span></td>
+                                    <td class="py-3 text-gray-400 space-x-2"><i class="far fa-eye hover:text-blue-500 cursor-pointer"></i> <i class="fas fa-chart-line hover:text-blue-500 cursor-pointer"></i> <i class="fas fa-ellipsis-v hover:text-gray-600 cursor-pointer pl-1"></i></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 font-medium text-gray-800">Retargeting Campaign</td>
+                                    <td class="py-3 flex items-center gap-2"><i class="fab fa-meta text-blue-600"></i> Meta Ads</td>
+                                    <td class="py-3">â‚¹40,000</td>
+                                    <td class="py-3">â‚¹20,100</td>
+                                    <td class="py-3 font-medium">48</td>
+                                    <td class="py-3">4.32%</td>
+                                    <td class="py-3">â‚¹6.85</td>
+                                    <td class="py-3"><span class="bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded text-[10px] font-medium border border-emerald-100">Active</span></td>
+                                    <td class="py-3 text-gray-400 space-x-2"><i class="far fa-eye hover:text-blue-500 cursor-pointer"></i> <i class="fas fa-chart-line hover:text-blue-500 cursor-pointer"></i> <i class="fas fa-ellipsis-v hover:text-gray-600 cursor-pointer pl-1"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="text-[12px] font-medium text-blue-600 hover:underline">View all campaigns <i class="fas fa-arrow-right text-[10px]"></i></a>
+                    </div>
+                </div>
+
+                <!-- Notifications & AI -->
+                <div class="col-span-4 flex flex-col gap-6">
+                    <!-- Notifications -->
+                    <div class="bg-white rounded-xl p-5 border border-gray-100 shadow-sm flex-1">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-semibold text-gray-800 text-[15px]">Notifications</h3>
+                            <a href="#" class="text-[11px] text-blue-600 hover:underline">View All</a>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex gap-3 items-start">
+                                <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5 text-[10px]"><i class="fas fa-check"></i></div>
+                                <div class="flex-1">
+                                    <div class="text-[12px] text-gray-800">New lead generated from Google Ads campaign</div>
+                                </div>
+                                <div class="text-[10px] text-gray-400 whitespace-nowrap">5 minutes ago</div>
+                            </div>
+                            <div class="flex gap-3 items-start">
+                                <div class="w-6 h-6 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center shrink-0 mt-0.5 text-[10px]"><i class="fas fa-exclamation"></i></div>
+                                <div class="flex-1">
+                                    <div class="text-[12px] text-gray-800">Budget alert: Q3 Franchise Push campaign is at 80%</div>
+                                </div>
+                                <div class="text-[10px] text-gray-400 whitespace-nowrap">30 minutes ago</div>
+                            </div>
+                            <div class="flex gap-3 items-start">
+                                <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5 text-[10px]"><i class="fas fa-check"></i></div>
+                                <div class="flex-1">
+                                    <div class="text-[12px] text-gray-800">Great! ROAS improved by 22% this week</div>
+                                </div>
+                                <div class="text-[10px] text-gray-400 whitespace-nowrap">1 hour ago</div>
+                            </div>
+                            <div class="flex gap-3 items-start">
+                                <div class="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 mt-0.5 text-[10px]"><i class="fas fa-exclamation"></i></div>
+                                <div class="flex-1">
+                                    <div class="text-[12px] text-gray-800">Ad disapproved in Meta Ads: Review required</div>
+                                </div>
+                                <div class="text-[10px] text-gray-400 whitespace-nowrap">2 hours ago</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Assistant -->
+                    <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-5 border border-indigo-100 shadow-sm relative">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center"><i class="fas fa-sparkles text-sm"></i></div>
+                                <h3 class="font-semibold text-gray-800 text-[14px]">AI Marketing Assistant</h3>
+                            </div>
+                            <span class="bg-purple-100 text-purple-700 text-[9px] font-bold px-2 py-0.5 rounded border border-purple-200">BETA</span>
+                        </div>
+                        <div class="text-[12px] text-gray-700 mb-2">ðŸ‘‹ Hi Yashraj! Here are some AI insights for you:</div>
+                        <ul class="text-[11px] text-gray-600 space-y-1.5 mb-4 pl-1">
+                            <li class="flex items-start gap-2"><i class="fas fa-arrow-up text-emerald-500 mt-0.5"></i> Increase budget by 20% in Q3 Franchise Push for better results.</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-lightbulb text-yellow-500 mt-0.5"></i> LinkedIn B2B Outreach CTR is low, try new creatives.</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-clock text-blue-500 mt-0.5"></i> Best performing time: 11 AM - 2 PM for your ads.</li>
+                        </ul>
+                        <div class="relative w-full">
+                            <input type="text" placeholder="Ask AI Assistant" class="w-full bg-white border border-indigo-200 rounded-lg py-2 pl-3 pr-10 text-[12px] focus:outline-none focus:border-indigo-500" />
+                            <button class="absolute right-2 top-1/2 -translate-y-1/2 text-indigo-500 hover:text-indigo-700">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Row: 5 Columns -->
+            <div class="grid grid-cols-5 gap-4">
+                <!-- Traffic by Channel -->
+                <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex flex-col">
+                    <h3 class="font-semibold text-gray-800 text-[13px] mb-3">Traffic by Channel</h3>
+                    <div class="flex items-center gap-3">
+                        <div class="relative w-24 h-24 shrink-0">
+                            <canvas id="trafficChart"></canvas>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                                <span class="text-sm font-bold text-gray-800">12,500</span>
+                                <span class="text-[8px] text-gray-500 leading-none">Total Traffic</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 space-y-1.5 text-[9px]">
+                            <div class="flex justify-between items-center"><div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#10B981]"></span> Organic Search</div><span class="text-gray-500">40% (5,000)</span></div>
+                            <div class="flex justify-between items-center"><div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#3B82F6]"></span> Paid Search</div><span class="text-gray-500">25% (3,125)</span></div>
+                            <div class="flex justify-between items-center"><div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#8B5CF6]"></span> Direct</div><span class="text-gray-500">15% (1,875)</span></div>
+                            <div class="flex justify-between items-center"><div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#EC4899]"></span> Social Media</div><span class="text-gray-500">10% (1,250)</span></div>
+                            <div class="flex justify-between items-center"><div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#F59E0B]"></span> Referral</div><span class="text-gray-500">6% (750)</span></div>
+                            <div class="flex justify-between items-center"><div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#06B6D4]"></span> Others</div><span class="text-gray-500">4% (500)</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Keyword Rankings -->
+                <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex flex-col">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-semibold text-gray-800 text-[13px]">Keyword Rankings</h3>
+                        <a href="#" class="text-[10px] text-blue-600 hover:underline">View All</a>
+                    </div>
+                    <table class="w-full text-left text-[11px]">
+                        <thead>
+                            <tr class="text-gray-500 border-b border-gray-100">
+                                <th class="pb-2 font-medium">Keyword</th>
+                                <th class="pb-2 font-medium text-center">Rank</th>
+                                <th class="pb-2 font-medium text-center">Change</th>
+                                <th class="pb-2 font-medium text-right">Search Vol.</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700">
+                            <tr class="border-b border-gray-50">
+                                <td class="py-2">ePay Digital India</td>
+                                <td class="py-2 text-center font-medium">1</td>
+                                <td class="py-2 text-center text-emerald-500"><i class="fas fa-arrow-up text-[8px]"></i> 2</td>
+                                <td class="py-2 text-right">12.5K</td>
+                            </tr>
+                            <tr class="border-b border-gray-50">
+                                <td class="py-2">Franchise Business India</td>
+                                <td class="py-2 text-center font-medium">3</td>
+                                <td class="py-2 text-center text-emerald-500"><i class="fas fa-arrow-up text-[8px]"></i> 1</td>
+                                <td class="py-2 text-right">8.2K</td>
+                            </tr>
+                            <tr class="border-b border-gray-50">
+                                <td class="py-2">Best CRM Software</td>
+                                <td class="py-2 text-center font-medium">5</td>
+                                <td class="py-2 text-center text-red-500"><i class="fas fa-arrow-down text-[8px]"></i> 1</td>
+                                <td class="py-2 text-right">6.8K</td>
+                            </tr>
+                            <tr class="border-b border-gray-50">
+                                <td class="py-2">Digital Marketing Services</td>
+                                <td class="py-2 text-center font-medium">7</td>
+                                <td class="py-2 text-center text-emerald-500"><i class="fas fa-arrow-up text-[8px]"></i> 3</td>
+                                <td class="py-2 text-right">5.4K</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2">Telecalling CRM</td>
+                                <td class="py-2 text-center font-medium">2</td>
+                                <td class="py-2 text-center text-emerald-500"><i class="fas fa-arrow-up text-[8px]"></i> 1</td>
+                                <td class="py-2 text-right">3.6K</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Top Landing Pages -->
+                <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex flex-col">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-semibold text-gray-800 text-[13px]">Top Landing Pages</h3>
+                        <a href="#" class="text-[10px] text-blue-600 hover:underline">View All</a>
+                    </div>
+                    <table class="w-full text-left text-[11px]">
+                        <thead>
+                            <tr class="text-gray-500 border-b border-gray-100">
+                                <th class="pb-2 font-medium">Page Path</th>
+                                <th class="pb-2 font-medium text-center">Views</th>
+                                <th class="pb-2 font-medium text-right">Engagement</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700">
+                            <tr class="border-b border-gray-50">
+                                <td class="py-2 text-blue-600">/franchise-opportunity</td>
+                                <td class="py-2 text-center">5,210</td>
+                                <td class="py-2 text-right font-medium">42.5%</td>
+                            </tr>
+                            <tr class="border-b border-gray-50">
+                                <td class="py-2 text-blue-600">/crm-software</td>
+                                <td class="py-2 text-center">3,125</td>
+                                <td class="py-2 text-right font-medium">25.5%</td>
+                            </tr>
+                            <tr class="border-b border-gray-50">
+                                <td class="py-2 text-blue-600">/telecaller-crm</td>
+                                <td class="py-2 text-center">2,150</td>
+                                <td class="py-2 text-right font-medium">17.6%</td>
+                            </tr>
+                            <tr class="border-b border-gray-50">
+                                <td class="py-2 text-blue-600">/digital-marketing</td>
+                                <td class="py-2 text-center">1,250</td>
+                                <td class="py-2 text-right font-medium">10.2%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 text-blue-600">/contact-us</td>
+                                <td class="py-2 text-center">765</td>
+                                <td class="py-2 text-right font-medium">6.2%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Social Media Overview -->
+                <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex flex-col">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-semibold text-gray-800 text-[13px]">Social Media Overview</h3>
+                        <select class="text-[9px] border border-gray-200 rounded outline-none text-gray-600 bg-white">
+                            <option>This Month</option>
+                        </select>
+                    </div>
+                    <table class="w-full text-left text-[11px]">
+                        <thead>
+                            <tr class="text-gray-500 border-b border-gray-100">
+                                <th class="pb-2 font-medium">Platform</th>
+                                <th class="pb-2 font-medium text-center">Reach</th>
+                                <th class="pb-2 font-medium text-right">Engagement</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700">
+                            <tr class="border-b border-gray-50">
+                                <td class="py-2.5 flex items-center gap-2"><i class="fab fa-facebook text-blue-600 text-sm"></i> Facebook</td>
+                                <td class="py-2.5 text-center font-bold">125K</td>
+                                <td class="py-2.5 text-right font-bold">5.2%</td>
+                            </tr>
+                            <tr class="border-b border-gray-50">
+                                <td class="py-2.5 flex items-center gap-2"><i class="fab fa-instagram text-pink-600 text-sm"></i> Instagram</td>
+                                <td class="py-2.5 text-center font-bold">98K</td>
+                                <td class="py-2.5 text-right font-bold">4.8%</td>
+                            </tr>
+                            <tr class="border-b border-gray-50">
+                                <td class="py-2.5 flex items-center gap-2"><i class="fab fa-linkedin text-blue-700 text-sm"></i> LinkedIn</td>
+                                <td class="py-2.5 text-center font-bold">65K</td>
+                                <td class="py-2.5 text-right font-bold">6.1%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 flex items-center gap-2"><i class="fab fa-youtube text-red-600 text-sm"></i> YouTube</td>
+                                <td class="py-2.5 text-center font-bold">42K</td>
+                                <td class="py-2.5 text-right font-bold">3.7%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex flex-col">
+                    <h3 class="font-semibold text-gray-800 text-[13px] mb-3">Quick Actions</h3>
+                    <div class="grid grid-cols-2 gap-2 flex-1">
+                        <button class="border border-gray-200 rounded-lg py-2 flex items-center justify-center gap-2 hover:bg-indigo-50 transition text-gray-700">
+                            <i class="fas fa-bullhorn text-indigo-500 text-[10px]"></i> <span class="text-[9px] font-medium">Create Campaign</span>
+                        </button>
+                        <button class="border border-gray-200 rounded-lg py-2 flex items-center justify-center gap-2 hover:bg-blue-50 transition text-gray-700">
+                            <i class="fas fa-user-plus text-blue-500 text-[10px]"></i> <span class="text-[9px] font-medium">Add New Lead</span>
+                        </button>
+                        <button class="border border-gray-200 rounded-lg py-2 flex items-center justify-center gap-2 hover:bg-purple-50 transition text-gray-700">
+                            <i class="fas fa-comment-dots text-purple-500 text-[10px]"></i> <span class="text-[9px] font-medium">Post on Social</span>
+                        </button>
+                        <button class="border border-gray-200 rounded-lg py-2 flex items-center justify-center gap-2 hover:bg-pink-50 transition text-gray-700">
+                            <i class="far fa-envelope text-pink-500 text-[10px]"></i> <span class="text-[9px] font-medium">Send Email</span>
+                        </button>
+                        <button class="border border-gray-200 rounded-lg py-2 flex items-center justify-center gap-2 hover:bg-emerald-50 transition text-gray-700">
+                            <i class="fas fa-chart-bar text-emerald-500 text-[10px]"></i> <span class="text-[9px] font-medium">View Reports</span>
+                        </button>
+                        <button class="border border-gray-200 rounded-lg py-2 flex items-center justify-center gap-2 hover:bg-violet-50 transition text-gray-700">
+                            <i class="fas fa-robot text-violet-500 text-[10px]"></i> <span class="text-[9px] font-medium">AI Generator</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- ENTERPRISE MODULES & REPORTS (merged with new Reports Dashboard) -->
+            <!-- ========================================== -->
+
+            <hr class="border-gray-200 my-8" />
+
+            <div class="mb-4">
+                <h2 class="text-lg font-bold text-gray-900"><i class="fas fa-layer-group text-blue-600 mr-2"></i>Enterprise Master Data & Operations</h2>
+                <p class="text-[13px] text-gray-500">Manage all sub-modules, tools, KPIs, and reporting parameters.</p>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <div class="flex space-x-4 border-b border-gray-200 mb-6">
+                <button onclick="switchTab('modules')" id="tab-modules" class="pb-3 text-sm font-semibold text-blue-600 border-b-2 border-blue-600 transition">Management Modules</button>
+                <button onclick="switchTab('reports')" id="tab-reports" class="pb-3 text-sm font-medium text-gray-500 hover:text-gray-700 transition">Performance Reports</button>
+                <button onclick="switchTab('kpis')" id="tab-kpis" class="pb-3 text-sm font-medium text-gray-500 hover:text-gray-700 transition">KPI Dashboard</button>
+                <button onclick="switchTab('enterprise')" id="tab-enterprise" class="pb-3 text-sm font-medium text-gray-500 hover:text-gray-700 transition">Advanced Enterprise Tools</button>
+            </div>
+
+            <!-- TAB 1: MODULES GRID -->
+            <div id="content-modules" class="grid grid-cols-5 gap-4">
+                <!-- Dynamically generated via JS -->
+            </div>
+
+            <!-- TAB 2: REPORTS ENGINE + NEW FILTERABLE REPORTS TABLE -->
+            <div id="content-reports" class="hidden space-y-6">
+                <!-- Existing 3 Report Cards -->
+                <div class="grid grid-cols-3 gap-6">
+                    <!-- Daily Report -->
+                    <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:border-blue-300 transition">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-800 text-[14px]"><i class="fas fa-calendar-day text-blue-500 mr-2"></i>Daily Report</h3>
+                            <button onclick="triggerAction('Generate Daily Report')" class="text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-[11px] font-medium transition">Generate</button>
+                        </div>
+                        <ul class="text-[12px] text-gray-600 space-y-2 max-h-[250px] overflow-y-auto custom-scrollbar pr-2">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> Campaigns Running / New Campaigns</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> Ad Spend & Revenue</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> Leads, Qualified Leads & Sales</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> Website Traffic & Social Engagement</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> Email, WhatsApp & SMS Performance</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> SEO Tasks & AI Content Generated</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> Team Productivity</li>
+                        </ul>
+                    </div>
+                    <!-- Weekly Report -->
+                    <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:border-blue-300 transition">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-800 text-[14px]"><i class="fas fa-calendar-week text-purple-500 mr-2"></i>Weekly Report</h3>
+                            <button onclick="triggerAction('Generate Weekly Report')" class="text-white bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded text-[11px] font-medium transition">Generate</button>
+                        </div>
+                        <ul class="text-[12px] text-gray-600 space-y-2 max-h-[250px] overflow-y-auto custom-scrollbar pr-2">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> Budget Utilized & Platform Performance</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> Best / Worst Campaign & Lead Sources</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> ROAS, Revenue & Conversion Rate</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> Executive Performance & Content Published</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> Keyword & Website Growth</li>
+                        </ul>
+                    </div>
+                    <!-- Monthly Report -->
+                    <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:border-blue-300 transition">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-gray-800 text-[14px]"><i class="fas fa-calendar-alt text-emerald-500 mr-2"></i>Monthly Report</h3>
+                            <button onclick="triggerAction('Generate Monthly Report')" class="text-white bg-emerald-600 hover:bg-emerald-700 px-3 py-1 rounded text-[11px] font-medium transition">Generate</button>
+                        </div>
+                        <ul class="text-[12px] text-gray-600 space-y-2 max-h-[250px] overflow-y-auto custom-scrollbar pr-2">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> Total Budget, Spend, Revenue & Leads</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> Qualified Leads & Sales / CAC / CPL</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> ROAS & ROI Analysis</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> SEO, Website & Social Growth</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> Email, WhatsApp & SMS Performance</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> Branch, Department & Executive Perf.</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-[10px]"></i> AI Usage Report & Leaderboard</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ============================================================ -->
+                <!-- NEW: Detailed Reports Filter + Table (merged from second HTML) -->
+                <!-- ============================================================ -->
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <h3 class="font-bold text-gray-800 text-[16px] mb-2">
+                        <i class="fas fa-table text-blue-500 mr-2"></i>Detailed System Reports
+                    </h3>
+                    <p class="text-[12px] text-gray-500 mb-4">Search and filter all executed system functions and their status.</p>
+
+                    <!-- Filter Section -->
+                    <div class="reports-filter-container">
+                        <div class="reports-filter-group">
+                            <label for="searchFunc">Search by Function / Detail</label>
+                            <input type="text" id="searchFunc" placeholder="e.g., DataSync, API Gateway..." />
+                        </div>
+                        <div class="reports-filter-group">
+                            <label for="dateFrom">Date From</label>
+                            <input type="date" id="dateFrom" />
+                        </div>
+                        <div class="reports-filter-group">
+                            <label for="dateTo">Date To</label>
+                            <input type="date" id="dateTo" />
+                        </div>
+                        <button class="btn-reports-search" onclick="filterReports()">Apply Filters</button>
+                        <button class="btn-reports-reset" onclick="resetFilters()">Reset</button>
+                    </div>
+
+                    <!-- Dynamic Table -->
+                    <div class="reports-table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Report ID</th>
+                                    <th>Function Executed</th>
+                                    <th>Date</th>
+                                    <th>Executed By</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportTableBody">
+                                <!-- Data injected by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: KPI DASHBOARD -->
+            <div id="content-kpis" class="hidden">
+                <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+                    <h3 class="font-semibold text-gray-800 text-[15px] mb-4">Target Achievements (Progress Bars)</h3>
+                    <div class="grid grid-cols-3 gap-6" id="kpi-grid">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: ENTERPRISE FEATURES -->
+            <div id="content-enterprise" class="hidden">
+                <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+                    <div class="grid grid-cols-4 gap-4" id="enterprise-features-grid">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- end scrollable body -->
+    </main>
+
+    <!-- ============================================ -->
+    <!-- UNIFIED MODAL FOR DATA ENTRY                  -->
+    <!-- ============================================ -->
+    <div id="universalModal" class="fixed inset-0 bg-gray-900/50 hidden items-center justify-center z-50 transition-opacity">
+        <div class="bg-white rounded-xl shadow-2xl w-[900px] max-w-[95%] max-h-[90vh] flex flex-col overflow-hidden transform scale-95 transition-transform" id="modalDialog">
+            <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center shrink-0">
+                <h2 id="modalTitle" class="text-lg font-bold text-gray-800">Module Data</h2>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1 custom-scrollbar">
+                <form id="modalForm" class="grid grid-cols-3 gap-x-6 gap-y-4 text-[13px]">
+                    <!-- Form fields generated dynamically -->
+                </form>
+            </div>
+            <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 flex justify-end gap-3 shrink-0" id="modalButtons">
+                <!-- Buttons generated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3"></div>
+
+    <!-- ============================================ -->
+    <!-- JAVASCRIPT                                   -->
+    <!-- ============================================ -->
+    <script>
+        // ==========================================
+        // 1. ORIGINAL CHART CONFIGURATIONS
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = '#94A3B8';
+
+            const sparklineOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                scales: { x: { display: false }, y: { display: false } },
+                elements: { point: { radius: 0 }, line: { tension: 0.4, borderWidth: 2 } }
+            };
+
+            new Chart(document.getElementById('spark1'), { type: 'line', data: { labels: [1, 2, 3, 4, 5, 6, 7], datasets: [{ data: [3, 4, 3, 5, 6, 5, 8], borderColor: '#8B5CF6' }] }, options: sparklineOptions });
+            new Chart(document.getElementById('spark2'), { type: 'line', data: { labels: [1, 2, 3, 4, 5, 6, 7], datasets: [{ data: [5, 7, 6, 9, 8, 11, 12], borderColor: '#3B82F6' }] }, options: sparklineOptions });
+            new Chart(document.getElementById('spark3'), { type: 'line', data: { labels: [1, 2, 3, 4, 5, 6, 7], datasets: [{ data: [2, 3, 2, 5, 4, 7, 8], borderColor: '#10B981' }] }, options: sparklineOptions });
+            new Chart(document.getElementById('spark4'), { type: 'line', data: { labels: [1, 2, 3, 4, 5, 6, 7], datasets: [{ data: [10, 9, 11, 8, 7, 9, 6], borderColor: '#F59E0B' }] }, options: sparklineOptions });
+            new Chart(document.getElementById('spark5'), { type: 'line', data: { labels: [1, 2, 3, 4, 5, 6, 7], datasets: [{ data: [2, 2.5, 2.2, 3, 3.2, 3.1, 3.5], borderColor: '#EC4899' }] }, options: sparklineOptions });
+            new Chart(document.getElementById('spark6'), { type: 'line', data: { labels: [1, 2, 3, 4, 5, 6, 7], datasets: [{ data: [5, 6, 8, 7, 10, 12, 15], borderColor: '#0D9488' }] }, options: sparklineOptions });
+
+            new Chart(document.getElementById('channelChart'), {
+                type: 'line',
+                data: {
+                    labels: ['01 May', '06 May', '11 May', '16 May', '21 May', '26 May', '31 May'],
+                    datasets: [
+                        { label: 'Traffic', data: [3000, 3200, 2900, 4100, 3100, 3900, 3500], borderColor: '#3B82F6',
+                            pointBackgroundColor: '#fff', pointBorderColor: '#3B82F6', tension: 0.3, borderWidth: 2 },
+                        { label: 'Leads', data: [1200, 1500, 1100, 2100, 1400, 1800, 1600], borderColor: '#10B981',
+                            pointBackgroundColor: '#fff', pointBorderColor: '#10B981', tension: 0.3, borderWidth: 2 },
+                        { label: 'Conversions', data: [400, 500, 350, 800, 450, 700, 600], borderColor: '#8B5CF6',
+                            pointBackgroundColor: '#fff', pointBorderColor: '#8B5CF6', tension: 0.3, borderWidth: 2 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, max: 5000, ticks: { callback: v => v / 1000 + 'K', stepSize: 1000,
+                                font: { size: 10 } }, grid: { color: '#F1F5F9' } },
+                        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                    }
+                }
+            });
+
+            new Chart(document.getElementById('sourceChart'), {
+                type: 'doughnut',
+                data: { labels: ['Google Ads', 'Meta Ads', 'Organic Search', 'LinkedIn Ads', 'Email', 'Others'],
+                    datasets: [{ data: [35, 28, 18, 10, 5, 4], backgroundColor: ['#3B82F6', '#10B981', '#F59E0B',
+                            '#10b981', '#EC4899', '#06B6D4'
+                        ], borderWidth: 0, cutout: '75%' }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            new Chart(document.getElementById('campaignsChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Q3 Franchise Push (Meta Ads)', 'Enterprise CRM Webinar (Google Ads)',
+                        'LinkedIn B2B Outreach (LinkedIn Ads)', 'Email Nurture Series (Email)',
+                        'Retargeting Campaign (Meta Ads)'
+                    ],
+                    datasets: [{ data: [420, 185, 95, 63, 48], backgroundColor: ['#3B82F6', '#10B981', '#10b981',
+                            '#EC4899', '#8B5CF6'
+                        ], borderRadius: 4, barThickness: 8 }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { beginAtZero: true, max: 500, grid: { color: '#F1F5F9' }, ticks: { font: { size: 10 } } },
+                        y: { grid: { display: false }, ticks: { font: { size: 11, color: '#1E293B', weight: '500' } } }
+                    }
+                },
+                plugins: [{
+                    id: 'valueLabels',
+                    afterDatasetsDraw(chart) {
+                        const { ctx, data } = chart;
+                        chart.getDatasetMeta(0).data.forEach((bar, index) => {
+                            const value = data.datasets[0].data[index];
+                            ctx.fillStyle = '#1E293B';
+                            ctx.font = 'bold 11px Inter';
+                            ctx.textAlign = 'left';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText(value, chart.chartArea.right - 20, bar.y);
+                        });
+                    }
+                }]
+            });
+
+            new Chart(document.getElementById('trafficChart'), {
+                type: 'doughnut',
+                data: { labels: ['Organic', 'Paid', 'Direct', 'Social', 'Referral', 'Others'],
+                    datasets: [{ data: [40, 25, 15, 10, 6, 4], backgroundColor: ['#10B981', '#3B82F6', '#8B5CF6',
+                            '#EC4899', '#F59E0B', '#06B6D4'
+                        ], borderWidth: 0, cutout: '75%' }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            initDynamicEnterpriseUI();
+            // Initialize reports table with all data
+            renderTable(reportsData);
+        });
+
+        // ==========================================
+        // 2. DYNAMIC ENTERPRISE UI ENGINE
+        // ==========================================
+
+        const enterpriseSchema = {
+            "Digital Marketing Master": {
+                icon: "fa-id-card",
+                color: "blue",
+                fields: ["Marketing ID", "Employee ID", "Marketing Executive", "Department", "Designation", "Branch",
+                    "Reporting Manager", "Team", "Work Shift", "Status", "Joining Date"
+                ],
+                buttons: ["Save Details", "Update Record"]
+            },
+            "Campaign Master": {
+                icon: "fa-bullhorn",
+                color: "purple",
+                fields: ["Campaign ID", "Campaign Code", "Campaign Name", "Campaign Type", "Platform", "Category",
+                    "Product/Service", "Business Unit", "Objective", "Funnel Stage", "Campaign Priority",
+                    "Campaign Owner", "Department", "Branch", "Agency Name", "Client Name", "Campaign Description",
+                    "Schedule", "Start Date", "End Date", "Campaign Duration", "Launch Time", "End Time", "Time Zone",
+                    "Target Audience", "Country", "State", "City", "Gender", "Age Group", "Language", "Interest",
+                    "Device", "Audience Size", "Lookalike Audience", "Custom Audience", "Retargeting Audience",
+                    "Budget", "Total Budget", "Daily Budget", "Remaining Budget", "Expected Revenue", "Target Leads",
+                    "Target Sales", "Expected ROAS", "Cost Per Lead Target", "Budget Approval Status"
+                ],
+                buttons: ["Launch Campaign", "Save Draft", "Request Approval"]
+            },
+            "Lead Source Management": {
+                icon: "fa-filter",
+                color: "emerald",
+                fields: ["Source ID", "Source Name", "Campaign", "Platform", "Medium", "Channel", "Landing Page",
+                    "UTM Source", "UTM Medium", "UTM Campaign", "UTM Content", "UTM Term", "Lead Count",
+                    "Qualified Leads", "Converted Leads", "Lost Leads", "Revenue Generated"
+                ],
+                buttons: ["Add Source", "Import", "Merge", "Analytics", "Export"]
+            },
+            "Website Management": {
+                icon: "fa-globe",
+                color: "indigo",
+                fields: ["Website Name", "Domain", "Hosting", "SSL Status", "CMS", "Theme", "Page Speed",
+                    "Core Web Vitals", "Mobile Score", "Desktop Score", "Visitors", "Sessions", "Bounce Rate",
+                    "Average Session", "Forms Submitted", "Downloads", "Exit Pages", "Top Landing Pages",
+                    "Top Exit Pages", "Broken Links", "Redirect Errors", "Sitemap Status", "Robots.txt Status",
+                    "Last Backup", "Security Score"
+                ],
+                buttons: ["View Website", "Manage Pages", "Create Page", "Create Landing Page", "Backup", "Audit"]
+            },
+            "SEO Management": {
+                icon: "fa-search",
+                color: "teal",
+                fields: ["SEO Score", "Crawl Errors", "Indexed Pages", "Sitemap", "Robots", "Canonical Errors",
+                    "Broken Links", "HTTPS Status", "Mobile Friendly", "Schema Status", "Page Speed", "Keyword",
+                    "Search Volume", "Ranking", "Previous Ranking", "Ranking Change", "Competition", "CPC",
+                    "Difficulty", "Search Intent", "Target URL", "Meta Title", "Meta Description", "H1", "H2",
+                    "Alt Tags", "Internal Links", "External Links", "Image Optimization", "Word Count",
+                    "Readability Score"
+                ],
+                buttons: ["SEO Audit", "Keyword Research", "Optimize", "Generate Meta", "Fix Errors"]
+            },
+            "Social Media Mgmt": {
+                icon: "fa-hashtag",
+                color: "pink",
+                fields: ["Platform (FB, IG, LI, X, YT, Pin, Threads, GBP)", "Account Name", "Username", "Followers",
+                    "New Followers", "Reach", "Impressions", "Engagement", "Likes", "Comments", "Shares", "Saves",
+                    "Video Views", "Clicks", "Link Clicks", "Story Views", "Messages", "Inbox", "Leads Generated",
+                    "Conversion", "Growth %", "Best Performing Post", "Worst Performing Post"
+                ],
+                buttons: ["Create Post", "Schedule", "Approve", "Publish", "Boost", "Reply", "Analytics"]
+            },
+            "Google Ads Manager": {
+                icon: "fa-ad",
+                color: "yellow",
+                fields: ["Campaign", "Campaign Type", "Budget", "Daily Budget", "Spend", "Clicks", "Impressions",
+                    "CTR", "CPC", "CPM", "CPA", "Leads", "Conversions", "Conversion Rate", "Revenue", "ROAS",
+                    "Quality Score", "Ad Strength", "Status"
+                ],
+                buttons: ["Launch", "Pause", "Resume", "Duplicate", "Edit", "Analytics"]
+            },
+            "Meta Ads Manager": {
+                icon: "fa-facebook-square",
+                color: "blue",
+                fields: ["Campaign", "Objective", "Ad Set", "Audience", "Creative", "Placement", "Budget", "Spend",
+                    "Reach", "Frequency", "CTR", "Leads", "Purchases", "Cost Per Result", "ROAS", "Approval Status"
+                ],
+                buttons: ["Launch", "Pause", "Resume", "Duplicate", "Edit", "Analytics"]
+            },
+            "Email Marketing": {
+                icon: "fa-envelope",
+                color: "orange",
+                fields: ["Campaign", "Template", "Subject", "Sender", "Recipients", "Delivered", "Open Rate",
+                    "Click Rate", "Bounce Rate", "Spam Complaints", "Unsubscribe", "Replies", "Leads", "Revenue"
+                ],
+                buttons: ["Create", "Test", "Schedule", "Send", "Analytics"]
+            },
+            "WhatsApp Marketing": {
+                icon: "fa-whatsapp",
+                color: "emerald",
+                fields: ["Campaign", "Template", "Category", "Contacts", "Sent", "Delivered", "Read", "Failed",
+                    "Replies", "Clicks", "Leads", "Sales", "Revenue"
+                ],
+                buttons: ["Create", "Upload Contacts", "Schedule", "Send", "Analytics"]
+            },
+            "SMS Marketing": {
+                icon: "fa-comment-alt",
+                color: "gray",
+                fields: ["Campaign", "SMS Template", "Sender ID", "Recipients", "Delivered", "Failed", "Click Rate",
+                    "Replies", "Leads", "Cost", "Revenue"
+                ],
+                buttons: ["Create", "Send SMS", "Analytics"]
+            },
+            "Content Management": {
+                icon: "fa-file-alt",
+                color: "indigo",
+                fields: ["Content ID", "Title", "Category", "Platform", "Author", "SEO Score", "Keywords", "Status",
+                    "Approval", "Publish Date", "Last Updated", "Views", "Engagement", "Leads Generated"
+                ],
+                buttons: ["Create", "AI Generate", "Edit", "Approve", "Publish"]
+            },
+            "Creative Library": {
+                icon: "fa-images",
+                color: "purple",
+                fields: ["Asset ID", "File Name", "Asset Type", "Category", "Campaign", "Format", "Resolution",
+                    "Size", "Designer", "Uploaded By", "Version", "Approval Status", "Download Count"
+                ],
+                buttons: ["Upload", "Download", "Preview", "Replace", "Archive"]
+            },
+            "AI Marketing Center": {
+                icon: "fa-robot",
+                color: "violet",
+                fields: ["AI Blog Writer Target", "AI Ad Copy Prompt", "AI Social Caption", "AI Hashtag Generator",
+                    "AI Keyword Parameters", "AI Email Writer Tone", "AI WhatsApp Writer", "AI Landing Page Brief",
+                    "AI Product Desc.", "AI Image Prompt", "AI Banner Text", "AI Video Script", "AI Voice Options",
+                    "AI SEO Optimizer Goal", "AI Competitor Profile", "AI Campaign Optimizer", "AI Budget Goal",
+                    "AI Lead Scoring System", "AI Perf. Prediction Model"
+                ],
+                buttons: ["Generate AI Asset", "Analyze", "Optimize Configuration"]
+            },
+            "Analytics Dashboard Data": {
+                icon: "fa-chart-pie",
+                color: "cyan",
+                fields: ["Total Visitors", "Sessions", "Users", "Returning Users", "New Users", "Leads",
+                    "Qualified Leads", "Sales", "Revenue", "ROI", "ROAS", "CPL", "CPA", "CPC", "CTR", "CPM",
+                    "CAC", "Conversion Rate", "Average Order Value", "Customer Lifetime Value"
+                ],
+                buttons: ["Refresh Data", "Export Dashboard"]
+            },
+            "Marketing Calendar": {
+                icon: "fa-calendar-alt",
+                color: "blue",
+                fields: ["Task", "Campaign", "Platform", "Date", "Time", "Assigned To", "Priority", "Status",
+                    "Approval", "Publish Status"
+                ],
+                buttons: ["Add", "Edit", "Approve", "Publish", "Reschedule"]
+            },
+            "Marketing Budget": {
+                icon: "fa-wallet",
+                color: "amber",
+                fields: ["Budget ID", "Department", "Branch", "Campaign", "Budget Allocated", "Budget Used",
+                    "Remaining Budget", "Vendor Cost", "Agency Cost", "Freelancer Cost", "Software Cost", "GST",
+                    "Total Expense", "Approval Status"
+                ],
+                buttons: ["Allocate Budget", "Approve Expenses", "Audit"]
+            },
+            "Team Management": {
+                icon: "fa-users",
+                color: "pink",
+                fields: ["Employee", "Department", "Designation", "Campaigns Assigned", "Tasks", "Completed",
+                    "Pending", "Overdue", "Leads Generated", "Revenue Generated", "KPI Score", "Attendance",
+                    "Productivity", "Rating"
+                ],
+                buttons: ["Assign Employee", "Update KPIs", "Evaluate Performance"]
+            },
+            "Task Management": {
+                icon: "fa-tasks",
+                color: "teal",
+                fields: ["Task ID", "Task Name", "Campaign", "Priority", "Assigned To", "Start Date", "Due Date",
+                    "Completion Date", "Status", "Approval", "Remarks"
+                ],
+                buttons: ["Assign", "Approve", "Reject", "Complete", "Reassign"]
+            }
+        };
+
+        const kpiList = ["Campaign Completion", "Budget Utilization", "Lead Target Achievement", "Revenue Target",
+            "Website Traffic Goal", "Organic Traffic", "Social Growth", "Email Open Rate", "WhatsApp Read Rate",
+            "SEO Score", "Team Productivity", "Content Publishing", "Conversion Rate", "ROAS", "ROI"
+        ];
+        const enterpriseFeats = ["Marketing Approval Workflow", "Multi-Branch Marketing Dashboard",
+            "Franchise-wise Marketing Performance", "Office-wise ROI", "Executive-wise Leaderboard",
+            "Campaign ROI Calculator", "Competitor Monitoring", "Google Trends Integration", "Meta Pixel Manager",
+            "Google Tag Manager", "UTM Builder", "QR Campaign Tracking", "QR Scan Analytics", "QR to Lead Conversion",
+            "Dynamic Landing Page Builder", "A/B Testing", "Funnel Builder", "Heatmap Integration", "Call Tracking",
+            "Missed Call Campaigns", "Affiliate Marketing Management", "Influencer Management", "Vendor Management",
+            "Marketing Asset Approval", "AI Budget Recommendation", "AI Campaign Health Score", "AI Forecasting",
+            "AI Lead Quality Score", "Marketing SLA Tracking", "Customer Journey Mapping", "Attribution Model Reports",
+            "Cohort Analysis", "RFM Analysis", "Executive Incentive Calculator", "Marketing Audit Log",
+            "API Integrations", "Automated Report Scheduler"
+        ];
+
+        function initDynamicEnterpriseUI() {
+            // Render Modules
+            const modulesDiv = document.getElementById('content-modules');
+            for (const [title, data] of Object.entries(enterpriseSchema)) {
+                modulesDiv.innerHTML += `
+                        <div onclick="openModal('${title}')" class="bg-white p-4 rounded-xl border border-gray-200 cursor-pointer hover:border-${data.color}-400 hover:shadow-md transition text-center flex flex-col items-center gap-3 enterprise-module-card">
+                            <div class="w-12 h-12 rounded-full bg-${data.color}-50 text-${data.color}-500 flex items-center justify-center text-xl"><i class="fas ${data.icon}"></i></div>
+                            <div>
+                                <h4 class="text-[13px] font-bold text-gray-800 leading-tight">${title}</h4>
+                                <p class="text-[10px] text-gray-500 mt-1">${data.fields.length} Fields</p>
+                            </div>
+                        </div>
+                    `;
+            }
+
+            // Render KPIs
+            const kpiDiv = document.getElementById('kpi-grid');
+            kpiList.forEach(kpi => {
+                const percent = Math.floor(Math.random() * 40) + 50;
+                kpiDiv.innerHTML += `
+                        <div>
+                            <div class="flex justify-between text-[11px] mb-1 font-medium"><span class="text-gray-700">${kpi}</span> <span class="text-blue-600">${percent}%</span></div>
+                            <div class="w-full bg-gray-100 rounded-full h-1.5"><div class="bg-blue-500 h-1.5 rounded-full" style="width: ${percent}%"></div></div>
+                        </div>
+                    `;
+            });
+
+            // Render Enterprise Features
+            const featDiv = document.getElementById('enterprise-features-grid');
+            enterpriseFeats.forEach(feat => {
+                featDiv.innerHTML += `
+                        <div class="flex items-center gap-2 border border-gray-100 p-2.5 rounded-lg bg-gray-50 cursor-pointer hover:bg-blue-50 transition" onclick="triggerAction('Enable ${feat}')">
+                            <div class="w-4 h-4 rounded text-blue-500 flex items-center justify-center shrink-0 border border-blue-200 bg-white"><i class="fas fa-check text-[8px]"></i></div>
+                            <span class="text-[11px] text-gray-700 font-medium">${feat}</span>
+                        </div>
+                    `;
+            });
+        }
+
+        // UI Interactions
+        function switchTab(tabId) {
+            ['modules', 'reports', 'kpis', 'enterprise'].forEach(id => {
+                document.getElementById('content-' + id).classList.add('hidden');
+                document.getElementById('tab-' + id).classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+                document.getElementById('tab-' + id).classList.add('text-gray-500');
+            });
+            document.getElementById('content-' + tabId).classList.remove('hidden');
+            document.getElementById('tab-' + tabId).classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+            document.getElementById('tab-' + tabId).classList.remove('text-gray-500');
+        }
+
+        function openModal(moduleName) {
+            const data = enterpriseSchema[moduleName];
+            document.getElementById('modalTitle').innerText = moduleName;
+
+            const form = document.getElementById('modalForm');
+            form.innerHTML = '';
+            data.fields.forEach(field => {
+                form.innerHTML += `
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-medium text-gray-700 text-[11px]">${field}</label>
+                            <input type="text" placeholder="Enter ${field}" class="w-full border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-blue-500 bg-gray-50">
+                        </div>
+                    `;
+            });
+
+            const btns = document.getElementById('modalButtons');
+            btns.innerHTML =
+                `<button onclick="closeModal()" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition text-[12px]">Cancel</button>`;
+            data.buttons.forEach((btn, index) => {
+                const color = index === 0 ? 'bg-blue-600 hover:bg-blue-700 text-white' :
+                    'border border-gray-300 hover:bg-gray-100 text-gray-700';
+                btns.innerHTML +=
+                    `<button type="button" onclick="triggerAction('${btn}')" class="px-4 py-2 rounded-lg font-medium transition text-[12px] ${color}">${btn}</button>`;
+            });
+
+            const modal = document.getElementById('universalModal');
+            modal.classList.add('modal-active');
+            setTimeout(() => { document.getElementById('modalDialog').classList.remove('scale-95'); }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('universalModal');
+            document.getElementById('modalDialog').classList.add('scale-95');
+            setTimeout(() => { modal.classList.remove('modal-active'); }, 200);
+        }
+
+        function triggerAction(actionName) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-white border-l-4 border-emerald-500 p-4 rounded shadow-lg flex items-center gap-3 min-w-[250px] toast-enter';
+            toast.innerHTML = `
+                    <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 text-sm"><i class="fas fa-check"></i></div>
+                    <div>
+                        <h4 class="text-[13px] font-bold text-gray-800">Action Successful</h4>
+                        <p class="text-[11px] text-gray-500">Successfully executed: <b>${actionName}</b></p>
+                    </div>
+                `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+
+            if (document.getElementById('universalModal').classList.contains('modal-active') && (actionName
+                    .toLowerCase().includes('save') || actionName.toLowerCase().includes('publish') || actionName
+                    .toLowerCase().includes('launch'))) {
+                closeModal();
+            }
+        }
+
+        // ==========================================
+        // 3. REPORTS DASHBOARD LOGIC (merged from second HTML)
+        // ==========================================
+
+        // Mock Data
+        const reportsData = [
+            { id: "REP-001", function: "DataSync Module", date: "2024-10-01", user: "Admin", status: "success" },
+            { id: "REP-002", function: "User Auth Gateway", date: "2024-10-05", user: "System", status: "failed" },
+            { id: "REP-003", function: "Payment API Processing", date: "2024-10-12", user: "Admin", status: "success" },
+            { id: "REP-004", function: "Monthly Backup Script", date: "2024-10-15", user: "System", status: "pending" },
+            { id: "REP-005", function: "DataSync Module", date: "2024-10-20", user: "Admin", status: "success" },
+            { id: "REP-006", function: "Email Notification Trigger", date: "2024-10-25", user: "System",
+            status: "success" },
+            { id: "REP-007", function: "API Gateway Health Check", date: "2024-10-28", user: "Admin",
+            status: "warning" },
+            { id: "REP-008", function: "Database Migration", date: "2024-10-30", user: "System", status: "failed" }
+        ];
+
+        function renderTable(data) {
+            const tbody = document.getElementById("reportTableBody");
+            tbody.innerHTML = "";
+
+            if (data.length === 0) {
+                tbody.innerHTML =
+                    `<tr><td colspan="5" style="text-align:center; padding:30px; color:#6b7280;">No reports found for the selected filters.</td></tr>`;
+                return;
+            }
+
+            data.forEach(report => {
+                const statusClass = report.status;
+                const statusText = report.status.charAt(0).toUpperCase() + report.status.slice(1);
+                const row = `
+                        <tr>
+                            <td><strong>${report.id}</strong></td>
+                            <td>${report.function}</td>
+                            <td>${report.date}</td>
+                            <td>${report.user}</td>
+                            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        </tr>
+                    `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function filterReports() {
+            const searchValue = document.getElementById("searchFunc").value.toLowerCase();
+            const dateFrom = document.getElementById("dateFrom").value;
+            const dateTo = document.getElementById("dateTo").value;
+
+            const filteredData = reportsData.filter(report => {
+                const matchesSearch = report.function.toLowerCase().includes(searchValue) || report.id.toLowerCase()
+                    .includes(searchValue);
+                let matchesDate = true;
+                if (dateFrom && report.date < dateFrom) matchesDate = false;
+                if (dateTo && report.date > dateTo) matchesDate = false;
+                return matchesSearch && matchesDate;
+            });
+
+            renderTable(filteredData);
+            // toast feedback
+            triggerAction('Applied Reports Filter');
+        }
+
+        function resetFilters() {
+            document.getElementById("searchFunc").value = "";
+            document.getElementById("dateFrom").value = "";
+            document.getElementById("dateTo").value = "";
+            renderTable(reportsData);
+            triggerAction('Reset Reports Filters');
+        }
+
+        // ==========================================
+        // 4. SIDEBAR CONFIG (crm-engine.js expects this)
+        // ==========================================
+        window.CRM_PORTAL = {
+            id: 'marketing',
+            brandIcon: 'fa-bullhorn',
+            brandTitle: 'ePay',
+            brandSub: 'Digital Marketing',
+            active: 'dashboard',
+            userName: 'Yashraj Sathe',
+            userRole: 'Marketing Manager',
+            menu: [
+                { type: 'section', label: 'Overview' },
+                { id: 'dashboard', label: 'Dashboard', icon: 'fa-home' },
+                { id: 'campaigns', label: 'Campaigns', icon: 'fa-bullhorn' },
+                { id: 'seo', label: 'SEO', icon: 'fa-search' },
+                { type: 'section', label: 'Channels' },
+                { id: 'channels', label: 'Marketing Channels', icon: 'fa-network-wired', chevron: 'fa-chevron-right' },
+                { id: 'content', label: 'Content Management', icon: 'fa-file-alt', chevron: 'fa-chevron-right' },
+                { id: 'social', label: 'Social Media', icon: 'fa-hashtag', chevron: 'fa-chevron-right' },
+                { id: 'email', label: 'Email Marketing', icon: 'far fa-envelope', chevron: 'fa-chevron-right' },
+                { id: 'leads', label: 'Leads & Forms', icon: 'fa-filter', chevron: 'fa-chevron-right' },
+                { type: 'section', label: 'Optimization' },
+                { id: 'automation', label: 'Automation', icon: 'fa-cog', chevron: 'fa-chevron-right' },
+                { id: 'analytics', label: 'Analytics', icon: 'fa-chart-line', chevron: 'fa-chevron-right' },
+                { id: 'reports', label: 'Reports', icon: 'fa-download', chevron: 'fa-chevron-right' },
+                { id: 'ai', label: 'AI Tools', icon: 'fa-robot', chevron: 'fa-chevron-right' },
+                { id: 'competitor', label: 'Competitor Analysis', icon: 'fa-chess-knight', chevron: 'fa-chevron-right' },
+                { id: 'keywords', label: 'Keyword Research', icon: 'fa-key', chevron: 'fa-chevron-right' },
+                { id: 'ads', label: 'Ad Manager', icon: 'fa-ad', chevron: 'fa-chevron-right' },
+                { type: 'section', label: 'Management' },
+                { id: 'budget', label: 'Budget & Expense', icon: 'fa-wallet', chevron: 'fa-chevron-right' },
+                { id: 'team', label: 'Team Management', icon: 'fa-users', chevron: 'fa-chevron-right' },
+                { id: 'tasks', label: 'Tasks & Approvals', icon: 'fa-check-square', chevron: 'fa-chevron-right' },
+                { id: 'assets', label: 'Assets & Media', icon: 'far fa-images', chevron: 'fa-chevron-right' },
+                { type: 'section', label: 'Support' },
+                { id: 'settings', label: 'Settings', icon: 'fa-sliders-h', chevron: 'fa-chevron-right' },
+                { id: 'help', label: 'Help & Support', icon: 'far fa-question-circle', chevron: 'fa-chevron-right' },
+                { type: 'portal', label: 'Portals' }
+            ]
+        };
+    </script>
+    <script src="crm-engine.js">
+    </script>
+    <script src="crm-auth.js">
+    </script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

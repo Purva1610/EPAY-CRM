@@ -1,0 +1,1134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ePay Accommodation · Find Your Perfect Stay</title>
+<meta name="description" content="Book hostels, PGs, rentals, student housing, and employee accommodations in India and internationally — before you leave your home city." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+
+
+
+:root {
+  --ink: #0a0b10;
+  --ink-2: #12141c;
+  --ink-3: #1a1d2a;
+  --purple: #8b5cf6;
+  --purple-light: #a78bfa;
+  --purple-dim: rgba(139,92,246,0.15);
+  --cyan: #06b6d4;
+  --cyan-dim: rgba(6,182,212,0.12);
+  --emerald: #10b981;
+  --emerald-dim: rgba(16,185,129,0.12);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.12);
+  --rose: #ef4444;
+  --rose-dim: rgba(239,68,68,0.12);
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --glass: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --radius: 20px;
+  --radius-sm: 12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--ink);
+  color:var(--text);
+  line-height:1.65;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+.container{width:100%;max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* Ambient */
+.ambient{
+  position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+}
+.ambient .orb{
+  position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;
+  animation:floatOrb 18s ease-in-out infinite;
+}
+.orb.o1{width:480px;height:480px;background:radial-gradient(circle,#8b5cf6,transparent 70%);top:-10%;right:-5%}
+.orb.o2{width:360px;height:360px;background:radial-gradient(circle,#06b6d4,transparent 70%);bottom:10%;left:-8%;animation-delay:-6s}
+.orb.o3{width:280px;height:280px;background:radial-gradient(circle,#10b981,transparent 70%);top:45%;left:40%;animation-delay:-12s;opacity:.2}
+@keyframes floatOrb{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(40px,-50px) scale(1.1)}
+  66%{transform:translate(-30px,30px) scale(.95)}
+}
+
+/* Nav */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(10,11,16,.7);backdrop-filter:blur(20px) saturate(160%);
+  border-bottom:1px solid transparent;transition:.4s;
+}
+.nav.scrolled{border-bottom-color:var(--border);box-shadow:0 8px 40px rgba(0,0,0,.4)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem;letter-spacing:-.02em}
+.logo-mark{
+  width:36px;height:36px;border-radius:11px;
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#fff;font-weight:900;
+  box-shadow:0 4px 16px rgba(139,92,246,.4);
+}
+.logo span{background:linear-gradient(135deg,var(--purple-light),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:26px;list-style:none}
+.nav-links a{font-size:.88rem;font-weight:500;color:var(--muted);transition:.25s}
+.nav-links a:hover{color:var(--purple-light)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 24px;font-size:.9rem;font-weight:600;border-radius:100px;border:none;cursor:pointer;
+  transition:.4s cubic-bezier(.34,1.56,.64,1);font-family:inherit;position:relative;overflow:hidden;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  color:#fff;box-shadow:0 4px 24px rgba(139,92,246,.35);
+}
+.btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 36px rgba(139,92,246,.5)}
+.btn-ghost{
+  background:transparent;color:var(--text);border:1.5px solid var(--border);
+}
+.btn-ghost:hover{border-color:var(--purple);color:var(--purple-light);background:var(--purple-dim)}
+.btn-success{
+  background:linear-gradient(135deg,var(--emerald),#059669);
+  color:#fff;box-shadow:0 4px 24px rgba(16,185,129,.35);
+}
+.btn-success:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 36px rgba(16,185,129,.5)}
+.btn-lg{padding:16px 32px;font-size:1rem}
+.btn-sm{padding:6px 16px;font-size:.8rem}
+.mobile-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.mobile-toggle span{display:block;width:22px;height:2px;background:var(--text);margin:5px 0;border-radius:2px}
+
+/* Hero */
+.hero{
+  min-height:100vh;display:flex;align-items:center;padding:120px 0 80px;position:relative;z-index:1;
+}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--purple-dim);border:1px solid rgba(139,92,246,.3);
+  color:var(--purple-light);font-size:.78rem;font-weight:600;padding:7px 16px;border-radius:100px;margin-bottom:22px;
+}
+.hero-badge .dot{width:7px;height:7px;background:var(--purple);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,.5)}50%{box-shadow:0 0 0 8px transparent}}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.4rem,5vw,3.6rem);font-weight:700;line-height:1.12;letter-spacing:-.03em;margin-bottom:18px;
+}
+.hero h1 .gradient{
+  background:linear-gradient(135deg,var(--purple-light),var(--cyan),var(--emerald));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{font-size:1.08rem;color:var(--muted);max-width:520px;margin-bottom:28px;line-height:1.7}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:32px}
+.hero-tagline{
+  font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--purple-light);
+  border-left:3px solid var(--purple);padding-left:16px;opacity:.9;
+}
+
+/* Hero visual */
+.hero-visual{position:relative}
+.hero-card{
+  background:linear-gradient(160deg,rgba(26,29,42,.9),rgba(18,20,28,.95));
+  border:1px solid var(--border);border-radius:24px;padding:24px;backdrop-filter:blur(20px);
+  box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 1px rgba(139,92,246,.08);
+  position:relative;overflow:hidden;
+}
+.hero-card::before{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:conic-gradient(from 0deg,transparent,rgba(139,92,246,.06),transparent 40%);
+  animation:spin 20s linear infinite;pointer-events:none;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-card-img{
+  height:200px;border-radius:16px;background-size:cover;background-position:center;
+  margin-bottom:18px;position:relative;overflow:hidden;
+}
+.hero-card-img .overlay{
+  position:absolute;inset:0;background:linear-gradient(to top,rgba(10,11,16,.8),transparent 50%);
+}
+.metric-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative;z-index:1}
+.metric{
+  background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:12px 14px;
+  transition:.3s;
+}
+.metric:hover{border-color:rgba(139,92,246,.3);background:rgba(139,92,246,.06)}
+.metric .label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.metric .val{font-size:1.25rem;font-weight:800;color:var(--purple-light);margin-top:2px}
+
+/* Trust strip */
+.trust{
+  padding:40px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  position:relative;z-index:1;background:rgba(18,20,28,.5);
+}
+.trust h3{text-align:center;font-size:.85rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:24px}
+.trust-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;text-align:center}
+.trust-item{
+  padding:18px 12px;border-radius:var(--radius-sm);border:1px solid transparent;
+  transition:.35s;background:var(--glass);
+}
+.trust-item:hover{border-color:rgba(139,92,246,.25);transform:translateY(-4px);background:var(--purple-dim)}
+.trust-item .icon{font-size:1.6rem;margin-bottom:8px}
+.trust-item span{font-size:.82rem;font-weight:600;color:var(--text)}
+
+/* Sections */
+section{padding:90px 0;position:relative;z-index:1}
+.section-label{
+  display:inline-block;font-size:.72rem;font-weight:700;color:var(--purple);
+  text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;
+  background:var(--purple-dim);padding:6px 14px;border-radius:100px;border:1px solid rgba(139,92,246,.2);
+}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin-bottom:12px;
+}
+.section-sub{font-size:1.02rem;color:var(--muted);max-width:560px;margin-bottom:40px;line-height:1.7}
+.text-center{text-align:center}
+.text-center .section-sub{margin-left:auto;margin-right:auto}
+
+/* Cards grid */
+.cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.cards-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{
+  background:linear-gradient(160deg,rgba(26,29,42,.85),rgba(18,20,28,.9));
+  border:1px solid var(--border);border-radius:var(--radius);padding:26px 24px;
+  transition:.4s;position:relative;overflow:hidden;
+}
+.card:hover{border-color:rgba(139,92,246,.3);transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.card .icon{font-size:1.8rem;margin-bottom:14px}
+.card h3{font-size:1.05rem;font-weight:700;margin-bottom:8px}
+.card p{font-size:.9rem;color:var(--muted);line-height:1.6}
+
+/* Property cards */
+.property-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.property-card{
+  background:var(--ink-3);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
+  transition:.4s;cursor:pointer;
+}
+.property-card:hover{border-color:rgba(139,92,246,.3);transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.property-card .img{height:180px;background-size:cover;background-position:center;position:relative}
+.property-card .img .badge-top{
+  position:absolute;top:12px;left:12px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
+  padding:4px 14px;border-radius:50px;font-size:.7rem;font-weight:600;color:var(--purple-light);
+  border:1px solid var(--border);
+}
+.property-card .img .badge-top.verified{color:var(--emerald);}
+.property-card .body{padding:16px 18px}
+.property-card .body .title{font-size:1.05rem;font-weight:700;color:#fff}
+.property-card .body .location{font-size:.85rem;color:var(--muted);margin-top:2px}
+.property-card .body .location i{color:var(--cyan);width:14px}
+.property-card .body .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin:8px 0}
+.property-card .body .meta-grid .item{font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:4px}
+.property-card .body .meta-grid .item i{color:var(--purple);width:14px}
+.property-card .body .price-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.property-card .body .price-row .price{font-size:1.2rem;font-weight:700;color:var(--cyan)}
+.property-card .body .price-row .price span{font-size:.75rem;font-weight:400;color:var(--muted)}
+.property-card .body .price-row .status{font-size:.7rem;font-weight:600;padding:3px 12px;border-radius:50px}
+.property-card .body .price-row .status.available{background:var(--emerald-dim);color:var(--emerald)}
+.property-card .body .price-row .status.limited{background:var(--amber-dim);color:var(--amber)}
+
+/* Filter bar */
+.filter-bar{
+  display:flex;flex-wrap:wrap;gap:10px 16px;
+  background:var(--glass);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:16px 20px;margin-bottom:28px;align-items:flex-end;
+}
+.filter-group{display:flex;flex-direction:column;gap:4px;flex:1;min-width:120px}
+.filter-group label{font-size:.7rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.filter-group select,.filter-group input{
+  padding:8px 12px;border-radius:8px;border:1px solid var(--border);
+  background:var(--glass);color:var(--text);font-family:inherit;font-size:.85rem;outline:none;transition:.25s;
+}
+.filter-group select:focus,.filter-group input:focus{
+  border-color:var(--purple);box-shadow:0 0 0 3px rgba(139,92,246,.15);
+}
+.filter-group select option{background:var(--ink-2)}
+
+/* Type toggle */
+.type-toggle{
+  display:flex;gap:4px;background:var(--glass);border-radius:var(--radius-sm);padding:4px;
+  margin-bottom:24px;border:1px solid var(--border);flex-wrap:wrap;
+}
+.type-toggle .toggle-btn{
+  padding:8px 24px;border:none;background:transparent;color:var(--muted);
+  font-weight:600;font-size:.85rem;border-radius:var(--radius-sm);cursor:pointer;transition:.3s;
+  font-family:inherit;
+}
+.type-toggle .toggle-btn:hover{color:var(--text)}
+.type-toggle .toggle-btn.active{
+  background:var(--purple-dim);color:var(--purple-light);border:1px solid rgba(139,92,246,.2);
+}
+
+/* Journey flow */
+.journey{
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;padding:30px 0;
+}
+.journey-node{
+  background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:14px 20px;
+  text-align:center;min-width:120px;transition:.3s;
+}
+.journey-node:hover{border-color:var(--purple);background:var(--purple-dim)}
+.journey-node .step{font-size:.7rem;color:var(--purple);font-weight:700;text-transform:uppercase}
+.journey-node .name{font-size:.88rem;font-weight:600;margin-top:4px}
+.journey-arrow{color:var(--purple);font-size:1.1rem;opacity:.6}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.step-card{
+  background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);padding:24px;
+  position:relative;transition:.35s;
+}
+.step-card:hover{border-color:rgba(139,92,246,.3);transform:translateY(-4px)}
+.step-num{
+  font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;
+  background:linear-gradient(135deg,var(--purple-light),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;
+}
+.step-card h3{font-size:1rem;font-weight:700;margin-bottom:6px}
+.step-card p{font-size:.88rem;color:var(--muted)}
+
+/* CTA band */
+.cta-band{
+  background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(16,185,129,.08));
+  border:1px solid rgba(139,92,246,.25);border-radius:28px;padding:48px 40px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-band::before{
+  content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);
+  animation:shimmer 4s infinite;
+}
+@keyframes shimmer{100%{left:150%}}
+.cta-band h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:12px}
+.cta-band p{color:var(--muted);max-width:480px;margin:0 auto 24px}
+
+/* Modal */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
+  z-index:200;display:none;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--ink-2);border:1px solid var(--border);border-radius:24px;
+  max-width:540px;width:100%;max-height:90vh;overflow-y:auto;padding:32px;
+  box-shadow:0 40px 100px rgba(0,0,0,.6);animation:modalIn .4s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+.modal h2{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:6px}
+.modal .sub{color:var(--muted);font-size:.9rem;margin-bottom:22px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid .full{grid-column:1/-1}
+.form-group label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:5px}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--glass);color:var(--text);font-family:inherit;font-size:.9rem;outline:none;transition:.25s;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  border-color:var(--purple);box-shadow:0 0 0 3px rgba(139,92,246,.15);
+}
+.form-group select option{background:var(--ink-2)}
+.modal-close{
+  position:absolute;top:16px;right:16px;background:var(--glass);border:1px solid var(--border);
+  width:36px;height:36px;border-radius:50%;color:var(--muted);cursor:pointer;font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.modal{position:relative}
+
+/* FAQ */
+.faq-list{max-width:720px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{
+  width:100%;text-align:left;background:none;border:none;color:var(--text);
+  padding:18px 0;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+}
+.faq-q:hover{color:var(--purple-light)}
+.faq-q .chev{transition:.3s;color:var(--purple)}
+.faq-item.open .chev{transform:rotate(180deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease;color:var(--muted);font-size:.92rem}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:16px}
+
+/* Footer */
+footer{
+  border-top:1px solid var(--border);padding:40px 0 28px;position:relative;z-index:1;
+  text-align:center;color:var(--muted);font-size:.85rem;
+}
+footer .logo{justify-content:center;margin-bottom:12px}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:none}
+.reveal-d1{transition-delay:.1s}
+.reveal-d2{transition-delay:.2s}
+.reveal-d3{transition-delay:.3s}
+
+/* Toast */
+.toast-box{position:fixed;bottom:24px;right:24px;z-index:300}
+.toast{
+  background:var(--ink-3);border:1px solid rgba(139,92,246,.3);border-left:3px solid var(--purple);
+  border-radius:12px;padding:14px 18px;min-width:240px;font-size:.9rem;
+  box-shadow:0 12px 40px rgba(0,0,0,.4);animation:slideIn .35s ease;margin-top:8px;
+}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:none;opacity:1}}
+
+/* Responsive */
+@media(max-width:900px){
+  .hero-grid,.cards-3,.cards-2,.steps,.trust-grid{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:var(--ink-2);padding:20px;border-bottom:1px solid var(--border)}
+  .property-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .hero-grid,.cards-3,.cards-2,.steps,.trust-grid,.form-grid{grid-template-columns:1fr}
+  .hero{padding:100px 0 60px;min-height:auto}
+  .cta-band{padding:32px 20px}
+  .property-grid{grid-template-columns:1fr}
+  .filter-bar{flex-direction:column;align-items:stretch}
+  .filter-group{min-width:auto}
+}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+<div class="ambient">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+</div>
+
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo"><div class="logo-mark">eA</div> <span>ePay Accommodation</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#india">India</a></li>
+      <li><a href="#international">International</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="btn btn-ghost" onclick="openModal('login')">Sign In</button>
+      <button class="btn btn-primary" onclick="openModal('search')">Find Accommodation</button>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-badge"><span class="dot"></span> Stay Before You Arrive</div>
+      <h1>Find Your Perfect <span class="gradient">Home Away From Home</span></h1>
+      <p class="hero-sub">Hostels, PGs, rentals, student housing, and employee accommodation — in India and internationally. Reserve before you leave your home city.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-primary btn-lg" onclick="openModal('search')">🔍 Find Accommodation</button>
+        <button class="btn btn-ghost btn-lg" onclick="document.getElementById('india').scrollIntoView({behavior:'smooth'})">🏠 Explore Options</button>
+      </div>
+      <p class="hero-tagline">Book before you arrive. Move in with confidence.</p>
+    </div>
+    <div class="hero-visual reveal">
+      <div class="hero-card">
+        <div class="hero-card-img" style="background-image:url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80')">
+          <div class="overlay"></div>
+        </div>
+        <div class="metric-row">
+          <div class="metric"><div class="label">Properties</div><div class="val" id="mProps">2,400+</div></div>
+          <div class="metric"><div class="label">Cities</div><div class="val">120+</div></div>
+          <div class="metric"><div class="label">Reservations</div><div class="val" id="mBookings">18,400+</div></div>
+          <div class="metric"><div class="label">Satisfaction</div><div class="val">94%</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<div class="trust">
+  <div class="container">
+    <h3>Trusted by Students, Employees, and Families</h3>
+    <div class="trust-grid">
+      <div class="trust-item"><div class="icon">🎓</div><span>Student Housing</span></div>
+      <div class="trust-item"><div class="icon">💼</div><span>Employee Accommodation</span></div>
+      <div class="trust-item"><div class="icon">🏠</div><span>Rentals &amp; PGs</span></div>
+      <div class="trust-item"><div class="icon">🛏️</div><span>Hostels &amp; Shared</span></div>
+      <div class="trust-item"><div class="icon">🌍</div><span>International Stays</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- INDIA PROPERTIES -->
+<section id="india">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">India</span>
+      <h2 class="section-title">Accommodation Across India</h2>
+      <p class="section-sub">Hostels, PGs, rentals, shared housing, student housing, and employee accommodation in cities across India.</p>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar reveal">
+      <div class="filter-group"><label>Type</label>
+        <select id="filterIndiaType" onchange="filterIndia()">
+          <option value="all">All Types</option>
+          <option value="hostel">Hostel</option>
+          <option value="pg">PG</option>
+          <option value="rental">Rental</option>
+          <option value="shared">Shared</option>
+          <option value="student">Student Housing</option>
+          <option value="employee">Employee Housing</option>
+        </select>
+      </div>
+      <div class="filter-group"><label>City</label>
+        <select id="filterIndiaCity" onchange="filterIndia()">
+          <option value="all">All Cities</option>
+          <option value="Mumbai">Mumbai</option>
+          <option value="Delhi">Delhi</option>
+          <option value="Bangalore">Bangalore</option>
+          <option value="Pune">Pune</option>
+          <option value="Hyderabad">Hyderabad</option>
+          <option value="Chennai">Chennai</option>
+        </select>
+      </div>
+      <div class="filter-group"><label>Budget (₹/month)</label>
+        <select id="filterIndiaBudget" onchange="filterIndia()">
+          <option value="all">Any</option>
+          <option value="0-5000">Under ₹5,000</option>
+          <option value="5000-10000">₹5,000-₹10,000</option>
+          <option value="10000-20000">₹10,000-₹20,000</option>
+          <option value="20000+">₹20,000+</option>
+        </select>
+      </div>
+      <div class="filter-group" style="flex:0.5;min-width:80px;">
+        <label>&nbsp;</label>
+        <button class="btn btn-primary btn-sm" onclick="filterIndia()">Apply</button>
+      </div>
+    </div>
+
+    <!-- Properties Grid -->
+    <div class="property-grid reveal" id="indiaGrid">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- INTERNATIONAL PROPERTIES -->
+<section id="international" style="background:rgba(18,20,28,.4)">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">International</span>
+      <h2 class="section-title">Global Accommodation</h2>
+      <p class="section-sub">Student accommodation, employee housing, shared housing, temporary hotels, and long-term rentals worldwide.</p>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar reveal">
+      <div class="filter-group"><label>Type</label>
+        <select id="filterIntlType" onchange="filterIntl()">
+          <option value="all">All Types</option>
+          <option value="student-intl">Student Accommodation</option>
+          <option value="employee-intl">Employee Accommodation</option>
+          <option value="shared-intl">Shared Housing</option>
+          <option value="hotel">Temporary Hotel</option>
+          <option value="long-rental">Long-term Rental</option>
+        </select>
+      </div>
+      <div class="filter-group"><label>Country</label>
+        <select id="filterIntlCountry" onchange="filterIntl()">
+          <option value="all">All Countries</option>
+          <option value="UAE">UAE</option>
+          <option value="UK">UK</option>
+          <option value="USA">USA</option>
+          <option value="Canada">Canada</option>
+          <option value="Australia">Australia</option>
+          <option value="Singapore">Singapore</option>
+        </select>
+      </div>
+      <div class="filter-group"><label>Budget (USD/mo)</label>
+        <select id="filterIntlBudget" onchange="filterIntl()">
+          <option value="all">Any</option>
+          <option value="0-500">Under $500</option>
+          <option value="500-1000">$500-$1,000</option>
+          <option value="1000-2000">$1,000-$2,000</option>
+          <option value="2000+">$2,000+</option>
+        </select>
+      </div>
+      <div class="filter-group" style="flex:0.5;min-width:80px;">
+        <label>&nbsp;</label>
+        <button class="btn btn-primary btn-sm" onclick="filterIntl()">Apply</button>
+      </div>
+    </div>
+
+    <!-- Properties Grid -->
+    <div class="property-grid reveal" id="intlGrid">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">How It Works</span>
+      <h2 class="section-title">Book Before You Arrive</h2>
+      <p class="section-sub">Find, reserve, and move in — all before you leave your home city.</p>
+    </div>
+    <div class="steps">
+      <div class="step-card reveal"><div class="step-num">01</div><h3>Search</h3><p>Find accommodation in your target city — India or international.</p></div>
+      <div class="step-card reveal reveal-d1"><div class="step-num">02</div><h3>Reserve</h3><p>Book your stay with a secure deposit before you arrive.</p></div>
+      <div class="step-card reveal reveal-d2"><div class="step-num">03</div><h3>Arrive</h3><p>Move in on your arrival date — no last-minute stress.</p></div>
+      <div class="step-card reveal"><div class="step-num">04</div><h3>Stay</h3><p>Enjoy your accommodation with full support from ePay.</p></div>
+      <div class="step-card reveal reveal-d1"><div class="step-num">05</div><h3>Renew or Move</h3><p>Extend your stay or find a new place as you grow.</p></div>
+      <div class="step-card reveal reveal-d2"><div class="step-num">06</div><h3>Refer &amp; Earn</h3><p>Refer friends and earn rewards on their bookings.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<section class="text-center" style="padding-bottom:40px;background:rgba(18,20,28,.2)">
+  <div class="container reveal">
+    <span class="section-label">For Everyone</span>
+    <h2 class="section-title">Accommodation for Every Need</h2>
+    <p class="section-sub" style="max-width:640px;">Whether you're a student, an employee, a family, or a traveler — we have a place for you.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:16px;">
+      <div style="background:var(--glass);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border);"><span style="font-size:1.8rem;display:block;">🎓</span> Students</div>
+      <div style="background:var(--glass);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border);"><span style="font-size:1.8rem;display:block;">💼</span> Employees</div>
+      <div style="background:var(--glass);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border);"><span style="font-size:1.8rem;display:block;">👨‍👩‍👧‍👦</span> Families</div>
+      <div style="background:var(--glass);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border);"><span style="font-size:1.8rem;display:block;">✈️</span> Travelers</div>
+      <div style="background:var(--glass);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border);"><span style="font-size:1.8rem;display:block;">🏢</span> Corporates</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="container">
+    <div class="cta-band reveal">
+      <span class="section-label">Reserve Now</span>
+      <h2>Secure Your Stay Before You Arrive</h2>
+      <p>Don't wait until you land. Find and reserve your accommodation now — and move in with peace of mind.</p>
+      <button class="btn btn-primary btn-lg" onclick="openModal('search')">🔍 Find Your Stay</button>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title">Questions, Answered</h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I book before arriving in the city? <span class="chev">▾</span></button><div class="faq-a">Yes. You can search, reserve, and confirm your accommodation before you leave your home city.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What types of accommodation are available in India? <span class="chev">▾</span></button><div class="faq-a">Hostels, PGs, rentals, shared accommodation, student housing, and employee housing across major cities.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What international options are available? <span class="chev">▾</span></button><div class="faq-a">Student accommodation, employee housing, shared housing, temporary hotels, and long-term rentals worldwide.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is there a deposit required? <span class="chev">▾</span></button><div class="faq-a">Most properties require a refundable security deposit, which is clearly mentioned before booking.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I extend my stay? <span class="chev">▾</span></button><div class="faq-a">Yes. You can request an extension directly through your dashboard.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I cancel my reservation? <span class="chev">▾</span></button><div class="faq-a">Cancellation policies vary by property. Please check the specific policy before booking.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="text-center" style="padding-bottom:100px">
+  <div class="container reveal">
+    <h2 class="section-title" style="font-size:clamp(1.8rem,3.5vw,2.6rem)">Find Your Home Before You Arrive</h2>
+    <p class="section-sub">Explore thousands of accommodations in India and internationally — and book with confidence.</p>
+    <button class="btn btn-primary btn-lg" onclick="openModal('search')">🔍 Start Searching</button>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo" style="margin-bottom:16px"><div class="logo-mark">eA</div> <span>ePay Accommodation</span></div>
+    <p>© 2026 ePay Accommodation · Book Before You Arrive</p>
+  </div>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-search">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('search')">×</button>
+    <h2>Find Your Accommodation</h2>
+    <p class="sub">Search across India and international destinations.</p>
+    <form onsubmit="return submitSearch(event)">
+      <div class="form-grid">
+        <div class="form-group full"><label>Location *</label>
+          <select name="location" required>
+            <option value="">Select city or country</option>
+            <option value="Mumbai, India">Mumbai, India</option>
+            <option value="Delhi, India">Delhi, India</option>
+            <option value="Bangalore, India">Bangalore, India</option>
+            <option value="Pune, India">Pune, India</option>
+            <option value="Dubai, UAE">Dubai, UAE</option>
+            <option value="London, UK">London, UK</option>
+            <option value="New York, USA">New York, USA</option>
+            <option value="Toronto, Canada">Toronto, Canada</option>
+            <option value="Sydney, Australia">Sydney, Australia</option>
+            <option value="Singapore">Singapore</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Accommodation Type</label>
+          <select name="type">
+            <option>Hostel</option><option>PG</option><option>Rental</option>
+            <option>Shared</option><option>Student Housing</option>
+            <option>Employee Housing</option><option>Temporary Hotel</option>
+            <option>Long-term Rental</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Budget (monthly)</label>
+          <select name="budget">
+            <option value="any">Any</option>
+            <option value="0-5000">Under ₹5,000</option>
+            <option value="5000-10000">₹5,000-₹10,000</option>
+            <option value="10000-20000">₹10,000-₹20,000</option>
+            <option value="20000+">₹20,000+</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Move-in Date</label><input type="date" name="movein" /></div>
+        <div class="form-group"><label>Duration (months)</label>
+          <select name="duration">
+            <option value="1">1 month</option>
+            <option value="3">3 months</option>
+            <option value="6" selected>6 months</option>
+            <option value="12">12 months</option>
+          </select>
+        </div>
+        <div class="form-group full"><button type="submit" class="btn btn-primary btn-lg" style="width:100%"><i class="fas fa-search"></i> Find Accommodation</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-book">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('book')">×</button>
+    <h2>Reserve Your Stay</h2>
+    <p class="sub" id="bookPropertyName">Property Name</p>
+    <form onsubmit="return submitBooking(event)">
+      <div class="form-grid">
+        <div class="form-group"><label>Full Name *</label><input name="name" required /></div>
+        <div class="form-group"><label>Mobile *</label><input name="mobile" required type="tel" /></div>
+        <div class="form-group full"><label>Email *</label><input name="email" required type="email" /></div>
+        <div class="form-group"><label>Move-in Date *</label><input type="date" name="movein" required /></div>
+        <div class="form-group"><label>Duration (months) *</label>
+          <select name="duration">
+            <option value="1">1 month</option>
+            <option value="3">3 months</option>
+            <option value="6" selected>6 months</option>
+            <option value="12">12 months</option>
+          </select>
+        </div>
+        <div class="form-group full"><label>Special Requests</label><textarea name="requests" rows="2" placeholder="Any special requirements"></textarea></div>
+        <div class="form-group full">
+          <div style="display:flex;gap:8px;align-items:center;font-size:.85rem;color:var(--muted);">
+            <input type="checkbox" required /> I agree to the <a href="#" style="color:var(--purple-light);">terms and cancellation policy</a>
+          </div>
+        </div>
+        <div class="form-group full"><button type="submit" class="btn btn-success btn-lg" style="width:100%"><i class="fas fa-check"></i> Reserve Now</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('login')">×</button>
+    <h2>Sign In</h2>
+    <p class="sub">Access your bookings and manage your stays.</p>
+    <form onsubmit="return submitLogin(event)">
+      <div class="form-grid">
+        <div class="form-group full"><label>Email</label><input name="email" required type="email" /></div>
+        <div class="form-group full"><label>Password</label><input name="pass" type="password" required /></div>
+        <div class="form-group full"><button type="submit" class="btn btn-primary btn-lg" style="width:100%">Sign In</button></div>
+        <div class="form-group full text-center" style="font-size:.85rem;color:var(--muted);">Don't have an account? <a href="#" onclick="closeModal('login');openModal('search');return false" style="color:var(--purple-light);">Find a place</a></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast-box" id="toasts"></div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const indiaProperties = [
+  { id: 1, type: 'hostel', city: 'Mumbai', name: 'Mumbai Central Hostel', location: 'Andheri, Mumbai', price: '₹4,200/month', priceNum: 4200, beds: '6-bed dorm', rating: 4.5, image: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&q=80', status: 'available', verified: true },
+  { id: 2, type: 'pg', city: 'Delhi', name: 'PG Near South Campus', location: 'Hauz Khas, Delhi', price: '₹8,500/month', priceNum: 8500, beds: 'Single room', rating: 4.2, image: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&q=80', status: 'available', verified: true },
+  { id: 3, type: 'rental', city: 'Bangalore', name: '2BHK Apartment - Indiranagar', location: 'Indiranagar, Bangalore', price: '₹18,000/month', priceNum: 18000, beds: '2 BHK', rating: 4.7, image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&q=80', status: 'limited', verified: true },
+  { id: 4, type: 'student', city: 'Pune', name: 'Student Housing - FC Road', location: 'FC Road, Pune', price: '₹6,500/month', priceNum: 6500, beds: 'Shared room', rating: 4.0, image: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&q=80', status: 'available', verified: true },
+  { id: 5, type: 'employee', city: 'Hyderabad', name: 'Employee Housing - HITEC City', location: 'HITEC City, Hyderabad', price: '₹12,000/month', priceNum: 12000, beds: '1 BHK', rating: 4.4, image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&q=80', status: 'available', verified: true },
+  { id: 6, type: 'shared', city: 'Chennai', name: 'Shared Apartment - Mylapore', location: 'Mylapore, Chennai', price: '₹5,500/month', priceNum: 5500, beds: 'Shared room', rating: 3.9, image: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&q=80', status: 'limited', verified: false },
+  { id: 7, type: 'hostel', city: 'Delhi', name: 'Delhi Backpackers Hostel', location: 'Paharganj, Delhi', price: '₹3,200/month', priceNum: 3200, beds: '8-bed dorm', rating: 4.1, image: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&q=80', status: 'available', verified: true },
+  { id: 8, type: 'pg', city: 'Bangalore', name: 'PG for Women - Koramangala', location: 'Koramangala, Bangalore', price: '₹9,200/month', priceNum: 9200, beds: 'Single room', rating: 4.6, image: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&q=80', status: 'available', verified: true },
+  { id: 9, type: 'rental', city: 'Mumbai', name: 'Studio Apartment - Bandra', location: 'Bandra, Mumbai', price: '₹22,000/month', priceNum: 22000, beds: 'Studio', rating: 4.8, image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&q=80', status: 'limited', verified: true },
+];
+
+const intlProperties = [
+  { id: 101, type: 'student-intl', country: 'UAE', name: 'Student Housing - Dubai', location: 'Dubai, UAE', price: '$650/month', priceNum: 650, beds: 'Shared room', rating: 4.3, image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&q=80', status: 'available', verified: true },
+  { id: 102, type: 'employee-intl', country: 'UK', name: 'Corporate Housing - Canary Wharf', location: 'London, UK', price: '$1,200/month', priceNum: 1200, beds: '1 BHK', rating: 4.7, image: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&q=80', status: 'available', verified: true },
+  { id: 103, type: 'shared-intl', country: 'USA', name: 'Shared Housing - Brooklyn', location: 'New York, USA', price: '$750/month', priceNum: 750, beds: 'Shared room', rating: 4.0, image: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&q=80', status: 'limited', verified: true },
+  { id: 104, type: 'hotel', country: 'Canada', name: 'Temporary Hotel - Downtown', location: 'Toronto, Canada', price: '$450/week', priceNum: 450, beds: 'Single room', rating: 4.2, image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&q=80', status: 'available', verified: true },
+  { id: 105, type: 'long-rental', country: 'Australia', name: 'Long-term Rental - CBD', location: 'Sydney, Australia', price: '$1,800/month', priceNum: 1800, beds: '2 BHK', rating: 4.9, image: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&q=80', status: 'available', verified: true },
+  { id: 106, type: 'student-intl', country: 'Singapore', name: 'Student Hostel - City Center', location: 'Singapore', price: '$580/month', priceNum: 580, beds: 'Shared room', rating: 4.1, image: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&q=80', status: 'limited', verified: true },
+  { id: 107, type: 'employee-intl', country: 'UAE', name: 'Employee Housing - Marina', location: 'Dubai, UAE', price: '$950/month', priceNum: 950, beds: '1 BHK', rating: 4.6, image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&q=80', status: 'available', verified: true },
+  { id: 108, type: 'shared-intl', country: 'UK', name: 'Shared Flat - Shoreditch', location: 'London, UK', price: '$680/month', priceNum: 680, beds: 'Shared room', rating: 4.3, image: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&q=80', status: 'available', verified: true },
+];
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+function renderIndia(filterType, filterCity, filterBudget) {
+  const grid = document.getElementById('indiaGrid');
+  let filtered = [...indiaProperties];
+  if (filterType && filterType !== 'all') filtered = filtered.filter(p => p.type === filterType);
+  if (filterCity && filterCity !== 'all') filtered = filtered.filter(p => p.city === filterCity);
+  if (filterBudget && filterBudget !== 'all') {
+    const [min, max] = filterBudget.split('-').map(Number);
+    if (filterBudget === '20000+') filtered = filtered.filter(p => p.priceNum >= 20000);
+    else filtered = filtered.filter(p => p.priceNum >= min && p.priceNum <= max);
+  }
+  grid.innerHTML = filtered.map(p => propertyCard(p, '₹')).join('');
+}
+
+function renderIntl(filterType, filterCountry, filterBudget) {
+  const grid = document.getElementById('intlGrid');
+  let filtered = [...intlProperties];
+  if (filterType && filterType !== 'all') filtered = filtered.filter(p => p.type === filterType);
+  if (filterCountry && filterCountry !== 'all') filtered = filtered.filter(p => p.country === filterCountry);
+  if (filterBudget && filterBudget !== 'all') {
+    const [min, max] = filterBudget.split('-').map(Number);
+    if (filterBudget === '2000+') filtered = filtered.filter(p => p.priceNum >= 2000);
+    else filtered = filtered.filter(p => p.priceNum >= min && p.priceNum <= max);
+  }
+  grid.innerHTML = filtered.map(p => propertyCard(p, '$')).join('');
+}
+
+function propertyCard(p, currency) {
+  const statusClass = p.status === 'available' ? 'available' : 'limited';
+  const statusLabel = p.status === 'available' ? 'Available' : 'Limited';
+  const verifiedBadge = p.verified ? '<span class="badge-top verified"><i class="fas fa-check-circle"></i> Verified</span>' : '<span class="badge-top">Verified</span>';
+  const typeLabels = {
+    'hostel': 'Hostel', 'pg': 'PG', 'rental': 'Rental', 'shared': 'Shared',
+    'student': 'Student Housing', 'employee': 'Employee Housing',
+    'student-intl': 'Student Accommodation', 'employee-intl': 'Employee Housing',
+    'shared-intl': 'Shared Housing', 'hotel': 'Temporary Hotel',
+    'long-rental': 'Long-term Rental'
+  };
+  const typeLabel = typeLabels[p.type] || p.type;
+  return `
+    <div class="property-card" onclick="openBook('${p.name}', '${p.price}')">
+      <div class="img" style="background-image:url('${p.image}')">
+        ${verifiedBadge}
+      </div>
+      <div class="body">
+        <div class="title">${p.name}</div>
+        <div class="location"><i class="fas fa-map-marker-alt"></i> ${p.location}</div>
+        <div class="meta-grid">
+          <div class="item"><i class="fas fa-bed"></i> ${p.beds}</div>
+          <div class="item"><i class="fas fa-tag"></i> ${typeLabel}</div>
+          <div class="item"><i class="fas fa-star" style="color:var(--amber);"></i> ${p.rating}</div>
+          <div class="item"><i class="fas fa-check-circle" style="color:var(--emerald);"></i> ${p.verified ? 'Verified' : 'Unverified'}</div>
+        </div>
+        <div class="price-row">
+          <div class="price">${p.price} <span>/month</span></div>
+          <div class="status ${statusClass}">${statusLabel}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// FILTER FUNCTIONS
+// ============================================================
+function filterIndia() {
+  const type = document.getElementById('filterIndiaType').value;
+  const city = document.getElementById('filterIndiaCity').value;
+  const budget = document.getElementById('filterIndiaBudget').value;
+  renderIndia(type, city, budget);
+}
+
+function filterIntl() {
+  const type = document.getElementById('filterIntlType').value;
+  const country = document.getElementById('filterIntlCountry').value;
+  const budget = document.getElementById('filterIntlBudget').value;
+  renderIntl(type, country, budget);
+}
+
+// ============================================================
+// MODALS & BOOKING
+// ============================================================
+let currentBookProperty = '';
+
+function openBook(name, price) {
+  currentBookProperty = name;
+  document.getElementById('bookPropertyName').textContent = `${name} · ${price}`;
+  openModal('book');
+}
+
+function submitBooking(e) {
+  e.preventDefault();
+  closeModal('book');
+  toast(`✅ Reserved ${currentBookProperty} successfully! We'll send you the confirmation.`);
+  return false;
+}
+
+function submitSearch(e) {
+  e.preventDefault();
+  closeModal('search');
+  toast('🔍 Showing accommodations matching your search...');
+  // Scroll to India section
+  document.getElementById('india').scrollIntoView({ behavior: 'smooth' });
+  return false;
+}
+
+function submitLogin(e) {
+  e.preventDefault();
+  closeModal('login');
+  toast('Signed in successfully');
+  return false;
+}
+
+// ============================================================
+// TOAST & HELPERS
+// ============================================================
+function toast(msg){
+  var box=document.getElementById('toasts');
+  var t=document.createElement('div');
+  t.className='toast';
+  t.textContent=msg;
+  box.appendChild(t);
+  setTimeout(function(){t.style.opacity='0';t.style.transition='.3s';setTimeout(function(){t.remove()},300)},3000);
+}
+
+function openModal(id){
+  document.getElementById('modal-'+id).classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(id){
+  document.getElementById('modal-'+id).classList.remove('open');
+  document.body.style.overflow='';
+}
+
+document.querySelectorAll('.modal-overlay').forEach(function(o){
+  o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('open');document.body.style.overflow='';});
+});
+
+function toggleFaq(btn){
+  var item=btn.parentElement;
+  var open=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(function(i){i.classList.remove('open')});
+  if(!open)item.classList.add('open');
+}
+
+// Nav scroll
+window.addEventListener('scroll',function(){
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40);
+});
+
+document.getElementById('mobileToggle').addEventListener('click',function(){
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// Reveal
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('visible');obs.unobserve(en.target)}});
+},{threshold:0.12,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
+
+// Live metrics jitter
+setInterval(function(){
+  var p=document.getElementById('mProps');
+  var b=document.getElementById('mBookings');
+  if(p) p.textContent=(2380+Math.floor(Math.random()*60))+'+';
+  if(b) b.textContent=(18300+Math.floor(Math.random()*400))+'+';
+},5000);
+
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){['search','book','login'].forEach(closeModal)}});
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+  renderIndia('all', 'all', 'all');
+  renderIntl('all', 'all', 'all');
+});
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

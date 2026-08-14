@@ -1,0 +1,1177 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>State Director · Maharashtra · Regional Operations · Enterprise CRM + ERP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+
+
+
+    * { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f1f5f9; margin: 0; padding: 0; height: 100vh; overflow: hidden; display: flex; }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+    #sidebar {
+      width: 290px; background: #0f172a; color: #e2e8f0; display: flex; flex-direction: column;
+      flex-shrink: 0; height: 100vh; overflow-y: auto; position: sticky; top: 0;
+      border-right: 1px solid #1e293b; transition: transform 0.3s ease; z-index: 50;
+    }
+    #sidebar .brand {
+      padding: 18px 22px; font-size: 15px; font-weight: 700; color: #fff;
+      border-bottom: 1px solid #1e293b; display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+    }
+    #sidebar .brand i { font-size: 22px; color: #38bdf8; }
+    #sidebar .nav { flex: 1; padding: 8px 0 20px 0; overflow-y: auto; }
+    #sidebar .nav-section {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+      padding: 14px 22px 6px 22px; color: #64748b; font-weight: 600;
+    }
+    #sidebar .nav-item {
+      display: flex; align-items: center; gap: 12px; padding: 8px 22px; color: #cbd5e1;
+      font-size: 13px; font-weight: 500; cursor: pointer; border-left: 3px solid transparent;
+      transition: all 0.15s; text-decoration: none;
+    }
+    #sidebar .nav-item:hover { background: #1e293b; color: #fff; border-left-color: #38bdf8; }
+    #sidebar .nav-item.active { background: #1e293b; color: #fff; border-left-color: #38bdf8; }
+    #sidebar .nav-item i { width: 18px; text-align: center; font-size: 14px; }
+    #sidebar .nav-item .badge {
+      margin-left: auto; background: #38bdf8; color: #0f172a; font-size: 9px;
+      padding: 2px 8px; border-radius: 12px; font-weight: 700;
+    }
+    .nav-sub .nav-item { padding-left: 44px; font-size: 12px; }
+    #main { flex: 1; overflow-y: auto; padding: 20px 28px 40px 28px; background: #f1f5f9; display: flex; flex-direction: column; }
+    .top-header {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+      margin-bottom: 24px; background: #fff; padding: 12px 24px; border-radius: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; flex-shrink: 0;
+    }
+    .top-header .hamburger { display: none; background: none; border: none; font-size: 22px; color: #0f172a; cursor: pointer; }
+    .top-header .search-wrap { position: relative; flex: 1 1 280px; }
+    .top-header .search-wrap input {
+      width: 100%; padding: 10px 16px 10px 42px; border: 1px solid #e2e8f0; border-radius: 40px;
+      font-size: 13px; outline: none; background: #f8fafc;
+    }
+    .top-header .search-wrap input:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56,189,248,0.15); }
+    .top-header .search-wrap i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+    .top-header .actions { display: flex; align-items: center; gap: 18px; }
+    .top-header .actions .avatar {
+      width: 36px; height: 36px; border-radius: 50%; background: #38bdf8; display: flex;
+      align-items: center; justify-content: center; color: #0f172a; font-weight: 700; font-size: 13px;
+    }
+    .page-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+    .page-header h1 { font-size: 24px; font-weight: 700; color: #0f172a; margin: 0; }
+    .page-header .sub { color: #64748b; font-size: 13px; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .kpi-card {
+      background: #fff; border-radius: 14px; padding: 14px 16px; border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: all 0.2s; cursor: pointer; display: flex; flex-direction: column;
+    }
+    .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); border-color: #38bdf8; }
+    .kpi-card .label { font-size: 11px; color: #64748b; font-weight: 500; text-transform: uppercase; letter-spacing: 0.3px; display: flex; align-items: center; gap: 6px; }
+    .kpi-card .value { font-size: 20px; font-weight: 700; color: #0f172a; margin: 4px 0 2px; }
+    .kpi-card .trend { font-size: 11px; }
+    .kpi-card .trend.up { color: #10b981; }
+    .kpi-card .trend.down { color: #ef4444; }
+    .filter-bar {
+      background: #fff; border-radius: 14px; padding: 14px 20px; border: 1px solid #e2e8f0;
+      display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-end; margin-bottom: 20px;
+    }
+    .filter-group { display: flex; flex-direction: column; gap: 4px; }
+    .filter-group label { font-size: 11px; font-weight: 600; color: #334155; }
+    .filter-group select, .filter-group input {
+      padding: 7px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 12px; background: #fff; outline: none; min-width: 120px;
+    }
+    .table-wrap { background: #fff; border-radius: 14px; border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 20px; }
+    .table-scroll { overflow-x: auto; }
+    .table-wrap table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .table-wrap th {
+      background: #f8fafc; text-align: left; padding: 12px 14px; font-weight: 600; color: #1e293b;
+      border-bottom: 1px solid #e2e8f0; white-space: nowrap; font-size: 11px; text-transform: uppercase;
+    }
+    .table-wrap td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    .table-wrap tr:hover td { background: #f8fafc; }
+    .status-badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 10px; font-weight: 600; }
+    .status-badge.success { background: #d1fae5; color: #065f46; }
+    .status-badge.danger { background: #fee2e2; color: #991b1b; }
+    .status-badge.warning { background: #fef3c7; color: #92400e; }
+    .status-badge.info { background: #dbeafe; color: #1e40af; }
+    .status-badge.secondary { background: #e2e8f0; color: #475569; }
+    .status-badge.critical { background: #fecaca; color: #7f1d1d; }
+    .tab-pane { display: none; animation: fadeIn 0.25s ease; }
+    .tab-pane.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0.5; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .report-card { background: #fff; border-radius: 14px; padding: 20px 24px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
+    .field-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px 20px; }
+    .field-grid .field-item { font-size: 12px; padding: 6px 0; border-bottom: 1px dashed #f1f5f9; display: flex; justify-content: space-between; }
+    .field-grid .field-item .fname { color: #64748b; }
+    .field-grid .field-item .fvalue { font-weight: 500; color: #0f172a; }
+    .btn { padding: 8px 18px; border-radius: 8px; font-weight: 600; font-size: 12px; border: none; cursor: pointer; transition: 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-primary { background: #38bdf8; color: #0f172a; }
+    .btn-primary:hover { background: #0ea5e9; }
+    .btn-outline { background: transparent; border: 1px solid #d1d5db; color: #1e293b; }
+    .btn-outline:hover { background: #f1f5f9; }
+    .btn-success { background: #10b981; color: #fff; }
+    .btn-danger { background: #ef4444; color: #fff; }
+    .btn-sm { padding: 4px 12px; font-size: 11px; }
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+    .toast {
+      background: #fff; border-radius: 12px; padding: 12px 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      border-left: 4px solid #38bdf8; min-width: 240px; animation: slideInRight 0.3s ease; font-size: 13px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .toast.success { border-left-color: #10b981; }
+    .toast.error { border-left-color: #ef4444; }
+    .toast.warning { border-left-color: #f59e0b; }
+    @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center;
+      justify-content: center; z-index: 999; backdrop-filter: blur(4px);
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: #fff; border-radius: 16px; max-width: 920px; width: 95%; max-height: 90vh;
+      overflow-y: auto; padding: 24px 32px; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .modal-box h2 { font-size: 20px; font-weight: 700; margin-top: 0; }
+    .scorecard-box {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #e2e8f0;
+      border-radius: 16px; padding: 24px; margin-bottom: 24px;
+    }
+    .health-bar { height: 8px; border-radius: 4px; background: #e2e8f0; overflow: hidden; margin-top: 4px; }
+    .health-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+    .alert-item {
+      display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; border-radius: 10px;
+      margin-bottom: 8px; border-left: 4px solid; background: #fff;
+    }
+    .alert-item.critical { border-left-color: #ef4444; background: #fef2f2; }
+    .alert-item.high { border-left-color: #f97316; background: #fff7ed; }
+    .alert-item.warning { border-left-color: #eab308; background: #fefce8; }
+    .alert-item.info { border-left-color: #3b82f6; background: #eff6ff; }
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+    .status-dot.green { background: #10b981; }
+    .status-dot.yellow { background: #eab308; }
+    .status-dot.orange { background: #f97316; }
+    .status-dot.red { background: #ef4444; }
+    @media (max-width: 768px) {
+      #sidebar { position: fixed; top: 0; left: 0; height: 100vh; width: 290px; transform: translateX(-100%); z-index: 100; }
+      #sidebar.open { transform: translateX(0); }
+      .top-header .hamburger { display: block; }
+      #main { padding: 16px; }
+      .kpi-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    }
+    .backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 90; }
+    .backdrop.open { display: block; }
+  </style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+  <div class="backdrop" id="backdrop" onclick="toggleSidebar()"></div>
+
+  <aside id="sidebar">
+    <div class="brand"><i class="fas fa-map-marked-alt"></i><span>State Director · MH</span></div>
+    <nav class="nav">
+      <div class="nav-section">Command</div>
+      <a class="nav-item active" data-tab="sd-command" onclick="navigateTo('sd-command')"><i class="fas fa-tachometer-alt"></i> State Command Center</a>
+      <a class="nav-item" data-tab="sd-scorecard" onclick="navigateTo('sd-scorecard')"><i class="fas fa-star"></i> State Scorecard</a>
+      <a class="nav-item" data-tab="sd-health" onclick="navigateTo('sd-health')"><i class="fas fa-heartbeat"></i> State Health</a>
+      <a class="nav-item" data-tab="sd-vs-company" onclick="navigateTo('sd-vs-company')"><i class="fas fa-balance-scale"></i> vs Company Avg</a>
+
+      <div class="nav-section">Galleries</div>
+      <a class="nav-item" data-tab="sd-galleries" onclick="navigateTo('sd-galleries')"><i class="fas fa-store"></i> All Galleries</a>
+      <a class="nav-item nav-sub" data-tab="sd-map" onclick="navigateTo('sd-map')"><i class="fas fa-map"></i> Gallery Map</a>
+      <a class="nav-item nav-sub" data-tab="sd-ranking" onclick="navigateTo('sd-ranking')"><i class="fas fa-trophy"></i> Ranking</a>
+      <a class="nav-item nav-sub" data-tab="sd-underperform" onclick="navigateTo('sd-underperform')"><i class="fas fa-exclamation-circle"></i> Underperforming</a>
+      <a class="nav-item nav-sub" data-tab="sd-recovery" onclick="navigateTo('sd-recovery')"><i class="fas fa-ambulance"></i> Recovery Plans</a>
+
+      <div class="nav-section">Sales</div>
+      <a class="nav-item" data-tab="sd-sales" onclick="navigateTo('sd-sales')"><i class="fas fa-rupee-sign"></i> Sales Dashboard</a>
+      <a class="nav-item nav-sub" data-tab="sd-targets" onclick="navigateTo('sd-targets')"><i class="fas fa-bullseye"></i> Targets</a>
+      <a class="nav-item nav-sub" data-tab="sd-forecast-sales" onclick="navigateTo('sd-forecast-sales')"><i class="fas fa-chart-line"></i> Forecast</a>
+      <a class="nav-item nav-sub" data-tab="sd-profit" onclick="navigateTo('sd-profit')"><i class="fas fa-chart-pie"></i> Profitability</a>
+
+      <div class="nav-section">Inventory</div>
+      <a class="nav-item" data-tab="sd-inventory" onclick="navigateTo('sd-inventory')"><i class="fas fa-boxes"></i> Stock</a>
+      <a class="nav-item nav-sub" data-tab="sd-transfers" onclick="navigateTo('sd-transfers')"><i class="fas fa-exchange-alt"></i> Transfers</a>
+      <a class="nav-item nav-sub" data-tab="sd-damaged" onclick="navigateTo('sd-damaged')"><i class="fas fa-broken-image"></i> Damaged</a>
+      <a class="nav-item nav-sub" data-tab="sd-procurement" onclick="navigateTo('sd-procurement')"><i class="fas fa-shopping-cart"></i> Procurement</a>
+
+      <div class="nav-section">Expenses</div>
+      <a class="nav-item" data-tab="sd-expenses" onclick="navigateTo('sd-expenses')"><i class="fas fa-file-invoice-dollar"></i> Expenses</a>
+      <a class="nav-item nav-sub" data-tab="sd-cash" onclick="navigateTo('sd-cash')"><i class="fas fa-money-bill"></i> Cash</a>
+
+      <div class="nav-section">Customers</div>
+      <a class="nav-item" data-tab="sd-customers" onclick="navigateTo('sd-customers')"><i class="fas fa-users"></i> Customers</a>
+      <a class="nav-item nav-sub" data-tab="sd-membership" onclick="navigateTo('sd-membership')"><i class="fas fa-id-card"></i> Membership</a>
+      <a class="nav-item nav-sub" data-tab="sd-cx" onclick="navigateTo('sd-cx')"><i class="fas fa-smile"></i> Experience</a>
+      <a class="nav-item" data-tab="sd-complaints" onclick="navigateTo('sd-complaints')"><i class="fas fa-ticket-alt"></i> Complaints</a>
+
+      <div class="nav-section">People</div>
+      <a class="nav-item" data-tab="sd-managers" onclick="navigateTo('sd-managers')"><i class="fas fa-user-tie"></i> Gallery Managers</a>
+      <a class="nav-item nav-sub" data-tab="sd-gm" onclick="navigateTo('sd-gm')"><i class="fas fa-user-friends"></i> General Managers</a>
+      <a class="nav-item nav-sub" data-tab="sd-am" onclick="navigateTo('sd-am')"><i class="fas fa-user"></i> Assistant Managers</a>
+      <a class="nav-item nav-sub" data-tab="sd-employees" onclick="navigateTo('sd-employees')"><i class="fas fa-users-cog"></i> Employees</a>
+      <a class="nav-item nav-sub" data-tab="sd-attendance" onclick="navigateTo('sd-attendance')"><i class="fas fa-calendar-check"></i> Attendance</a>
+      <a class="nav-item nav-sub" data-tab="sd-staffing" onclick="navigateTo('sd-staffing')"><i class="fas fa-user-plus"></i> Staffing Forecast</a>
+
+      <div class="nav-section">Operations</div>
+      <a class="nav-item" data-tab="sd-ops" onclick="navigateTo('sd-ops')"><i class="fas fa-clipboard-list"></i> Operations</a>
+      <a class="nav-item nav-sub" data-tab="sd-audits" onclick="navigateTo('sd-audits')"><i class="fas fa-search"></i> Audits</a>
+      <a class="nav-item nav-sub" data-tab="sd-compliance" onclick="navigateTo('sd-compliance')"><i class="fas fa-check-square"></i> Compliance</a>
+      <a class="nav-item" data-tab="sd-vendors" onclick="navigateTo('sd-vendors')"><i class="fas fa-handshake"></i> Vendors</a>
+      <a class="nav-item" data-tab="sd-expansion" onclick="navigateTo('sd-expansion')"><i class="fas fa-plus-square"></i> Expansion</a>
+
+      <div class="nav-section">Analytics</div>
+      <a class="nav-item" data-tab="sd-risk" onclick="navigateTo('sd-risk')"><i class="fas fa-exclamation-triangle"></i> Risks</a>
+      <a class="nav-item" data-tab="sd-forecast" onclick="navigateTo('sd-forecast')"><i class="fas fa-crystal-ball"></i> Forecasting</a>
+      <a class="nav-item" data-tab="sd-whatif" onclick="navigateTo('sd-whatif')"><i class="fas fa-random"></i> What-If</a>
+      <a class="nav-item" data-tab="sd-decisions" onclick="navigateTo('sd-decisions')"><i class="fas fa-gavel"></i> Decisions</a>
+
+      <div class="nav-section">Reports</div>
+      <a class="nav-item" data-tab="sd-reports" onclick="navigateTo('sd-reports')"><i class="fas fa-file-alt"></i> Report Center</a>
+      <a class="nav-item nav-sub" data-tab="sd-reports-daily" onclick="navigateTo('sd-reports-daily')"><i class="fas fa-calendar-day"></i> Daily</a>
+      <a class="nav-item nav-sub" data-tab="sd-reports-weekly" onclick="navigateTo('sd-reports-weekly')"><i class="fas fa-calendar-week"></i> Weekly</a>
+      <a class="nav-item nav-sub" data-tab="sd-custom-report" onclick="navigateTo('sd-custom-report')"><i class="fas fa-magic"></i> Custom Builder</a>
+
+      <div class="nav-section">System</div>
+      <a class="nav-item" data-tab="sd-approvals" onclick="navigateTo('sd-approvals')"><i class="fas fa-check-double"></i> Approvals <span class="badge">5</span></a>
+      <a class="nav-item" data-tab="sd-alerts" onclick="navigateTo('sd-alerts')"><i class="fas fa-bell"></i> Alerts <span class="badge">4</span></a>
+      <a class="nav-item" data-tab="sd-settings" onclick="navigateTo('sd-settings')"><i class="fas fa-cog"></i> Settings</a>
+    </nav>
+  </aside>
+
+  <div id="main">
+    <header class="top-header">
+      <button class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="search-wrap">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search galleries, managers, inventory, complaints..." oninput="showToast('Searching: '+this.value,'success')" />
+      </div>
+      <div class="actions">
+        <span class="text-sm text-gray-600 hidden sm:inline">Maharashtra · Updated: <span id="lastUpdated">Just now</span></span>
+        <i class="far fa-bell text-gray-500 text-lg cursor-pointer hover:text-sky-500" onclick="navigateTo('sd-alerts')"></i>
+        <i class="fas fa-exclamation-triangle text-red-500 text-lg cursor-pointer" onclick="navigateTo('sd-risk')"></i>
+        <div class="avatar" title="State Director · Maharashtra">SD</div>
+      </div>
+    </header>
+
+    <!-- ========== COMMAND CENTER ========== -->
+    <div id="tab-sd-command" class="tab-pane active">
+      <div class="page-header">
+        <div>
+          <h1>State Command Center · Maharashtra</h1>
+          <div class="sub">Is every gallery meeting revenue, profit, customer, inventory, employee, compliance targets—and if not, exactly why?</div>
+        </div>
+        <button class="btn btn-primary" onclick="refreshDashboard()"><i class="fas fa-sync"></i> Refresh</button>
+      </div>
+
+      <div class="scorecard-box">
+        <div class="flex justify-between items-start flex-wrap gap-4">
+          <div>
+            <div class="text-sky-300 text-xs uppercase tracking-wider font-semibold">State Director · Maharashtra</div>
+            <div class="text-3xl font-bold text-white mt-1">State Health <span class="text-sky-400">92%</span></div>
+          </div>
+          <div class="text-right text-sm text-slate-300">
+            <div>18 Galleries · Aug 2026</div>
+            <div class="text-sky-300 mt-1">State → City → Gallery → Manager → Employee → Customer → Sale → Profit → Health</div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mt-5 text-sm">
+          <div><div class="text-slate-400 text-xs">Sales</div><div class="text-xl font-bold text-emerald-400">94%</div></div>
+          <div><div class="text-slate-400 text-xs">Profitability</div><div class="text-xl font-bold text-emerald-400">91%</div></div>
+          <div><div class="text-slate-400 text-xs">Gallery Perf</div><div class="text-xl font-bold text-emerald-400">92%</div></div>
+          <div><div class="text-slate-400 text-xs">Inventory</div><div class="text-xl font-bold text-emerald-400">88%</div></div>
+          <div><div class="text-slate-400 text-xs">CX</div><div class="text-xl font-bold text-emerald-400">93%</div></div>
+        </div>
+      </div>
+
+      <h3 class="text-sm font-bold text-slate-600 uppercase tracking-wide mb-2"><i class="fas fa-chart-pie mr-1 text-sky-500"></i> State Performance Tower</h3>
+      <div class="kpi-grid">
+        <div class="kpi-card" onclick="navigateTo('sd-galleries')"><span class="label"><i class="fas fa-store text-sky-500"></i> Total Galleries</span><span class="value">18</span></div>
+        <div class="kpi-card" onclick="navigateTo('sd-galleries')"><span class="label">Active</span><span class="value">17</span></div>
+        <div class="kpi-card" onclick="navigateTo('sd-sales')"><span class="label">State Sales</span><span class="value">₹1.42 Cr</span></div>
+        <div class="kpi-card" onclick="navigateTo('sd-targets')"><span class="label">Monthly Target</span><span class="value">₹1.55 Cr</span></div>
+        <div class="kpi-card" onclick="navigateTo('sd-targets')"><span class="label">Achievement</span><span class="value">92%</span></div>
+        <div class="kpi-card" onclick="navigateTo('sd-sales')"><span class="label">State Growth</span><span class="value">+14%</span><span class="trend up"></span></div>
+        <div class="kpi-card" onclick="navigateTo('sd-profit')"><span class="label">State Profit</span><span class="value">₹38 L</span></div>
+        <div class="kpi-card" onclick="navigateTo('sd-inventory')"><span class="label">Inventory</span><span class="value">₹4.8 Cr</span></div>
+        <div class="kpi-card" onclick="navigateTo('sd-customers')"><span class="label">Customers</span><span class="value">12,450</span></div>
+        <div class="kpi-card" onclick="navigateTo('sd-membership')"><span class="label">Members</span><span class="value">8,620</span></div>
+        <div class="kpi-card" onclick="navigateTo('sd-employees')"><span class="label">Employees</span><span class="value">286</span></div>
+        <div class="kpi-card" onclick="navigateTo('sd-attendance')"><span class="label">Attendance</span><span class="value">94%</span></div>
+        <div class="kpi-card" onclick="navigateTo('sd-complaints')"><span class="label">Complaints</span><span class="value">38</span></div>
+        <div class="kpi-card" onclick="navigateTo('sd-complaints')"><span class="label">Pending</span><span class="value">7</span></div>
+        <div class="kpi-card" onclick="navigateTo('sd-expenses')"><span class="label">Expenses</span><span class="value">₹21 L</span></div>
+        <div class="kpi-card" onclick="navigateTo('sd-health')"><span class="label">Gallery Health</span><span class="value">91%</span></div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="report-card">
+          <h4 class="font-semibold text-sm mb-3"><i class="fas fa-chart-line text-sky-500 mr-2"></i>State Sales (4 Weeks)</h4>
+          <canvas id="sdSalesChart" height="120"></canvas>
+        </div>
+        <div class="report-card">
+          <h4 class="font-semibold text-sm mb-3"><i class="fas fa-trophy text-amber-500 mr-2"></i>Top Galleries</h4>
+          <div class="text-sm space-y-2">
+            <div class="flex justify-between p-2 bg-emerald-50 rounded"><span>1. Pune Central</span><span class="font-bold text-emerald-700">96%</span></div>
+            <div class="flex justify-between p-2 bg-emerald-50 rounded"><span>2. Mumbai Central</span><span class="font-bold text-emerald-700">95%</span></div>
+            <div class="flex justify-between p-2 bg-emerald-50 rounded"><span>3. Nashik</span><span class="font-bold text-emerald-700">94%</span></div>
+            <div class="flex justify-between p-2 bg-amber-50 rounded"><span>5. Mumbai West</span><span class="font-bold text-amber-700">82%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="report-card">
+        <h4 class="font-semibold text-sm mb-3"><i class="fas fa-bell text-red-500 mr-2"></i> State Alerts</h4>
+        <div class="alert-item high" onclick="navigateTo('sd-underperform')"><i class="fas fa-circle text-orange-500 text-xs mt-1"></i><div><strong>High:</strong> Mumbai West below 85% target — GM alerted.</div></div>
+        <div class="alert-item warning" onclick="navigateTo('sd-inventory')"><i class="fas fa-circle text-yellow-500 text-xs mt-1"></i><div><strong>Warning:</strong> Pune West turnover 4.1x — overstock risk.</div></div>
+        <div class="alert-item info" onclick="navigateTo('sd-targets')"><i class="fas fa-circle text-blue-500 text-xs mt-1"></i><div>State projected 96% of monthly target · Gap ₹6L expected.</div></div>
+        <button class="btn btn-outline btn-sm mt-2" onclick="navigateTo('sd-alerts')">View All</button>
+      </div>
+    </div>
+
+    <!-- SCORECARD -->
+    <div id="tab-sd-scorecard" class="tab-pane">
+      <div class="page-header"><h1>State Performance Scorecard</h1></div>
+      <div class="scorecard-box">
+        <div class="text-center mb-6">
+          <div class="text-sky-300 text-xs uppercase tracking-wider">State Director · Maharashtra</div>
+          <div class="text-4xl font-bold text-white mt-1">STATE SCORECARD</div>
+          <div class="text-5xl font-bold text-sky-400 mt-4">92%</div>
+          <div class="text-slate-400 text-sm">Overall State Health</div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-sm">
+          <div class="bg-slate-800/50 rounded-lg p-3"><div class="text-slate-400 text-xs">Sales Achievement</div><div class="text-xl font-bold text-emerald-400">94%</div></div>
+          <div class="bg-slate-800/50 rounded-lg p-3"><div class="text-slate-400 text-xs">Profitability</div><div class="text-xl font-bold text-emerald-400">91%</div></div>
+          <div class="bg-slate-800/50 rounded-lg p-3"><div class="text-slate-400 text-xs">Gallery Performance</div><div class="text-xl font-bold text-emerald-400">92%</div></div>
+          <div class="bg-slate-800/50 rounded-lg p-3"><div class="text-slate-400 text-xs">Inventory</div><div class="text-xl font-bold text-emerald-400">89%</div></div>
+          <div class="bg-slate-800/50 rounded-lg p-3"><div class="text-slate-400 text-xs">Customer Experience</div><div class="text-xl font-bold text-emerald-400">93%</div></div>
+          <div class="bg-slate-800/50 rounded-lg p-3"><div class="text-slate-400 text-xs">Employee Performance</div><div class="text-xl font-bold text-emerald-400">95%</div></div>
+          <div class="bg-slate-800/50 rounded-lg p-3"><div class="text-slate-400 text-xs">Expense Control</div><div class="text-xl font-bold text-emerald-400">88%</div></div>
+          <div class="bg-slate-800/50 rounded-lg p-3"><div class="text-slate-400 text-xs">Compliance</div><div class="text-xl font-bold text-emerald-400">97%</div></div>
+          <div class="bg-slate-800/50 rounded-lg p-3"><div class="text-slate-400 text-xs">Membership</div><div class="text-xl font-bold text-emerald-400">90%</div></div>
+          <div class="bg-slate-800/50 rounded-lg p-3"><div class="text-slate-400 text-xs">Complaint Resolution</div><div class="text-xl font-bold text-emerald-400">94%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEALTH -->
+    <div id="tab-sd-health" class="tab-pane">
+      <div class="page-header"><h1>State Health Score</h1></div>
+      <div class="report-card">
+        <div class="text-center mb-6"><div class="text-4xl font-bold text-sky-600">92%</div><div class="text-slate-500">OVERALL STATE HEALTH</div></div>
+        <div class="space-y-3">
+          <div class="flex items-center gap-4 cursor-pointer" onclick="navigateTo('sd-sales')"><div class="w-48 text-sm font-medium">Sales Performance</div><div class="flex-1 health-bar"><div class="health-fill bg-emerald-500" style="width:94%"></div></div><div class="w-12 text-right font-bold text-emerald-600">94%</div></div>
+          <div class="flex items-center gap-4 cursor-pointer" onclick="navigateTo('sd-profit')"><div class="w-48 text-sm font-medium">Profitability</div><div class="flex-1 health-bar"><div class="health-fill bg-emerald-500" style="width:91%"></div></div><div class="w-12 text-right font-bold text-emerald-600">91%</div></div>
+          <div class="flex items-center gap-4 cursor-pointer" onclick="navigateTo('sd-galleries')"><div class="w-48 text-sm font-medium">Gallery Performance</div><div class="flex-1 health-bar"><div class="health-fill bg-emerald-500" style="width:92%"></div></div><div class="w-12 text-right font-bold text-emerald-600">92%</div></div>
+          <div class="flex items-center gap-4 cursor-pointer" onclick="navigateTo('sd-inventory')"><div class="w-48 text-sm font-medium">Inventory</div><div class="flex-1 health-bar"><div class="health-fill bg-emerald-400" style="width:88%"></div></div><div class="w-12 text-right font-bold text-emerald-600">88%</div></div>
+          <div class="flex items-center gap-4 cursor-pointer" onclick="navigateTo('sd-cx')"><div class="w-48 text-sm font-medium">Customer Experience</div><div class="flex-1 health-bar"><div class="health-fill bg-emerald-500" style="width:93%"></div></div><div class="w-12 text-right font-bold text-emerald-600">93%</div></div>
+          <div class="flex items-center gap-4 cursor-pointer" onclick="navigateTo('sd-employees')"><div class="w-48 text-sm font-medium">Employee Performance</div><div class="flex-1 health-bar"><div class="health-fill bg-emerald-500" style="width:95%"></div></div><div class="w-12 text-right font-bold text-emerald-600">95%</div></div>
+          <div class="flex items-center gap-4 cursor-pointer" onclick="navigateTo('sd-expenses')"><div class="w-48 text-sm font-medium">Expense Control</div><div class="flex-1 health-bar"><div class="health-fill bg-emerald-400" style="width:89%"></div></div><div class="w-12 text-right font-bold text-emerald-600">89%</div></div>
+          <div class="flex items-center gap-4 cursor-pointer" onclick="navigateTo('sd-compliance')"><div class="w-48 text-sm font-medium">Compliance</div><div class="flex-1 health-bar"><div class="health-fill bg-emerald-500" style="width:97%"></div></div><div class="w-12 text-right font-bold text-emerald-600">97%</div></div>
+          <div class="flex items-center gap-4 cursor-pointer" onclick="navigateTo('sd-membership')"><div class="w-48 text-sm font-medium">Membership</div><div class="flex-1 health-bar"><div class="health-fill bg-emerald-500" style="width:90%"></div></div><div class="w-12 text-right font-bold text-emerald-600">90%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-sd-vs-company" class="tab-pane">
+      <div class="page-header"><h1>State vs Company Average</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Metric</th><th>State</th><th>Company Avg</th><th>Gap</th></tr></thead>
+          <tbody>
+            <tr><td>Sales Growth</td><td>+14%</td><td>+11%</td><td class="text-emerald-600">+3%</td></tr>
+            <tr><td>Profit Margin</td><td>27%</td><td>25%</td><td class="text-emerald-600">+2%</td></tr>
+            <tr><td>Customer Growth</td><td>+18%</td><td>+15%</td><td class="text-emerald-600">+3%</td></tr>
+            <tr><td>Inventory Turnover</td><td>5.8x</td><td>5.2x</td><td class="text-emerald-600">+0.6x</td></tr>
+            <tr><td>Complaint Rate</td><td>1.2%</td><td>1.5%</td><td class="text-emerald-600">-0.3%</td></tr>
+            <tr><td>Attendance</td><td>94%</td><td>92%</td><td class="text-emerald-600">+2%</td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <!-- GALLERIES -->
+    <div id="tab-sd-galleries" class="tab-pane">
+      <div class="page-header"><h1>All Galleries · Maharashtra</h1></div>
+      <div class="filter-bar">
+        <div class="filter-group"><label>City</label><select onchange="filterTable('galleryTable', this.value)"><option value="all">All</option><option>Pune</option><option>Mumbai</option><option>Nashik</option></select></div>
+        <button class="btn btn-primary" onclick="showToast('Filtered','success')">Apply</button>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table id="galleryTable"><thead><tr><th>Gallery</th><th>City</th><th>Sales</th><th>Target</th><th>Ach %</th><th>Profit</th><th>Health</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr data-status="Pune"><td>Pune Central</td><td>Pune</td><td>₹42 L</td><td>₹40 L</td><td>105%</td><td>₹12 L</td><td>96%</td><td><span class="status-badge success">🟢</span></td><td><button class="btn btn-sm btn-outline" onclick="openGallery('Pune Central')">Open</button></td></tr>
+            <tr data-status="Pune"><td>Pune East</td><td>Pune</td><td>₹36 L</td><td>₹38 L</td><td>95%</td><td>₹9 L</td><td>93%</td><td><span class="status-badge success">🟢</span></td><td><button class="btn btn-sm btn-outline" onclick="openGallery('Pune East')">Open</button></td></tr>
+            <tr data-status="Pune"><td>Pune West</td><td>Pune</td><td>₹28 L</td><td>₹34 L</td><td>82%</td><td>₹6 L</td><td>84%</td><td><span class="status-badge warning">🟡</span></td><td><button class="btn btn-sm btn-outline" onclick="openGallery('Pune West')">Open</button></td></tr>
+            <tr data-status="Mumbai"><td>Mumbai Central</td><td>Mumbai</td><td>₹39 L</td><td>₹40 L</td><td>98%</td><td>₹10 L</td><td>95%</td><td><span class="status-badge success">🟢</span></td><td><button class="btn btn-sm btn-outline" onclick="openGallery('Mumbai Central')">Open</button></td></tr>
+            <tr data-status="Mumbai"><td>Mumbai West</td><td>Mumbai</td><td>₹31 L</td><td>₹38 L</td><td>82%</td><td>₹7 L</td><td>82%</td><td><span class="status-badge warning">🟡</span></td><td><button class="btn btn-sm btn-outline" onclick="openGallery('Mumbai West')">Open</button></td></tr>
+            <tr data-status="Nashik"><td>Nashik Central</td><td>Nashik</td><td>₹31 L</td><td>₹30 L</td><td>103%</td><td>₹11 L</td><td>94%</td><td><span class="status-badge success">🟢</span></td><td><button class="btn btn-sm btn-outline" onclick="openGallery('Nashik Central')">Open</button></td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <div id="tab-sd-map" class="tab-pane">
+      <div class="page-header"><h1>State Gallery Map</h1></div>
+      <div class="report-card">
+        <pre class="bg-slate-50 p-4 rounded text-xs leading-relaxed">
+MAHARASHTRA
+
+Pune
+ ├─ Pune Central       🟢 96%
+ ├─ Pune East          🟢 93%
+ ├─ Pune West          🟡 84%
+
+Mumbai
+ ├─ Mumbai Central     🟢 95%
+ ├─ Mumbai West        🟡 82%
+
+Nashik
+ └─ Nashik Central     🟢 94%
+        </pre>
+        <p class="text-sm text-slate-600 mt-2">Click any gallery in the list above (Galleries) to open its full operational dashboard.</p>
+      </div>
+    </div>
+
+    <div id="tab-sd-ranking" class="tab-pane">
+      <div class="page-header"><h1>Gallery Ranking · Maharashtra</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Rank</th><th>Gallery</th><th>Health</th><th>Sales Ach</th><th>Profit</th><th>CX</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Pune Central</td><td>96%</td><td>105%</td><td>₹12 L</td><td>95%</td></tr>
+            <tr><td>2</td><td>Mumbai Central</td><td>95%</td><td>98%</td><td>₹10 L</td><td>92%</td></tr>
+            <tr><td>3</td><td>Nashik Central</td><td>94%</td><td>103%</td><td>₹11 L</td><td>97%</td></tr>
+            <tr><td>4</td><td>Pune East</td><td>93%</td><td>95%</td><td>₹9 L</td><td>91%</td></tr>
+            <tr><td>5</td><td>Mumbai West</td><td>82%</td><td>82%</td><td>₹7 L</td><td>88%</td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <div id="tab-sd-underperform" class="tab-pane">
+      <div class="page-header"><h1>Underperforming Galleries</h1></div>
+      <div class="alert-item high"><i class="fas fa-circle text-orange-500 text-xs mt-1"></i><div>Mumbai West: 82% target · Low turnover · Recovery plan recommended</div></div>
+      <div class="alert-item warning"><i class="fas fa-circle text-yellow-500 text-xs mt-1"></i><div>Pune West: 82% target · Overstock · Attendance watch</div></div>
+      <button class="btn btn-primary mt-2" onclick="navigateTo('sd-recovery')"><i class="fas fa-ambulance"></i> Create Recovery Plan</button>
+    </div>
+
+    <div id="tab-sd-recovery" class="tab-pane">
+      <div class="page-header"><h1>Gallery Recovery Program</h1></div>
+      <div class="report-card">
+        <pre class="bg-slate-50 p-3 rounded text-xs text-center mb-3">Problem → Root Cause → Recovery Plan → Manager → Actions → Weekly Review → Improvement → Closure</pre>
+        <h4 class="font-semibold mb-2">Mumbai West — Sales 82%</h4>
+        <div class="text-sm space-y-1">
+          <div><b>Root causes:</b> Low conversion · Overstock · Staffing gaps</div>
+          <div><b>Actions:</b> Training · Stock transfer from Pune · Local promo · Manager coaching</div>
+          <div><b>Owner:</b> GM · Deadline: 30 days · Status: In progress</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SALES -->
+    <div id="tab-sd-sales" class="tab-pane">
+      <div class="page-header"><h1>State Sales Control</h1></div>
+      <div class="report-card mb-3">
+        <pre class="bg-slate-50 p-3 rounded text-xs text-center">State → City → Gallery → Manager → Employee → Customer → Order → Payment</pre>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Daily</span><span class="value">₹6.2 L</span></div>
+        <div class="kpi-card"><span class="label">Weekly</span><span class="value">₹38 L</span></div>
+        <div class="kpi-card"><span class="label">Monthly</span><span class="value">₹1.42 Cr</span></div>
+        <div class="kpi-card"><span class="label">Quarterly</span><span class="value">₹4.1 Cr</span></div>
+        <div class="kpi-card"><span class="label">Growth</span><span class="value">+14%</span></div>
+        <div class="kpi-card"><span class="label">Avg Ticket</span><span class="value">₹4,650</span></div>
+      </div>
+    </div>
+
+    <div id="tab-sd-targets" class="tab-pane">
+      <div class="page-header"><h1>Target Management</h1></div>
+      <div class="report-card">
+        <p class="text-sm mb-3">Company → State → City → Gallery → Manager → Employee</p>
+        <div class="kpi-grid">
+          <div class="kpi-card"><span class="label">Target</span><span class="value">₹1.55 Cr</span></div>
+          <div class="kpi-card"><span class="label">Actual</span><span class="value">₹1.42 Cr</span></div>
+          <div class="kpi-card"><span class="label">Achievement</span><span class="value">92%</span></div>
+          <div class="kpi-card"><span class="label">Gap</span><span class="value">₹13 L</span></div>
+          <div class="kpi-card"><span class="label">Forecast</span><span class="value">₹1.49 Cr</span></div>
+          <div class="kpi-card"><span class="label">Expected Gap</span><span class="value">₹6 L</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-sd-forecast-sales" class="tab-pane">
+      <div class="page-header"><h1>Sales Forecast</h1></div>
+      <div class="alert-item info"><i class="fas fa-circle text-blue-500 text-xs mt-1"></i><div>At current rate, state projected to achieve 96% of monthly target.</div></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Expected Sales</span><span class="value">₹1.49 Cr</span></div>
+        <div class="kpi-card"><span class="label">Forecast Ach %</span><span class="value">96%</span></div>
+        <div class="kpi-card"><span class="label">Category Demand</span><span class="value">Stable</span></div>
+      </div>
+    </div>
+
+    <div id="tab-sd-profit" class="tab-pane">
+      <div class="page-header"><h1>State Profitability</h1></div>
+      <div class="report-card mb-4">
+        <h4 class="font-semibold mb-3">State P&L</h4>
+        <div class="field-grid text-sm">
+          <div class="field-item"><span class="fname">Revenue</span><span class="fvalue">₹1.42 Cr</span></div>
+          <div class="field-item"><span class="fname">COGS</span><span class="fvalue">₹84 L</span></div>
+          <div class="field-item"><span class="fname">Gross Profit</span><span class="fvalue">₹58 L</span></div>
+          <div class="field-item"><span class="fname">Employee Cost</span><span class="fvalue">₹8 L</span></div>
+          <div class="field-item"><span class="fname">Rent</span><span class="fvalue">₹5 L</span></div>
+          <div class="field-item"><span class="fname">Marketing</span><span class="fvalue">₹3 L</span></div>
+          <div class="field-item"><span class="fname">Utilities</span><span class="fvalue">₹2 L</span></div>
+          <div class="field-item"><span class="fname">Other</span><span class="fvalue">₹2 L</span></div>
+          <div class="field-item"><span class="fname">Operating Profit</span><span class="fvalue font-bold text-emerald-600">₹38 L</span></div>
+        </div>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Gallery</th><th>Revenue</th><th>Expenses</th><th>Profit</th><th>Margin</th></tr></thead>
+          <tbody>
+            <tr><td>Pune Central</td><td>₹42 L</td><td>₹30 L</td><td>₹12 L</td><td>28.6%</td></tr>
+            <tr><td>Mumbai Central</td><td>₹39 L</td><td>₹29 L</td><td>₹10 L</td><td>25.6%</td></tr>
+            <tr><td>Nashik</td><td>₹31 L</td><td>₹20 L</td><td>₹11 L</td><td>35.5%</td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <!-- INVENTORY -->
+    <div id="tab-sd-inventory" class="tab-pane">
+      <div class="page-header"><h1>Inventory Command Center</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Total Stock</span><span class="value">₹4.8 Cr</span></div>
+        <div class="kpi-card"><span class="label">Available</span><span class="value">₹3.9 Cr</span></div>
+        <div class="kpi-card"><span class="label">Slow-moving</span><span class="value">₹42 L</span></div>
+        <div class="kpi-card"><span class="label">Overstock</span><span class="value">₹28 L</span></div>
+        <div class="kpi-card"><span class="label">Turnover</span><span class="value">5.8x</span></div>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Gallery</th><th>Stock</th><th>Turnover</th><th>Health</th></tr></thead>
+          <tbody>
+            <tr><td>Pune Central</td><td>₹82 L</td><td>6.2x</td><td><span class="status-badge success">🟢</span></td></tr>
+            <tr><td>Mumbai West</td><td>₹76 L</td><td>4.1x</td><td><span class="status-badge warning">🟡</span></td></tr>
+            <tr><td>Nashik</td><td>₹64 L</td><td>7.0x</td><td><span class="status-badge success">🟢</span></td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <div id="tab-sd-transfers" class="tab-pane">
+      <div class="page-header"><h1>Stock Transfer Management</h1></div>
+      <div class="report-card mb-3">
+        <p class="text-sm">Pune Central (excess) → Transfer Request → Mumbai West (shortage). High-value transfers require CGO approval.</p>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Transfer</th><th>Source</th><th>Destination</th><th>Value</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>TRF-112</td><td>Pune Central</td><td>Mumbai West</td><td>₹8 L</td><td><span class="status-badge info">Pending CGO</span></td></tr>
+            <tr><td>TRF-108</td><td>Nashik</td><td>Pune West</td><td>₹2.1 L</td><td><span class="status-badge success">Received</span></td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <div id="tab-sd-damaged" class="tab-pane">
+      <div class="page-header"><h1>Damaged Stock Control</h1></div>
+      <div class="alert-item high"><i class="fas fa-circle text-orange-500 text-xs mt-1"></i><div>Gallery X damage rate 3.2% vs state average 1.4% — investigation required.</div></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Damaged Value</span><span class="value">₹6.8 L</span></div>
+        <div class="kpi-card"><span class="label">State Avg Rate</span><span class="value">1.4%</span></div>
+      </div>
+    </div>
+
+    <div id="tab-sd-procurement" class="tab-pane">
+      <div class="page-header"><h1>Procurement Control</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Open POs</span><span class="value">12</span></div>
+        <div class="kpi-card"><span class="label">Pending Value</span><span class="value">₹48 L</span></div>
+        <div class="kpi-card"><span class="label">Delayed</span><span class="value">2</span></div>
+      </div>
+    </div>
+
+    <!-- EXPENSES -->
+    <div id="tab-sd-expenses" class="tab-pane">
+      <div class="page-header"><h1>State Expense Control</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">State Expenses</span><span class="value">₹21 L</span></div>
+        <div class="kpi-card"><span class="label">Expense Ratio</span><span class="value">14.8%</span></div>
+        <div class="kpi-card"><span class="label">Employee Cost</span><span class="value">₹8 L</span></div>
+        <div class="kpi-card"><span class="label">Rent</span><span class="value">₹5 L</span></div>
+        <div class="kpi-card"><span class="label">Petty Cash</span><span class="value">₹1.2 L</span></div>
+      </div>
+    </div>
+
+    <div id="tab-sd-cash" class="tab-pane">
+      <div class="page-header"><h1>Cash Control</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Cash Sales</span><span class="value">₹18 L</span></div>
+        <div class="kpi-card"><span class="label">Digital</span><span class="value">₹1.24 Cr</span></div>
+        <div class="kpi-card"><span class="label">Variance Flags</span><span class="value">1</span></div>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div id="tab-sd-customers" class="tab-pane">
+      <div class="page-header"><h1>Customer Command Center</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Active</span><span class="value">12,450</span></div>
+        <div class="kpi-card"><span class="label">New (Month)</span><span class="value">1,120</span></div>
+        <div class="kpi-card"><span class="label">Returning</span><span class="value">41%</span></div>
+        <div class="kpi-card"><span class="label">VIP</span><span class="value">680</span></div>
+        <div class="kpi-card"><span class="label">Retention</span><span class="value">79%</span></div>
+      </div>
+    </div>
+
+    <div id="tab-sd-membership" class="tab-pane">
+      <div class="page-header"><h1>Membership Performance</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Members</span><span class="value">8,620</span></div>
+        <div class="kpi-card"><span class="label">New</span><span class="value">640</span></div>
+        <div class="kpi-card"><span class="label">Renewals</span><span class="value">520</span></div>
+        <div class="kpi-card"><span class="label">Expiring Soon</span><span class="value">140</span></div>
+        <div class="kpi-card"><span class="label">Renewal Rate</span><span class="value">81%</span></div>
+      </div>
+    </div>
+
+    <div id="tab-sd-cx" class="tab-pane">
+      <div class="page-header"><h1>Customer Experience</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Gallery</th><th>CX Score</th></tr></thead>
+          <tbody>
+            <tr><td>Pune Central</td><td>95%</td></tr>
+            <tr><td>Mumbai Central</td><td>92%</td></tr>
+            <tr><td>Nashik</td><td>97%</td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <div id="tab-sd-complaints" class="tab-pane">
+      <div class="page-header"><h1>State Complaint Center</h1></div>
+      <div class="report-card mb-3">
+        <pre class="bg-slate-50 p-3 rounded text-xs text-center">Customer → Gallery Manager → GM → State Director → CGO → MD</pre>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Open</span><span class="value">7</span></div>
+        <div class="kpi-card"><span class="label">Escalated</span><span class="value">2</span></div>
+        <div class="kpi-card"><span class="label">Resolved</span><span class="value">29</span></div>
+        <div class="kpi-card"><span class="label">SLA Breach</span><span class="value">1</span></div>
+        <div class="kpi-card"><span class="label">Critical</span><span class="value">1</span></div>
+      </div>
+    </div>
+
+    <!-- PEOPLE -->
+    <div id="tab-sd-managers" class="tab-pane">
+      <div class="page-header"><h1>Gallery Manager Scorecards</h1></div>
+      <div class="report-card">
+        <h4 class="font-semibold mb-3">Sample — Overall 93%</h4>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+          <div class="p-3 bg-emerald-50 rounded"><div class="text-xs text-slate-500">Sales</div><div class="text-xl font-bold text-emerald-700">94%</div></div>
+          <div class="p-3 bg-emerald-50 rounded"><div class="text-xs text-slate-500">Inventory</div><div class="text-xl font-bold text-emerald-700">91%</div></div>
+          <div class="p-3 bg-emerald-50 rounded"><div class="text-xs text-slate-500">Employees</div><div class="text-xl font-bold text-emerald-700">96%</div></div>
+          <div class="p-3 bg-emerald-50 rounded"><div class="text-xs text-slate-500">CX</div><div class="text-xl font-bold text-emerald-700">93%</div></div>
+          <div class="p-3 bg-emerald-50 rounded"><div class="text-xs text-slate-500">Expenses</div><div class="text-xl font-bold text-emerald-700">88%</div></div>
+          <div class="p-3 bg-emerald-50 rounded"><div class="text-xs text-slate-500">Compliance</div><div class="text-xl font-bold text-emerald-700">97%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-sd-gm" class="tab-pane">
+      <div class="page-header"><h1>General Manager Comparison</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>GM</th><th>Galleries</th><th>Revenue</th><th>Profit</th><th>Health</th><th>CX</th></tr></thead>
+          <tbody>
+            <tr><td>Rajesh K.</td><td>6</td><td>₹68 L</td><td>₹18 L</td><td>94%</td><td>94%</td></tr>
+            <tr><td>Meena S.</td><td>5</td><td>₹52 L</td><td>₹12 L</td><td>88%</td><td>90%</td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <div id="tab-sd-am" class="tab-pane">
+      <div class="page-header"><h1>Assistant Manager Performance</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Task Completion</span><span class="value">91%</span></div>
+        <div class="kpi-card"><span class="label">Opening/Closing</span><span class="value">98%</span></div>
+        <div class="kpi-card"><span class="label">Inventory Accuracy</span><span class="value">96%</span></div>
+        <div class="kpi-card"><span class="label">Complaint Handling</span><span class="value">93%</span></div>
+      </div>
+    </div>
+
+    <div id="tab-sd-employees" class="tab-pane">
+      <div class="page-header"><h1>Employee Command Center</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Total</span><span class="value">286</span></div>
+        <div class="kpi-card"><span class="label">Available</span><span class="value">14</span></div>
+        <div class="kpi-card"><span class="label">Overloaded</span><span class="value">8</span></div>
+        <div class="kpi-card"><span class="label">Underutilized</span><span class="value">9</span></div>
+        <div class="kpi-card"><span class="label">On Leave</span><span class="value">12</span></div>
+        <div class="kpi-card"><span class="label">Absent</span><span class="value">7</span></div>
+      </div>
+    </div>
+
+    <div id="tab-sd-attendance" class="tab-pane">
+      <div class="page-header"><h1>State Attendance</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Present</span><span class="value">267</span></div>
+        <div class="kpi-card"><span class="label">Absent</span><span class="value">7</span></div>
+        <div class="kpi-card"><span class="label">Late</span><span class="value">12</span></div>
+        <div class="kpi-card"><span class="label">On Leave</span><span class="value">12</span></div>
+        <div class="kpi-card"><span class="label">Rate</span><span class="value">94%</span></div>
+      </div>
+    </div>
+
+    <div id="tab-sd-staffing" class="tab-pane">
+      <div class="page-header"><h1>Staffing Forecast</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Current</span><span class="value">286</span></div>
+        <div class="kpi-card"><span class="label">Projected Growth</span><span class="value">+18%</span></div>
+        <div class="kpi-card"><span class="label">Required</span><span class="value">315</span></div>
+        <div class="kpi-card"><span class="label">Staffing Gap</span><span class="value">29</span></div>
+      </div>
+      <button class="btn btn-primary mt-2" onclick="showToast('Recruitment request sent to HR','success')"><i class="fas fa-user-plus"></i> Create HR Request</button>
+    </div>
+
+    <!-- OPERATIONS -->
+    <div id="tab-sd-ops" class="tab-pane">
+      <div class="page-header"><h1>Gallery Operations</h1></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="report-card"><h4 class="font-semibold mb-2">Opening</h4><div class="text-sm space-y-1"><div>✅ Staff present</div><div>✅ Cash verified</div><div>✅ Inventory ready</div><div>✅ Systems online</div><div>✅ Gallery ready</div></div></div>
+        <div class="report-card"><h4 class="font-semibold mb-2">Closing</h4><div class="text-sm space-y-1"><div>✅ Sales reconciled</div><div>✅ Cash reconciled</div><div>✅ Inventory updated</div><div>⏳ Expenses submitted</div><div>⏳ Manager approval</div></div></div>
+      </div>
+    </div>
+
+    <div id="tab-sd-audits" class="tab-pane">
+      <div class="page-header"><h1>Gallery Audits</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Audit</th><th>Gallery</th><th>Category</th><th>Score</th><th>Findings</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>AUD-089</td><td>Pune Central</td><td>Inventory</td><td>96%</td><td>1 minor</td><td><span class="status-badge success">Closed</span></td></tr>
+            <tr><td>AUD-086</td><td>Mumbai West</td><td>Cash</td><td>88%</td><td>2 major</td><td><span class="status-badge warning">Corrective</span></td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <div id="tab-sd-compliance" class="tab-pane">
+      <div class="page-header"><h1>Compliance Dashboard</h1></div>
+      <div class="alert-item warning"><i class="fas fa-circle text-yellow-500 text-xs mt-1"></i><div>2 galleries have overdue compliance actions.</div></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">SOP Compliance</span><span class="value">97%</span></div>
+        <div class="kpi-card"><span class="label">Overdue Actions</span><span class="value">2</span></div>
+        <div class="kpi-card"><span class="label">Expired Licenses</span><span class="value">0</span></div>
+      </div>
+    </div>
+
+    <div id="tab-sd-vendors" class="tab-pane">
+      <div class="page-header"><h1>Vendors</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Vendor</th><th>Spend</th><th>SLA</th><th>Rating</th></tr></thead>
+          <tbody>
+            <tr><td>SupplyCo MH</td><td>₹18 L</td><td>97%</td><td>4.5</td></tr>
+            <tr><td>Local Craft</td><td>₹6 L</td><td>93%</td><td>4.0</td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <div id="tab-sd-expansion" class="tab-pane">
+      <div class="page-header"><h1>State Expansion</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Proposal</th><th>Location</th><th>Expected Revenue</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>EXP-MH-04</td><td>Pune South</td><td>₹28 L/mo</td><td><span class="status-badge info">CGO Review</span></td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <!-- RISK & ANALYTICS -->
+    <div id="tab-sd-risk" class="tab-pane">
+      <div class="page-header"><h1>State Risk Center</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Risk</th><th>Type</th><th>Score</th><th>Owner</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Mumbai West underperformance</td><td>Revenue</td><td><span class="status-badge danger">High</span></td><td>GM</td><td>Recovery active</td></tr>
+            <tr><td>Staffing gap 29</td><td>Employee</td><td><span class="status-badge warning">Medium</span></td><td>SD</td><td>HR request</td></tr>
+            <tr><td>Overstock Pune West</td><td>Inventory</td><td><span class="status-badge warning">Medium</span></td><td>Manager</td><td>Transfer planned</td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <div id="tab-sd-forecast" class="tab-pane">
+      <div class="page-header"><h1>State Forecasting</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Revenue</span><span class="value">₹1.49 Cr</span></div>
+        <div class="kpi-card"><span class="label">Profit</span><span class="value">₹40 L</span></div>
+        <div class="kpi-card"><span class="label">Customers</span><span class="value">+6%</span></div>
+        <div class="kpi-card"><span class="label">Staffing Need</span><span class="value">+29</span></div>
+      </div>
+    </div>
+
+    <div id="tab-sd-whatif" class="tab-pane">
+      <div class="page-header"><h1>What-If Simulator</h1></div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="report-card">
+          <h4 class="font-semibold mb-2 text-sm">+3 employees Gallery A</h4>
+          <div class="text-sm space-y-1"><div>Salary +₹1.5 L</div><div>Capacity +20%</div><div>Sales +₹2–4 L</div><div>Break-even ~5 wks</div></div>
+        </div>
+        <div class="report-card">
+          <h4 class="font-semibold mb-2 text-sm">Move ₹10L stock</h4>
+          <div class="text-sm space-y-1"><div>Availability ↑</div><div>Turnover improve</div><div>Revenue impact +₹1.5 L</div></div>
+        </div>
+        <div class="report-card">
+          <h4 class="font-semibold mb-2 text-sm">Open new gallery</h4>
+          <div class="text-sm space-y-1"><div>Investment ₹35 L</div><div>Staff 18</div><div>Break-even 16 mo</div></div>
+        </div>
+      </div>
+      <button class="btn btn-primary mt-4" onclick="showToast('Custom scenario opened','success')"><i class="fas fa-random"></i> Run Custom</button>
+    </div>
+
+    <div id="tab-sd-decisions" class="tab-pane">
+      <div class="page-header"><h1>Decision Center</h1><button class="btn btn-primary" onclick="showToast('Log decision','success')"><i class="fas fa-plus"></i> Log</button></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Decision</th><th>Reason</th><th>Expected</th><th>Actual</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Transfer ₹8L stock Pune → Mumbai West</td><td>Overstock / shortage</td><td>Improve turnover</td><td>Tracking</td><td>Pending CGO</td></tr>
+            <tr><td>Recovery plan Mumbai West</td><td>82% target</td><td>+10% sales</td><td>—</td><td>Active</td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <!-- APPROVALS -->
+    <div id="tab-sd-approvals" class="tab-pane">
+      <div class="page-header"><h1>Approval Center</h1></div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Request</th><th>Type</th><th>By</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td>Stock transfer ₹8 L</td><td>Transfer</td><td>GM</td><td><span class="status-badge warning">Pending</span></td>
+              <td><button class="btn btn-success btn-sm" onclick="approveItem('Transfer')">Approve</button> <button class="btn btn-outline btn-sm">Escalate CGO</button></td></tr>
+            <tr><td>Employee transfer</td><td>HR</td><td>Manager</td><td><span class="status-badge warning">Pending</span></td>
+              <td><button class="btn btn-success btn-sm">Approve</button></td></tr>
+            <tr><td>Expense ₹45K</td><td>Expense</td><td>GM</td><td><span class="status-badge warning">Pending</span></td>
+              <td><button class="btn btn-success btn-sm">Approve</button> <button class="btn btn-danger btn-sm">Reject</button></td></tr>
+          </tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <!-- REPORTS -->
+    <div id="tab-sd-reports" class="tab-pane">
+      <div class="page-header"><h1>Report Center</h1></div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <button class="report-card text-center cursor-pointer hover:border-sky-400" onclick="navigateTo('sd-reports-daily')"><i class="fas fa-calendar-day text-2xl text-sky-500 mb-2"></i><div class="font-semibold text-sm">Daily</div></button>
+        <button class="report-card text-center cursor-pointer hover:border-sky-400" onclick="navigateTo('sd-reports-weekly')"><i class="fas fa-calendar-week text-2xl text-sky-500 mb-2"></i><div class="font-semibold text-sm">Weekly</div></button>
+        <button class="report-card text-center cursor-pointer hover:border-sky-400" onclick="showToast('Monthly P&L generated','success')"><i class="fas fa-calendar-alt text-2xl text-sky-500 mb-2"></i><div class="font-semibold text-sm">Monthly</div></button>
+        <button class="report-card text-center cursor-pointer hover:border-sky-400" onclick="navigateTo('sd-custom-report')"><i class="fas fa-magic text-2xl text-sky-500 mb-2"></i><div class="font-semibold text-sm">Custom</div></button>
+      </div>
+    </div>
+
+    <div id="tab-sd-reports-daily" class="tab-pane">
+      <div class="page-header"><h1>Daily State Report</h1><button class="btn btn-outline" onclick="exportReport('daily')"><i class="fas fa-file-pdf"></i> Export</button></div>
+      <div class="report-card">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+          <div><b>Sales</b><br>₹6.2 L</div>
+          <div><b>Attendance</b><br>94%</div>
+          <div><b>Complaints</b><br>2 new</div>
+          <div><b>Critical</b><br>0</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-sd-reports-weekly" class="tab-pane">
+      <div class="page-header"><h1>Weekly State Report</h1><button class="btn btn-outline" onclick="exportReport('weekly')"><i class="fas fa-file-pdf"></i> Export</button></div>
+      <div class="report-card"><p class="text-sm">Gallery ranking · Manager performance · Inventory · Expenses · CX</p></div>
+    </div>
+
+    <div id="tab-sd-custom-report" class="tab-pane">
+      <div class="page-header"><h1>Custom Report Builder</h1></div>
+      <div class="report-card">
+        <p class="text-sm mb-3">Example: <em>Galleries below 85% target, inventory above ₹50L, complaints above state average.</em></p>
+        <div class="table-wrap"><div class="table-scroll">
+          <table><thead><tr><th>Gallery</th><th>Target %</th><th>Inventory</th><th>Complaints</th><th>Risk</th></tr></thead>
+            <tbody>
+              <tr><td>Mumbai West</td><td>82%</td><td>₹76 L</td><td>11</td><td><span class="status-badge danger">🟠</span></td></tr>
+              <tr><td>Pune West</td><td>82%</td><td>₹58 L</td><td>9</td><td><span class="status-badge warning">🟡</span></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <button class="btn btn-primary mt-4" onclick="showToast('Custom builder opened','success')"><i class="fas fa-magic"></i> Build New</button>
+      </div>
+    </div>
+
+    <!-- ALERTS -->
+    <div id="tab-sd-alerts" class="tab-pane">
+      <div class="page-header"><h1>State Alerts</h1></div>
+      <div class="alert-item high"><i class="fas fa-circle text-orange-500 text-xs mt-1"></i><div>Mumbai West below 85% — GM alerted</div></div>
+      <div class="alert-item warning"><i class="fas fa-circle text-yellow-500 text-xs mt-1"></i><div>Pune West turnover risk</div></div>
+      <div class="alert-item info"><i class="fas fa-circle text-blue-500 text-xs mt-1"></i><div>Projected 96% target · Gap ₹6L</div></div>
+      <div class="alert-item warning"><i class="fas fa-circle text-yellow-500 text-xs mt-1"></i><div>2 overdue compliance actions</div></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="tab-sd-settings" class="tab-pane">
+      <div class="page-header"><h1>Settings</h1></div>
+      <div class="report-card space-y-4">
+        <div class="flex justify-between items-center border-b pb-3"><span class="font-medium text-sm">State</span><span class="text-sm font-semibold">Maharashtra</span></div>
+        <div class="flex justify-between items-center border-b pb-3"><span class="font-medium text-sm">Alert if gallery &lt; 85% target</span><input type="checkbox" checked /></div>
+        <div class="flex justify-between items-center border-b pb-3"><span class="font-medium text-sm">Escalate to CGO if &lt; 70%</span><input type="checkbox" checked /></div>
+        <div class="flex justify-between items-center"><span class="font-medium text-sm">Auto recovery plan trigger</span><input type="checkbox" checked /></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+      <h2 id="modalTitle">Details</h2>
+      <div id="modalBody" class="text-sm text-gray-600"></div>
+      <button class="btn btn-outline mt-4" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('backdrop').classList.toggle('open');
+    }
+    function navigateTo(tabId) {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      const t = document.querySelector(`.nav-item[data-tab="${tabId}"]`);
+      if (t) t.classList.add('active');
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      const pane = document.getElementById('tab-' + tabId);
+      if (pane) pane.classList.add('active');
+      else showToast('Module loading...', 'warning');
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('backdrop').classList.remove('open');
+      }
+      document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+      initCharts(tabId);
+    }
+    function showToast(msg, type = 'success') {
+      const c = document.getElementById('toastContainer');
+      const t = document.createElement('div');
+      t.className = `toast ${type}`;
+      const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle';
+      t.innerHTML = `<i class="fas fa-${icon}"></i> ${msg}`;
+      c.appendChild(t);
+      setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(100%)'; t.style.transition = '0.3s'; setTimeout(() => t.remove(), 300); }, 3200);
+    }
+    function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+    function openModal(title, html) {
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('modalBody').innerHTML = html;
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+    function openGallery(name) {
+      openModal(name, '<div class="text-sm space-y-2"><div><b>Chain:</b> State → City → Gallery → Manager → Employee → Customer → Sale → Revenue → Inventory → Expense → Profit → CX → Health → State Performance</div><button class="btn btn-primary btn-sm" onclick="showToast(\'Full gallery loaded\');closeModal()">Open Full View</button></div>');
+    }
+    function filterTable(tableId, status) {
+      document.querySelectorAll('#' + tableId + ' tbody tr').forEach(r => {
+        r.style.display = (status === 'all' || r.dataset.status === status) ? '' : 'none';
+      });
+      showToast('Filtered: ' + status);
+    }
+    function approveItem(t) { showToast(t + ' approved', 'success'); }
+    function exportReport(p) { showToast(p + ' report exported', 'success'); }
+    function refreshDashboard() {
+      showToast('Dashboard refreshed', 'success');
+      document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+    }
+    let chartsOk = {};
+    function initCharts(tab) {
+      if (tab === 'sd-command' && !chartsOk.cmd) {
+        const c1 = document.getElementById('sdSalesChart')?.getContext('2d');
+        if (c1) new Chart(c1, {
+          type: 'line',
+          data: { labels: ['W1','W2','W3','W4'], datasets: [{ label: 'Sales ₹L', data: [32, 35, 36, 39], borderColor: '#38bdf8', tension: 0.3, fill: true, backgroundColor: 'rgba(56,189,248,0.1)' }] },
+          options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+        chartsOk.cmd = true;
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+      initCharts('sd-command');
+    });
+    document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('backdrop').classList.remove('open');
+      }
+    });
+  </script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
+

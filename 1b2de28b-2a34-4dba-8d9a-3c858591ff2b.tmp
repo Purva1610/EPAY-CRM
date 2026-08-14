@@ -1,0 +1,1 @@
+firebase auth:setCustomUserClaims UID --json='{"admin":true}'

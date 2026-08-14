@@ -1,0 +1,2721 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ePay Digital India - Technical Support Portal</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js">
+    </script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { dark: '#0f172a', purple: '#10b981', light: '#f8fafc' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+
+
+
+        /* ===== Scrollbar ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* ===== Status / Priority Badges ===== */
+        .status-badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        .status-badge-new {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        .status-badge-open {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        .status-badge-assigned {
+            background: #d1fae5;
+            color: #059669;
+        }
+        .status-badge-acknowledged {
+            background: #fef3c7;
+            color: #b45309;
+        }
+        .status-badge-in-progress {
+            background: #fef3c7;
+            color: #b45309;
+        }
+        .status-badge-pending-customer {
+            background: #fef3c7;
+            color: #b45309;
+        }
+        .status-badge-pending-vendor {
+            background: #fef3c7;
+            color: #b45309;
+        }
+        .status-badge-pending-developer {
+            background: #fef3c7;
+            color: #b45309;
+        }
+        .status-badge-on-hold {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+        .status-badge-resolved {
+            background: #dcfce7;
+            color: #15803d;
+        }
+        .status-badge-closed {
+            background: #dcfce7;
+            color: #15803d;
+        }
+        .status-badge-reopened {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+        .status-badge-cancelled {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .status-badge-duplicate {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .status-badge-escalated {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+        .status-badge-critical {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+        .status-badge-high {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+        .status-badge-medium {
+            background: #fef3c7;
+            color: #b45309;
+        }
+        .status-badge-low {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .priority-p1 {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+        .priority-p2 {
+            background: #fef3c7;
+            color: #b45309;
+        }
+        .priority-p3 {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        .priority-p4 {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .chip {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* ===== Modal ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 820px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 32px;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+            animation: modalIn 0.25s ease;
+        }
+        @keyframes modalIn {
+            from {
+                transform: scale(0.95) translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+        .modal .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .modal .modal-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .modal .modal-header .close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 4px;
+            transition: 0.2s;
+        }
+        .modal .modal-header .close:hover {
+            color: #1e293b;
+        }
+        .modal .form-group {
+            margin-bottom: 16px;
+        }
+        .modal .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 13px;
+            color: #334155;
+            margin-bottom: 4px;
+        }
+        .modal .form-group input,
+        .modal .form-group select,
+        .modal .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .modal .form-group input:focus,
+        .modal .form-group select:focus,
+        .modal .form-group textarea:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+        }
+        .modal .form-group textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+        .modal .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .modal .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* ===== Buttons ===== */
+        .btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+            background: #e2e8f0;
+            color: #334155;
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .btn-primary {
+            background: #10b981;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #059669;
+        }
+        .btn-success {
+            background: #22c55e;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #16a34a;
+        }
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        .btn-warning {
+            background: #f59e0b;
+            color: #fff;
+        }
+        .btn-warning:hover {
+            background: #d97706;
+        }
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 12px;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #d1d5db;
+        }
+        .btn-outline:hover {
+            background: #f1f5f9;
+        }
+
+        /* ===== Toast ===== */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 360px;
+        }
+        .toast {
+            background: #0f172a;
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            animation: slideUp 0.3s ease;
+            border-left: 4px solid #10b981;
+        }
+        .toast.success {
+            border-left-color: #22c55e;
+        }
+        .toast.error {
+            border-left-color: #ef4444;
+        }
+        .toast.warning {
+            border-left-color: #f59e0b;
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .toast i {
+            font-size: 18px;
+        }
+        .toast .toast-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0 4px;
+        }
+        .toast .toast-close:hover {
+            color: #fff;
+        }
+
+        /* ===== Filter Bar ===== */
+        .filter-bar {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px 20px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+        }
+        .filter-bar .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1 1 140px;
+            min-width: 120px;
+        }
+        .filter-bar .filter-group label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .filter-bar .filter-group input,
+        .filter-bar .filter-group select {
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+            background: #fff;
+        }
+        .filter-bar .filter-group input:focus,
+        .filter-bar .filter-group select:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1);
+        }
+        .filter-bar .filter-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex: 0 0 auto;
+        }
+
+        /* ===== Tables ===== */
+        .table-wrap {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        .table-scroll {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        table th {
+            background: #f8fafc;
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+        table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+        table tr:last-child td {
+            border-bottom: none;
+        }
+        table tr:hover td {
+            background: #f8fafc;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 24px 0 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .section-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .section-header h2 i {
+            color: #10b981;
+            margin-right: 8px;
+        }
+
+        /* ===== Stat Cards ===== */
+        .stat-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px 18px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            transition: 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+        }
+        .stat-card .label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .stat-card .value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: 2px;
+            color: #0f172a;
+        }
+        .stat-card .change {
+            font-size: 11px;
+            font-weight: 500;
+            margin-top: 2px;
+            display: inline-block;
+            padding: 1px 8px;
+            border-radius: 20px;
+        }
+        .stat-card .change.up {
+            color: #22c55e;
+            background: #dcfce7;
+        }
+        .stat-card .change.down {
+            color: #ef4444;
+            background: #fee2e2;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* ===== AI Insight Box ===== */
+        .ai-insight-box {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            color: #fff;
+            border-radius: 12px;
+            padding: 16px 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .ai-insight-box i {
+            font-size: 28px;
+            color: #34d399;
+        }
+        .ai-insight-box .content {
+            flex: 1;
+        }
+        .ai-insight-box .content .title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.6;
+        }
+        .ai-insight-box .content .message {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .ai-insight-box .badge-ai {
+            background: rgba(255, 255, 255, 0.12);
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .text-muted {
+            color: #94a3b8;
+        }
+        .text-center {
+            text-align: center;
+        }
+
+        /* ===== Sidebar ===== */
+        .sidebar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 260px;
+            background: #0f172a;
+            color: #fff;
+            z-index: 50;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .sidebar-fixed .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 24px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .sidebar-fixed .logo-area i {
+            color: #818cf8;
+            font-size: 24px;
+        }
+        .sidebar-fixed .logo-area .title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .sidebar-fixed .logo-area .title span {
+            color: #818cf8;
+        }
+        .sidebar-fixed .logo-area .sub {
+            font-size: 10px;
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        .sidebar-fixed .nav-section {
+            padding: 12px 16px 4px;
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .sidebar-fixed .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            margin: 1px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.15s;
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .sidebar-fixed .nav-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #f1f5f9;
+        }
+        .sidebar-fixed .nav-item.active {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+        }
+        .sidebar-fixed .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 15px;
+        }
+        .sidebar-fixed .nav-item .badge-nav {
+            margin-left: auto;
+            font-size: 10px;
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            padding: 1px 8px;
+            border-radius: 20px;
+        }
+
+        .sidebar-fixed .user-footer {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sidebar-fixed .user-footer .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #818cf8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .sidebar-fixed .user-footer .info {
+            flex: 1;
+            min-width: 0;
+        }
+        .sidebar-fixed .user-footer .info .name {
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .sidebar-fixed .user-footer .info .role {
+            font-size: 10px;
+            color: #94a3b8;
+        }
+        .sidebar-fixed .user-footer .logout {
+            color: #64748b;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .sidebar-fixed .user-footer .logout:hover {
+            color: #f1f5f9;
+        }
+
+        /* ===== Main content offset for fixed sidebar ===== */
+        .main-with-sidebar {
+            margin-left: 260px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ===== Responsive sidebar ===== */
+        @media (max-width: 768px) {
+            .sidebar-fixed {
+                width: 60px;
+                overflow-x: hidden;
+            }
+            .sidebar-fixed .logo-area .title,
+            .sidebar-fixed .logo-area .sub,
+            .sidebar-fixed .nav-item span,
+            .sidebar-fixed .nav-item .badge-nav,
+            .sidebar-fixed .nav-section,
+            .sidebar-fixed .user-footer .info {
+                display: none;
+            }
+            .sidebar-fixed .logo-area {
+                padding: 14px 18px;
+                justify-content: center;
+            }
+            .sidebar-fixed .logo-area i {
+                font-size: 20px;
+            }
+            .sidebar-fixed .nav-item {
+                padding: 10px 14px;
+                justify-content: center;
+                margin: 1px 4px;
+            }
+            .sidebar-fixed .nav-item i {
+                font-size: 18px;
+                width: auto;
+            }
+            .sidebar-fixed .user-footer {
+                justify-content: center;
+                padding: 12px;
+            }
+            .sidebar-fixed .user-footer .avatar {
+                width: 28px;
+                height: 28px;
+                font-size: 11px;
+            }
+            .main-with-sidebar {
+                margin-left: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar-fixed {
+                width: 48px;
+            }
+            .main-with-sidebar {
+                margin-left: 48px;
+            }
+            .sidebar-fixed .logo-area {
+                padding: 10px 12px;
+            }
+            .sidebar-fixed .logo-area i {
+                font-size: 16px;
+            }
+            .sidebar-fixed .nav-item {
+                padding: 8px 10px;
+                margin: 1px 2px;
+            }
+            .sidebar-fixed .nav-item i {
+                font-size: 15px;
+            }
+            .sidebar-fixed .user-footer {
+                padding: 8px;
+            }
+            .sidebar-fixed .user-footer .avatar {
+                width: 22px;
+                height: 22px;
+                font-size: 9px;
+            }
+        }
+    </style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body class="bg-gray-50 font-sans text-gray-800 antialiased">
+
+
+    <!-- ===== SIDEBAR (static HTML — CSS fixed) ===== -->
+    <aside class="sidebar-fixed" id="crmSidebar">
+        <!-- Logo -->
+        <div class="logo-area">
+            <i class="fa-solid fa-headset"></i>
+            <div>
+                <div class="title">ePay<span>Support</span></div>
+                <div class="sub">Technical Support Portal</div>
+            </div>
+        </div>
+
+        <!-- Navigation (populated by JS) -->
+        <div class="flex-1 overflow-y-auto" id="sidebarNav">
+            <!-- JS will render nav items here -->
+        </div>
+
+        <!-- User Footer -->
+        <div class="user-footer">
+            <div class="avatar">YS</div>
+            <div class="info">
+                <div class="name">Yashraj Sathe</div>
+                <div class="role">Support Manager</div>
+            </div>
+            <div class="logout" onclick="toast('Logging out...','info')"><i class="fa-solid fa-sign-out-alt"></i></div>
+        </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT (offset for sidebar) ===== -->
+    <div class="main-with-sidebar">
+
+        <!-- HEADER -->
+        <header class="h-20 bg-white flex items-center justify-between px-8 border-b border-gray-200 flex-shrink-0 z-10">
+            <div class="relative w-96">
+                <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="globalSearch" placeholder="Search tickets, customers, issues..."
+                class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+            </div>
+            <div class="flex items-center gap-6">
+                <button class="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-right-left text-gray-500"></i> Switch Role
+                </button>
+                <div class="flex items-center gap-4">
+                    <button class="relative text-gray-500 hover:text-indigo-600 transition" onclick="toast('Notifications','info')">
+                        <i class="fa-regular fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold flex items-center justify-center rounded-full border border-white">15</span>
+                    </button>
+                    <button class="relative text-gray-500 hover:text-indigo-600 transition" onclick="toast('Messages','info')">
+                        <i class="fa-regular fa-message text-xl"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold flex items-center justify-center rounded-full border border-white">8</span>
+                    </button>
+                </div>
+                <div class="h-8 w-px bg-gray-200"></div>
+                <div class="flex items-center gap-3 cursor-pointer group">
+                    <div class="relative">
+                        <img src="https://ui-avatars.com/api/?name=Yashraj+Sathe&background=10b981&color=fff" alt="User" class="w-10 h-10 rounded-full border-2 border-white shadow-sm">
+                        <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></div>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-sm font-bold text-gray-900 group-hover:text-indigo-600 transition">Yashraj Sathe</span>
+                        <span class="text-[10px] text-gray-500 leading-tight">Support Manager</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-gray-400 text-xs ml-1"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- SCROLLABLE DASHBOARD -->
+        <main class="flex-1 overflow-y-auto p-8 scroll-smooth" id="pageContent">
+            <!-- Rendered dynamically by JS -->
+        </main>
+    </div>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modalContent"></div>
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT — FULL ITSM SUITE                                   -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        // DATA STORE (localStorage)
+        // ============================================================
+        const DB_KEY = 'support_erp_data_enhanced';
+
+        function defaultDB() {
+            return {
+                tickets: [
+                    { id: 1, ticketNumber: 'TKT-1001', title: 'Laptop not booting', description: 'Dell laptop fails to boot, shows blue screen error 0x0000007B.',
+                        customer: 'Rahul Sharma', customerId: 1, mobile: '9876543210', email: 'rahul@sharma.in',
+                        category: 'Hardware', subcategory: 'Laptop', priority: 'P1 Critical', severity: 'Critical',
+                        status: 'pending', assignedTo: 'Vikram Joshi', created: '2026-05-01 10:30:00',
+                        updated: '2026-05-02 09:15:00', source: 'Phone', gallery: 'Kothrud', product: 'Dell Laptop',
+                        version: 'Latitude 5420', os: 'Windows 11', assetId: 'AST-001', serialNumber: 'DL12345',
+                        slaStatus: 'At Risk', resolution: '', responseTime: 45, resolutionTime: 0,
+                        comments: [{ id: 1, user: 'Vikram Joshi', text: 'Attempted recovery mode, no success.',
+                            created: '2026-05-02 09:15:00' }],
+                        attachments: [] },
+                    { id: 2, ticketNumber: 'TKT-1002', title: 'WiFi connectivity issue', description: 'Unable to connect to office WiFi network, shows authentication error.',
+                        customer: 'Priya Patel', customerId: 2, mobile: '9123456780', email: 'priya@patel.com',
+                        category: 'Network', subcategory: 'Wi-Fi', priority: 'P2 High', severity: 'Major',
+                        status: 'open', assignedTo: 'Rohan Mehta', created: '2026-05-01 09:15:00',
+                        updated: '2026-05-01 11:30:00', source: 'Email', gallery: 'Baner', product: 'Cisco AP',
+                        version: 'WiFi 6', os: 'Windows 11', assetId: 'AST-002', serialNumber: 'CIS12345',
+                        slaStatus: 'On Track', resolution: '', responseTime: 20, resolutionTime: 0,
+                        comments: [], attachments: [] },
+                    { id: 3, ticketNumber: 'TKT-1003', title: 'Software installation', description: 'Need to install Adobe Creative Cloud on new system.',
+                        customer: 'Amit Kumar', customerId: 3, mobile: '9988776655', email: 'amit@kumar.com',
+                        category: 'Software', subcategory: 'Application', priority: 'P4 Low', severity: 'Minor',
+                        status: 'resolved', assignedTo: 'Anita Verma', created: '2026-04-30 16:45:00',
+                        updated: '2026-05-01 10:00:00', source: 'Customer Portal', gallery: 'Hinjewadi',
+                        product: 'Adobe CC', version: '2024', os: 'Windows 11', assetId: 'AST-003',
+                        serialNumber: 'ADB12345', slaStatus: 'Completed', resolution: 'Installed successfully',
+                        responseTime: 30, resolutionTime: 120, comments: [], attachments: [] },
+                    { id: 4, ticketNumber: 'TKT-1004', title: 'Printer not responding', description: 'HP LaserJet printer shows offline, not accepting print jobs.',
+                        customer: 'Neha Verma', customerId: 4, mobile: '8899001122', email: 'neha@verma.com',
+                        category: 'Hardware', subcategory: 'Printer', priority: 'P2 High', severity: 'Major',
+                        status: 'open', assignedTo: 'Vikram Joshi', created: '2026-04-30 14:20:00',
+                        updated: '2026-04-30 16:45:00', source: 'WhatsApp', gallery: 'Kothrud',
+                        product: 'HP LaserJet', version: 'M404dn', os: 'N/A', assetId: 'AST-004',
+                        serialNumber: 'HP12345', slaStatus: 'At Risk', resolution: '', responseTime: 35,
+                        resolutionTime: 0, comments: [], attachments: [] },
+                    { id: 5, ticketNumber: 'TKT-1005', title: 'Email not syncing', description: 'Outlook not syncing emails, stuck on "Updating inbox"',
+                        customer: 'Karan Singh', customerId: 5, mobile: '9012345678', email: 'karan@singh.com',
+                        category: 'Software', subcategory: 'Email', priority: 'P1 Critical', severity: 'Critical',
+                        status: 'in-progress', assignedTo: 'Rohan Mehta', created: '2026-04-29 11:05:00',
+                        updated: '2026-05-01 08:30:00', source: 'Phone', gallery: 'Baner', product: 'Microsoft 365',
+                        version: 'Outlook 2023', os: 'Windows 11', assetId: 'AST-005', serialNumber: 'MS12345',
+                        slaStatus: 'Warning', resolution: '', responseTime: 25, resolutionTime: 0,
+                        comments: [], attachments: [] },
+                    { id: 6, ticketNumber: 'TKT-1006', title: 'Payment gateway error', description: 'Payment transactions failing with error code PG-101',
+                        customer: 'Sneha Reddy', customerId: 6, mobile: '9876123450', email: 'sneha@reddy.com',
+                        category: 'Payment', subcategory: 'Gateway Error', priority: 'P1 Critical',
+                        severity: 'Critical', status: 'pending-developer', assignedTo: 'Developer Team',
+                        created: '2026-05-02 08:20:00', updated: '2026-05-02 10:00:00', source: 'System Generated',
+                        gallery: 'Online', product: 'Payment Gateway', version: 'v3.2', os: 'N/A',
+                        assetId: 'AST-006', serialNumber: 'PG12345', slaStatus: 'On Track', resolution: '',
+                        responseTime: 10, resolutionTime: 0, comments: [], attachments: [] },
+                    { id: 7, ticketNumber: 'TKT-1007', title: 'POS system slow', description: 'Point of sale system taking 30+ seconds to load each transaction.',
+                        customer: 'Rajesh Gupta', customerId: 7, mobile: '9988771122', email: 'rajesh@gupta.com',
+                        category: 'Software', subcategory: 'POS', priority: 'P2 High', severity: 'Major',
+                        status: 'assigned', assignedTo: 'Saurabh Singh', created: '2026-05-02 11:30:00',
+                        updated: '2026-05-02 12:15:00', source: 'Gallery Manager', gallery: 'Hinjewadi',
+                        product: 'POS System', version: 'v2.1', os: 'Windows 10', assetId: 'AST-007',
+                        serialNumber: 'POS12345', slaStatus: 'On Track', resolution: '', responseTime: 15,
+                        resolutionTime: 0, comments: [], attachments: [] },
+                    { id: 8, ticketNumber: 'TKT-1008', title: 'Biometric device offline', description: 'Fingerprint scanner not working, shows offline error.',
+                        customer: 'Employee HR', customerId: 8, mobile: '8877665544', email: 'hr@company.com',
+                        category: 'Hardware', subcategory: 'Biometric', priority: 'P3 Medium', severity: 'Moderate',
+                        status: 'pending-vendor', assignedTo: 'Vendor', created: '2026-05-02 09:00:00',
+                        updated: '2026-05-02 13:20:00', source: 'Employee', gallery: 'Kothrud',
+                        product: 'Biometric Scanner', version: 'ZKTeco', os: 'N/A', assetId: 'AST-008',
+                        serialNumber: 'BIO12345', slaStatus: 'On Track', resolution: '', responseTime: 20,
+                        resolutionTime: 0, comments: [], attachments: [] },
+                    { id: 9, ticketNumber: 'TKT-1009', title: 'VPN connection failure', description: 'Unable to connect to office VPN from home location.',
+                        customer: 'Sales Team', customerId: 9, mobile: '7766554433', email: 'sales@company.com',
+                        category: 'Network', subcategory: 'VPN', priority: 'P2 High', severity: 'Major',
+                        status: 'in-progress', assignedTo: 'Rohan Mehta', created: '2026-05-03 07:45:00',
+                        updated: '2026-05-03 09:30:00', source: 'Phone', gallery: 'Remote',
+                        product: 'VPN Gateway', version: 'v2.0', os: 'Windows 11', assetId: 'AST-009',
+                        serialNumber: 'VPN12345', slaStatus: 'On Track', resolution: '', responseTime: 18,
+                        resolutionTime: 0, comments: [], attachments: [] },
+                    { id: 10, ticketNumber: 'TKT-1010', title: 'Server disk full', description: 'CRM server running out of disk space, critical alert.',
+                        customer: 'Admin', customerId: 10, mobile: '6655443322', email: 'admin@company.com',
+                        category: 'Hardware', subcategory: 'Server', priority: 'P1 Critical', severity: 'Critical',
+                        status: 'resolved', assignedTo: 'Vikram Joshi', created: '2026-05-03 06:00:00',
+                        updated: '2026-05-03 10:15:00', source: 'System Generated', gallery: 'Data Center',
+                        product: 'Dell Server', version: 'PowerEdge R740', os: 'Windows Server 2022',
+                        assetId: 'AST-010', serialNumber: 'SRV12345', slaStatus: 'Completed',
+                        resolution: 'Cleared 500GB of logs and temp files', responseTime: 15, resolutionTime: 150,
+                        comments: [], attachments: [] },
+                ],
+                customers: [
+                    { id: 1, name: 'Rahul Sharma', mobile: '9876543210', email: 'rahul@sharma.in', type: 'Individual',
+                        gallery: 'Kothrud' },
+                    { id: 2, name: 'Priya Patel', mobile: '9123456780', email: 'priya@patel.com', type: 'Individual',
+                        gallery: 'Baner' },
+                    { id: 3, name: 'Amit Kumar', mobile: '9988776655', email: 'amit@kumar.com', type: 'Business',
+                        gallery: 'Hinjewadi' },
+                    { id: 4, name: 'Neha Verma', mobile: '8899001122', email: 'neha@verma.com', type: 'Individual',
+                        gallery: 'Kothrud' },
+                    { id: 5, name: 'Karan Singh', mobile: '9012345678', email: 'karan@singh.com', type: 'Business',
+                        gallery: 'Baner' },
+                    { id: 6, name: 'Sneha Reddy', mobile: '9876123450', email: 'sneha@reddy.com', type: 'Business',
+                        gallery: 'Online' },
+                    { id: 7, name: 'Rajesh Gupta', mobile: '9988771122', email: 'rajesh@gupta.com', type: 'Business',
+                        gallery: 'Hinjewadi' },
+                    { id: 8, name: 'HR Department', mobile: '8877665544', email: 'hr@company.com', type: 'Internal',
+                        gallery: 'Kothrud' },
+                    { id: 9, name: 'Sales Team', mobile: '7766554433', email: 'sales@company.com', type: 'Internal',
+                        gallery: 'Remote' },
+                    { id: 10, name: 'Admin', mobile: '6655443322', email: 'admin@company.com', type: 'Internal',
+                        gallery: 'Data Center' },
+                ],
+                technicians: [
+                    { id: 1, name: 'Vikram Joshi', email: 'vikram@support.com', level: 'L3',
+                        skills: 'Hardware,Server,Network', workload: 4, performance: 92, sla: 95, fcr: 88 },
+                    { id: 2, name: 'Rohan Mehta', email: 'rohan@support.com', level: 'L2',
+                        skills: 'Software,Network,Email', workload: 3, performance: 88, sla: 90, fcr: 82 },
+                    { id: 3, name: 'Anita Verma', email: 'anita@support.com', level: 'L2',
+                        skills: 'Software,Installation,Email', workload: 2, performance: 85, sla: 92, fcr: 80 },
+                    { id: 4, name: 'Saurabh Singh', email: 'saurabh@support.com', level: 'L1',
+                        skills: 'Basic Troubleshooting,Hardware', workload: 5, performance: 78, sla: 85, fcr: 75 },
+                    { id: 5, name: 'Neha Shah', email: 'neha@support.com', level: 'L1',
+                        skills: 'Basic Troubleshooting,Email', workload: 3, performance: 74, sla: 80, fcr: 70 },
+                ],
+                assets: [
+                    { id: 1, assetTag: 'AST-001', name: 'Dell Laptop', type: 'Laptop', model: 'Latitude 5420',
+                        serial: 'DL12345', assignedTo: 'Rahul Sharma', gallery: 'Kothrud', status: 'Active',
+                        warranty: '2027-05-01', condition: 'Good', purchaseDate: '2026-01-15' },
+                    { id: 2, assetTag: 'AST-002', name: 'Cisco AP', type: 'Network', model: 'WiFi 6', serial: 'CIS12345',
+                        assignedTo: 'Priya Patel', gallery: 'Baner', status: 'Active', warranty: '2026-12-01',
+                        condition: 'Excellent', purchaseDate: '2025-12-10' },
+                    { id: 3, assetTag: 'AST-003', name: 'HP LaserJet', type: 'Printer', model: 'M404dn',
+                        serial: 'HP12345', assignedTo: 'Neha Verma', gallery: 'Kothrud', status: 'Active',
+                        warranty: '2026-08-01', condition: 'Good', purchaseDate: '2025-08-20' },
+                    { id: 4, assetTag: 'AST-004', name: 'POS System', type: 'POS', model: 'v2.1', serial: 'POS12345',
+                        assignedTo: 'Rajesh Gupta', gallery: 'Hinjewadi', status: 'Active', warranty: '2027-03-01',
+                        condition: 'Good', purchaseDate: '2026-03-05' },
+                    { id: 5, assetTag: 'AST-005', name: 'Dell Server', type: 'Server', model: 'PowerEdge R740',
+                        serial: 'SRV12345', assignedTo: 'Data Center', gallery: 'Data Center', status: 'Active',
+                        warranty: '2026-10-01', condition: 'Excellent', purchaseDate: '2025-10-12' },
+                ],
+                repairs: [
+                    { id: 1, ticketId: 1, assetId: 1, device: 'Dell Laptop', problem: 'Motherboard failure',
+                        technician: 'Vikram Joshi', partsUsed: 'Motherboard replacement', partsCost: 450,
+                        labourCost: 100, totalCost: 550, status: 'In Progress', sentDate: '2026-05-02',
+                        expectedReturn: '2026-05-10', notes: 'Waiting for part delivery' },
+                    { id: 2, ticketId: 4, assetId: 3, device: 'HP LaserJet', problem: 'Fuser unit failure',
+                        technician: 'Saurabh Singh', partsUsed: 'Fuser unit', partsCost: 180, labourCost: 60,
+                        totalCost: 240, status: 'Completed', sentDate: '2026-05-01', expectedReturn: '2026-05-03',
+                        notes: 'Repaired and tested' },
+                ],
+                knowledge: [
+                    { id: 1, title: 'How to reset email password', category: 'Email', problem: 'Forgot email password',
+                        solution: 'Use password reset tool at https://reset.company.com',
+                        steps: '1. Go to reset link\n2. Enter employee ID\n3. Follow OTP verification',
+                        author: 'Anita Verma', rating: 4.5, usage: 120, status: 'Published' },
+                    { id: 2, title: 'Fix WiFi connectivity issues', category: 'Network',
+                        problem: 'Unable to connect to WiFi', solution: 'Restart router and check IP settings',
+                        steps: '1. Restart router\n2. Run ipconfig /release\n3. Run ipconfig /renew',
+                        author: 'Rohan Mehta', rating: 4.2, usage: 85, status: 'Published' },
+                    { id: 3, title: 'Install software on remote system', category: 'Software',
+                        problem: 'Need to install software remotely', solution: 'Use remote deployment tool',
+                        steps: '1. Connect via remote support\n2. Download installer\n3. Run installation',
+                        author: 'Vikram Joshi', rating: 4.0, usage: 56, status: 'Published' },
+                    { id: 4, title: 'Printer troubleshooting guide', category: 'Hardware',
+                        problem: 'Printer not responding', solution: 'Check power, cables and restart spooler',
+                        steps: '1. Check power cable\n2. Check USB/Network cable\n3. Restart print spooler service',
+                        author: 'Saurabh Singh', rating: 3.8, usage: 42, status: 'Draft' },
+                    { id: 5, title: 'How to clear browser cache', category: 'Software',
+                        problem: 'Browser slow or not loading', solution: 'Clear cache and cookies',
+                        steps: '1. Open browser settings\n2. Privacy -> Clear browsing data\n3. Select cached images and files',
+                        author: 'Neha Shah', rating: 4.1, usage: 73, status: 'Published' },
+                ],
+                errorCodes: [
+                    { id: 1, code: 'PG-101', name: 'Payment Gateway Timeout', product: 'Payment Gateway',
+                        meaning: 'Transaction timed out due to network latency', severity: 'Critical',
+                        resolution: 'Retry after 30 seconds. If persists, check gateway connectivity.',
+                        workaround: 'Use offline mode' },
+                    { id: 2, code: '0x0000007B', name: 'Boot Device Error', product: 'Windows',
+                        meaning: 'Hard disk controller driver missing or corrupted', severity: 'Major',
+                        resolution: 'Boot from recovery media and run CHKDSK', workaround: 'Use system restore' },
+                    { id: 3, code: 'ERR_CONNECTION_REFUSED', name: 'Connection Refused', product: 'Web Application',
+                        meaning: 'Server refused the connection, service may be down', severity: 'Critical',
+                        resolution: 'Check if service is running and port is open', workaround: 'Restart service' },
+                    { id: 4, code: 'DNS_PROBE_FINISHED_NXDOMAIN', name: 'DNS Resolution Error', product: 'Network',
+                        meaning: 'Domain name could not be resolved', severity: 'Major',
+                        resolution: 'Check DNS settings and ensure domain exists', workaround: 'Use IP address directly' },
+                ],
+                incidents: [
+                    { id: 1, number: 'INC-001', type: 'Service Disruption', severity: 'Critical',
+                        affectedService: 'Payment Gateway', affectedGalleries: 'All', affectedUsers: 1200,
+                        detectionTime: '2026-05-02 08:00:00', startTime: '2026-05-02 08:15:00',
+                        responseTime: '2026-05-02 08:20:00', resolutionTime: '2026-05-02 09:30:00',
+                        endTime: '2026-05-02 09:30:00', impact: 'Payment failures', status: 'Resolved',
+                        incidentManager: 'Vikram Joshi' },
+                ],
+                changes: [
+                    { id: 1, number: 'CHG-001', type: 'Normal', requester: 'IT Team', system: 'CRM Server',
+                        description: 'Upgrade database from MySQL 5.7 to 8.0', risk: 'Medium',
+                        impact: '30 min downtime during maintenance', status: 'Approved',
+                        requestedDate: '2026-04-28', scheduledDate: '2026-05-10', approvedBy: 'Admin' },
+                ],
+                problems: [
+                    { id: 1, number: 'PRB-001', product: 'Payment Gateway', issue: 'Recurring payment timeouts',
+                        frequency: 'Daily', impact: 'Affects 15% of transactions', rootCause: 'Network congestion',
+                        temporaryWorkaround: 'Retry logic implemented', status: 'Under Investigation',
+                        problemOwner: 'Vikram Joshi' },
+                ],
+                escalations: [
+                    { id: 1, ticketId: 1, customer: 'Rahul Sharma', priority: 'P1 Critical', level: 'L2',
+                        reason: 'SLA breach risk', escalatedBy: 'Vikram Joshi', escalatedTo: 'Support Manager',
+                        date: '2026-05-02 10:00:00', status: 'In Progress' },
+                ],
+                surveys: [
+                    { id: 1, ticketId: 3, customer: 'Amit Kumar', technician: 'Anita Verma', rating: 5,
+                        feedback: 'Quick and efficient resolution', resolutionSatisfaction: 5,
+                        technicianSatisfaction: 5, wouldRecommend: true, surveyDate: '2026-05-01' },
+                ],
+                serviceRequests: [
+                    { id: 1, requester: 'Priya Patel', department: 'Sales', type: 'Software Installation',
+                        description: 'Install CRM software', priority: 'Medium', status: 'Completed',
+                        assignedTo: 'Anita Verma', dueDate: '2026-05-05', completionDate: '2026-05-03' },
+                    { id: 2, requester: 'Rahul Sharma', department: 'Operations', type: 'Password Reset',
+                        description: 'Reset email password', priority: 'High', status: 'In Progress',
+                        assignedTo: 'Rohan Mehta', dueDate: '2026-05-04', completionDate: '' },
+                ],
+                slas: [
+                    { id: 1, priority: 'P1 Critical', responseTarget: 15, resolutionTarget: 120, warningThreshold: 80,
+                        breachThreshold: 100 },
+                    { id: 2, priority: 'P2 High', responseTarget: 30, resolutionTarget: 240, warningThreshold: 80,
+                        breachThreshold: 100 },
+                    { id: 3, priority: 'P3 Medium', responseTarget: 60, resolutionTarget: 480, warningThreshold: 80,
+                        breachThreshold: 100 },
+                    { id: 4, priority: 'P4 Low', responseTarget: 120, resolutionTarget: 720, warningThreshold: 80,
+                        breachThreshold: 100 },
+                ],
+                reopens: [],
+                devIssues: [],
+                nextId: { ticket: 11, customer: 11, technician: 6, asset: 6, knowledge: 6, errorCode: 5, repair: 3,
+                    serviceRequest: 3, sla: 5, incident: 2, change: 2, problem: 2, escalation: 2, survey: 2,
+                    reopen: 2, devIssue: 1 }
+            };
+        }
+
+        function loadDB() {
+            try {
+                const raw = localStorage.getItem(DB_KEY);
+                if (!raw) return defaultDB();
+                const data = JSON.parse(raw);
+                const def = defaultDB();
+                for (const k in def) { if (!data[k]) data[k] = def[k]; }
+                return data;
+            } catch (e) { return defaultDB(); }
+        }
+
+        function saveDB() { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+
+        let db = loadDB();
+        let currentUser = null;
+        let currentPage = 'support_dashboard';
+
+        // ============================================================
+        // HELPERS
+        // ============================================================
+        function genId(collection) {
+            const key = collection + 'Id';
+            if (!db.nextId) db.nextId = {};
+            if (!db.nextId[key]) db.nextId[key] = 1;
+            return db.nextId[key]++;
+        }
+
+        function getTicket(id) { return db.tickets.find(t => t.id === id); }
+
+        function getCustomer(id) { return db.customers.find(c => c.id === id); }
+
+        function getTechnician(id) { return db.technicians.find(t => t.id === id); }
+
+        function getAsset(id) { return db.assets.find(a => a.id === id); }
+
+        function getTechnicianName(id) { const t = getTechnician(id); return t ? t.name : 'Unassigned'; }
+
+        function getCustomerName(id) { const c = getCustomer(id); return c ? c.name : 'Unknown'; }
+
+        function formatDate(d) { if (!d) return '—'; const dt = new Date(d); return dt.toLocaleDateString('en-US', { month: 'short',
+                day: 'numeric', year: 'numeric' }); }
+
+        function formatDateTime(d) { if (!d) return '—'; const dt = new Date(d); return dt.toLocaleString('en-US', { month: 'short',
+                day: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+
+        function todayStr() { return new Date().toISOString().slice(0, 10); }
+
+        function nowStr() { return new Date().toISOString().slice(0, 16).replace('T', ' '); }
+
+        function toast(msg, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const icons = { info: 'fa-circle-info', success: 'fa-check-circle', error: 'fa-exclamation-circle',
+                warning: 'fa-triangle-exclamation' };
+            const el = document.createElement('div');
+            el.className = `toast ${type}`;
+            el.innerHTML =
+                `<i class="fa-solid ${icons[type] || icons.info}"></i><span>${msg}</span><button class="toast-close"><i class="fa-solid fa-xmark"></i></button>`;
+            el.querySelector('.toast-close').addEventListener('click', () => el.remove());
+            container.appendChild(el);
+            setTimeout(() => { if (el.parentNode) el.remove(); }, 4500);
+        }
+
+        function showModal(html) {
+            document.getElementById('modalContent').innerHTML = html;
+            document.getElementById('modalOverlay').classList.add('open');
+        }
+
+        function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+        document.getElementById('modalOverlay').addEventListener('click', (e) => { if (e.target === e.currentTarget)
+                closeModal(); });
+
+        function statusBadge(status) {
+            const cls = {
+                'new': 'new',
+                'open': 'open',
+                'assigned': 'assigned',
+                'acknowledged': 'acknowledged',
+                'in-progress': 'in-progress',
+                'pending-customer': 'pending-customer',
+                'pending-vendor': 'pending-vendor',
+                'pending-developer': 'pending-developer',
+                'on-hold': 'on-hold',
+                'resolved': 'resolved',
+                'closed': 'closed',
+                'reopened': 'reopened',
+                'cancelled': 'cancelled',
+                'duplicate': 'duplicate',
+                'escalated': 'escalated'
+            };
+            const label = status.replace(/-/g, ' ').toUpperCase();
+            return `<span class="status-badge status-badge-${cls[status] || 'open'}">${label}</span>`;
+        }
+
+        function priorityBadge(priority) {
+            const cls = {
+                'P1 Critical': 'priority-p1',
+                'P2 High': 'priority-p2',
+                'P3 Medium': 'priority-p3',
+                'P4 Low': 'priority-p4'
+            };
+            return `<span class="chip ${cls[priority] || 'priority-p3'}">${priority}</span>`;
+        }
+
+        function chip(text, color = 'slate') {
+            const map = {
+                green: 'bg-green-50 text-green-700',
+                red: 'bg-red-50 text-red-600',
+                amber: 'bg-amber-50 text-amber-700',
+                blue: 'bg-blue-50 text-blue-600',
+                purple: 'bg-purple-50 text-purple-700',
+                slate: 'bg-gray-100 text-gray-600'
+            };
+            return `<span class="chip ${map[color] || map.slate}">${text}</span>`;
+        }
+
+        // ============================================================
+        // SIDEBAR NAVIGATION (rendered into static sidebar)
+        // ============================================================
+        const NAV_SECTIONS = [
+            { group: '🏠 Overview', items: [
+                    { id: 'support_dashboard', label: 'Dashboard', icon: 'fa-house' },
+                    { id: 'support_ai', label: 'AI Command Center', icon: 'fa-robot' },
+                ] },
+            { group: '🎫 Ticket Management', items: [
+                    { id: 'support_tickets', label: 'All Tickets', icon: 'fa-ticket' },
+                    { id: 'support_my_tickets', label: 'My Tickets', icon: 'fa-user-tie' },
+                    { id: 'support_new_tickets', label: 'New Tickets', icon: 'fa-plus-circle' },
+                    { id: 'support_open_tickets', label: 'Open Tickets', icon: 'fa-circle' },
+                    { id: 'support_pending_tickets', label: 'Pending Tickets', icon: 'fa-clock' },
+                    { id: 'support_resolved', label: 'Resolved / Closed', icon: 'fa-check-circle' },
+                    { id: 'support_escalated', label: 'Escalated Tickets', icon: 'fa-arrow-up' },
+                ] },
+            { group: '🔧 Operations', items: [
+                    { id: 'support_incidents', label: 'Incident Management', icon: 'fa-triangle-exclamation' },
+                    { id: 'support_problems', label: 'Problem Management', icon: 'fa-bug' },
+                    { id: 'support_changes', label: 'Change Management', icon: 'fa-arrows-rotate' },
+                    { id: 'support_requests', label: 'Service Requests', icon: 'fa-list-check' },
+                ] },
+            { group: '🖥️ Assets & Repairs', items: [
+                    { id: 'support_assets', label: 'Asset Management', icon: 'fa-laptop' },
+                    { id: 'support_repairs', label: 'Repair Management', icon: 'fa-screwdriver-wrench' },
+                    { id: 'support_maintenance', label: 'Maintenance', icon: 'fa-calendar-check' },
+                ] },
+            { group: '📚 Knowledge', items: [
+                    { id: 'support_knowledge', label: 'Knowledge Base', icon: 'fa-book-bookmark' },
+                    { id: 'support_errors', label: 'Error Code Database', icon: 'fa-code' },
+                ] },
+            { group: '📊 Performance', items: [
+                    { id: 'support_sla', label: 'SLA Management', icon: 'fa-shield-halved' },
+                    { id: 'support_performance', label: 'Technician Performance', icon: 'fa-chart-line' },
+                    { id: 'support_surveys', label: 'Customer Satisfaction', icon: 'fa-star' },
+                ] },
+            { group: '👨‍💻 Developer Hub', items: [
+                    { id: 'support_devhub', label: 'Developer Integration', icon: 'fa-code' },
+                ] },
+            { group: '📑 Reports', items: [
+                    { id: 'support_reports', label: 'Enterprise Reports', icon: 'fa-file-pdf' },
+                ] },
+            { group: '⚙️ Settings', items: [
+                    { id: 'support_settings', label: 'Settings', icon: 'fa-gear' },
+                ] },
+        ];
+
+        function getCount(pageId) {
+            const counts = {
+                support_tickets: db.tickets?.length || 0,
+                support_my_tickets: db.tickets?.filter(t => t.assignedTo === 'Vikram Joshi' || t.assignedTo ===
+                'Rohan Mehta').length || 0,
+                support_new_tickets: db.tickets?.filter(t => t.status === 'new').length || 0,
+                support_open_tickets: db.tickets?.filter(t => t.status === 'open' || t.status === 'assigned' || t
+                    .status === 'acknowledged').length || 0,
+                support_pending_tickets: db.tickets?.filter(t => t.status === 'pending-customer' || t.status ===
+                    'pending-vendor' || t.status === 'pending-developer').length || 0,
+                support_resolved: db.tickets?.filter(t => t.status === 'resolved' || t.status === 'closed').length ||
+                    0,
+                support_escalated: db.tickets?.filter(t => t.status === 'escalated').length || 0,
+                support_incidents: db.incidents?.length || 0,
+                support_problems: db.problems?.length || 0,
+                support_changes: db.changes?.length || 0,
+                support_requests: db.serviceRequests?.filter(r => r.status === 'In Progress' || r.status ===
+                    'Pending').length || 0,
+                support_assets: db.assets?.length || 0,
+                support_repairs: db.repairs?.filter(r => r.status === 'In Progress').length || 0,
+                support_maintenance: 0,
+                support_sla: db.slas?.length || 0,
+                support_performance: db.technicians?.length || 0,
+                support_surveys: db.surveys?.length || 0,
+                support_devhub: db.tickets?.filter(t => t.status === 'pending-developer').length || 0,
+            };
+            return counts[pageId] || 0;
+        }
+
+        function renderSidebarNav() {
+            const container = document.getElementById('sidebarNav');
+            if (!container) return;
+            let html = '';
+            for (const sec of NAV_SECTIONS) {
+                html +=
+                    `<div class="nav-section">${sec.group}</div>`;
+                for (const item of sec.items) {
+                    const active = item.id === currentPage ? 'active' : '';
+                    const count = getCount(item.id);
+                    const badge = count > 0 ?
+                        `<span class="badge-nav">${count}</span>` : '';
+                    html += `
+                <div class="nav-item ${active}" data-page="${item.id}">
+                  <i class="fa-solid ${item.icon}"></i>
+                  <span>${item.label}</span>
+                  ${badge}
+                </div>`;
+                }
+            }
+            container.innerHTML = html;
+
+            // Click handlers
+            container.querySelectorAll('.nav-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    const id = el.dataset.page;
+                    if (id) navigateTo(id);
+                });
+            });
+        }
+
+        // ============================================================
+        // NAVIGATION
+        // ============================================================
+        function navigateTo(page) {
+            currentPage = page;
+            renderSidebarNav();
+            const container = document.getElementById('pageContent');
+            const viewMap = {
+                support_dashboard: renderDashboard,
+                support_ai: renderAI,
+                support_tickets: renderAllTickets,
+                support_my_tickets: renderMyTickets,
+                support_new_tickets: renderNewTickets,
+                support_open_tickets: renderOpenTickets,
+                support_pending_tickets: renderPendingTickets,
+                support_resolved: renderResolvedTickets,
+                support_escalated: renderEscalatedTickets,
+                support_incidents: renderIncidents,
+                support_problems: renderProblems,
+                support_changes: renderChanges,
+                support_requests: renderServiceRequests,
+                support_assets: renderAssets,
+                support_repairs: renderRepairs,
+                support_maintenance: renderMaintenance,
+                support_knowledge: renderKnowledge,
+                support_errors: renderErrorCodes,
+                support_sla: renderSLA,
+                support_performance: renderPerformance,
+                support_surveys: renderSurveys,
+                support_devhub: renderDevHub,
+                support_reports: renderReports,
+                support_settings: renderSettings,
+            };
+            const renderer = viewMap[page];
+            if (renderer) renderer(container);
+            else container.innerHTML = '<div class="text-center text-gray-500 py-20">Page not found.</div>';
+        }
+
+        // ============================================================
+        // RENDER: DASHBOARD
+        // ============================================================
+        function renderDashboard(container) {
+            const total = db.tickets.length;
+            const open = db.tickets.filter(t => t.status === 'open' || t.status === 'assigned' || t.status ===
+                'acknowledged' || t.status === 'in-progress').length;
+            const pending = db.tickets.filter(t => t.status === 'pending-customer' || t.status === 'pending-vendor' || t
+                .status === 'pending-developer').length;
+            const resolved = db.tickets.filter(t => t.status === 'resolved' || t.status === 'closed').length;
+            const critical = db.tickets.filter(t => t.priority === 'P1 Critical').length;
+            const escalated = db.tickets.filter(t => t.status === 'escalated').length;
+            const slaBreached = db.tickets.filter(t => t.slaStatus === 'Breached').length;
+            const atRisk = db.tickets.filter(t => t.slaStatus === 'At Risk').length;
+            const avgResponse = total ? (db.tickets.reduce((s, t) => s + (t.responseTime || 0), 0) / total).toFixed(0) :
+            0;
+            const avgResolution = resolved ? (db.tickets.filter(t => t.resolutionTime).reduce((s, t) => s + (t
+                .resolutionTime || 0), 0) / resolved).toFixed(0) : 0;
+
+            const recent = db.tickets.slice(-5).reverse();
+
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-6">
+
+              <div class="stats-grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-ticket text-blue-500"></i> Total Tickets</div><div class="value">${total}</div><span class="change up">+${db.tickets.filter(t=>t.created.startsWith(todayStr())).length} today</span></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-circle text-blue-500"></i> Open</div><div class="value">${open}</div><span class="change ${open > 5 ? 'down' : 'up'}">${open} active</span></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-clock text-amber-500"></i> Pending</div><div class="value">${pending}</div><span class="change ${pending > 0 ? 'down' : 'up'}">${pending} awaiting action</span></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-check-circle text-green-500"></i> Resolved</div><div class="value">${resolved}</div><span class="change up">${db.tickets.filter(t=>t.status==='resolved' && t.created.startsWith(todayStr())).length} today</span></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-triangle-exclamation text-red-500"></i> Critical</div><div class="value">${critical}</div><span class="change ${critical > 0 ? 'down' : 'up'}">${critical} critical</span></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-arrow-up text-purple-500"></i> Escalated</div><div class="value">${escalated}</div><span class="change ${escalated > 0 ? 'down' : 'up'}">${escalated}</span></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-clock text-indigo-500"></i> Avg Response</div><div class="value">${avgResponse}m</div><span class="change up">SLA: ${avgResponse < 30 ? 'Good' : 'Needs improvement'}</span></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-check-double text-emerald-500"></i> Avg Resolution</div><div class="value">${avgResolution}m</div><span class="change up">${avgResolution < 240 ? 'On track' : 'Review'}</span></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-shield-halved text-amber-500"></i> SLA Breach</div><div class="value">${slaBreached}</div><span class="change down">${slaBreached} breaches</span></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-exclamation-triangle text-amber-500"></i> At Risk</div><div class="value">${atRisk}</div><span class="change down">${atRisk} at risk</span></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-people-group text-cyan-500"></i> Technicians</div><div class="value">${db.technicians.length}</div><span class="change up">Active</span></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-star text-amber-500"></i> CSAT</div><div class="value">${db.surveys.length ? (db.surveys.reduce((s,r)=>s+r.rating,0)/db.surveys.length).toFixed(1) : 'N/A'}</div><span class="change up">${db.surveys.length} surveys</span></div>
+              </div>
+
+              <div class="ai-insight-box">
+                <i class="fa-solid fa-brain"></i>
+                <div class="content">
+                  <div class="title">🧠 AI Support Intelligence</div>
+                  <div class="message">${total} tickets · ${open} open · ${slaBreached} SLA breaches · ${atRisk} at risk · ${critical} critical · Avg response ${avgResponse}m</div>
+                </div>
+                <span class="badge-ai">Live</span>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+                  <h3 class="text-sm font-bold text-gray-800 mb-3">Tickets by Status</h3>
+                  <div class="h-52"><canvas id="statusChart"></canvas></div>
+                </div>
+                <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+                  <h3 class="text-sm font-bold text-gray-800 mb-3">Priority Distribution</h3>
+                  <div class="h-52"><canvas id="priorityChart"></canvas></div>
+                </div>
+                <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+                  <h3 class="text-sm font-bold text-gray-800 mb-3">Category Breakdown</h3>
+                  <div class="h-52"><canvas id="categoryChart"></canvas></div>
+                </div>
+              </div>
+
+              <div class="section-header"><h2><i class="fa-solid fa-clock"></i> Recent Tickets</h2><button class="btn btn-sm btn-primary" onclick="navigateTo('support_tickets')">View All</button></div>
+              <div class="table-wrap">
+                <div class="table-scroll">
+                  <table>
+                    <thead><tr><th>Ticket</th><th>Customer</th><th>Issue</th><th>Priority</th><th>Status</th><th>Assigned To</th><th>Created</th></tr></thead>
+                    <tbody>${recent.map(t => `
+                      <tr onclick="viewTicketDetail(${t.id})" style="cursor:pointer;">
+                        <td class="font-semibold text-indigo-600">${t.ticketNumber}</td>
+                        <td>${t.customer}</td>
+                        <td class="max-w-[150px] truncate">${t.title}</td>
+                        <td>${priorityBadge(t.priority)}</td>
+                        <td>${statusBadge(t.status)}</td>
+                        <td>${t.assignedTo || 'Unassigned'}</td>
+                        <td class="text-gray-500 text-sm">${formatDateTime(t.created)}</td>
+                      </tr>
+                    `).join('') || '<tr><td colspan="7" class="text-center text-gray-400 py-8">No tickets found</td></tr>'}</tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <button onclick="openCreateTicket()" class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition text-center">
+                  <i class="fa-solid fa-plus-circle text-2xl text-indigo-500 mb-1 block"></i>
+                  <span class="text-sm font-medium">Create Ticket</span>
+                </button>
+                <button onclick="toast('Opening remote support...','info')" class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition text-center">
+                  <i class="fa-solid fa-headset text-2xl text-emerald-500 mb-1 block"></i>
+                  <span class="text-sm font-medium">Remote Support</span>
+                </button>
+                <button onclick="navigateTo('support_knowledge')" class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition text-center">
+                  <i class="fa-solid fa-book-bookmark text-2xl text-purple-500 mb-1 block"></i>
+                  <span class="text-sm font-medium">Knowledge Base</span>
+                </button>
+                <button onclick="navigateTo('support_devhub')" class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm hover:shadow-md transition text-center">
+                  <i class="fa-solid fa-code text-2xl text-blue-500 mb-1 block"></i>
+                  <span class="text-sm font-medium">Developer Hub</span>
+                </button>
+              </div>
+            </div>`;
+
+            // Charts
+            setTimeout(() => {
+                const statuses = ['new', 'open', 'assigned', 'in-progress', 'pending-customer', 'pending-vendor',
+                    'pending-developer', 'resolved', 'closed', 'escalated'
+                ];
+                const statusLabels = statuses.map(s => s.replace(/-/g, ' ').toUpperCase());
+                const statusData = statuses.map(s => db.tickets.filter(t => t.status === s).length);
+
+                const priorities = ['P1 Critical', 'P2 High', 'P3 Medium', 'P4 Low'];
+                const priorityData = priorities.map(p => db.tickets.filter(t => t.priority === p).length);
+
+                const categories = {};
+                db.tickets.forEach(t => { categories[t.category] = (categories[t.category] || 0) + 1; });
+                const catLabels = Object.keys(categories);
+                const catData = Object.values(categories);
+
+                const sc = document.getElementById('statusChart');
+                const pc = document.getElementById('priorityChart');
+                const cc = document.getElementById('categoryChart');
+
+                if (sc) new Chart(sc, { type: 'bar', data: { labels: statusLabels, datasets: [{ data: statusData,
+                            backgroundColor: ['#3b82f6', '#60a5fa', '#34d399', '#f59e0b', '#f97316', '#8b5cf6',
+                                '#10b981', '#22c55e', '#10b981', '#ef4444'
+                            ] }] }, options: { responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true,
+                                ticks: { stepSize: 1 } } } } });
+                if (pc) new Chart(pc, { type: 'doughnut', data: { labels: priorities, datasets: [{ data: priorityData,
+                            backgroundColor: ['#ef4444', '#f59e0b', '#3b82f6', '#22c55e'] }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom',
+                                labels: { font: { size: 10 } } } } } });
+                if (cc && catLabels.length) new Chart(cc, { type: 'doughnut', data: { labels: catLabels,
+                        datasets: [{ data: catData, backgroundColor: ['#3b82f6', '#10b981', '#f59e0b',
+                                '#8b5cf6', '#ef4444', '#06b6d4'
+                            ] }] }, options: { responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } } });
+            }, 100);
+        }
+
+        // ============================================================
+        // RENDER: AI COMMAND CENTER
+        // ============================================================
+        function renderAI(container) {
+            const total = db.tickets.length;
+            const open = db.tickets.filter(t => t.status === 'open' || t.status === 'assigned' || t.status ===
+                'in-progress').length;
+            const critical = db.tickets.filter(t => t.priority === 'P1 Critical').length;
+            const slaBreached = db.tickets.filter(t => t.slaStatus === 'Breached').length;
+            const atRisk = db.tickets.filter(t => t.slaStatus === 'At Risk').length;
+            const pendingDev = db.tickets.filter(t => t.status === 'pending-developer').length;
+            const avgResponse = total ? (db.tickets.reduce((s, t) => s + (t.responseTime || 0), 0) / total).toFixed(0) :
+            0;
+
+            const insights = [];
+            if (critical > 0) insights.push(`⚠️ ${critical} critical tickets require immediate attention.`);
+            if (slaBreached > 0) insights.push(`🚨 ${slaBreached} tickets have breached SLA.`);
+            if (atRisk > 0) insights.push(`⏰ ${atRisk} tickets are at risk of SLA breach.`);
+            if (pendingDev > 0) insights.push(`👨‍💻 ${pendingDev} tickets are pending developer action.`);
+            if (open > 0 && total > 0) insights.push(`📊 ${Math.round(open / total * 100)}% of tickets are currently open.`);
+            if (avgResponse > 30) insights.push(`⏱️ Average response time ${avgResponse}m — target is 30m.`);
+            if (insights.length === 0) insights.push('✅ All metrics are healthy. No critical alerts.');
+
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-6">
+              <div class="section-header"><h2><i class="fa-solid fa-robot"></i> AI Command Center</h2></div>
+
+              <div class="ai-insight-box" style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);">
+                <i class="fa-solid fa-brain" style="font-size:32px;color:#34d399;"></i>
+                <div class="content">
+                  <div class="title">🧠 AI Analytics Engine</div>
+                  <div class="message" style="font-size:14px;font-weight:400;line-height:1.6;">${insights.map(i=>'• '+i).join('<br>')}</div>
+                </div>
+                <span class="badge-ai">${new Date().toLocaleTimeString()}</span>
+              </div>
+
+              <div class="stats-grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-ticket"></i> Total</div><div class="value">${total}</div></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-circle"></i> Open</div><div class="value">${open}</div></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-triangle-exclamation text-red-500"></i> Critical</div><div class="value">${critical}</div></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-shield-halved"></i> SLA Breach</div><div class="value">${slaBreached}</div></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-code"></i> Pending Dev</div><div class="value">${pendingDev}</div></div>
+              </div>
+
+              <div class="section-header"><h2><i class="fa-solid fa-lightbulb"></i> AI Recommendations</h2></div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                ${db.tickets.filter(t=>t.priority==='P1 Critical' && t.status!=='resolved' && t.status!=='closed').slice(0,4).map(t => `
+                  <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0 text-sm"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div class="flex-1">
+                      <div class="font-semibold text-gray-800 text-sm">${t.ticketNumber} - ${t.title}</div>
+                      <div class="text-xs text-gray-500">${t.customer} · ${t.category}</div>
+                      <div class="text-xs text-red-600 mt-1 font-medium">⚠️ Critical priority — Action required</div>
+                      <button onclick="viewTicketDetail(${t.id})" class="text-xs text-indigo-600 hover:underline mt-1">View →</button>
+                    </div>
+                  </div>
+                `).join('') || '<div class="text-gray-400 text-sm">No critical recommendations</div>'}
+              </div>
+
+              <div class="section-header"><h2><i class="fa-solid fa-clock"></i> SLA At Risk</h2></div>
+              <div class="table-wrap">
+                <div class="table-scroll">
+                  <table>
+                    <thead><tr><th>Ticket</th><th>Customer</th><th>Priority</th><th>SLA Status</th><th>Assigned To</th></tr></thead>
+                    <tbody>${db.tickets.filter(t=>t.slaStatus==='At Risk' || t.slaStatus==='Warning').map(t => `
+                      <tr onclick="viewTicketDetail(${t.id})" style="cursor:pointer;">
+                        <td class="font-semibold text-indigo-600">${t.ticketNumber}</td>
+                        <td>${t.customer}</td>
+                        <td>${priorityBadge(t.priority)}</td>
+                        <td><span class="chip ${t.slaStatus==='At Risk'?'bg-red-50 text-red-600':'bg-amber-50 text-amber-700'}">${t.slaStatus}</span></td>
+                        <td>${t.assignedTo || 'Unassigned'}</td>
+                      </tr>
+                    `).join('') || '<tr><td colspan="5" class="text-center text-gray-400 py-6">No SLA risks detected</td></tr>'}</tbody>
+                  </table>
+                </div>
+              </div>
+            </div>`;
+        }
+
+        // ============================================================
+        // TICKET TABLE RENDERERS
+        // ============================================================
+        function renderAllTickets(container) { renderTicketTable(container, db.tickets, 'All Tickets', true); }
+
+        function renderMyTickets(container) { const my = db.tickets.filter(t => t.assignedTo === 'Vikram Joshi' || t
+                .assignedTo === 'Rohan Mehta');
+            renderTicketTable(container, my, 'My Tickets', true); }
+
+        function renderNewTickets(container) { const tickets = db.tickets.filter(t => t.status === 'new');
+            renderTicketTable(container, tickets, 'New Tickets', true); }
+
+        function renderOpenTickets(container) { const tickets = db.tickets.filter(t => t.status === 'open' || t.status ===
+                'assigned' || t.status === 'acknowledged' || t.status === 'in-progress');
+            renderTicketTable(container, tickets, 'Open Tickets', true); }
+
+        function renderPendingTickets(container) { const tickets = db.tickets.filter(t => t.status === 'pending-customer' ||
+                t.status === 'pending-vendor' || t.status === 'pending-developer' || t.status === 'on-hold');
+            renderTicketTable(container, tickets, 'Pending Tickets', true); }
+
+        function renderResolvedTickets(container) { const tickets = db.tickets.filter(t => t.status === 'resolved' || t
+                .status === 'closed');
+            renderTicketTable(container, tickets, 'Resolved / Closed Tickets', true); }
+
+        function renderEscalatedTickets(container) { const tickets = db.tickets.filter(t => t.status === 'escalated');
+            renderTicketTable(container, tickets, 'Escalated Tickets', true); }
+
+        function renderTicketTable(container, tickets, title, showActions = true) {
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-4">
+              <div class="section-header">
+                <h2><i class="fa-solid fa-ticket"></i> ${title}</h2>
+                <button class="btn btn-primary btn-sm" onclick="openCreateTicket()"><i class="fa-solid fa-plus"></i> Create Ticket</button>
+              </div>
+
+              <div class="filter-bar">
+                <div class="filter-group"><label>Search</label><input type="text" id="ticketSearch" placeholder="Search tickets..." oninput="filterTicketTable()" /></div>
+                <div class="filter-group"><label>Status</label><select id="ticketStatusFilter" onchange="filterTicketTable()"><option value="">All</option><option value="new">New</option><option value="open">Open</option><option value="assigned">Assigned</option><option value="in-progress">In Progress</option><option value="pending-customer">Pending Customer</option><option value="pending-vendor">Pending Vendor</option><option value="pending-developer">Pending Developer</option><option value="resolved">Resolved</option><option value="closed">Closed</option><option value="escalated">Escalated</option></select></div>
+                <div class="filter-group"><label>Priority</label><select id="ticketPriorityFilter" onchange="filterTicketTable()"><option value="">All</option><option value="P1 Critical">P1 Critical</option><option value="P2 High">P2 High</option><option value="P3 Medium">P3 Medium</option><option value="P4 Low">P4 Low</option></select></div>
+                <div class="filter-group"><label>Category</label><select id="ticketCategoryFilter" onchange="filterTicketTable()"><option value="">All</option><option value="Hardware">Hardware</option><option value="Software">Software</option><option value="Network">Network</option><option value="Account">Account</option><option value="Payment">Payment</option><option value="Security">Security</option></select></div>
+                <div class="filter-actions"><button class="btn btn-sm btn-outline" onclick="resetTicketFilters()"><i class="fa-solid fa-undo"></i> Reset</button></div>
+              </div>
+
+              <div class="table-wrap">
+                <div class="table-scroll">
+                  <table>
+                    <thead><tr><th>Ticket</th><th>Customer</th><th>Issue</th><th>Category</th><th>Priority</th><th>Status</th><th>Assigned To</th><th>Created</th>${showActions ? '<th>Actions</th>' : ''}</tr></thead>
+                    <tbody id="ticketTableBody">
+                      ${tickets.map(t => `
+                        <tr data-status="${t.status}" data-priority="${t.priority}" data-category="${t.category}">
+                          <td class="font-semibold text-indigo-600">${t.ticketNumber}</td>
+                          <td>${t.customer}</td>
+                          <td class="max-w-[120px] truncate" title="${t.title}">${t.title}</td>
+                          <td>${chip(t.category, t.category==='Hardware'?'blue':t.category==='Network'?'purple':t.category==='Payment'?'red':'amber')}</td>
+                          <td>${priorityBadge(t.priority)}</td>
+                          <td>${statusBadge(t.status)}</td>
+                          <td>${t.assignedTo || 'Unassigned'}</td>
+                          <td class="text-gray-500 text-sm">${formatDateTime(t.created)}</td>
+                          ${showActions ? `<td>
+                            <button class="btn btn-sm btn-primary" onclick="viewTicketDetail(${t.id})"><i class="fa-regular fa-eye"></i></button>
+                            <button class="btn btn-sm btn-success" onclick="updateTicketStatus(${t.id},'in-progress')"><i class="fa-solid fa-play"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteTicket(${t.id})"><i class="fa-solid fa-trash"></i></button>
+                          </td>` : ''}
+                        </tr>
+                      `).join('') || '<tr><td colspan="9" class="text-center text-gray-400 py-8">No tickets found</td></tr>'}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>`;
+        }
+
+        function filterTicketTable() {
+            const search = document.getElementById('ticketSearch')?.value?.toLowerCase() || '';
+            const status = document.getElementById('ticketStatusFilter')?.value || '';
+            const priority = document.getElementById('ticketPriorityFilter')?.value || '';
+            const category = document.getElementById('ticketCategoryFilter')?.value || '';
+            const rows = document.querySelectorAll('#ticketTableBody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const s = row.dataset.status || '';
+                const p = row.dataset.priority || '';
+                const c = row.dataset.category || '';
+                let show = true;
+                if (search && !text.includes(search)) show = false;
+                if (status && s !== status) show = false;
+                if (priority && p !== priority) show = false;
+                if (category && c !== category) show = false;
+                row.style.display = show ? '' : 'none';
+            });
+        }
+
+        function resetTicketFilters() {
+            ['ticketSearch', 'ticketStatusFilter', 'ticketPriorityFilter', 'ticketCategoryFilter'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            filterTicketTable();
+        }
+
+        // ============================================================
+        // TICKET CRUD
+        // ============================================================
+        function openCreateTicket() {
+            const customerOpts = db.customers.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+            const techOpts = db.technicians.map(t => `<option value="${t.name}">${t.name}</option>`).join('');
+            const categories = ['Hardware', 'Software', 'Network', 'Account', 'Payment', 'Security'];
+            showModal(`
+            <div class="modal-header"><h3><i class="fa-solid fa-plus-circle"></i> Create Ticket</h3><button class="close" onclick="closeModal()">&times;</button></div>
+            <form id="ticketForm" onsubmit="saveTicket(event)">
+              <div class="form-row">
+                <div class="form-group"><label>Customer *</label><select id="tktCustomer">${customerOpts}</select></div>
+                <div class="form-group"><label>Category *</label><select id="tktCategory" onchange="updateSubcategory()">${categories.map(c=>`<option value="${c}">${c}</option>`).join('')}</select></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Subcategory</label><select id="tktSubcategory"></select></div>
+                <div class="form-group"><label>Priority *</label><select id="tktPriority"><option value="P1 Critical">P1 Critical</option><option value="P2 High">P2 High</option><option value="P3 Medium" selected>P3 Medium</option><option value="P4 Low">P4 Low</option></select></div>
+              </div>
+              <div class="form-group"><label>Issue Title *</label><input type="text" id="tktTitle" required placeholder="Brief description of the issue" /></div>
+              <div class="form-group"><label>Description *</label><textarea id="tktDesc" rows="3" required placeholder="Detailed description of the problem"></textarea></div>
+              <div class="form-row">
+                <div class="form-group"><label>Source</label><select id="tktSource"><option value="Phone">Phone</option><option value="Email">Email</option><option value="WhatsApp">WhatsApp</option><option value="Customer Portal">Customer Portal</option><option value="Employee">Employee</option><option value="System Generated">System Generated</option></select></div>
+                <div class="form-group"><label>Gallery</label><input type="text" id="tktGallery" placeholder="Kothrud / Baner / Online" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Product</label><input type="text" id="tktProduct" placeholder="e.g. Dell Laptop, Payment Gateway" /></div>
+                <div class="form-group"><label>Version</label><input type="text" id="tktVersion" placeholder="e.g. Windows 11, v3.2" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Assigned To</label><select id="tktAssign"><option value="">Unassigned</option>${techOpts}</select></div>
+                <div class="form-group"><label>Asset ID</label><input type="text" id="tktAsset" placeholder="AST-001" /></div>
+              </div>
+              <div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancel</button><button type="submit" class="btn btn-primary">Create Ticket</button></div>
+            </form>`);
+            updateSubcategory();
+        }
+
+        function updateSubcategory() {
+            const cat = document.getElementById('tktCategory')?.value || 'Hardware';
+            const subMap = {
+                'Hardware': ['Laptop', 'Printer', 'Scanner', 'Desktop', 'Server', 'Monitor', 'Keyboard', 'Mouse', 'UPS',
+                    'Router', 'Switch'
+                ],
+                'Software': ['Application', 'Email', 'POS', 'ERP', 'CRM', 'HRMS', 'Billing', 'Operating System',
+                    'Database'
+                ],
+                'Network': ['Wi-Fi', 'LAN', 'VPN', 'DNS', 'Router', 'Firewall', 'Connectivity', 'Slow Network'],
+                'Account': ['Login', 'Password', 'OTP', 'Permission', 'Access', 'Email', 'Account Locked'],
+                'Payment': ['Payment Failed', 'Transaction Failed', 'Refund', 'Gateway Error', 'Settlement'],
+                'Security': ['Suspicious Login', 'Phishing', 'Malware', 'Unauthorized Access', 'Security Alert']
+            };
+            const sub = document.getElementById('tktSubcategory');
+            if (sub) {
+                sub.innerHTML = (subMap[cat] || ['General']).map(s => `<option value="${s}">${s}</option>`).join('');
+            }
+        }
+
+        function saveTicket(event) {
+            event.preventDefault();
+            const customerId = parseInt(document.getElementById('tktCustomer').value);
+            const customer = getCustomerName(customerId);
+            const category = document.getElementById('tktCategory').value;
+            const subcategory = document.getElementById('tktSubcategory').value;
+            const priority = document.getElementById('tktPriority').value;
+            const title = document.getElementById('tktTitle').value.trim();
+            const desc = document.getElementById('tktDesc').value.trim();
+            const source = document.getElementById('tktSource').value;
+            const gallery = document.getElementById('tktGallery').value.trim() || '—';
+            const product = document.getElementById('tktProduct').value.trim() || '—';
+            const version = document.getElementById('tktVersion').value.trim() || '—';
+            const assignedTo = document.getElementById('tktAssign').value || '';
+            const assetId = document.getElementById('tktAsset').value.trim() || '—';
+
+            if (!title || !desc) return toast('Title and description required.', 'warning');
+
+            const severity = priority === 'P1 Critical' ? 'Critical' : priority === 'P2 High' ? 'Major' : priority ===
+                'P3 Medium' ? 'Moderate' : 'Minor';
+
+            const ticket = {
+                id: genId('ticket'),
+                ticketNumber: 'TKT-' + String(db.tickets.length + 1001).padStart(4, '0'),
+                title,
+                description: desc,
+                customer,
+                customerId,
+                mobile: '',
+                email: '',
+                category,
+                subcategory: subcategory || 'General',
+                priority,
+                severity,
+                status: 'new',
+                assignedTo: assignedTo || '',
+                created: nowStr(),
+                updated: nowStr(),
+                source,
+                gallery,
+                product,
+                version,
+                os: '—',
+                assetId: assetId,
+                serialNumber: '—',
+                slaStatus: 'On Track',
+                resolution: '',
+                responseTime: 0,
+                resolutionTime: 0,
+                comments: [],
+                attachments: []
+            };
+            db.tickets.push(ticket);
+            saveDB();
+            toast(`Ticket ${ticket.ticketNumber} created!`, 'success');
+            closeModal();
+            navigateTo(currentPage);
+        }
+
+        function viewTicketDetail(id) {
+            const t = getTicket(id);
+            if (!t) return toast('Ticket not found', 'error');
+            const customer = getCustomer(t.customerId);
+            const techs = db.technicians.map(tc => `<option value="${tc.name}" ${tc.name===t.assignedTo?'selected':''}>${tc.name}</option>`)
+                .join('');
+            const statuses = ['new', 'open', 'assigned', 'acknowledged', 'in-progress', 'pending-customer',
+                'pending-vendor', 'pending-developer', 'on-hold', 'resolved', 'closed', 'escalated', 'reopened'
+            ];
+            const priorityOpts = ['P1 Critical', 'P2 High', 'P3 Medium', 'P4 Low'];
+
+            const commentsHtml = t.comments && t.comments.length ? t.comments.map(c => `
+                <div class="text-sm border-b border-gray-100 py-2">
+                    <div><span class="font-semibold">${c.user}</span> <span class="text-xs text-gray-400">${formatDateTime(c.created)}</span></div>
+                    <div class="text-gray-600">${c.text}</div>
+                </div>
+            `).join('') : '<div class="text-sm text-gray-400">No comments yet.</div>';
+
+            showModal(`
+            <div class="modal-header"><h3><i class="fa-solid fa-ticket"></i> ${t.ticketNumber} — ${t.title}</h3><button class="close" onclick="closeModal()">&times;</button></div>
+            <div class="space-y-4">
+              <div class="grid grid-cols-2 gap-3 text-sm">
+                <div><span class="text-gray-500">Customer:</span> <strong>${t.customer}</strong></div>
+                <div><span class="text-gray-500">Category:</span> <strong>${t.category}</strong> ${t.subcategory ? '→ '+t.subcategory : ''}</div>
+                <div><span class="text-gray-500">Priority:</span> ${priorityBadge(t.priority)}</div>
+                <div><span class="text-gray-500">Status:</span> ${statusBadge(t.status)}</div>
+                <div><span class="text-gray-500">Assigned To:</span> <strong>${t.assignedTo || 'Unassigned'}</strong></div>
+                <div><span class="text-gray-500">SLA Status:</span> <span class="chip ${t.slaStatus==='Breached'?'bg-red-50 text-red-600':t.slaStatus==='At Risk'?'bg-amber-50 text-amber-700':t.slaStatus==='Warning'?'bg-amber-50 text-amber-700':'bg-green-50 text-green-700'}">${t.slaStatus}</span></div>
+                <div><span class="text-gray-500">Source:</span> <strong>${t.source}</strong></div>
+                <div><span class="text-gray-500">Gallery:</span> <strong>${t.gallery}</strong></div>
+                <div><span class="text-gray-500">Product:</span> <strong>${t.product}</strong></div>
+                <div><span class="text-gray-500">Version:</span> <strong>${t.version}</strong></div>
+                <div><span class="text-gray-500">Created:</span> <strong>${formatDateTime(t.created)}</strong></div>
+                <div><span class="text-gray-500">Updated:</span> <strong>${formatDateTime(t.updated)}</strong></div>
+                <div><span class="text-gray-500">Response Time:</span> <strong>${t.responseTime || 0}m</strong></div>
+                <div><span class="text-gray-500">Resolution Time:</span> <strong>${t.resolutionTime || 0}m</strong></div>
+                <div class="col-span-2"><span class="text-gray-500">Description:</span><br><p class="text-sm bg-gray-50 p-2 rounded-lg mt-1">${t.description}</p></div>
+                ${t.resolution ? `<div class="col-span-2"><span class="text-gray-500">Resolution:</span><br><p class="text-sm bg-green-50 p-2 rounded-lg mt-1">${t.resolution}</p></div>` : ''}
+              </div>
+
+              <div class="border-t border-gray-200 pt-4">
+                <h4 class="text-sm font-bold mb-2"><i class="fa-regular fa-comments"></i> Comments</h4>
+                <div class="max-h-40 overflow-y-auto bg-gray-50 rounded-lg p-2">${commentsHtml}</div>
+                <div class="mt-2 flex gap-2">
+                  <input type="text" id="newComment" placeholder="Add a comment..." class="flex-1 border border-gray-200 rounded-lg p-2 text-sm">
+                  <button onclick="addComment(${t.id})" class="btn btn-sm btn-primary">Post</button>
+                </div>
+              </div>
+
+              <div class="border-t border-gray-200 pt-4">
+                <h4 class="text-sm font-bold mb-3">Update Ticket</h4>
+                <form id="ticketUpdateForm" onsubmit="updateTicket(event, ${t.id})">
+                  <div class="grid grid-cols-2 gap-3">
+                    <div class="form-group"><label>Status</label><select id="updStatus">${statuses.map(s => `<option value="${s}" ${s===t.status?'selected':''}>${s.replace(/-/g,' ').toUpperCase()}</option>`).join('')}</select></div>
+                    <div class="form-group"><label>Priority</label><select id="updPriority">${priorityOpts.map(p => `<option value="${p}" ${p===t.priority?'selected':''}>${p}</option>`).join('')}</select></div>
+                    <div class="form-group col-span-2"><label>Assigned To</label><select id="updAssign"><option value="">Unassigned</option>${techs}</select></div>
+                    <div class="form-group col-span-2"><label>Resolution Notes</label><textarea id="updResolution" rows="2" placeholder="Add resolution details...">${t.resolution || ''}</textarea></div>
+                  </div>
+                  <div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Close</button><button type="submit" class="btn btn-primary">Update Ticket</button></div>
+                </form>
+              </div>
+
+              <div class="border-t border-gray-200 pt-4 flex gap-2 flex-wrap">
+                <button onclick="createDevIssue(${t.id})" class="btn btn-sm btn-primary"><i class="fa-solid fa-code"></i> Create Developer Issue</button>
+                <button onclick="escalateTicket(${t.id})" class="btn btn-sm btn-warning"><i class="fa-solid fa-arrow-up"></i> Escalate</button>
+                <button onclick="resolveTicket(${t.id})" class="btn btn-sm btn-success"><i class="fa-solid fa-check"></i> Resolve</button>
+                <button onclick="deleteTicket(${t.id})" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i> Delete</button>
+              </div>
+            </div>`);
+        }
+
+        function addComment(ticketId) {
+            const input = document.getElementById('newComment');
+            const text = input?.value?.trim();
+            if (!text) return toast('Comment cannot be empty.', 'warning');
+            const t = getTicket(ticketId);
+            if (!t) return toast('Ticket not found.', 'error');
+            if (!t.comments) t.comments = [];
+            t.comments.push({ id: t.comments.length + 1, user: 'Yashraj Sathe', text: text, created: nowStr() });
+            t.updated = nowStr();
+            saveDB();
+            toast('Comment added.', 'success');
+            viewTicketDetail(ticketId);
+        }
+
+        function updateTicket(event, id) {
+            event.preventDefault();
+            const t = getTicket(id);
+            if (!t) return toast('Not found', 'error');
+            t.status = document.getElementById('updStatus').value;
+            t.priority = document.getElementById('updPriority').value;
+            t.assignedTo = document.getElementById('updAssign').value || '';
+            t.resolution = document.getElementById('updResolution').value.trim() || t.resolution;
+            t.updated = nowStr();
+            t.severity = t.priority === 'P1 Critical' ? 'Critical' : t.priority === 'P2 High' ? 'Major' : t.priority ===
+                'P3 Medium' ? 'Moderate' : 'Minor';
+            if (t.status === 'resolved' || t.status === 'closed') {
+                if (!t.resolutionTime) {
+                    const created = new Date(t.created);
+                    const resolved = new Date();
+                    t.resolutionTime = Math.round((resolved - created) / (1000 * 60));
+                }
+            }
+            saveDB();
+            toast(`Ticket ${t.ticketNumber} updated!`, 'success');
+            closeModal();
+            navigateTo(currentPage);
+        }
+
+        function updateTicketStatus(id, status) {
+            const t = getTicket(id);
+            if (!t) return toast('Not found', 'error');
+            t.status = status;
+            t.updated = nowStr();
+            if (status === 'in-progress' && !t.responseTime) {
+                const created = new Date(t.created);
+                const now = new Date();
+                t.responseTime = Math.round((now - created) / (1000 * 60));
+            }
+            saveDB();
+            toast(`Ticket ${t.ticketNumber} → ${status.replace(/-/g,' ').toUpperCase()}`, 'success');
+            navigateTo(currentPage);
+        }
+
+        function resolveTicket(id) {
+            const t = getTicket(id);
+            if (!t) return toast('Not found', 'error');
+            t.status = 'resolved';
+            if (!t.resolutionTime) {
+                const created = new Date(t.created);
+                const now = new Date();
+                t.resolutionTime = Math.round((now - created) / (1000 * 60));
+            }
+            t.resolution = t.resolution || 'Resolved by technician';
+            t.updated = nowStr();
+            saveDB();
+            toast(`Ticket ${t.ticketNumber} resolved!`, 'success');
+            closeModal();
+            navigateTo(currentPage);
+        }
+
+        function escalateTicket(id) {
+            const t = getTicket(id);
+            if (!t) return toast('Not found', 'error');
+            t.status = 'escalated';
+            t.updated = nowStr();
+            if (!db.escalations) db.escalations = [];
+            db.escalations.push({
+                id: genId('escalation'),
+                ticketId: t.id,
+                customer: t.customer,
+                priority: t.priority,
+                level: 'L2',
+                reason: 'Manual escalation',
+                escalatedBy: 'Yashraj Sathe',
+                escalatedTo: 'Support Manager',
+                date: nowStr(),
+                status: 'In Progress'
+            });
+            saveDB();
+            toast(`Ticket ${t.ticketNumber} escalated!`, 'warning');
+            closeModal();
+            navigateTo(currentPage);
+        }
+
+        function deleteTicket(id) {
+            if (!confirm('Delete this ticket permanently?')) return;
+            db.tickets = db.tickets.filter(t => t.id !== id);
+            saveDB();
+            toast('Ticket deleted.', 'info');
+            closeModal();
+            navigateTo(currentPage);
+        }
+
+        // ============================================================
+        // DEVELOPER HUB
+        // ============================================================
+        function createDevIssue(ticketId) {
+            const t = getTicket(ticketId);
+            if (!t) return toast('Ticket not found', 'error');
+            if (!db.devIssues) db.devIssues = [];
+            const issue = {
+                id: genId('devIssue'),
+                ticketId: t.id,
+                ticketNumber: t.ticketNumber,
+                title: t.title,
+                description: t.description,
+                customer: t.customer,
+                category: t.category,
+                priority: t.priority,
+                status: 'New',
+                assignedTo: 'Developer Team',
+                created: nowStr(),
+                updated: nowStr(),
+                fixVersion: '',
+                releaseVersion: '',
+                deploymentDate: ''
+            };
+            db.devIssues.push(issue);
+            t.status = 'pending-developer';
+            t.updated = nowStr();
+            saveDB();
+            toast(`Developer issue created from ${t.ticketNumber}!`, 'success');
+            closeModal();
+            navigateTo(currentPage);
+        }
+
+        function renderDevHub(container) {
+            const issues = db.devIssues || [];
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-4">
+              <div class="section-header">
+                <h2><i class="fa-solid fa-code"></i> Developer Hub Integration</h2>
+                <span class="text-sm text-gray-500">${issues.length} developer issues</span>
+              </div>
+
+              <div class="ai-insight-box" style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);">
+                <i class="fa-solid fa-code" style="font-size:28px;color:#34d399;"></i>
+                <div class="content">
+                  <div class="title">👨‍💻 Developer Integration</div>
+                  <div class="message">${issues.length} issues created from support tickets · ${issues.filter(i=>i.status==='Fixed').length} fixed · ${issues.filter(i=>i.status==='New'||i.status==='In Progress').length} in progress</div>
+                </div>
+                <span class="badge-ai">${new Date().toLocaleTimeString()}</span>
+              </div>
+
+              <div class="table-wrap">
+                <div class="table-scroll">
+                  <table>
+                    <thead><tr><th>Issue ID</th><th>Source Ticket</th><th>Title</th><th>Priority</th><th>Status</th><th>Assigned To</th><th>Created</th><th>Actions</th></tr></thead>
+                    <tbody>${issues.map(i => `
+                      <tr>
+                        <td class="font-semibold text-indigo-600">DEV-${String(i.id).padStart(4,'0')}</td>
+                        <td><a href="#" onclick="viewTicketDetail(${i.ticketId})" class="text-indigo-600 hover:underline">${i.ticketNumber}</a></td>
+                        <td>${i.title}</td>
+                        <td>${priorityBadge(i.priority)}</td>
+                        <td>${statusBadge(i.status === 'New' ? 'new' : i.status === 'In Progress' ? 'in-progress' : i.status === 'Fixed' ? 'resolved' : 'open')}</td>
+                        <td>${i.assignedTo}</td>
+                        <td class="text-sm text-gray-500">${formatDateTime(i.created)}</td>
+                        <td>
+                          <button class="btn btn-sm btn-success" onclick="updateDevIssue(${i.id},'In Progress')"><i class="fa-solid fa-play"></i></button>
+                          <button class="btn btn-sm btn-primary" onclick="updateDevIssue(${i.id},'Fixed')"><i class="fa-solid fa-check"></i></button>
+                        </td>
+                      </tr>
+                    `).join('') || '<tr><td colspan="8" class="text-center text-gray-400 py-8">No developer issues created yet. Create one from a ticket!</td></tr>'}</tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                <h3 class="text-sm font-bold text-gray-800 mb-3"><i class="fa-solid fa-arrow-right"></i> Flow: Support → Developer → Resolution</h3>
+                <div class="flex items-center gap-2 text-xs text-gray-600 flex-wrap">
+                  <span class="bg-blue-50 px-3 py-1 rounded-full">Ticket Created</span>
+                  <i class="fa-solid fa-arrow-right text-gray-300"></i>
+                  <span class="bg-amber-50 px-3 py-1 rounded-full">Support Triage</span>
+                  <i class="fa-solid fa-arrow-right text-gray-300"></i>
+                  <span class="bg-purple-50 px-3 py-1 rounded-full">Developer Issue</span>
+                  <i class="fa-solid fa-arrow-right text-gray-300"></i>
+                  <span class="bg-emerald-50 px-3 py-1 rounded-full">Bug Fix</span>
+                  <i class="fa-solid fa-arrow-right text-gray-300"></i>
+                  <span class="bg-green-50 px-3 py-1 rounded-full">Ticket Resolved</span>
+                </div>
+              </div>
+            </div>`;
+        }
+
+        function updateDevIssue(id, status) {
+            const issues = db.devIssues || [];
+            const issue = issues.find(i => i.id === id);
+            if (!issue) return toast('Issue not found', 'error');
+            issue.status = status;
+            issue.updated = nowStr();
+            if (status === 'Fixed') {
+                const ticket = getTicket(issue.ticketId);
+                if (ticket) {
+                    ticket.status = 'resolved';
+                    ticket.resolution = ticket.resolution || `Fixed by developer: ${issue.title}`;
+                    ticket.updated = nowStr();
+                }
+            }
+            saveDB();
+            toast(`Developer issue updated: ${status}`, 'success');
+            navigateTo(currentPage);
+        }
+
+        // ============================================================
+        // INCIDENT, PROBLEM, CHANGE, SERVICE REQUEST
+        // ============================================================
+        function renderIncidents(container) {
+            const incidents = db.incidents || [];
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-4">
+              <div class="section-header"><h2><i class="fa-solid fa-triangle-exclamation"></i> Incident Management</h2><button class="btn btn-primary btn-sm" onclick="openCreateIncident()"><i class="fa-solid fa-plus"></i> Log Incident</button></div>
+              <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Incident</th><th>Type</th><th>Severity</th><th>Affected Service</th><th>Status</th><th>Impact</th><th>Manager</th></tr></thead>
+                <tbody>${incidents.map(i => `
+                  <tr><td class="font-semibold text-indigo-600">${i.number}</td><td>${i.type}</td><td><span class="chip ${i.severity==='Critical'?'bg-red-50 text-red-600':'bg-amber-50 text-amber-700'}">${i.severity}</span></td><td>${i.affectedService}</td><td>${statusBadge(i.status === 'Resolved' ? 'resolved' : 'open')}</td><td>${i.impact}</td><td>${i.incidentManager}</td></tr>
+                `).join('') || '<tr><td colspan="7" class="text-center text-gray-400 py-8">No incidents logged</td></tr>'}</tbody>
+              </table></div></div>
+            </div>`;
+        }
+
+        function openCreateIncident() { toast('Incident logging form would open here.', 'info'); }
+
+        function renderProblems(container) {
+            const problems = db.problems || [];
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-4">
+              <div class="section-header"><h2><i class="fa-solid fa-bug"></i> Problem Management</h2><button class="btn btn-primary btn-sm" onclick="toast('Create Problem','info')"><i class="fa-solid fa-plus"></i> Add Problem</button></div>
+              <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Problem</th><th>Product</th><th>Issue</th><th>Frequency</th><th>Root Cause</th><th>Status</th><th>Owner</th></tr></thead>
+                <tbody>${problems.map(p => `
+                  <tr><td class="font-semibold text-indigo-600">${p.number}</td><td>${p.product}</td><td>${p.issue}</td><td>${p.frequency}</td><td>${p.rootCause || 'Under investigation'}</td><td>${statusBadge(p.status === 'Under Investigation' ? 'in-progress' : p.status === 'Resolved' ? 'resolved' : 'open')}</td><td>${p.problemOwner}</td></tr>
+                `).join('') || '<tr><td colspan="7" class="text-center text-gray-400 py-8">No problems recorded</td></tr>'}</tbody>
+              </table></div></div>
+            </div>`;
+        }
+
+        function renderChanges(container) {
+            const changes = db.changes || [];
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-4">
+              <div class="section-header"><h2><i class="fa-solid fa-arrows-rotate"></i> Change Management</h2><button class="btn btn-primary btn-sm" onclick="toast('Create Change Request','info')"><i class="fa-solid fa-plus"></i> New Change</button></div>
+              <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Change</th><th>Type</th><th>System</th><th>Description</th><th>Risk</th><th>Status</th><th>Scheduled</th></tr></thead>
+                <tbody>${changes.map(c => `
+                  <tr><td class="font-semibold text-indigo-600">${c.number}</td><td>${c.type}</td><td>${c.system}</td><td>${c.description}</td><td><span class="chip ${c.risk==='High'?'bg-red-50 text-red-600':c.risk==='Medium'?'bg-amber-50 text-amber-700':'bg-green-50 text-green-700'}">${c.risk}</span></td><td>${statusBadge(c.status === 'Approved' ? 'resolved' : c.status === 'Implemented' ? 'closed' : 'open')}</td><td>${formatDate(c.scheduledDate)}</td></tr>
+                `).join('') || '<tr><td colspan="7" class="text-center text-gray-400 py-8">No change requests</td></tr>'}</tbody>
+              </table></div></div>
+            </div>`;
+        }
+
+        function renderServiceRequests(container) {
+            const requests = db.serviceRequests || [];
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-4">
+              <div class="section-header"><h2><i class="fa-solid fa-list-check"></i> Service Requests</h2><button class="btn btn-primary btn-sm" onclick="toast('Create Service Request','info')"><i class="fa-solid fa-plus"></i> New Request</button></div>
+              <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Requester</th><th>Type</th><th>Description</th><th>Priority</th><th>Status</th><th>Assigned To</th><th>Due</th></tr></thead>
+                <tbody>${requests.map(r => `
+                  <tr><td>${r.requester}</td><td>${r.type}</td><td>${r.description}</td><td>${chip(r.priority, r.priority==='High'?'red':r.priority==='Medium'?'amber':'green')}</td><td>${statusBadge(r.status === 'Completed' ? 'resolved' : r.status === 'In Progress' ? 'in-progress' : 'open')}</td><td>${r.assignedTo || 'Unassigned'}</td><td>${formatDate(r.dueDate)}</td></tr>
+                `).join('') || '<tr><td colspan="7" class="text-center text-gray-400 py-8">No service requests</td></tr>'}</tbody>
+              </table></div></div>
+            </div>`;
+        }
+
+        // ============================================================
+        // ASSETS, REPAIRS, MAINTENANCE
+        // ============================================================
+        function renderAssets(container) {
+            const assets = db.assets || [];
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-4">
+              <div class="section-header"><h2><i class="fa-solid fa-laptop"></i> Asset Management</h2><button class="btn btn-primary btn-sm" onclick="toast('Add Asset','info')"><i class="fa-solid fa-plus"></i> Add Asset</button></div>
+              <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Asset Tag</th><th>Name</th><th>Type</th><th>Model</th><th>Assigned To</th><th>Status</th><th>Condition</th><th>Warranty</th></tr></thead>
+                <tbody>${assets.map(a => `
+                  <tr><td class="font-semibold">${a.assetTag}</td><td>${a.name}</td><td>${a.type}</td><td>${a.model}</td><td>${a.assignedTo}</td><td>${statusBadge(a.status === 'Active' ? 'resolved' : 'open')}</td><td>${chip(a.condition, a.condition==='Excellent'?'green':a.condition==='Good'?'blue':'amber')}</td><td>${formatDate(a.warranty)}</td></tr>
+                `).join('') || '<tr><td colspan="8" class="text-center text-gray-400 py-8">No assets</td></tr>'}</tbody>
+              </table></div></div>
+            </div>`;
+        }
+
+        function renderRepairs(container) {
+            const repairs = db.repairs || [];
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-4">
+              <div class="section-header"><h2><i class="fa-solid fa-screwdriver-wrench"></i> Repair Management</h2><button class="btn btn-primary btn-sm" onclick="toast('Create Repair','info')"><i class="fa-solid fa-plus"></i> New Repair</button></div>
+              <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Device</th><th>Problem</th><th>Technician</th><th>Parts Cost</th><th>Total Cost</th><th>Status</th><th>Expected Return</th></tr></thead>
+                <tbody>${repairs.map(r => `
+                  <tr><td>${r.device}</td><td>${r.problem}</td><td>${r.technician}</td><td>$${r.partsCost}</td><td><strong>$${r.totalCost}</strong></td><td>${statusBadge(r.status === 'Completed' ? 'resolved' : 'in-progress')}</td><td>${formatDate(r.expectedReturn)}</td></tr>
+                `).join('') || '<tr><td colspan="7" class="text-center text-gray-400 py-8">No repairs</td></tr>'}</tbody>
+              </table></div></div>
+            </div>`;
+        }
+
+        function renderMaintenance(container) {
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-4">
+              <div class="section-header"><h2><i class="fa-solid fa-calendar-check"></i> Maintenance Management</h2></div>
+              <div class="text-center text-gray-400 py-20">Maintenance scheduling module coming soon. Assets requiring maintenance will appear here.</div>
+            </div>`;
+        }
+
+        // ============================================================
+        // KNOWLEDGE BASE & ERROR CODES
+        // ============================================================
+        function renderKnowledge(container) {
+            const articles = db.knowledge || [];
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-4">
+              <div class="section-header"><h2><i class="fa-solid fa-book-bookmark"></i> Knowledge Base</h2><button class="btn btn-primary btn-sm" onclick="openCreateArticle()"><i class="fa-solid fa-plus"></i> New Article</button></div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                ${articles.map(a => `
+                  <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-start justify-between">
+                      <h4 class="font-bold text-gray-800">${a.title}</h4>
+                      <span class="chip ${a.status==='Published'?'bg-green-50 text-green-700':'bg-amber-50 text-amber-700'}">${a.status}</span>
+                    </div>
+                    <div class="text-xs text-gray-500 mt-1">${a.category} · by ${a.author}</div>
+                    <p class="text-sm text-gray-600 mt-2">${a.problem}</p>
+                    <p class="text-sm text-gray-700 mt-1 bg-gray-50 p-2 rounded-lg"><strong>Solution:</strong> ${a.solution}</p>
+                    <div class="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                      <span><i class="fa-regular fa-star text-amber-400"></i> ${a.rating}</span>
+                      <span><i class="fa-regular fa-eye"></i> ${a.usage} views</span>
+                    </div>
+                    <div class="mt-2 flex gap-2">
+                      <button onclick="editArticle(${a.id})" class="btn btn-sm btn-outline"><i class="fa-regular fa-edit"></i></button>
+                      <button onclick="deleteArticle(${a.id})" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                  </div>
+                `).join('') || '<div class="col-span-2 text-center text-gray-400 py-12">No knowledge articles</div>'}
+              </div>
+            </div>`;
+        }
+
+        function openCreateArticle() {
+            showModal(`
+            <div class="modal-header"><h3><i class="fa-solid fa-plus"></i> Create Knowledge Article</h3><button class="close" onclick="closeModal()">&times;</button></div>
+            <form id="articleForm" onsubmit="saveArticle(event)">
+              <div class="form-group"><label>Title *</label><input type="text" id="artTitle" required placeholder="Article title" /></div>
+              <div class="form-row">
+                <div class="form-group"><label>Category</label><select id="artCategory"><option>Hardware</option><option>Software</option><option>Network</option><option>Email</option><option>Payment</option><option>Security</option></select></div>
+                <div class="form-group"><label>Status</label><select id="artStatus"><option value="Draft">Draft</option><option value="Published">Published</option></select></div>
+              </div>
+              <div class="form-group"><label>Problem *</label><textarea id="artProblem" rows="2" required placeholder="Describe the problem"></textarea></div>
+              <div class="form-group"><label>Solution *</label><textarea id="artSolution" rows="3" required placeholder="Solution steps"></textarea></div>
+              <div class="form-group"><label>Steps</label><textarea id="artSteps" rows="2" placeholder="Detailed steps (optional)"></textarea></div>
+              <div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancel</button><button type="submit" class="btn btn-primary">Save Article</button></div>
+            </form>`);
+        }
+
+        function saveArticle(event) {
+            event.preventDefault();
+            const title = document.getElementById('artTitle').value.trim();
+            const category = document.getElementById('artCategory').value;
+            const status = document.getElementById('artStatus').value;
+            const problem = document.getElementById('artProblem').value.trim();
+            const solution = document.getElementById('artSolution').value.trim();
+            const steps = document.getElementById('artSteps').value.trim();
+            if (!title || !problem || !solution) return toast('Title, problem, and solution required.', 'warning');
+            const article = {
+                id: genId('knowledge'),
+                title,
+                category,
+                problem,
+                solution,
+                steps,
+                author: 'Yashraj Sathe',
+                rating: 0,
+                usage: 0,
+                status: status || 'Draft'
+            };
+            db.knowledge.push(article);
+            saveDB();
+            toast('Article created!', 'success');
+            closeModal();
+            navigateTo(currentPage);
+        }
+
+        function editArticle(id) {
+            const a = db.knowledge.find(k => k.id === id);
+            if (!a) return toast('Article not found', 'error');
+            showModal(`
+            <div class="modal-header"><h3><i class="fa-regular fa-edit"></i> Edit Article</h3><button class="close" onclick="closeModal()">&times;</button></div>
+            <form id="articleEditForm" onsubmit="updateArticle(event, ${id})">
+              <div class="form-group"><label>Title *</label><input type="text" id="editArtTitle" required value="${a.title}" /></div>
+              <div class="form-row">
+                <div class="form-group"><label>Category</label><select id="editArtCategory"><option ${a.category==='Hardware'?'selected':''}>Hardware</option><option ${a.category==='Software'?'selected':''}>Software</option><option ${a.category==='Network'?'selected':''}>Network</option><option ${a.category==='Email'?'selected':''}>Email</option><option ${a.category==='Payment'?'selected':''}>Payment</option><option ${a.category==='Security'?'selected':''}>Security</option></select></div>
+                <div class="form-group"><label>Status</label><select id="editArtStatus"><option value="Draft" ${a.status==='Draft'?'selected':''}>Draft</option><option value="Published" ${a.status==='Published'?'selected':''}>Published</option></select></div>
+              </div>
+              <div class="form-group"><label>Problem *</label><textarea id="editArtProblem" rows="2" required>${a.problem}</textarea></div>
+              <div class="form-group"><label>Solution *</label><textarea id="editArtSolution" rows="3" required>${a.solution}</textarea></div>
+              <div class="form-group"><label>Steps</label><textarea id="editArtSteps" rows="2">${a.steps || ''}</textarea></div>
+              <div class="form-actions"><button type="button" class="btn" onclick="closeModal()">Cancel</button><button type="submit" class="btn btn-primary">Update Article</button></div>
+            </form>`);
+        }
+
+        function updateArticle(event, id) {
+            event.preventDefault();
+            const a = db.knowledge.find(k => k.id === id);
+            if (!a) return toast('Not found', 'error');
+            a.title = document.getElementById('editArtTitle').value.trim();
+            a.category = document.getElementById('editArtCategory').value;
+            a.status = document.getElementById('editArtStatus').value;
+            a.problem = document.getElementById('editArtProblem').value.trim();
+            a.solution = document.getElementById('editArtSolution').value.trim();
+            a.steps = document.getElementById('editArtSteps').value.trim();
+            saveDB();
+            toast('Article updated.', 'success');
+            closeModal();
+            navigateTo(currentPage);
+        }
+
+        function deleteArticle(id) {
+            if (!confirm('Delete this article?')) return;
+            db.knowledge = db.knowledge.filter(k => k.id !== id);
+            saveDB();
+            toast('Article deleted.', 'info');
+            navigateTo(currentPage);
+        }
+
+        function renderErrorCodes(container) {
+            const errors = db.errorCodes || [];
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-4">
+              <div class="section-header"><h2><i class="fa-solid fa-code"></i> Error Code Database</h2><button class="btn btn-primary btn-sm" onclick="toast('Add Error Code','info')"><i class="fa-solid fa-plus"></i> Add Error Code</button></div>
+              <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Error Code</th><th>Name</th><th>Product</th><th>Meaning</th><th>Severity</th><th>Resolution</th></tr></thead>
+                <tbody>${errors.map(e => `
+                  <tr><td class="font-semibold text-red-600">${e.code}</td><td>${e.name}</td><td>${e.product}</td><td>${e.meaning}</td><td><span class="chip ${e.severity==='Critical'?'bg-red-50 text-red-600':e.severity==='Major'?'bg-amber-50 text-amber-700':'bg-green-50 text-green-700'}">${e.severity}</span></td><td class="text-sm">${e.resolution}</td></tr>
+                `).join('') || '<tr><td colspan="6" class="text-center text-gray-400 py-8">No error codes</td></tr>'}</tbody>
+              </table></div></div>
+            </div>`;
+        }
+
+        // ============================================================
+        // SLA, PERFORMANCE, SURVEYS
+        // ============================================================
+        function renderSLA(container) {
+            const slas = db.slas || [];
+            const tickets = db.tickets || [];
+            const total = tickets.length;
+            const breached = tickets.filter(t => t.slaStatus === 'Breached').length;
+            const atRisk = tickets.filter(t => t.slaStatus === 'At Risk' || t.slaStatus === 'Warning').length;
+            const onTrack = total - breached - atRisk;
+
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-4">
+              <div class="section-header"><h2><i class="fa-solid fa-shield-halved"></i> SLA Management</h2></div>
+              <div class="stats-grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-check-circle text-green-500"></i> On Track</div><div class="value">${onTrack}</div><span class="change up">${Math.round(onTrack/total*100||0)}%</span></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-clock text-amber-500"></i> At Risk</div><div class="value">${atRisk}</div><span class="change down">Needs attention</span></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-triangle-exclamation text-red-500"></i> Breached</div><div class="value">${breached}</div><span class="change down">Critical</span></div>
+                <div class="stat-card"><div class="label"><i class="fa-solid fa-flag"></i> Total</div><div class="value">${total}</div></div>
+              </div>
+              <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Priority</th><th>Response Target</th><th>Resolution Target</th><th>Warning %</th><th>Breach %</th></tr></thead>
+                <tbody>${slas.map(s => `
+                  <tr><td>${priorityBadge(s.priority)}</td><td>${s.responseTarget} min</td><td>${s.resolutionTarget} min</td><td>${s.warningThreshold}%</td><td>${s.breachThreshold}%</td></tr>
+                `).join('') || '<tr><td colspan="5" class="text-center text-gray-400 py-8">No SLA policies defined</td></tr>'}</tbody>
+              </table></div></div>
+            </div>`;
+        }
+
+        function renderPerformance(container) {
+            const techs = db.technicians || [];
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-4">
+              <div class="section-header"><h2><i class="fa-solid fa-chart-line"></i> Technician Performance</h2></div>
+              <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Technician</th><th>Level</th><th>Skills</th><th>Workload</th><th>Performance</th><th>SLA %</th><th>FCR %</th></tr></thead>
+                <tbody>${techs.map(t => `
+                  <tr>
+                    <td class="font-semibold">${t.name}</td>
+                    <td>${t.level}</td>
+                    <td class="text-sm">${t.skills}</td>
+                    <td><span class="chip ${t.workload > 4 ? 'bg-red-50 text-red-600' : t.workload > 2 ? 'bg-amber-50 text-amber-700' : 'bg-green-50 text-green-700'}">${t.workload} tickets</span></td>
+                    <td><span class="font-bold ${t.performance >= 85 ? 'text-green-600' : t.performance >= 75 ? 'text-amber-600' : 'text-red-600'}">${t.performance}%</span></td>
+                    <td>${t.sla}%</td>
+                    <td>${t.fcr}%</td>
+                  </tr>
+                `).join('') || '<tr><td colspan="7" class="text-center text-gray-400 py-8">No technicians</td></tr>'}</tbody>
+              </table></div></div>
+            </div>`;
+        }
+
+        function renderSurveys(container) {
+            const surveys = db.surveys || [];
+            const avgRating = surveys.length ? (surveys.reduce((s, r) => s + r.rating, 0) / surveys.length).toFixed(1) :
+            'N/A';
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-4">
+              <div class="section-header"><h2><i class="fa-solid fa-star"></i> Customer Satisfaction</h2></div>
+              <div class="stats-grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="stat-card"><div class="label">Average Rating</div><div class="value">${avgRating}</div><span class="change up">⭐ ${avgRating}/5</span></div>
+                <div class="stat-card"><div class="label">Total Surveys</div><div class="value">${surveys.length}</div></div>
+                <div class="stat-card"><div class="label">Would Recommend</div><div class="value">${surveys.filter(s=>s.wouldRecommend).length}</div></div>
+                <div class="stat-card"><div class="label">Technician Satisfaction</div><div class="value">${surveys.length ? (surveys.reduce((s,r)=>s+r.technicianSatisfaction,0)/surveys.length).toFixed(1) : 'N/A'}</div></div>
+              </div>
+              <div class="table-wrap"><div class="table-scroll"><table>
+                <thead><tr><th>Ticket</th><th>Customer</th><th>Technician</th><th>Rating</th><th>Feedback</th><th>Recommend</th><th>Date</th></tr></thead>
+                <tbody>${surveys.map(s => `
+                  <tr><td>TKT-${String(s.ticketId).padStart(4,'0')}</td><td>${s.customer}</td><td>${s.technician}</td><td><span class="text-amber-500">${'★'.repeat(s.rating)}${'☆'.repeat(5-s.rating)}</span></td><td>${s.feedback}</td><td>${s.wouldRecommend ? '✅' : '❌'}</td><td>${formatDate(s.surveyDate)}</td></tr>
+                `).join('') || '<tr><td colspan="7" class="text-center text-gray-400 py-8">No surveys</td></tr>'}</tbody>
+              </table></div></div>
+            </div>`;
+        }
+
+        // ============================================================
+        // REPORTS & SETTINGS
+        // ============================================================
+        function renderReports(container) {
+            const total = db.tickets.length;
+            const open = db.tickets.filter(t => t.status === 'open' || t.status === 'assigned' || t.status ===
+                'in-progress').length;
+            const resolved = db.tickets.filter(t => t.status === 'resolved' || t.status === 'closed').length;
+            const critical = db.tickets.filter(t => t.priority === 'P1 Critical').length;
+            const avgResponse = total ? (db.tickets.reduce((s, t) => s + (t.responseTime || 0), 0) / total).toFixed(0) :
+            0;
+            const avgResolution = resolved ? (db.tickets.filter(t => t.resolutionTime).reduce((s, t) => s + (t
+                .resolutionTime || 0), 0) / resolved).toFixed(0) : 0;
+
+            container.innerHTML = `
+            <div class="max-w-[1600px] mx-auto space-y-4">
+              <div class="section-header"><h2><i class="fa-solid fa-file-pdf"></i> Enterprise Reports</h2><button class="btn btn-primary btn-sm" onclick="toast('Exporting all reports...','success')"><i class="fa-solid fa-download"></i> Export All</button></div>
+
+              <div class="stats-grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="stat-card"><div class="label">Total Tickets</div><div class="value">${total}</div></div>
+                <div class="stat-card"><div class="label">Open Tickets</div><div class="value">${open}</div></div>
+                <div class="stat-card"><div class="label">Resolved</div><div class="value">${resolved}</div></div>
+                <div class="stat-card"><div class="label">Critical</div><div class="value">${critical}</div></div>
+                <div class="stat-card"><div class="label">Avg Response</div><div class="value">${avgResponse}m</div></div>
+                <div class="stat-card"><div class="label">Avg Resolution</div><div class="value">${avgResolution}m</div></div>
+                <div class="stat-card"><div class="label">SLA Breach</div><div class="value">${db.tickets.filter(t=>t.slaStatus==='Breached').length}</div></div>
+                <div class="stat-card"><div class="label">CSAT</div><div class="value">${db.surveys.length ? (db.surveys.reduce((s,r)=>s+r.rating,0)/db.surveys.length).toFixed(1) : 'N/A'}</div></div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+                  <h4 class="font-bold text-sm text-gray-800 mb-3"><i class="fa-solid fa-folder text-indigo-500"></i> Ticket Reports</h4>
+                  <ul class="space-y-1">
+                    <li onclick="toast('Generating Ticket Summary...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>Ticket Summary</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                    <li onclick="toast('Generating Open Tickets...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>Open Tickets</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                    <li onclick="toast('Generating SLA Performance...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>SLA Performance</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                    <li onclick="toast('Generating Ticket Aging...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>Ticket Aging</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                  </ul>
+                </div>
+                <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+                  <h4 class="font-bold text-sm text-gray-800 mb-3"><i class="fa-solid fa-chart-simple text-emerald-500"></i> Performance Reports</h4>
+                  <ul class="space-y-1">
+                    <li onclick="toast('Generating Technician Productivity...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>Technician Productivity</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                    <li onclick="toast('Generating FCR Analysis...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>FCR Analysis</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                    <li onclick="toast('Generating Response Time...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>Response Time</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                    <li onclick="toast('Generating Resolution Time...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>Resolution Time</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                  </ul>
+                </div>
+                <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+                  <h4 class="font-bold text-sm text-gray-800 mb-3"><i class="fa-solid fa-laptop text-purple-500"></i> Asset Reports</h4>
+                  <ul class="space-y-1">
+                    <li onclick="toast('Generating Asset Inventory...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>Asset Inventory</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                    <li onclick="toast('Generating Asset by Status...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>Asset by Status</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                    <li onclick="toast('Generating Repair History...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>Repair History</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                    <li onclick="toast('Generating Warranty Expiry...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>Warranty Expiry</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                  </ul>
+                </div>
+                <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+                  <h4 class="font-bold text-sm text-gray-800 mb-3"><i class="fa-solid fa-users text-cyan-500"></i> Customer Reports</h4>
+                  <ul class="space-y-1">
+                    <li onclick="toast('Generating Customer Ticket History...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>Customer Ticket History</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                    <li onclick="toast('Generating Customer Satisfaction...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>Customer Satisfaction</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                    <li onclick="toast('Generating Repeat Issues...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>Repeat Issues</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                    <li onclick="toast('Generating Customer Escalations...','info')" class="text-sm text-gray-600 hover:text-indigo-600 cursor-pointer flex justify-between items-center p-1.5 hover:bg-gray-50 rounded"><span>Customer Escalations</span><i class="fa-solid fa-chevron-right text-xs text-gray-300"></i></li>
+                  </ul>
+                </div>
+              </div>
+            </div>`;
+        }
+
+        function renderSettings(container) {
+            container.innerHTML = `
+            <div class="max-w-[800px] mx-auto space-y-6">
+              <div class="section-header"><h2><i class="fa-solid fa-gear"></i> Settings</h2></div>
+              <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 mb-4">General Settings</h3>
+                <div class="space-y-4">
+                  <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                    <div><span class="font-medium">Portal Name</span><div class="text-sm text-gray-500">ePay Technical Support</div></div>
+                    <button class="btn btn-sm btn-outline" onclick="toast('Edit','info')">Edit</button>
+                  </div>
+                  <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                    <div><span class="font-medium">Default SLA</span><div class="text-sm text-gray-500">Standard (30m response, 4h resolution)</div></div>
+                    <button class="btn btn-sm btn-outline" onclick="toast('Edit','info')">Edit</button>
+                  </div>
+                  <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                    <div><span class="font-medium">Ticket Sources</span><div class="text-sm text-gray-500">Phone, Email, WhatsApp, Portal, System</div></div>
+                    <button class="btn btn-sm btn-outline" onclick="toast('Edit','info')">Edit</button>
+                  </div>
+                  <div class="flex items-center justify-between py-2">
+                    <div><span class="font-medium">AI Features</span><div class="text-sm text-gray-500">Enabled · Auto-classification · SLA Prediction</div></div>
+                    <button class="btn btn-sm btn-success" onclick="toast('AI Features active','success')"><i class="fa-solid fa-check"></i> Active</button>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 mb-4">Data Management</h3>
+                <div class="flex gap-3 flex-wrap">
+                  <button onclick="toast('Data exported as CSV','success')" class="btn btn-sm btn-primary"><i class="fa-solid fa-download"></i> Export Data</button>
+                  <button onclick="if(confirm('Reset all data?')){localStorage.removeItem(DB_KEY);location.reload();}" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i> Reset Data</button>
+                </div>
+              </div>
+            </div>`;
+        }
+
+        // ============================================================
+        // APP INIT
+        // ============================================================
+        window.navigateTo = navigateTo;
+        window.toast = toast;
+        window.closeModal = closeModal;
+        window.openCreateTicket = openCreateTicket;
+        window.saveTicket = saveTicket;
+        window.viewTicketDetail = viewTicketDetail;
+        window.updateTicket = updateTicket;
+        window.updateTicketStatus = updateTicketStatus;
+        window.resolveTicket = resolveTicket;
+        window.escalateTicket = escalateTicket;
+        window.deleteTicket = deleteTicket;
+        window.createDevIssue = createDevIssue;
+        window.updateDevIssue = updateDevIssue;
+        window.filterTicketTable = filterTicketTable;
+        window.resetTicketFilters = resetTicketFilters;
+        window.updateSubcategory = updateSubcategory;
+        window.openCreateIncident = openCreateIncident;
+        window.addComment = addComment;
+        window.openCreateArticle = openCreateArticle;
+        window.saveArticle = saveArticle;
+        window.editArticle = editArticle;
+        window.updateArticle = updateArticle;
+        window.deleteArticle = deleteArticle;
+        window.logout = function() { toast('Logging out...', 'info'); };
+
+        renderSidebarNav();
+        navigateTo('support_dashboard');
+
+        document.getElementById('globalSearch')?.addEventListener('input', function(e) {
+            const q = e.target.value.toLowerCase().trim();
+            const rows = document.querySelectorAll('#pageContent table tbody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = !q || text.includes(q) ? '' : 'none';
+            });
+        });
+
+        console.log('🚀 Enhanced Technical Support ITSM loaded with 40+ modules, comments, and advanced reporting.');
+        console.log(
+            `📊 ${db.tickets.length} tickets, ${db.technicians.length} technicians, ${db.assets.length} assets, ${db.knowledge.length} KB articles.`
+            );
+    </script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

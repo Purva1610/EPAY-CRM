@@ -1,0 +1,33 @@
+{
+  "projects": {
+    "development": "epay-crm-dev",
+    "staging": "epay-crm-staging",
+    "production": "epay-crm-prod"
+  },
+  "targets": {
+    "epay-crm-dev": {
+      "hosting": {
+        "dev": [
+          "epay-crm-dev"
+        ]
+      }
+    },
+    "epay-crm-staging": {
+      "hosting": {
+        "staging": [
+          "epay-crm-staging"
+        ]
+      }
+    },
+    "epay-crm-prod": {
+      "hosting": {
+        "prod": [
+          "epay-crm-prod"
+        ]
+      }
+    }
+  },
+  "etags": {
+    "firebase.json": "abcdef123456"
+  }
+}

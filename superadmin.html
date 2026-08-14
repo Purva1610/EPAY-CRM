@@ -1,0 +1,1915 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Super Admin · Enterprise CRM + ERP + ePay Travel</title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js">
+  </script>
+  <style>
+    /* --- Base --- */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f1f5f9;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+    }
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e2e8f0;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+
+    /* --- Sidebar (Super Admin) --- */
+    #sidebar {
+      width: 280px;
+      background: #0f172a;
+      color: #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      height: 100vh;
+      overflow-y: auto;
+      position: sticky;
+      top: 0;
+      border-right: 1px solid #1e293b;
+      transition: transform 0.3s ease, width 0.3s ease;
+      z-index: 50;
+    }
+    #sidebar .brand {
+      padding: 18px 22px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    #sidebar .brand i {
+      font-size: 24px;
+      color: #facc15;
+    }
+    #sidebar .nav {
+      flex: 1;
+      padding: 8px 0 20px 0;
+      overflow-y: auto;
+    }
+    #sidebar .nav-section {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 14px 22px 6px 22px;
+      color: #64748b;
+      font-weight: 600;
+    }
+    #sidebar .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 22px;
+      color: #cbd5e1;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+    #sidebar .nav-item:hover {
+      background: #1e293b;
+      color: #fff;
+      border-left-color: #facc15;
+    }
+    #sidebar .nav-item.active {
+      background: #1e293b;
+      color: #fff;
+      border-left-color: #facc15;
+    }
+    #sidebar .nav-item i {
+      width: 18px;
+      text-align: center;
+      font-size: 14px;
+    }
+    #sidebar .nav-item .badge {
+      margin-left: auto;
+      background: #facc15;
+      color: #0f172a;
+      font-size: 9px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+    .nav-sub .nav-item {
+      padding-left: 44px;
+      font-size: 12px;
+    }
+    .nav-sub .nav-item i {
+      font-size: 12px;
+    }
+
+    /* --- Main --- */
+    #main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 28px 40px 28px;
+      background: #f1f5f9;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top header */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+      background: #fff;
+      padding: 12px 24px;
+      border-radius: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+    .top-header .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: #0f172a;
+      cursor: pointer;
+    }
+    .top-header .search-wrap {
+      position: relative;
+      flex: 1 1 300px;
+    }
+    .top-header .search-wrap input {
+      width: 100%;
+      padding: 10px 16px 10px 42px;
+      border: 1px solid #e2e8f0;
+      border-radius: 40px;
+      font-size: 13px;
+      outline: none;
+      background: #f8fafc;
+      transition: 0.2s;
+    }
+    .top-header .search-wrap input:focus {
+      border-color: #facc15;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.15);
+    }
+    .top-header .search-wrap i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+    }
+    .top-header .actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .top-header .actions .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #facc15;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    /* Page header */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .page-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+    }
+    .page-header .sub {
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    /* KPI cards (Super Admin) */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px 18px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+    .kpi-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      border-color: #facc15;
+    }
+    .kpi-card .label {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .kpi-card .value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 4px 0 2px;
+    }
+    .kpi-card .trend {
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .kpi-card .trend.up {
+      color: #10b981;
+    }
+    .kpi-card .trend.down {
+      color: #ef4444;
+    }
+
+    /* Filter bar */
+    .filter-bar {
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 20px;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 20px;
+      align-items: flex-end;
+      margin-bottom: 24px;
+    }
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .filter-group label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #334155;
+    }
+    .filter-group select,
+    .filter-group input {
+      padding: 7px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 12px;
+      background: #fff;
+      outline: none;
+      min-width: 130px;
+      transition: 0.2s;
+    }
+    .filter-group select:focus,
+    .filter-group input:focus {
+      border-color: #facc15;
+      box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.12);
+    }
+
+    /* Tables */
+    .table-wrap {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .table-scroll {
+      overflow-x: auto;
+      padding: 0 0 4px 0;
+    }
+    .table-wrap table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .table-wrap th {
+      background: #f8fafc;
+      text-align: left;
+      padding: 12px 14px;
+      font-weight: 600;
+      color: #1e293b;
+      border-bottom: 1px solid #e2e8f0;
+      white-space: nowrap;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .table-wrap td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+    .table-wrap tr:hover td {
+      background: #f8fafc;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .status-badge.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .status-badge.danger {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .status-badge.warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .status-badge.info {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    .status-badge.secondary {
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-top: 1px solid #e2e8f0;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      color: #475569;
+    }
+    .pagination .pages {
+      display: flex;
+      gap: 4px;
+    }
+    .pagination .pages button {
+      padding: 4px 10px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+      transition: 0.15s;
+      font-size: 12px;
+    }
+    .pagination .pages button.active-page {
+      background: #facc15;
+      color: #0f172a;
+      border-color: #facc15;
+    }
+    .pagination .pages button:hover:not(.active-page) {
+      background: #f1f5f9;
+    }
+
+    /* Tabs (within modules) */
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 20px;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+    .tabs button {
+      padding: 8px 18px;
+      font-weight: 600;
+      font-size: 13px;
+      background: transparent;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+    .tabs button:hover {
+      color: #0f172a;
+    }
+    .tabs button.active {
+      color: #facc15;
+      border-bottom-color: #facc15;
+    }
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0.5;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Cards for reports */
+    .report-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px 24px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 20px;
+    }
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 6px 24px;
+    }
+    .field-grid .field-item {
+      font-size: 12px;
+      padding: 6px 0;
+      border-bottom: 1px dashed #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+    }
+    .field-grid .field-item .fname {
+      color: #64748b;
+    }
+    .field-grid .field-item .fvalue {
+      font-weight: 500;
+      color: #0f172a;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 12px;
+      border: none;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-primary {
+      background: #facc15;
+      color: #0f172a;
+    }
+    .btn-primary:hover {
+      background: #eab308;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #d1d5db;
+      color: #1e293b;
+    }
+    .btn-outline:hover {
+      background: #f1f5f9;
+    }
+    .btn-success {
+      background: #10b981;
+      color: #fff;
+    }
+    .btn-success:hover {
+      background: #059669;
+    }
+    .btn-danger {
+      background: #ef4444;
+      color: #fff;
+    }
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+    .btn-sm {
+      padding: 4px 12px;
+      font-size: 11px;
+    }
+
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .toast {
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      border-left: 4px solid #facc15;
+      min-width: 220px;
+      animation: slideInRight 0.3s ease;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toast.success {
+      border-left-color: #10b981;
+    }
+    .toast.error {
+      border-left-color: #ef4444;
+    }
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-box {
+      background: #fff;
+      border-radius: 16px;
+      max-width: 800px;
+      width: 95%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px 32px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+    .modal-box h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 280px;
+        transform: translateX(-100%);
+        z-index: 100;
+      }
+      #sidebar.open {
+        transform: translateX(0);
+      }
+      .top-header .hamburger {
+        display: block;
+      }
+      #main {
+        padding: 16px;
+      }
+      .kpi-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 90;
+    }
+    .backdrop.open {
+      display: block;
+    }
+
+    /* Password toggle */
+    .password-toggle {
+      position: relative;
+    }
+    .password-toggle .toggle-eye {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #94a3b8;
+      background: none;
+      border: none;
+      font-size: 14px;
+    }
+    .password-toggle .toggle-eye:hover {
+      color: #334155;
+    }
+  </style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+  <!-- Backdrop for mobile -->
+  <div class="backdrop" id="backdrop" onclick="toggleSidebar()"></div>
+
+  <!-- =================================================== -->
+  <!-- SIDEBAR (Super Admin)                              -->
+  <!-- =================================================== -->
+  <aside id="sidebar">
+    <div class="brand">
+      <i class="fas fa-crown"></i>
+      <span>Super Admin</span>
+    </div>
+    <nav class="nav" id="sidebarNav">
+      <div class="nav-section">Command</div>
+      <a class="nav-item active" data-tab="super-dashboard"><i class="fas fa-tachometer-alt"></i> Command Center</a>
+      <a class="nav-item" data-tab="global-search"><i class="fas fa-search"></i> Global Search</a>
+
+      <div class="nav-section">Organization</div>
+      <a class="nav-item" data-tab="org-profile"><i class="fas fa-building"></i> Company Profile</a>
+      <a class="nav-item nav-sub" data-tab="branches"><i class="fas fa-store"></i> Branches</a>
+      <a class="nav-item nav-sub" data-tab="departments"><i class="fas fa-sitemap"></i> Departments</a>
+
+      <div class="nav-section">Identity & Access</div>
+      <a class="nav-item" data-tab="users"><i class="fas fa-user-shield"></i> Users</a>
+      <a class="nav-item nav-sub" data-tab="roles"><i class="fas fa-lock"></i> Roles & Permissions</a>
+
+      <div class="nav-section">HRMS</div>
+      <a class="nav-item" data-tab="hr-dashboard"><i class="fas fa-user-tie"></i> HR Dashboard</a>
+      <a class="nav-item nav-sub" data-tab="employees"><i class="fas fa-users"></i> Employees</a>
+      <a class="nav-item nav-sub" data-tab="attendance"><i class="fas fa-clock"></i> Attendance</a>
+      <a class="nav-item nav-sub" data-tab="payroll"><i class="fas fa-wallet"></i> Payroll</a>
+
+      <div class="nav-section">Sales CRM</div>
+      <a class="nav-item" data-tab="crm-dashboard"><i class="fas fa-chart-pie"></i> CRM Dashboard</a>
+      <a class="nav-item nav-sub" data-tab="leads"><i class="fas fa-bullseye"></i> All Leads</a>
+      <a class="nav-item nav-sub" data-tab="pipeline"><i class="fas fa-project-diagram"></i> Pipeline</a>
+
+      <div class="nav-section">Telecalling</div>
+      <a class="nav-item" data-tab="tele-dashboard"><i class="fas fa-phone-alt"></i> Telecalling Ops</a>
+      <a class="nav-item nav-sub" data-tab="allocation"><i class="fas fa-random"></i> 100‑Lead Engine</a>
+      <a class="nav-item nav-sub" data-tab="calls"><i class="fas fa-phone"></i> Call Log</a>
+
+      <div class="nav-section">BDE</div>
+      <a class="nav-item" data-tab="bde-dashboard"><i class="fas fa-handshake"></i> BDE Ops</a>
+
+      <div class="nav-section">Digital Marketing</div>
+      <a class="nav-item" data-tab="marketing"><i class="fas fa-bullhorn"></i> Marketing Control</a>
+
+      <div class="nav-section">Social Media</div>
+      <a class="nav-item" data-tab="social"><i class="fas fa-hashtag"></i> Social Command</a>
+
+      <div class="nav-section">Developer Hub</div>
+      <a class="nav-item" data-tab="devhub"><i class="fas fa-code"></i> Dev Hub</a>
+      <a class="nav-item nav-sub" data-tab="bugs"><i class="fas fa-bug"></i> Bugs</a>
+
+      <div class="nav-section">IT Support</div>
+      <a class="nav-item" data-tab="it-support"><i class="fas fa-headset"></i> IT Tickets</a>
+
+      <div class="nav-section">Finance</div>
+      <a class="nav-item" data-tab="finance"><i class="fas fa-coins"></i> Finance Control</a>
+      <a class="nav-item nav-sub" data-tab="transactions"><i class="fas fa-list-ul"></i> Transactions</a>
+      <a class="nav-item nav-sub" data-tab="ledger"><i class="fas fa-book"></i> Ledger</a>
+
+      <div class="nav-section">Vendors</div>
+      <div class="nav-section">Vendor Control</div>
+      <a class="nav-item" data-tab="vendors"><i class="fas fa-store"></i> Vendor Command</a>
+      <a class="nav-item nav-sub" data-tab="vendor-apps"><i class="fas fa-file-signature"></i> Applications <span class="badge">12</span></a>
+      <a class="nav-item nav-sub" data-tab="vendor-approvals"><i class="fas fa-check-double"></i> Approvals <span class="badge">8</span></a>
+      <a class="nav-item nav-sub" data-tab="vendor-network"><i class="fas fa-project-diagram"></i> Network &amp; Attribution</a>
+      <a class="nav-item nav-sub" data-tab="vendor-products"><i class="fas fa-box-open"></i> Product Approvals</a>
+      <a class="nav-item nav-sub" data-tab="vendor-finance"><i class="fas fa-rupee-sign"></i> Settlements Queue</a>
+      <a class="nav-item nav-sub" data-tab="vendor-risk"><i class="fas fa-shield-alt"></i> Risk &amp; Performance</a>
+      <a class="nav-item nav-sub" data-tab="vendor-360"><i class="fas fa-id-card"></i> Vendor 360°</a>
+
+
+      <div class="nav-section">Franchise Network</div>
+      <a class="nav-item" data-tab="franchise"><i class="fas fa-store-alt"></i> Franchises</a>
+      <a class="nav-item nav-sub" data-tab="franchise-owners"><i class="fas fa-user-tie"></i> Owners</a>
+
+      <div class="nav-section">Members / Customers</div>
+      <a class="nav-item" data-tab="members"><i class="fas fa-id-card"></i> Customer 360</a>
+
+      <div class="nav-section">Projects & Tasks</div>
+      <a class="nav-item" data-tab="projects"><i class="fas fa-project-diagram"></i> Projects</a>
+      <a class="nav-item nav-sub" data-tab="tasks"><i class="fas fa-tasks"></i> Tasks</a>
+      <a class="nav-item nav-sub" data-tab="approvals"><i class="fas fa-check-double"></i> Approvals</a>
+
+      <div class="nav-section">Communication</div>
+      <a class="nav-item" data-tab="communication"><i class="fas fa-comments"></i> Communication Hub</a>
+
+      <div class="nav-section">AI & Intelligence</div>
+      <a class="nav-item" data-tab="ai"><i class="fas fa-robot"></i> AI Copilot</a>
+
+      <div class="nav-section">Reports & Analytics</div>
+      <a class="nav-item" data-tab="reports"><i class="fas fa-file-alt"></i> Report Center</a>
+
+      <div class="nav-section">Exceptions & Security</div>
+      <a class="nav-item" data-tab="exceptions"><i class="fas fa-exclamation-triangle"></i> Exception Center</a>
+      <a class="nav-item nav-sub" data-tab="security"><i class="fas fa-shield-alt"></i> Security Center</a>
+      <a class="nav-item nav-sub" data-tab="audit"><i class="fas fa-clipboard-list"></i> Audit Log</a>
+
+
+      <div class="nav-section">ePay Travel</div>
+      <a class="nav-item" data-tab="travel-command"><i class="fas fa-plane-departure"></i> Travel Command</a>
+      <a class="nav-item nav-sub" data-tab="travel-alerts"><i class="fas fa-bell"></i> Travel Alerts</a>
+      <a class="nav-item nav-sub" data-tab="travel-approvals"><i class="fas fa-check-double"></i> Travel Approvals <span class="badge">14</span></a>
+      <a class="nav-item" data-tab="travel-customers"><i class="fas fa-user-friends"></i> Travel Customers</a>
+      <a class="nav-item nav-sub" data-tab="travel-leads"><i class="fas fa-bullseye"></i> Travel Leads</a>
+      <a class="nav-item nav-sub" data-tab="travel-enquiries"><i class="fas fa-inbox"></i> Enquiries</a>
+      <a class="nav-item" data-tab="travel-destinations"><i class="fas fa-globe-asia"></i> Destinations</a>
+      <a class="nav-item nav-sub" data-tab="travel-packages"><i class="fas fa-box-open"></i> Packages</a>
+      <a class="nav-item nav-sub" data-tab="travel-builder"><i class="fas fa-puzzle-piece"></i> Package Builder</a>
+      <a class="nav-item" data-tab="travel-suppliers"><i class="fas fa-truck-loading"></i> Suppliers</a>
+      <a class="nav-item nav-sub" data-tab="travel-api"><i class="fas fa-plug"></i> API Management</a>
+      <a class="nav-item nav-sub" data-tab="travel-pricing"><i class="fas fa-tags"></i> Pricing & Markup</a>
+      <a class="nav-item nav-sub" data-tab="travel-commission"><i class="fas fa-percentage"></i> Commission</a>
+      <a class="nav-item" data-tab="travel-bookings"><i class="fas fa-calendar-check"></i> Bookings</a>
+      <a class="nav-item nav-sub" data-tab="travel-trips"><i class="fas fa-suitcase-rolling"></i> Trip Control</a>
+      <a class="nav-item nav-sub" data-tab="travel-payments"><i class="fas fa-credit-card"></i> Payments</a>
+      <a class="nav-item nav-sub" data-tab="travel-settlements"><i class="fas fa-university"></i> Settlements</a>
+      <a class="nav-item nav-sub" data-tab="travel-refunds"><i class="fas fa-hand-holding-usd"></i> Refunds</a>
+      <a class="nav-item" data-tab="travel-galleries"><i class="fas fa-store"></i> Gallery Travel</a>
+      <a class="nav-item nav-sub" data-tab="travel-employees"><i class="fas fa-user-tie"></i> Travel Staff KPIs</a>
+      <a class="nav-item" data-tab="travel-support"><i class="fas fa-headset"></i> Travel Support</a>
+      <a class="nav-item nav-sub" data-tab="travel-ai"><i class="fas fa-robot"></i> AI Travel Control</a>
+      <a class="nav-item" data-tab="travel-reports"><i class="fas fa-chart-area"></i> Travel Reports</a>
+      <a class="nav-item nav-sub" data-tab="travel-profitability"><i class="fas fa-chart-line"></i> Profitability</a>
+      <a class="nav-item nav-sub" data-tab="travel-automation"><i class="fas fa-cogs"></i> Automation Rules</a>
+      <a class="nav-item nav-sub" data-tab="travel-settings"><i class="fas fa-sliders-h"></i> Travel Settings</a>
+
+      <div class="nav-section">System</div>
+      <a class="nav-item" data-tab="settings"><i class="fas fa-cog"></i> Enterprise Settings</a>
+    </nav>
+  </aside>
+
+  <!-- =================================================== -->
+  <!-- MAIN CONTENT                                       -->
+  <!-- =================================================== -->
+  <div id="main">
+
+    <!-- Top Header -->
+    <header class="top-header">
+      <button class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="search-wrap">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search anything... Employee, Lead, Franchise, Vendor, Invoice..." id="globalSearch" oninput="globalSearch(this.value)" />
+      </div>
+      <div class="actions">
+        <span class="text-sm text-gray-600 hidden sm:inline">Last updated: <span id="lastUpdated">Just now</span></span>
+        <i class="far fa-bell text-gray-500 text-lg cursor-pointer hover:text-gray-700" onclick="showToast('🔔 18 notifications')"></i>
+        <i class="fas fa-exclamation-triangle text-red-500 text-lg cursor-pointer hover:text-red-700" onclick="showToast('🚨 7 critical alerts')"></i>
+        <div class="avatar" onclick="showToast('👑 Super Admin')">SA</div>
+      </div>
+    </header>
+
+    <!-- =============================================== -->
+    <!-- SUPER ADMIN DASHBOARD (Command Center)         -->
+    <!-- =============================================== -->
+    <div id="tab-super-dashboard" class="tab-pane active">
+      <div class="page-header">
+        <div><h1>Command Center</h1><div class="sub">Real‑time enterprise health &amp; control</div></div>
+        <button class="btn btn-primary" onclick="showToast('Dashboard refreshed','success')"><i class="fas fa-sync"></i> Refresh</button>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-group"><label>Organization</label><select><option>All</option><option>ePay Digital</option></select></div>
+        <div class="filter-group"><label>Branch</label><select><option>All Branches</option><option>Mumbai</option><option>Delhi</option></select></div>
+        <div class="filter-group"><label>Department</label><select><option>All</option><option>Telecalling</option><option>Sales</option></select></div>
+        <div class="filter-group"><label>Date</label><input type="date" value="2026-08-07" /></div>
+        <button class="btn btn-primary" onclick="showToast('Filters applied','success')">Apply</button>
+      </div>
+
+      <!-- KPI Cards (clickable) -->
+      <div class="kpi-grid">
+        <div class="kpi-card" onclick="showModal('totalUsers')">
+          <span class="label"><i class="fas fa-users text-blue-500"></i> Total Users</span>
+          <span class="value" id="kpiTotalUsers">248</span>
+          <span class="trend up"><i class="fas fa-arrow-up"></i> +12 this month</span>
+          <div class="text-xs text-gray-500 mt-1">Active: 232 · Inactive: 16</div>
+          <div class="text-xs text-gray-500">Present: 219 · Absent: 13 · Leave: 8</div>
+        </div>
+        <div class="kpi-card" onclick="showModal('openLeads')">
+          <span class="label"><i class="fas fa-bullseye text-emerald-500"></i> Open Leads</span>
+          <span class="value">8,420</span>
+          <span class="trend up"><i class="fas fa-arrow-up"></i> +5%</span>
+          <div class="text-xs text-gray-500 mt-1">New: 1,820 · Assigned: 6,240</div>
+          <div class="text-xs text-gray-500">Unassigned: 360 · Overdue: 180</div>
+        </div>
+        <div class="kpi-card" onclick="showModal('totalRevenue')">
+          <span class="label"><i class="fas fa-rupee-sign text-amber-500"></i> Total Revenue</span>
+          <span class="value">₹2.84 Cr</span>
+          <span class="trend up"><i class="fas fa-arrow-up"></i> +18%</span>
+          <div class="text-xs text-gray-500 mt-1">Today: ₹2.4L · Week: ₹12.8L</div>
+          <div class="text-xs text-gray-500">Month: ₹48.5L · Year: ₹2.84Cr</div>
+        </div>
+        <div class="kpi-card" onclick="showModal('franchises')">
+          <span class="label"><i class="fas fa-store-alt text-indigo-500"></i> Total Franchises</span>
+          <span class="value">50</span>
+          <span class="trend up"><i class="fas fa-arrow-up"></i> +2</span>
+          <div class="text-xs text-gray-500 mt-1">Active: 42 · Pending: 5 · Inactive: 3</div>
+        </div>
+        <div class="kpi-card" onclick="showModal('telecallingToday')">
+          <span class="label"><i class="fas fa-phone-alt text-purple-500"></i> Telecalling Today</span>
+          <span class="value">35</span>
+          <span class="trend up"><i class="fas fa-arrow-up"></i> 100% capacity</span>
+          <div class="text-xs text-gray-500 mt-1">Leads Allocated: 3,500</div>
+          <div class="text-xs text-gray-500">Calls: 2,840 · Connected: 2,100</div>
+        </div>
+        <div class="kpi-card" onclick="showModal('openBugs')">
+          <span class="label"><i class="fas fa-bug text-red-500"></i> Open Bugs</span>
+          <span class="value">12</span>
+          <span class="trend down"><i class="fas fa-arrow-down"></i> -3</span>
+          <div class="text-xs text-gray-500 mt-1">In Progress: 8 · Resolved: 41</div>
+        </div>
+        <div class="kpi-card" onclick="showModal('openTickets')">
+          <span class="label"><i class="fas fa-headset text-orange-500"></i> Support Tickets</span>
+          <span class="value">18</span>
+          <span class="trend up"><i class="fas fa-arrow-up"></i> +2</span>
+          <div class="text-xs text-gray-500 mt-1">Pending: 12 · Overdue: 3</div>
+        </div>
+        <div class="kpi-card" onclick="showModal('businessHealth')">
+          <span class="label"><i class="fas fa-heartbeat text-pink-500"></i> Business Health</span>
+          <span class="value">92/100</span>
+          <span class="trend up"><i class="fas fa-arrow-up"></i> +2</span>
+          <div class="text-xs text-gray-500 mt-1">Revenue Growth: 94% · Conversion: 88%</div>
+          <div class="text-xs text-gray-500">Productivity: 91% · Retention: 89%</div>
+        </div>
+      </div>
+
+
+      <!-- ePay Travel KPI Strip -->
+      <div class="page-header mt-2 mb-3">
+        <div><h2 class="text-lg font-bold text-slate-800">✈️ ePay Travel · Live Snapshot</h2>
+        <div class="sub">Customer → Gallery → Package → Supplier → Booking → Payment → Settlement</div></div>
+        <button class="btn btn-outline btn-sm" onclick="document.querySelector('[data-tab=travel-command]').click()"><i class="fas fa-external-link-alt"></i> Open Travel Command</button>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card" onclick="document.querySelector('[data-tab=travel-command]').click()">
+          <span class="label"><i class="fas fa-rupee-sign text-amber-500"></i> Travel GMV</span>
+          <span class="value">₹1.28 Cr</span>
+          <span class="trend up"><i class="fas fa-arrow-up"></i> +22%</span>
+          <div class="text-xs text-gray-500 mt-1">Today: ₹4.2L · Month: ₹48L</div>
+        </div>
+        <div class="kpi-card" onclick="document.querySelector('[data-tab=travel-bookings]').click()">
+          <span class="label"><i class="fas fa-calendar-check text-blue-500"></i> Bookings</span>
+          <span class="value">1,842</span>
+          <span class="trend up"><i class="fas fa-arrow-up"></i> +9%</span>
+          <div class="text-xs text-gray-500 mt-1">Today: 28 · Pending: 46</div>
+        </div>
+        <div class="kpi-card" onclick="document.querySelector('[data-tab=travel-command]').click()">
+          <span class="label"><i class="fas fa-percentage text-emerald-500"></i> Gross Margin</span>
+          <span class="value">₹18.4L</span>
+          <span class="trend up"><i class="fas fa-arrow-up"></i> 14.4%</span>
+          <div class="text-xs text-gray-500 mt-1">Gallery Comm: ₹6.2L</div>
+        </div>
+        <div class="kpi-card" onclick="document.querySelector('[data-tab=travel-approvals]').click()">
+          <span class="label"><i class="fas fa-check-double text-yellow-600"></i> Approvals</span>
+          <span class="value">14</span>
+          <span class="trend down"><i class="fas fa-exclamation"></i> Needs action</span>
+          <div class="text-xs text-gray-500 mt-1">High-value: 3 · Refund: 4</div>
+        </div>
+        <div class="kpi-card" onclick="document.querySelector('[data-tab=travel-alerts]').click()">
+          <span class="label"><i class="fas fa-exclamation-triangle text-red-500"></i> Travel Alerts</span>
+          <span class="value">9</span>
+          <span class="trend down"><i class="fas fa-arrow-down"></i> Critical: 3</span>
+          <div class="text-xs text-gray-500 mt-1">API fail · Refund SLA · Supplier</div>
+        </div>
+        <div class="kpi-card" onclick="document.querySelector('[data-tab=travel-trips]').click()">
+          <span class="label"><i class="fas fa-suitcase-rolling text-indigo-500"></i> Upcoming Trips</span>
+          <span class="value">126</span>
+          <span class="trend up"><i class="fas fa-plane"></i> 7 days: 38</span>
+          <div class="text-xs text-gray-500 mt-1">Docs pending: 7 · Risk: 4</div>
+        </div>
+        <div class="kpi-card" onclick="document.querySelector('[data-tab=travel-refunds]').click()">
+          <span class="label"><i class="fas fa-hand-holding-usd text-orange-500"></i> Pending Refund</span>
+          <span class="value">₹3.8L</span>
+          <span class="trend down"><i class="fas fa-clock"></i> 11 cases</span>
+          <div class="text-xs text-gray-500 mt-1">Beyond SLA: 2</div>
+        </div>
+        <div class="kpi-card" onclick="document.querySelector('[data-tab=travel-suppliers]').click()">
+          <span class="label"><i class="fas fa-truck text-slate-600"></i> Supplier Payable</span>
+          <span class="value">₹22.6L</span>
+          <span class="trend up"><i class="fas fa-arrow-up"></i> Due this week</span>
+          <div class="text-xs text-gray-500 mt-1">Confirmed: 92% · Pending: 8%</div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="report-card"><h4 class="font-semibold text-sm mb-3"><i class="fas fa-chart-line text-blue-500 mr-2"></i>Revenue (Last 7 Days)</h4><canvas id="revenueChart" height="100"></canvas></div>
+        <div class="report-card"><h4 class="font-semibold text-sm mb-3"><i class="fas fa-chart-bar text-emerald-500 mr-2"></i>Lead Allocation by Source</h4><canvas id="leadSourceChart" height="100"></canvas></div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="flex flex-wrap gap-2 mt-4">
+        <button class="btn btn-primary" onclick="showToast('Add Employee form','success')"><i class="fas fa-user-plus"></i> Add Employee</button>
+        <button class="btn btn-outline" onclick="showToast('Add Franchise form','success')"><i class="fas fa-store-alt"></i> Add Franchise</button>
+        <button class="btn btn-outline" onclick="showToast('Add Vendor form','success')"><i class="fas fa-truck"></i> Add Vendor</button>
+        <button class="btn btn-outline" onclick="showToast('Add Lead form','success')"><i class="fas fa-plus-circle"></i> Add Lead</button>
+        <button class="btn btn-outline" onclick="showToast('Create Task form','success')"><i class="fas fa-tasks"></i> Create Task</button>
+        <button class="btn btn-outline" onclick="showToast('Generate Invoice','success')"><i class="fas fa-file-invoice"></i> Generate Invoice</button>
+        <button class="btn btn-outline" onclick="showToast('Create Campaign','success')"><i class="fas fa-bullhorn"></i> Create Campaign</button>
+        <button class="btn btn-outline" onclick="showToast('Generate Report','success')"><i class="fas fa-file-alt"></i> Generate Report</button>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- GLOBAL SEARCH                                   -->
+    <!-- =============================================== -->
+    <div id="tab-global-search" class="tab-pane">
+      <div class="page-header"><h1>Global Search</h1></div>
+      <div class="report-card">
+        <input type="text" placeholder="Search across all modules..." class="w-full p-3 border rounded-lg text-sm" oninput="showToast('Searching: '+this.value,'success')" />
+        <div class="mt-4 text-sm text-gray-500">Results will appear here for: Employees, Leads, Customers, Franchises, Vendors, Invoices, Projects, Tasks, Tickets, etc.</div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- ORGANIZATION PROFILE                            -->
+    <!-- =============================================== -->
+    <div id="tab-org-profile" class="tab-pane">
+      <div class="page-header"><h1>Company Profile</h1><button class="btn btn-outline" onclick="showToast('Edit mode','success')"><i class="fas fa-edit"></i> Edit</button></div>
+      <div class="report-card">
+        <div class="field-grid">
+          <div class="field-item"><span class="fname">Organization</span><span class="fvalue">ePay Digital Pvt Ltd</span></div>
+          <div class="field-item"><span class="fname">Business Units</span><span class="fvalue">CRM, Marketing, Operations</span></div>
+          <div class="field-item"><span class="fname">Branches</span><span class="fvalue">5</span></div>
+          <div class="field-item"><span class="fname">Departments</span><span class="fvalue">8</span></div>
+          <div class="field-item"><span class="fname">Total Employees</span><span class="fvalue">248</span></div>
+          <div class="field-item"><span class="fname">Active Franchises</span><span class="fvalue">42</span></div>
+          <div class="field-item"><span class="fname">Vendors</span><span class="fvalue">47</span></div>
+          <div class="field-item"><span class="fname">GST</span><span class="fvalue">22AAAAA1234A1Z5</span></div>
+          <div class="field-item"><span class="fname">PAN</span><span class="fvalue">AAACD1234E</span></div>
+          <div class="field-item"><span class="fname">Financial Year</span><span class="fvalue">2026-27</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- BRANCHES (already exists, we keep)              -->
+    <!-- =============================================== -->
+    <div id="tab-branches" class="tab-pane">
+      <div class="page-header"><h1>Branches</h1><button class="btn btn-primary" onclick="showToast('Add branch form','success')"><i class="fas fa-plus"></i> Add</button></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Branch ID</th><th>Code</th><th>Name</th><th>Type</th><th>City</th><th>Manager</th><th>Employees</th><th>Telecallers</th><th>Capacity</th><th>Status</th></tr></thead>
+            <tbody><tr><td>BR001</td><td>MUM-001</td><td>Mumbai Central</td><td>Main</td><td>Mumbai</td><td>Mr. Desai</td><td>45</td><td>18</td><td>1,800</td><td><span class="status-badge success">Active</span></td></tr>
+              <tr><td>BR002</td><td>DEL-001</td><td>Delhi South</td><td>Branch</td><td>Delhi</td><td>Ms. Gupta</td><td>32</td><td>12</td><td>1,200</td><td><span class="status-badge success">Active</span></td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPARTMENTS -->
+    <div id="tab-departments" class="tab-pane">
+      <div class="page-header"><h1>Departments</h1></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Dept ID</th><th>Name</th><th>Head</th><th>Employees</th><th>Status</th></tr></thead>
+            <tbody><tr><td>DEPT01</td><td>Telecalling</td><td>Mr. Sharma</td><td>38</td><td><span class="status-badge success">Active</span></td></tr>
+              <tr><td>DEPT02</td><td>Sales</td><td>Ms. Reddy</td><td>22</td><td><span class="status-badge success">Active</span></td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- USERS (DYNAMIC)                                 -->
+    <!-- =============================================== -->
+    <div id="tab-users" class="tab-pane">
+      <div class="page-header"><h1>Users</h1><button class="btn btn-primary" onclick="openUserModal()"><i class="fas fa-user-plus"></i> Add User</button></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table id="userTable">
+            <thead><tr><th>User ID</th><th>Name</th><th>Email</th><th>Role</th><th>Department</th><th>Branch</th><th>Status</th><th>Last Login</th><th>Action</th></tr></thead>
+            <tbody id="userTableBody">
+              <!-- dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROLES -->
+    <div id="tab-roles" class="tab-pane">
+      <div class="page-header"><h1>Roles & Permissions</h1><button class="btn btn-primary" onclick="showToast('Add role form','success')"><i class="fas fa-plus"></i> Add Role</button></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Role ID</th><th>Role Name</th><th>Department</th><th>Scope</th><th>Users</th><th>Permissions</th><th>Status</th></tr></thead>
+            <tbody><tr><td>R001</td><td>Super Admin</td><td>—</td><td>Global</td><td>1</td><td>All</td><td><span class="status-badge success">Active</span></td></tr>
+              <tr><td>R002</td><td>Ops Admin</td><td>Operations</td><td>Branch</td><td>5</td><td>Custom</td><td><span class="status-badge success">Active</span></td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- HR DASHBOARD                                    -->
+    <!-- =============================================== -->
+    <div id="tab-hr-dashboard" class="tab-pane">
+      <div class="page-header"><h1>HR Dashboard</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Total Employees</span><span class="value">248</span></div>
+        <div class="kpi-card"><span class="label">Present Today</span><span class="value">219</span></div>
+        <div class="kpi-card"><span class="label">Absent</span><span class="value">13</span></div>
+        <div class="kpi-card"><span class="label">On Leave</span><span class="value">8</span></div>
+        <div class="kpi-card"><span class="label">New Joiners</span><span class="value">12</span></div>
+        <div class="kpi-card"><span class="label">Exits</span><span class="value">4</span></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Employee</th><th>ID</th><th>Department</th><th>Branch</th><th>Present</th><th>Login Time</th><th>Status</th></tr></thead>
+            <tbody><tr><td>Rahul Sharma</td><td>EMP001</td><td>Telecalling</td><td>Pune</td><td>🟢</td><td>09:12</td><td><span class="status-badge success">Present</span></td></tr>
+              <tr><td>Priya Mehta</td><td>EMP002</td><td>HR</td><td>Pune</td><td>🔴</td><td>—</td><td><span class="status-badge danger">Absent</span></td></tr>
+              <tr><td>Ankit Verma</td><td>EMP003</td><td>Development</td><td>Mumbai</td><td>🟢</td><td>09:05</td><td><span class="status-badge success">Present</span></td></tr>
+            </tbody></table>
+        </div>
+      </div>
+      <p class="text-xs text-gray-500">* Click a KPI to see detailed employee list with presence indicators.</p>
+    </div>
+
+    <!-- EMPLOYEES (existing, enhanced) -->
+    <div id="tab-employees" class="tab-pane">
+      <div class="page-header"><h1>Employees</h1><button class="btn btn-primary" onclick="showToast('Add employee form','success')"><i class="fas fa-user-plus"></i> Add</button></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Emp ID</th><th>Name</th><th>Photo</th><th>Designation</th><th>Dept</th><th>Team</th><th>Branch</th><th>Status</th><th>Login</th><th>Tasks</th><th>Productivity</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td>EMP001</td><td>Rahul Sharma</td><td><img src="https://i.pravatar.cc/30?img=1" class="w-8 h-8 rounded-full border" /></td><td>Telecaller</td><td>Telecalling</td><td>Alpha</td><td>Mumbai</td><td><span class="status-badge success">Active</span></td><td><span class="status-badge info">Online</span></td><td>12/8</td><td>92%</td><td><i class="fas fa-edit text-blue-500"></i></td></tr>
+              <tr><td>EMP002</td><td>Priya Mehta</td><td><img src="https://i.pravatar.cc/30?img=2" class="w-8 h-8 rounded-full border" /></td><td>Sr. Telecaller</td><td>Telecalling</td><td>Beta</td><td>Delhi</td><td><span class="status-badge success">Active</span></td><td><span class="status-badge secondary">Available</span></td><td>15/10</td><td>95%</td><td><i class="fas fa-edit text-blue-500"></i></td></tr>
+              <tr><td>EMP003</td><td>Ankit Verma</td><td><img src="https://i.pravatar.cc/30?img=3" class="w-8 h-8 rounded-full border" /></td><td>BDE</td><td>Sales</td><td>Alpha</td><td>Bangalore</td><td><span class="status-badge warning">Leave</span></td><td><span class="status-badge danger">Offline</span></td><td>8/5</td><td>78%</td><td><i class="fas fa-edit text-blue-500"></i></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ATTENDANCE -->
+    <div id="tab-attendance" class="tab-pane">
+      <div class="page-header"><h1>Attendance</h1></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Date</th><th>Employee</th><th>Department</th><th>Check‑in</th><th>Check‑out</th><th>Status</th><th>Remarks</th></tr></thead>
+            <tbody><tr><td>2026-08-07</td><td>Rahul Sharma</td><td>Telecalling</td><td>09:12</td><td>18:20</td><td><span class="status-badge success">Present</span></td><td>—</td></tr>
+              <tr><td>2026-08-07</td><td>Priya Mehta</td><td>HR</td><td>—</td><td>—</td><td><span class="status-badge danger">Absent</span></td><td>Leave</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYROLL -->
+    <div id="tab-payroll" class="tab-pane">
+      <div class="page-header"><h1>Payroll</h1></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Employee</th><th>Designation</th><th>Fixed Salary</th><th>Incentive</th><th>Target</th><th>Achievement</th><th>Eligible</th><th>Net Pay</th><th>Status</th></tr></thead>
+            <tbody><tr><td>Rahul Sharma</td><td>Telecaller</td><td>₹25,000</td><td>₹5,000</td><td>40</td><td>37</td><td>❌</td><td>₹25,000</td><td><span class="status-badge warning">Pending</span></td></tr>
+              <tr><td>Priya Mehta</td><td>Sr. Telecaller</td><td>₹30,000</td><td>₹8,000</td><td>40</td><td>43</td><td>✅</td><td>₹38,000</td><td><span class="status-badge success">Approved</span></td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- CRM DASHBOARD                                   -->
+    <!-- =============================================== -->
+    <div id="tab-crm-dashboard" class="tab-pane">
+      <div class="page-header"><h1>Sales CRM</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Total Leads</span><span class="value">8,420</span></div>
+        <div class="kpi-card"><span class="label">Open Leads</span><span class="value">6,240</span></div>
+        <div class="kpi-card"><span class="label">Closed Won</span><span class="value">1,280</span></div>
+        <div class="kpi-card"><span class="label">Pipeline Value</span><span class="value">₹4.2 Cr</span></div>
+        <div class="kpi-card"><span class="label">Conversion Rate</span><span class="value">18.4%</span></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Lead ID</th><th>Name</th><th>Source</th><th>Status</th><th>Stage</th><th>Value</th><th>BDE</th><th>Telecaller</th><th>Next Follow-up</th></tr></thead>
+            <tbody><tr><td>L1001</td><td>Amit Kumar</td><td>Google</td><td><span class="status-badge info">Contacted</span></td><td>Negotiation</td><td>₹2.5L</td><td>Ankit</td><td>Rahul</td><td>2026-08-10</td></tr>
+              <tr><td>L1002</td><td>Sneha Patel</td><td>Meta</td><td><span class="status-badge success">Qualified</span></td><td>Demo</td><td>₹1.8L</td><td>Priya</td><td>—</td><td>2026-08-08</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEADS (already exists, we keep) -->
+    <div id="tab-leads" class="tab-pane">
+      <div class="page-header"><h1>All Leads</h1><button class="btn btn-primary" onclick="showToast('Add lead form','success')"><i class="fas fa-plus"></i> Add</button></div>
+      <div class="filter-bar">
+        <div class="filter-group"><label>Source</label><select><option>All</option><option>Google</option></select></div>
+        <div class="filter-group"><label>Status</label><select><option>All</option><option>New</option></select></div>
+        <button class="btn btn-primary" onclick="showToast('Filtered','success')">Apply</button>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Lead ID</th><th>Name</th><th>Mobile</th><th>Source</th><th>Status</th><th>Assigned To</th><th>Follow-up</th><th>Action</th></tr></thead>
+            <tbody><tr><td>L1001</td><td>Amit Kumar</td><td>9876543210</td><td>Google</td><td><span class="status-badge info">Contacted</span></td><td>Rahul S.</td><td>2026-08-08</td><td><i class="fas fa-edit text-blue-500"></i> <i class="fas fa-phone text-green-500"></i></td></tr>
+              <tr><td>L1002</td><td>Sneha Patel</td><td>9876543211</td><td>Meta</td><td><span class="status-badge success">Qualified</span></td><td>Priya M.</td><td>2026-08-07</td><td><i class="fas fa-edit text-blue-500"></i> <i class="fas fa-phone text-green-500"></i></td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PIPELINE -->
+    <div id="tab-pipeline" class="tab-pane">
+      <div class="page-header"><h1>Pipeline</h1></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Lead</th><th>Stage</th><th>Value</th><th>Probability</th><th>Expected Revenue</th><th>BDE</th><th>Last Activity</th><th>Ageing</th></tr></thead>
+            <tbody><tr><td>Amit Kumar</td><td>Negotiation</td><td>₹2.5L</td><td>70%</td><td>₹1.75L</td><td>Ankit</td><td>2026-08-07</td><td>12d</td></tr>
+              <tr><td>Sneha Patel</td><td>Demo</td><td>₹1.8L</td><td>60%</td><td>₹1.08L</td><td>Priya</td><td>2026-08-06</td><td>8d</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- TELECALLING OPS                                 -->
+    <!-- =============================================== -->
+    <div id="tab-tele-dashboard" class="tab-pane">
+      <div class="page-header"><h1>Telecalling Command</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Total Telecallers</span><span class="value">35</span></div>
+        <div class="kpi-card"><span class="label">Leads Allocated Today</span><span class="value">3,500</span></div>
+        <div class="kpi-card"><span class="label">Calls Completed</span><span class="value">2,840</span></div>
+        <div class="kpi-card"><span class="label">Connected</span><span class="value">2,100</span></div>
+        <div class="kpi-card"><span class="label">Interested</span><span class="value">620</span></div>
+        <div class="kpi-card"><span class="label">Follow-ups</span><span class="value">420</span></div>
+        <div class="kpi-card"><span class="label">Conversions</span><span class="value">85</span></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Telecaller</th><th>Assigned</th><th>Worked</th><th>Calls</th><th>Connected</th><th>Interested</th><th>Follow-ups</th><th>Converted</th><th>Conversion %</th></tr></thead>
+            <tbody><tr><td>TC-001</td><td>100</td><td>100</td><td>95</td><td>54</td><td>21</td><td>18</td><td>7</td><td>7%</td></tr>
+              <tr><td>TC-002</td><td>75</td><td>57</td><td>98</td><td>68</td><td>32</td><td>14</td><td>13</td><td>17%</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALLOCATION (existing, keep) -->
+    <div id="tab-allocation" class="tab-pane">
+      <div class="page-header"><h1>100‑Lead Engine</h1><button class="btn btn-primary" onclick="runAllocation()"><i class="fas fa-play"></i> Run Allocation</button></div>
+      <div class="grid grid-cols-3 gap-3 mb-4">
+        <div class="bg-white p-3 rounded border"><span class="text-gray-500">Leads in Pool</span><div class="text-2xl font-bold">1,240</div></div>
+        <div class="bg-white p-3 rounded border"><span class="text-gray-500">Eligible</span><div class="text-2xl font-bold">876</div></div>
+        <div class="bg-white p-3 rounded border"><span class="text-gray-500">Allocated</span><div class="text-2xl font-bold">312</div></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Telecaller</th><th>Capacity</th><th>Assigned</th><th>Remaining</th><th>Status</th></tr></thead>
+            <tbody id="allocationTable">
+              <tr><td>TC-001</td><td>100</td><td>100</td><td>0</td><td><span class="status-badge danger">Full</span></td></tr>
+              <tr><td>TC-002</td><td>100</td><td>75</td><td>25</td><td><span class="status-badge success">Available</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="bg-blue-50 border border-blue-200 p-3 rounded text-xs"><i class="fas fa-info-circle mr-2"></i> Rule: Max 100 leads/telecaller/day. Non‑repetitive allocation. Super Admin override available with reason.</div>
+    </div>
+
+    <!-- CALL LOG -->
+    <div id="tab-calls" class="tab-pane">
+      <div class="page-header"><h1>Call Log</h1></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Call ID</th><th>Lead</th><th>Telecaller</th><th>Time</th><th>Duration</th><th>Outcome</th><th>Next Follow-up</th></tr></thead>
+            <tbody><tr><td>CL001</td><td>Amit Kumar</td><td>Rahul</td><td>10:23</td><td>3:42</td><td>Interested</td><td>2026-08-08</td></tr>
+              <tr><td>CL002</td><td>Sneha Patel</td><td>Priya</td><td>11:15</td><td>2:10</td><td>Not Interested</td><td>—</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- BDE DASHBOARD                                   -->
+    <!-- =============================================== -->
+    <div id="tab-bde-dashboard" class="tab-pane">
+      <div class="page-header"><h1>BDE Operations</h1></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>BDE</th><th>Leads</th><th>Meetings</th><th>Proposals</th><th>Negotiations</th><th>Won</th><th>Lost</th><th>Pipeline Value</th><th>Won Value</th><th>Conversion</th></tr></thead>
+            <tbody><tr><td>Ankit Verma</td><td>85</td><td>18</td><td>12</td><td>8</td><td>6</td><td>4</td><td>₹28L</td><td>₹18L</td><td>64%</td></tr>
+              <tr><td>Priya Reddy</td><td>92</td><td>22</td><td>16</td><td>11</td><td>9</td><td>5</td><td>₹35L</td><td>₹27L</td><td>77%</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- MARKETING CONTROL                               -->
+    <!-- =============================================== -->
+    <div id="tab-marketing" class="tab-pane">
+      <div class="page-header"><h1>Digital Marketing</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Active Campaigns</span><span class="value">8</span></div>
+        <div class="kpi-card"><span class="label">Website Traffic</span><span class="value">12,500</span></div>
+        <div class="kpi-card"><span class="label">Leads Generated</span><span class="value">420</span></div>
+        <div class="kpi-card"><span class="label">Ad Spend</span><span class="value">₹85K</span></div>
+        <div class="kpi-card"><span class="label">ROAS</span><span class="value">3.5x</span></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Campaign</th><th>Platform</th><th>Budget</th><th>Spend</th><th>Leads</th><th>CPL</th><th>Conversion</th><th>ROAS</th><th>Status</th></tr></thead>
+            <tbody><tr><td>Q3 Franchise Push</td><td>Meta</td><td>₹1.5L</td><td>₹72.5K</td><td>420</td><td>₹172</td><td>14%</td><td>2.8x</td><td><span class="status-badge success">Active</span></td></tr>
+              <tr><td>Enterprise CRM Webinar</td><td>Google</td><td>₹85K</td><td>₹48.3K</td><td>185</td><td>₹261</td><td>9%</td><td>1.9x</td><td><span class="status-badge success">Active</span></td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- SOCIAL MEDIA                                    -->
+    <!-- =============================================== -->
+    <div id="tab-social" class="tab-pane">
+      <div class="page-header"><h1>Social Media Command</h1></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Platform</th><th>Followers</th><th>Growth</th><th>Posts</th><th>Scheduled</th><th>Reach</th><th>Engagement</th><th>Likes</th><th>Shares</th></tr></thead>
+            <tbody><tr><td>Instagram</td><td>98K</td><td>+12%</td><td>45</td><td>8</td><td>2.1M</td><td>4.8%</td><td>8.2K</td><td>1.3K</td></tr>
+              <tr><td>Facebook</td><td>125K</td><td>+8%</td><td>52</td><td>6</td><td>3.4M</td><td>5.2%</td><td>12K</td><td>2.1K</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- DEVELOPER HUB                                   -->
+    <!-- =============================================== -->
+    <div id="tab-devhub" class="tab-pane">
+      <div class="page-header"><h1>Developer Hub</h1></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Open Bugs</span><span class="value">12</span></div>
+        <div class="kpi-card"><span class="label">In Progress</span><span class="value">8</span></div>
+        <div class="kpi-card"><span class="label">Resolved</span><span class="value">41</span></div>
+        <div class="kpi-card"><span class="label">Deployments</span><span class="value">5</span></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Project</th><th>Tasks</th><th>Completed</th><th>Pending</th><th>Blockers</th><th>QA</th><th>Deployment</th><th>Progress</th></tr></thead>
+            <tbody><tr><td>CRM 2.0</td><td>48</td><td>32</td><td>16</td><td>2</td><td>In Progress</td><td>Pending</td><td>67%</td></tr>
+              <tr><td>Mobile App</td><td>32</td><td>18</td><td>14</td><td>4</td><td>Pending</td><td>--</td><td>56%</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUGS -->
+    <div id="tab-bugs" class="tab-pane">
+      <div class="page-header"><h1>Bug Tracker</h1><button class="btn btn-primary" onclick="showToast('New bug form','success')"><i class="fas fa-plus"></i> Report Bug</button></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Bug ID</th><th>Project</th><th>Module</th><th>Description</th><th>Priority</th><th>Severity</th><th>Assigned To</th><th>Status</th><th>Resolution</th></tr></thead>
+            <tbody><tr><td>BUG001</td><td>CRM 2.0</td><td>Leads</td><td>Lead duplication on import</td><td>High</td><td>Major</td><td>Rahul</td><td><span class="status-badge warning">Open</span></td><td>—</td></tr>
+              <tr><td>BUG002</td><td>Mobile App</td><td>Login</td><td>OTP not received</td><td>Medium</td><td>Minor</td><td>Priya</td><td><span class="status-badge success">Resolved</span></td><td>Fixed in v1.0.1</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- IT SUPPORT                                      -->
+    <!-- =============================================== -->
+    <div id="tab-it-support" class="tab-pane">
+      <div class="page-header"><h1>IT Support Tickets</h1><button class="btn btn-primary" onclick="showToast('New ticket form','success')"><i class="fas fa-plus"></i> New Ticket</button></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Ticket ID</th><th>Employee</th><th>Category</th><th>Issue</th><th>Priority</th><th>Assigned To</th><th>Status</th><th>SLA</th></tr></thead>
+            <tbody><tr><td>IT001</td><td>Rahul Sharma</td><td>Hardware</td><td>Laptop not booting</td><td>High</td><td>Engineer A</td><td><span class="status-badge warning">Open</span></td><td>On Track</td></tr>
+              <tr><td>IT002</td><td>Priya Mehta</td><td>Software</td><td>CRM not loading</td><td>Medium</td><td>Engineer B</td><td><span class="status-badge info">In Progress</span></td><td>At Risk</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- FINANCE                                         -->
+    <!-- =============================================== -->
+    <div id="tab-finance" class="tab-pane">
+      <div class="page-header"><h1>Finance Control</h1><button class="btn btn-primary" onclick="showToast('Add transaction','success')"><i class="fas fa-plus"></i> Add Transaction</button></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><span class="label">Total Revenue</span><span class="value">₹2.84 Cr</span></div>
+        <div class="kpi-card"><span class="label">Total Expenses</span><span class="value">₹1.92 Cr</span></div>
+        <div class="kpi-card"><span class="label">Net Profit</span><span class="value">₹92 L</span></div>
+        <div class="kpi-card"><span class="label">Pending Invoices</span><span class="value">18</span></div>
+        <div class="kpi-card"><span class="label">Outstanding</span><span class="value">₹12.4L</span></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Transaction ID</th><th>Date</th><th>Type</th><th>Customer/Vendor</th><th>Amount</th><th>GST</th><th>Payment Method</th><th>Status</th></tr></thead>
+            <tbody><tr><td>TXN001</td><td>2026-08-07</td><td>Revenue</td><td>Acme Corp</td><td>₹2,40,000</td><td>₹43,200</td><td>UPI</td><td><span class="status-badge success">Paid</span></td></tr>
+              <tr><td>TXN002</td><td>2026-08-06</td><td>Expense</td><td>TechServe</td><td>₹1,10,000</td><td>₹19,800</td><td>NEFT</td><td><span class="status-badge warning">Pending</span></td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANSACTIONS -->
+    <div id="tab-transactions" class="tab-pane">
+      <div class="page-header"><h1>All Transactions</h1></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>ID</th><th>Date</th><th>Type</th><th>Category</th><th>Amount</th><th>Tax</th><th>GST</th><th>Method</th><th>Ref</th><th>Status</th></tr></thead>
+            <tbody><tr><td>TXN001</td><td>2026-08-07</td><td>Credit</td><td>Sales</td><td>₹2.4L</td><td>₹43.2K</td><td>12%</td><td>UPI</td><td>INV-101</td><td><span class="status-badge success">Completed</span></td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEDGER -->
+    <div id="tab-ledger" class="tab-pane">
+      <div class="page-header"><h1>Ledger</h1></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Date</th><th>Particular</th><th>Debit</th><th>Credit</th><th>Balance</th><th>Reference</th></tr></thead>
+            <tbody><tr><td>2026-08-07</td><td>Invoice #101</td><td>₹0</td><td>₹2.4L</td><td>₹2.4L</td><td>INV-101</td></tr>
+              <tr><td>2026-08-06</td><td>Vendor Payment</td><td>₹1.1L</td><td>₹0</td><td>₹1.3L</td><td>PO-001</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- VENDORS                                         -->
+    <!-- =============================================== -->
+    <div id="tab-vendors" class="tab-pane">
+        <div class="page-header">
+          <div>
+            <h1>Vendor Ecosystem Control</h1>
+            <div class="sub">Super Admin · Lifecycle, attribution, commercial & settlement control</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="openVendorAction('approve')"><i class="fas fa-check"></i> Approve Vendor</button>
+            <button class="btn btn-outline" onclick="showToast('Bulk operations','success')"><i class="fas fa-layer-group"></i> Bulk Ops</button>
+            <button class="btn btn-outline" onclick="refreshVendorKPIs()"><i class="fas fa-sync"></i></button>
+          </div>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-card" onclick="document.querySelector('[data-tab=vendor-apps]').click()"><div class="label">Total Vendors</div><div class="value" id="vkTotal">2,845</div><div class="trend up">+42</div></div>
+          <div class="kpi-card"><div class="label">Active</div><div class="value" id="vkActive">2,312</div></div>
+          <div class="kpi-card" onclick="document.querySelector('[data-tab=vendor-apps]').click()"><div class="label">Applications</div><div class="value">184</div></div>
+          <div class="kpi-card" onclick="document.querySelector('[data-tab=vendor-approvals]').click()"><div class="label">Pending Approval</div><div class="value">92</div></div>
+          <div class="kpi-card"><div class="label">Pending KYC</div><div class="value">47</div></div>
+          <div class="kpi-card" onclick="document.querySelector('[data-tab=vendor-products]').click()"><div class="label">Product Approvals</div><div class="value">156</div></div>
+          <div class="kpi-card"><div class="label">Suspended</div><div class="value">28</div></div>
+          <div class="kpi-card"><div class="label">Vendor Revenue</div><div class="value">₹126Cr</div><div class="trend up">+14%</div></div>
+          <div class="kpi-card" onclick="document.querySelector('[data-tab=vendor-finance]').click()"><div class="label">Pending Payables</div><div class="value">₹8.4Cr</div></div>
+          <div class="kpi-card" onclick="document.querySelector('[data-tab=vendor-risk]').click()"><div class="label">Risk Vendors</div><div class="value">42</div></div>
+          <div class="kpi-card"><div class="label">Platform Revenue</div><div class="value">₹18.2Cr</div></div>
+          <div class="kpi-card"><div class="label">Network Inventory</div><div class="value">₹84.6Cr</div></div>
+        </div>
+        <div class="report-card">
+          <h3 style="margin:0 0 10px;font-size:14px">Real-Time Alerts</h3>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">
+            <div style="padding:8px 12px;background:#fef2f2;border-radius:8px;border-left:4px solid #ef4444">🔴 Compliance breach — VND-EP-00088</div>
+            <div style="padding:8px 12px;background:#fff7ed;border-radius:8px;border-left:4px solid #f59e0b">🟠 Payment dispute — ABC vs Mumbai Gallery</div>
+            <div style="padding:8px 12px;background:#fefce8;border-radius:8px;border-left:4px solid #eab308">🟡 Contract expiring — TechServe (18d)</div>
+            <div style="padding:8px 12px;background:#f0fdf4;border-radius:8px;border-left:4px solid #22c55e">🟢 New application — HomeCraft Pune</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+          <div class="report-card" style="margin:0"><h3 style="margin:0 0 8px;font-size:14px">Application Pipeline</h3>
+            <table style="width:100%;font-size:12px"><tr><td>New</td><td><b>184</b></td></tr><tr><td>Review</td><td>92</td></tr><tr><td>KYC</td><td>47</td></tr><tr><td>Commercial</td><td>31</td></tr><tr><td>Approved MTD</td><td><span class="status-badge success">45</span></td></tr></table>
+          </div>
+          <div class="report-card" style="margin:0"><h3 style="margin:0 0 8px;font-size:14px">Origin Gallery Acquisition</h3>
+            <table style="width:100%;font-size:12px"><tr><td>Pune</td><td>420 vendors</td><td>₹18.5Cr</td></tr><tr><td>Mumbai</td><td>360</td><td>₹14.2Cr</td></tr><tr><td>Delhi</td><td>285</td><td>₹11.8Cr</td></tr></table>
+          </div>
+        </div>
+        <div class="report-card">
+          <div style="display:flex;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+            <h3 style="margin:0;font-size:14px">Vendor Master</h3>
+            <input type="text" placeholder="Search..." oninput="filterTable('vendorMasterTable',this.value)" style="padding:6px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:12px" />
+          </div>
+          <div class="table-wrap" style="margin:0"><div class="table-scroll">
+            <table id="vendorMasterTable"><thead><tr>
+              <th></th><th>ID</th><th>Name</th><th>Tier</th><th>Origin</th><th>Category</th><th>Revenue</th><th>Score</th><th>Risk</th><th>Status</th><th></th>
+            </tr></thead><tbody id="vendorMasterBody"></tbody></table>
+          </div></div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-vendor-apps">
+        <div class="page-header"><div><h1>Vendor Applications</h1><div class="sub">Application → Review → KYC → Commercial → Risk → Active</div></div>
+          <button class="btn btn-outline" onclick="showToast('Exported CSV','success')"><i class="fas fa-download"></i> Export</button></div>
+        <div class="filter-bar">
+          <div class="filter-group"><label>Stage</label><select id="appStageFilter" onchange="renderVendorApps()"><option value="">All</option><option>New</option><option>Initial Review</option><option>KYC</option><option>Commercial</option><option>Risk</option><option>Final Approval</option></select></div>
+          <div class="filter-group"><label>Priority</label><select id="appPriFilter" onchange="renderVendorApps()"><option value="">All</option><option>High</option><option>Medium</option><option>Low</option></select></div>
+          <div class="filter-group"><label>Search</label><input id="appSearch" oninput="renderVendorApps()" placeholder="Name / city" /></div>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table><thead><tr>
+          <th>App ID</th><th>Business</th><th>Contact</th><th>Mobile</th><th>Category</th><th>City</th><th>Origin</th><th>Stage</th><th>KYC</th><th>Score</th><th>Pri</th><th>Date</th><th>Actions</th>
+        </tr></thead><tbody id="vendorAppsBody"></tbody></table></div></div>
+      </div>
+
+      <div class="tab-pane" id="tab-vendor-approvals">
+        <div class="page-header"><div><h1>Approval Center</h1><div class="sub">Stage-wise · One-click for trusted · Audited</div></div></div>
+        <div class="tabs" id="vendorApprovalTabs">
+          <button class="active" onclick="filterVendorApprovals('all',this)">All</button>
+          <button onclick="filterVendorApprovals('kyc',this)">KYC</button>
+          <button onclick="filterVendorApprovals('commercial',this)">Commercial</button>
+          <button onclick="filterVendorApprovals('risk',this)">Risk</button>
+          <button onclick="filterVendorApprovals('contract',this)">Contract</button>
+          <button onclick="filterVendorApprovals('product',this)">Product</button>
+          <button onclick="filterVendorApprovals('final',this)">Final SA</button>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table><thead><tr>
+          <th>ID</th><th>Vendor</th><th>Stage</th><th>Checklist</th><th>Origin</th><th>Risk</th><th>Wait</th><th>Actions</th>
+        </tr></thead><tbody id="vendorApprovalBody"></tbody></table></div></div>
+        <div class="report-card" style="margin-top:14px">
+          <h3 style="font-size:14px;margin:0 0 8px">One-Click Approve (Trusted)</h3>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <input id="oneClickVendor" placeholder="Vendor ID" style="padding:8px 12px;border:1px solid #d1d5db;border-radius:8px" />
+            <input id="oneClickReason" placeholder="Approval reason *" style="padding:8px 12px;border:1px solid #d1d5db;border-radius:8px;min-width:200px" />
+            <button class="btn btn-success" onclick="oneClickApproveVendor()">Approve &amp; Activate</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-vendor-network">
+        <div class="page-header"><div><h1>Network &amp; Attribution</h1><div class="sub">Origin history is immutable</div></div>
+          <button class="btn btn-primary" onclick="openVendorAction('attribution')">Change Attribution</button></div>
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="label">Origin Galleries</div><div class="value">42</div></div>
+          <div class="kpi-card"><div class="label">Connected</div><div class="value">87</div></div>
+          <div class="kpi-card"><div class="label">Pending Connections</div><div class="value">23</div></div>
+        </div>
+        <div class="report-card"><h3 style="font-size:14px;margin:0 0 10px">Connection Requests</h3>
+          <div class="table-wrap" style="margin:0"><table><thead><tr><th>Vendor</th><th>Origin</th><th>Requested</th><th>Products</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="galConnBody">
+            <tr><td><b>ABC Enterprises</b></td><td>Pune</td><td>Jaipur</td><td>18 SKUs</td><td><span class="status-badge warning">Pending</span></td>
+              <td><button class="btn btn-success btn-sm" onclick="approveGalConn(this)">Approve</button>
+                  <button class="btn btn-danger btn-sm" onclick="rejectGalConn(this)">Reject</button></td></tr>
+            <tr><td><b>DecorHub</b></td><td>Mumbai</td><td>Ahmedabad</td><td>6 SKUs</td><td><span class="status-badge warning">Pending</span></td>
+              <td><button class="btn btn-success btn-sm" onclick="approveGalConn(this)">Approve</button>
+                  <button class="btn btn-danger btn-sm" onclick="rejectGalConn(this)">Reject</button></td></tr>
+          </tbody></table></div>
+        </div>
+        <div class="report-card"><h3 style="font-size:14px;margin:0 0 10px">Attribution Audit</h3>
+          <div class="table-wrap" style="margin:0"><table><thead><tr><th>Vendor</th><th>Previous</th><th>New</th><th>Rule</th><th>Effective</th><th>By</th><th>Reason</th></tr></thead>
+          <tbody>
+            <tr><td>ABC Enterprises</td><td>—</td><td>Pune</td><td>Origin 8%</td><td>01 Feb 2025</td><td>Super Admin</td><td>Onboarding</td></tr>
+            <tr><td>TechServe</td><td>Pune</td><td>Pune locked</td><td>8% locked</td><td>15 Jun 2025</td><td>CGO</td><td>Policy</td></tr>
+          </tbody></table></div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-vendor-products">
+        <div class="page-header"><div><h1>Product Approvals</h1><div class="sub">Global review · Bulk approve</div></div>
+          <button class="btn btn-success" onclick="bulkApproveProducts()">Bulk Approve Selected</button></div>
+        <div class="filter-bar">
+          <div class="filter-group"><label>Status</label><select id="vpStatus" onchange="renderVendorProducts()"><option value="">All</option><option>Pending</option><option>Approved</option><option>Rejected</option></select></div>
+          <div class="filter-group"><label>Search</label><input id="vpSearch" oninput="renderVendorProducts()" placeholder="SKU / vendor" /></div>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table><thead><tr>
+          <th><input type="checkbox" onchange="document.querySelectorAll('.vp-check').forEach(c=>c.checked=this.checked)" /></th>
+          <th>SKU</th><th>Product</th><th>Vendor</th><th>Category</th><th>MRP</th><th>Price</th><th>Status</th><th>Actions</th>
+        </tr></thead><tbody id="vendorProductsBody"></tbody></table></div></div>
+      </div>
+
+      <div class="tab-pane" id="tab-vendor-finance">
+        <div class="page-header"><div><h1>Settlements Queue</h1><div class="sub">Review → Approve → Release → Reconcile</div></div></div>
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="label">Pending</div><div class="value">₹8.4Cr</div></div>
+          <div class="kpi-card"><div class="label">In Review</div><div class="value">₹1.2Cr</div></div>
+          <div class="kpi-card"><div class="label">Approved Today</div><div class="value">₹2.6Cr</div></div>
+          <div class="kpi-card"><div class="label">Disputed</div><div class="value">₹42L</div></div>
+        </div>
+        <div class="table-wrap"><div class="table-scroll"><table><thead><tr>
+          <th>ID</th><th>Vendor</th><th>Gallery</th><th>Period</th><th>Gross</th><th>Deductions</th><th>Net</th><th>Status</th><th>Actions</th>
+        </tr></thead><tbody id="vendorSettleBody"></tbody></table></div></div>
+      </div>
+
+      <div class="tab-pane" id="tab-vendor-risk">
+        <div class="page-header"><div><h1>Risk &amp; Performance</h1><div class="sub">Healthy → Watch → Risk → Critical</div></div></div>
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="label">Healthy</div><div class="value" style="color:#10b981">2,180</div></div>
+          <div class="kpi-card"><div class="label">Watch</div><div class="value" style="color:#f59e0b">90</div></div>
+          <div class="kpi-card"><div class="label">Risk</div><div class="value" style="color:#f97316">32</div></div>
+          <div class="kpi-card"><div class="label">Critical</div><div class="value" style="color:#ef4444">10</div></div>
+        </div>
+        <div class="table-wrap"><table><thead><tr>
+          <th>Vendor</th><th>Score</th><th>Risk</th><th>Band</th><th>Actions</th>
+        </tr></thead><tbody id="vendorRiskBody"></tbody></table></div>
+      </div>
+
+      <div class="tab-pane" id="tab-vendor-360">
+        <div class="page-header">
+          <div><h1>Vendor 360° — <span id="v360Name">ABC Enterprises</span></h1>
+            <div class="sub"><span id="v360Id">VND-EP-000124</span> · Origin Pune · Platinum</div></div>
+          <select id="v360Select" onchange="loadVendor360(this.value)" style="padding:8px 12px;border:1px solid #d1d5db;border-radius:8px">
+            <option value="VND-EP-000124">ABC Enterprises</option>
+            <option value="VEN001">TechServe</option>
+            <option value="VEN002">DecorHub</option>
+            <option value="VEN003">HomeCraft</option>
+          </select>
+        </div>
+        <div class="tabs" id="v360Tabs">
+          <button class="active" onclick="showV360Tab('overview',this)">Overview</button>
+          <button onclick="showV360Tab('network',this)">Network</button>
+          <button onclick="showV360Tab('finance',this)">Finance</button>
+          <button onclick="showV360Tab('compliance',this)">Compliance</button>
+          <button onclick="showV360Tab('audit',this)">Audit</button>
+        </div>
+        <div id="v360Content"></div>
+        <div class="report-card" style="margin-top:12px">
+          <h3 style="font-size:14px;margin:0 0 8px">Quick Control</h3>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <button class="btn btn-success btn-sm" onclick="vendorQuick('activate')">Activate</button>
+            <button class="btn btn-outline btn-sm" onclick="vendorQuick('suspend')">Suspend</button>
+            <button class="btn btn-outline btn-sm" onclick="vendorQuick('freeze')">Freeze</button>
+            <button class="btn btn-danger btn-sm" onclick="vendorQuick('terminate')">Terminate</button>
+            <button class="btn btn-outline btn-sm" onclick="vendorQuick('tier')">Change Tier</button>
+            <button class="btn btn-outline btn-sm" onclick="vendorQuick('manager')">Assign Manager</button>
+            <button class="btn btn-primary btn-sm" onclick="vendorQuick('settlement')">Approve Settlement</button>
+            <button class="btn btn-outline btn-sm" onclick="vendorQuick('holdpay')">Hold Payment</button>
+            <button class="btn btn-outline btn-sm" onclick="vendorQuick('notify')">Notify</button>
+          </div>
+        </div>
+      </div>
+
+
+    <div id="tab-franchise" class="tab-pane">
+      <div class="page-header"><h1>Franchises</h1><button class="btn btn-primary" onclick="showToast('Add franchise form','success')"><i class="fas fa-plus"></i> Add</button></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Franchise ID</th><th>Name</th><th>Owner</th><th>City</th><th>Status</th><th>Revenue</th><th>Expense</th><th>Profit</th><th>Manager</th></tr></thead>
+            <tbody><tr><td>FR001</td><td>Mumbai Central</td><td>Mr. Desai</td><td>Mumbai</td><td><span class="status-badge success">Active</span></td><td>₹18L</td><td>₹12L</td><td>₹6L</td><td>Ms. Rao</td></tr>
+              <tr><td>FR002</td><td>Delhi South</td><td>Ms. Gupta</td><td>Delhi</td><td><span class="status-badge success">Active</span></td><td>₹15L</td><td>₹10L</td><td>₹5L</td><td>Mr. Singh</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRANCHISE OWNERS -->
+    <div id="tab-franchise-owners" class="tab-pane">
+      <div class="page-header"><h1>Franchise Owners</h1></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Owner ID</th><th>Name</th><th>Mobile</th><th>Email</th><th>Total Franchises</th><th>Total Investment</th><th>Total Revenue</th><th>Total Profit</th><th>Profit Share %</th><th>Status</th></tr></thead>
+            <tbody><tr><td>OWN001</td><td>Mr. Desai</td><td>9876543210</td><td>desai@epay.in</td><td>3</td><td>₹45L</td><td>₹54L</td><td>₹18L</td><td>40%</td><td><span class="status-badge success">Active</span></td></tr>
+              <tr><td>OWN002</td><td>Ms. Gupta</td><td>9876543211</td><td>gupta@epay.in</td><td>2</td><td>₹30L</td><td>₹30L</td><td>₹10L</td><td>35%</td><td><span class="status-badge success">Active</span></td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- MEMBERS / CUSTOMER 360                          -->
+    <!-- =============================================== -->
+    <div id="tab-members" class="tab-pane">
+      <div class="page-header"><h1>Customer 360</h1><button class="btn btn-primary" onclick="showToast('Add member form','success')"><i class="fas fa-user-plus"></i> Add Member</button></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Member ID</th><th>Name</th><th>Mobile</th><th>Email</th><th>Referral ID</th><th>Subscription</th><th>Wallet</th><th>Orders</th><th>KYC</th><th>Status</th></tr></thead>
+            <tbody><tr><td>MEM001</td><td>Rajesh Kumar</td><td>9876543212</td><td>rajesh@x.com</td><td>REF123</td><td>Premium</td><td>₹2,500</td><td>5</td><td>✅</td><td><span class="status-badge success">Active</span></td></tr>
+              <tr><td>MEM002</td><td>Priya Sharma</td><td>9876543213</td><td>priya@y.com</td><td>REF456</td><td>Basic</td><td>₹0</td><td>2</td><td>❌</td><td><span class="status-badge warning">Pending</span></td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- PROJECTS & TASKS                                -->
+    <!-- =============================================== -->
+    <div id="tab-projects" class="tab-pane">
+      <div class="page-header"><h1>Projects</h1><button class="btn btn-primary" onclick="showToast('Add project form','success')"><i class="fas fa-plus"></i> Add Project</button></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Project ID</th><th>Name</th><th>Client</th><th>PM</th><th>Start</th><th>End</th><th>Status</th><th>Progress</th><th>Tasks</th><th>Blockers</th></tr></thead>
+            <tbody><tr><td>P001</td><td>CRM 2.0</td><td>Internal</td><td>Mr. Desai</td><td>2026-06-01</td><td>2026-09-30</td><td><span class="status-badge info">Active</span></td><td>67%</td><td>48</td><td>2</td></tr>
+              <tr><td>P002</td><td>Mobile App</td><td>Client A</td><td>Ms. Gupta</td><td>2026-07-15</td><td>2026-10-15</td><td><span class="status-badge warning">In Progress</span></td><td>56%</td><td>32</td><td>4</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TASKS (existing, keep) -->
+    <div id="tab-tasks" class="tab-pane">
+      <div class="page-header"><h1>Tasks</h1><button class="btn btn-primary" onclick="showToast('New task form','success')"><i class="fas fa-plus"></i> Create</button></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Task ID</th><th>Name</th><th>Assigned To</th><th>Priority</th><th>Due Date</th><th>Status</th><th>Progress</th></tr></thead>
+            <tbody><tr><td>TSK001</td><td>Review pending leads</td><td>Rahul S.</td><td>High</td><td>2026-08-08</td><td><span class="status-badge info">In Progress</span></td><td>60%</td></tr>
+              <tr><td>TSK002</td><td>Import Q3 data</td><td>Priya M.</td><td>Medium</td><td>2026-08-10</td><td><span class="status-badge warning">Pending</span></td><td>0%</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPROVALS -->
+    <div id="tab-approvals" class="tab-pane">
+      <div class="page-header"><h1>Approval Center</h1></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Request ID</th><th>Type</th><th>Requested By</th><th>Department</th><th>Priority</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody><tr><td>APR001</td><td>Lead Reassignment</td><td>Ankit V.</td><td>Telecalling</td><td>High</td><td><span class="status-badge warning">Pending</span></td><td><button class="btn btn-success btn-sm" onclick="showToast('Approved','success')">Approve</button> <button class="btn btn-danger btn-sm" onclick="showToast('Rejected','error')">Reject</button></td></tr>
+              <tr><td>APR002</td><td>Bulk Import</td><td>Priya M.</td><td>Telecalling</td><td>Medium</td><td><span class="status-badge success">Approved</span></td><td>—</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- COMMUNICATION HUB                               -->
+    <!-- =============================================== -->
+    <div id="tab-communication" class="tab-pane">
+      <div class="page-header"><h1>Communication Hub</h1></div>
+      <div class="filter-bar">
+        <div class="filter-group"><label>Channel</label><select><option>All</option><option>WhatsApp</option><option>Email</option><option>SMS</option></select></div>
+        <div class="filter-group"><label>Date</label><input type="date" /></div>
+        <button class="btn btn-primary" onclick="showToast('Filtered','success')">Apply</button>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>ID</th><th>From</th><th>To</th><th>Channel</th><th>Message</th><th>Sent</th><th>Status</th></tr></thead>
+            <tbody><tr><td>COM001</td><td>System</td><td>Rahul S.</td><td>WhatsApp</td><td>Follow‑up reminder</td><td>2026-08-07 10:30</td><td><span class="status-badge success">Delivered</span></td></tr>
+              <tr><td>COM002</td><td>Admin</td><td>Priya M.</td><td>Email</td><td>Lead assignment update</td><td>2026-08-07 09:15</td><td><span class="status-badge info">Sent</span></td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- AI COPILOT                                      -->
+    <!-- =============================================== -->
+    <div id="tab-ai" class="tab-pane">
+      <div class="page-header"><h1>AI Copilot</h1></div>
+      <div class="report-card">
+        <div class="relative">
+          <input type="text" placeholder="Ask anything... e.g. 'Show today's revenue', 'Who has the highest conversion?'" class="w-full p-3 border rounded-lg text-sm" onkeypress="if(event.key==='Enter') showToast('AI processing: '+this.value,'success')" />
+          <button class="absolute right-3 top-1/2 -translate-y-1/2 btn btn-primary" onclick="showToast('AI command executed')"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        <div class="mt-4 text-sm text-gray-500">Examples: "Compare Pune and Mumbai branches", "Show overdue follow‑ups", "Predict next month's revenue"</div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- REPORTS CENTER                                  -->
+    <!-- =============================================== -->
+    <div id="tab-reports" class="tab-pane">
+      <div class="page-header"><h1>Report Center</h1></div>
+      <div class="tabs" id="reportTabs2">
+        <button class="active" data-report="executive">Executive</button>
+        <button data-report="crm">CRM</button>
+        <button data-report="telecalling">Telecalling</button>
+        <button data-report="finance">Finance</button>
+        <button data-report="hr">HR</button>
+      </div>
+      <div id="reportContent2" class="report-card">
+        <div class="grid grid-cols-2 gap-4 text-sm">
+          <div><b>Revenue Growth</b> 94%</div>
+          <div><b>Lead Conversion</b> 88%</div>
+          <div><b>Employee Productivity</b> 91%</div>
+          <div><b>Customer Retention</b> 89%</div>
+          <div><b>Franchise Performance</b> 93%</div>
+          <div><b>Finance Health</b> 90%</div>
+          <div><b>Project Delivery</b> 87%</div>
+          <div><b>Vendor Performance</b> 95%</div>
+          <div><b>System Health</b> 98%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- EXCEPTION CENTER                                -->
+    <!-- =============================================== -->
+    <div id="tab-exceptions" class="tab-pane">
+      <div class="page-header"><h1>Exception Center</h1></div>
+      <div class="grid grid-cols-4 gap-2 mb-4">
+        <div class="bg-white p-3 rounded border text-center"><span class="text-red-500 font-bold">🔴 7</span> Critical</div>
+        <div class="bg-white p-3 rounded border text-center"><span class="text-orange-500 font-bold">🟠 31</span> High</div>
+        <div class="bg-white p-3 rounded border text-center"><span class="text-yellow-500 font-bold">🟡 84</span> Medium</div>
+        <div class="bg-white p-3 rounded border text-center"><span class="text-blue-500 font-bold">🔵 126</span> Low</div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>Exception ID</th><th>Type</th><th>Module</th><th>Priority</th><th>Detected</th><th>Assigned To</th><th>Status</th></tr></thead>
+            <tbody><tr><td>EXC001</td><td>Capacity Exceeded</td><td>Allocation</td><td>High</td><td>2026-08-07</td><td>Admin</td><td><span class="status-badge warning">Open</span></td></tr>
+              <tr><td>EXC002</td><td>Overdue Follow-up</td><td>Telecalling</td><td>Medium</td><td>2026-08-06</td><td>Rahul</td><td><span class="status-badge success">Resolved</span></td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECURITY CENTER -->
+    <div id="tab-security" class="tab-pane">
+      <div class="page-header"><h1>Security Center</h1></div>
+      <div class="grid grid-cols-3 gap-4 mb-4">
+        <div class="bg-white p-3 rounded border"><span class="font-bold">Login Activity</span> 1,234 sessions</div>
+        <div class="bg-white p-3 rounded border"><span class="font-bold">Failed Logins</span> 12 (last 24h)</div>
+        <div class="bg-white p-3 rounded border"><span class="font-bold">2FA Enabled</span> 98%</div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>User</th><th>IP</th><th>Device</th><th>Login Time</th><th>Status</th></tr></thead>
+            <tbody><tr><td>admin@epay.in</td><td>192.168.1.1</td><td>Chrome/Windows</td><td>2026-08-07 10:23</td><td><span class="status-badge success">Success</span></td></tr>
+              <tr><td>rahul@epay.in</td><td>192.168.1.5</td><td>Firefox/Mac</td><td>2026-08-07 09:12</td><td><span class="status-badge success">Success</span></td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUDIT LOG -->
+    <div id="tab-audit" class="tab-pane">
+      <div class="page-header"><h1>Audit Log</h1></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table><thead><tr><th>User</th><th>Action</th><th>Module</th><th>Record</th><th>Old Value</th><th>New Value</th><th>Date</th><th>Time</th><th>IP</th><th>Reason</th></tr></thead>
+            <tbody><tr><td>admin@epay.in</td><td>Lead Reassignment</td><td>Leads</td><td>L1005</td><td>TC-001</td><td>TC-004</td><td>2026-08-07</td><td>10:42</td><td>192.168.1.1</td><td>Workload balancing</td></tr>
+              <tr><td>admin@epay.in</td><td>User Role Change</td><td>Users</td><td>USR002</td><td>Ops Admin</td><td>Super Admin</td><td>2026-08-06</td><td>17:40</td><td>192.168.1.1</td><td>Promotion</td></tr>
+            </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================== -->
+    <!-- SETTINGS                                        -->
+    <!-- =============================================== -->
+    
+    <!-- =============================================== -->
+    <!-- ePAY TRAVEL — SUPER ADMIN MODULES               -->
+    <!-- =============================================== -->
+
+    <!-- TRAVEL COMMAND CENTER -->
+    <div id="tab-travel-command" class="tab-pane">
+      <div class="page-header">
+        <div><h1>✈️ ePay Travel Command Center</h1><div class="sub">Global control tower · Customer → Gallery → Package → Supplier → Booking → Payment → Settlement</div></div>
+        <div class="flex gap-2">
+          <button class="btn btn-outline" onclick="showToast('Global search focused','success')"><i class="fas fa-search"></i> Search</button>
+          <button class="btn btn-primary" onclick="showToast('Travel dashboard refreshed','success')"><i class="fas fa-sync"></i> Refresh</button>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <div class="filter-group"><label>Location</label><select id="tvLoc"><option>All Locations</option><option>Maharashtra</option><option>Gujarat</option><option>Delhi NCR</option><option>Karnataka</option></select></div>
+        <div class="filter-group"><label>Gallery</label><select><option>All Galleries</option><option>Mumbai Central</option><option>Pune FC</option><option>Ahmedabad</option></select></div>
+        <div class="filter-group"><label>Date Range</label><input type="date" value="2026-08-01" /> </div>
+        <div class="filter-group"><label>To</label><input type="date" value="2026-08-12" /></div>
+        <button class="btn btn-primary" onclick="refreshTravelKPIs()">Apply</button>
+      </div>
+      <div class="kpi-grid" id="travelKpiGrid">
+        <div class="kpi-card"><span class="label">Total Travel GMV</span><span class="value" id="kpiGmv">₹1.28 Cr</span><span class="trend up">+22% MoM</span></div>
+        <div class="kpi-card"><span class="label">Today's Bookings</span><span class="value" id="kpiTodayBk">28</span><span class="trend up">Target 32</span></div>
+        <div class="kpi-card"><span class="label">Monthly Bookings</span><span class="value">1,842</span><span class="trend up">+9%</span></div>
+        <div class="kpi-card"><span class="label">Total Revenue</span><span class="value">₹18.4L</span><span class="trend up">Margin 14.4%</span></div>
+        <div class="kpi-card"><span class="label">Gross Margin</span><span class="value">₹18.4L</span><span class="trend up">+1.2 pts</span></div>
+        <div class="kpi-card"><span class="label">Gallery Commission</span><span class="value">₹6.2L</span><span class="trend up">Paid: ₹4.8L</span></div>
+        <div class="kpi-card"><span class="label">Supplier Payable</span><span class="value">₹22.6L</span><span class="trend down">Due 7d</span></div>
+        <div class="kpi-card"><span class="label">Pending Refund</span><span class="value">₹3.8L</span><span class="trend down">11 cases</span></div>
+        <div class="kpi-card"><span class="label">Active Customers</span><span class="value">12,480</span><span class="trend up">+340</span></div>
+        <div class="kpi-card"><span class="label">Travel Leads</span><span class="value">2,156</span><span class="trend up">Open 890</span></div>
+        <div class="kpi-card"><span class="label">Quote Conversion</span><span class="value">31%</span><span class="trend up">+4 pts</span></div>
+        <div class="kpi-card"><span class="label">Avg Booking Value</span><span class="value">₹69,500</span><span class="trend up">+8%</span></div>
+        <div class="kpi-card"><span class="label">Upcoming Trips</span><span class="value">126</span><span class="trend up">7d: 38</span></div>
+        <div class="kpi-card"><span class="label">API Failures</span><span class="value">3</span><span class="trend down">Last 24h</span></div>
+        <div class="kpi-card"><span class="label">Support Tickets</span><span class="value">24</span><span class="trend down">SLA breach 2</span></div>
+        <div class="kpi-card"><span class="label">Repeat Customers</span><span class="value">28%</span><span class="trend up">+3 pts</span></div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
+        <div class="report-card">
+          <h4 class="font-semibold text-sm mb-3"><i class="fas fa-check-double text-yellow-600 mr-2"></i>Pending Approvals (14)</h4>
+          <ul class="text-sm space-y-2" id="cmdApprovals">
+            <li class="flex justify-between border-b pb-1"><span>High-value booking EPTR-10245</span><button class="btn btn-success btn-sm" onclick="showToast('Approved','success')">Approve</button></li>
+            <li class="flex justify-between border-b pb-1"><span>Special discount 18% · Dubai</span><button class="btn btn-success btn-sm" onclick="showToast('Approved','success')">Approve</button></li>
+            <li class="flex justify-between border-b pb-1"><span>Large refund ₹1.2L</span><button class="btn btn-outline btn-sm" onclick="document.querySelector('[data-tab=travel-approvals]').click()">Review</button></li>
+            <li class="flex justify-between"><span>New supplier activation</span><button class="btn btn-outline btn-sm" onclick="document.querySelector('[data-tab=travel-approvals]').click()">Review</button></li>
+          </ul>
+        </div>
+        <div class="report-card">
+          <h4 class="font-semibold text-sm mb-3"><i class="fas fa-exclamation-triangle text-red-500 mr-2"></i>Critical Exceptions</h4>
+          <ul class="text-sm space-y-2">
+            <li>🔴 Supplier booking failed · EPTR-10198</li>
+            <li>🔴 Refund pending beyond SLA · RF-441</li>
+            <li>🔴 Payment received, supplier not confirmed</li>
+            <li>🟠 API unavailable · Supplier B</li>
+            <li>🟠 Gallery conversion declining · Pune FC</li>
+          </ul>
+          <button class="btn btn-outline btn-sm mt-3" onclick="document.querySelector('[data-tab=travel-alerts]').click()">Open Alert Center</button>
+        </div>
+        <div class="report-card">
+          <h4 class="font-semibold text-sm mb-3"><i class="fas fa-suitcase-rolling text-indigo-500 mr-2"></i>Upcoming Trips (Risk)</h4>
+          <ul class="text-sm space-y-2">
+            <li>Docs pending · EPTR-10210 · Dubai · 3d</li>
+            <li>Payment partial · EPTR-10218 · Bali · 5d</li>
+            <li>Visa pending · EPTR-10222 · Europe · 8d</li>
+            <li>Hotel confirm pending · EPTR-10205</li>
+          </ul>
+          <button class="btn btn-outline btn-sm mt-3" onclick="document.querySelector('[data-tab=travel-trips]').click()">Trip Control</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRAVEL ALERTS -->
+    <div id="tab-travel-alerts" class="tab-pane">
+      <div class="page-header"><div><h1>🚨 Travel Alert & Exception Center</h1><div class="sub">Anything abnormal across bookings, payments, suppliers, APIs</div></div>
+        <button class="btn btn-primary" onclick="showToast('Alerts refreshed','success')"><i class="fas fa-sync"></i> Refresh</button></div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+        <div class="bg-white p-3 rounded border text-center"><span class="text-red-500 font-bold text-xl">3</span><div class="text-xs text-gray-500">Critical</div></div>
+        <div class="bg-white p-3 rounded border text-center"><span class="text-orange-500 font-bold text-xl">6</span><div class="text-xs text-gray-500">Warning</div></div>
+        <div class="bg-white p-3 rounded border text-center"><span class="text-yellow-500 font-bold text-xl">12</span><div class="text-xs text-gray-500">Medium</div></div>
+        <div class="bg-white p-3 rounded border text-center"><span class="text-blue-500 font-bold text-xl">28</span><div class="text-xs text-gray-500">Info</div></div>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table><thead><tr><th>Alert ID</th><th>Module</th><th>Record</th><th>Severity</th><th>Created</th><th>Owner</th><th>SLA</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>TAL-001</td><td>Supplier</td><td>EPTR-10198</td><td><span class="status-badge danger">Critical</span></td><td>2026-08-12 09:14</td><td>Ops Lead</td><td>2h</td><td>Open</td><td><button class="btn btn-sm btn-primary" onclick="showToast('Assigned','success')">Assign</button></td></tr>
+          <tr><td>TAL-002</td><td>Refund</td><td>RF-441</td><td><span class="status-badge danger">Critical</span></td><td>2026-08-11 16:40</td><td>Finance</td><td>Breached</td><td>Escalated</td><td><button class="btn btn-sm btn-outline" onclick="showToast('Opened case')">View</button></td></tr>
+          <tr><td>TAL-003</td><td>Payment</td><td>PAY-8821</td><td><span class="status-badge danger">Critical</span></td><td>2026-08-12 08:02</td><td>Finance</td><td>4h</td><td>Open</td><td><button class="btn btn-sm btn-primary" onclick="showToast('Supplier notified','success')">Notify</button></td></tr>
+          <tr><td>TAL-004</td><td>API</td><td>SUP-B</td><td><span class="status-badge warning">Warning</span></td><td>2026-08-12 07:55</td><td>Tech</td><td>1h</td><td>Monitoring</td><td><button class="btn btn-sm btn-outline">Logs</button></td></tr>
+          <tr><td>TAL-005</td><td>Gallery</td><td>Pune FC</td><td><span class="status-badge warning">Warning</span></td><td>2026-08-10</td><td>State Dir</td><td>7d</td><td>Open</td><td><button class="btn btn-sm btn-outline">Score</button></td></tr>
+        </tbody></table>
+      </div></div>
+    </div>
+
+    <!-- TRAVEL APPROVALS -->
+    <div id="tab-travel-approvals" class="tab-pane">
+      <div class="page-header"><div><h1>✅ Travel Approval Center</h1><div class="sub">Commercial · Product · Supplier · Financial · Gallery · Customer</div></div>
+        <button class="btn btn-outline" onclick="showToast('Exported approvals','success')"><i class="fas fa-download"></i> Export</button></div>
+      <div class="tabs" id="travelApprovalTabs">
+        <button class="active" data-ap="all" onclick="filterTravelApprovals('all')">All (14)</button>
+        <button data-ap="commercial" onclick="filterTravelApprovals('commercial')">Commercial</button>
+        <button data-ap="product" onclick="filterTravelApprovals('product')">Product</button>
+        <button data-ap="supplier" onclick="filterTravelApprovals('supplier')">Supplier</button>
+        <button data-ap="financial" onclick="filterTravelApprovals('financial')">Financial</button>
+        <button data-ap="gallery" onclick="filterTravelApprovals('gallery')">Gallery</button>
+      </div>
+      <div class="table-wrap"><div class="table-scroll">
+        <table id="travelApprovalTable"><thead><tr>
+          <th>Request ID</th><th>Type</th><th>Requested By</th><th>Gallery</th><

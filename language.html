@@ -1,0 +1,291 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ePay Language Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+
+
+
+:root{--a:#7c3aed;--a2:#4f46e5;--navy:#0f172a;--muted:#64748b;--bg:#f8fafc}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;color:#0f172a;line-height:1.55;background:#fff}
+.container{max-width:1080px;margin:0 auto;padding:0 20px}
+.nav{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid #e2e8f0;height:60px;display:flex;align-items:center}
+.nav-in{display:flex;justify-content:space-between;align-items:center;width:100%}
+.logo{font-weight:800;display:flex;align-items:center;gap:8px;font-size:1.05rem}
+.logo i{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--a),var(--a2));color:#fff;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:.7rem;font-weight:900}
+.logo span{color:var(--a)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:11px 20px;border-radius:100px;font-weight:600;font-size:.88rem;border:none;cursor:pointer;font-family:inherit;transition:.25s}
+.btn-p{background:linear-gradient(135deg,var(--a),var(--a2));color:#fff;box-shadow:0 4px 14px color-mix(in srgb,var(--a) 35%,transparent)}
+.btn-p:hover{transform:translateY(-1px)}
+.btn-g{background:#fff;border:1.5px solid #e2e8f0}
+.btn-g:hover{border-color:var(--a)}
+.btn-sm{padding:7px 14px;font-size:.8rem}
+.hero{padding:48px 0 36px;background:linear-gradient(165deg,color-mix(in srgb,var(--a) 12%,#fff),#fff 70%)}
+.badge{display:inline-block;font-size:.72rem;font-weight:700;color:var(--a);background:color-mix(in srgb,var(--a) 12%,#fff);padding:5px 12px;border-radius:100px;margin-bottom:10px}
+h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.7rem,4vw,2.5rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:10px}
+.sub{color:var(--muted);font-size:1.02rem;max-width:540px;margin-bottom:20px}
+.ctas{display:flex;flex-wrap:wrap;gap:10px}
+section{padding:48px 0}
+.sl{font-size:.72rem;font-weight:700;color:var(--a);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.st{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.3rem,3vw,1.75rem);font-weight:800;margin-bottom:8px}
+.ss{color:var(--muted);max-width:520px;margin-bottom:22px}
+.bg{background:var(--bg)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:18px;transition:.25s}
+.card:hover{border-color:var(--a);box-shadow:0 8px 24px color-mix(in srgb,var(--a) 12%,transparent);transform:translateY(-2px)}
+.card .ic{font-size:1.4rem;margin-bottom:6px}
+.card h3{font-size:.98rem;font-weight:700;margin-bottom:4px}
+.card p{font-size:.85rem;color:var(--muted)}
+.pkg{border:1.5px solid #e2e8f0;border-radius:16px;padding:22px;background:#fff;position:relative}
+.pkg.feat{border-color:var(--a);box-shadow:0 12px 32px color-mix(in srgb,var(--a) 15%,transparent)}
+.pkg .tag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--a);color:#fff;font-size:.7rem;font-weight:700;padding:3px 12px;border-radius:100px}
+.pkg h3{font-size:1.1rem;font-weight:800;margin-bottom:6px}
+.pkg ul{list-style:none;margin:12px 0 16px;font-size:.88rem}
+.pkg li{padding:4px 0;display:flex;gap:6px}
+.pkg li::before{content:'✓';color:#10b981;font-weight:700}
+.flow{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center}
+.flow span{background:color-mix(in srgb,var(--a) 10%,#fff);border:1px solid color-mix(in srgb,var(--a) 25%,#fff);border-radius:10px;padding:8px 12px;font-size:.78rem;font-weight:600;color:var(--a)}
+.flow i{color:var(--a);font-style:normal}
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(5px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:440px;width:100%;padding:22px;position:relative;max-height:90vh;overflow:auto}
+.modal h2{font-size:1.15rem;margin-bottom:4px}
+.modal .s{font-size:.85rem;color:var(--muted);margin-bottom:12px}
+.modal-x{position:absolute;top:10px;right:10px;border:none;background:#f1f5f9;width:28px;height:28px;border-radius:50%;cursor:pointer}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fg .f{grid-column:1/-1}
+.fg label{font-size:.72rem;font-weight:600;color:var(--muted);display:block;margin-bottom:3px}
+.fg input,.fg select,.fg textarea{width:100%;padding:9px 11px;border:1.5px solid #e2e8f0;border-radius:9px;font-size:.88rem;font-family:inherit;outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--a)}
+footer{background:var(--navy);color:#94a3b8;padding:24px;text-align:center;font-size:.82rem}
+@media(max-width:800px){.grid3,.grid4,.grid2,.fg{grid-template-columns:1fr}}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+<nav class="nav"><div class="container nav-in">
+  <div class="logo"><i>eP</i> ePay <span>🗣️</span></div>
+  <button class="btn btn-p btn-sm" onclick="openM('lang')">Get started</button>
+</div></nav>
+<section class="hero"><div class="container">
+  <div class="badge">🗣️ Language Center</div>
+  <h1>Career-focused language — not generic classes.</h1>
+  <p class="sub">English, German, French, Japanese, Korean, Spanish, Arabic… with pathways like German for Nurses and Japanese for Skilled Workers.</p>
+  <div class="ctas">
+    <button class="btn btn-p" onclick="openM('lang')">Get started</button>
+    <button class="btn btn-g" onclick="document.getElementById('main').scrollIntoView({behavior:'smooth'})">Explore</button>
+  </div>
+</div></section>
+
+<section id="main"><div class="container">
+  <div class="sl">Languages</div>
+  <div class="grid4" style="margin-bottom:24px">
+    <div class="card"><h3>English</h3><p>International jobs</p></div>
+    <div class="card"><h3>German</h3><p>Nurses &amp; skilled</p></div>
+    <div class="card"><h3>French</h3><p>Mobility paths</p></div>
+    <div class="card"><h3>Japanese</h3><p>Skilled workers</p></div>
+    <div class="card"><h3>Korean</h3><p>Work pathways</p></div>
+    <div class="card"><h3>Spanish</h3><p>Global roles</p></div>
+    <div class="card"><h3>Arabic</h3><p>Gulf readiness</p></div>
+  </div>
+  <div class="sl">Career tracks</div>
+  <div class="grid3">
+    <div class="card"><div class="ic">🏥</div><h3>German for Nurses</h3><p>Healthcare mobility focus.</p></div>
+    <div class="card"><div class="ic">🔧</div><h3>Japanese for Skilled Workers</h3><p>Trade &amp; technical paths.</p></div>
+    <div class="card"><div class="ic">💼</div><h3>English for International Jobs</h3><p>Interview &amp; workplace English.</p></div>
+  </div>
+</div></section>
+
+<footer><div class="container">© 2026 ePay Digital Gallery · Partner-assisted services · Outcomes depend on providers &amp; eligibility.</div></footer>
+<div class="modal-bg" id="m-lang"><div class="modal">
+  <button class="modal-x" onclick="closeM('lang')">×</button>
+  <h2>Get started</h2>
+  <p class="s">An ePay Gallery will follow up.</p>
+  <form onsubmit="return send(event,'lang')">
+    <div class="fg">
+      <div class="f"><label>Name *</label><input name="name" required/></div>
+      <div><label>Mobile *</label><input name="mobile" required type="tel"/></div>
+      <div><label>City</label><input name="city"/></div>
+      <div class="f"><label>Interest</label><input name="interest" id="interest-lang" placeholder="What do you need?"/></div>
+      <div class="f"><button class="btn btn-p" style="width:100%" type="submit">Submit</button></div>
+    </div>
+  </form>
+</div></div>
+<script>
+function openM(id){document.getElementById('m-'+id).classList.add('open')}
+function closeM(id){document.getElementById('m-'+id).classList.remove('open')}
+document.querySelectorAll('.modal-bg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open')})});
+function send(e,id){
+  e.preventDefault();var fd=new FormData(e.target);
+  var d=Object.fromEntries(fd);d.page=id;d.ts=new Date().toISOString();
+  try{var a=JSON.parse(localStorage.getItem('epay-center-leads')||'[]');a.push(d);localStorage.setItem('epay-center-leads',JSON.stringify(a))}catch(x){}
+  closeM(id);alert('Request submitted.\nRef: CTR-'+Date.now().toString().slice(-6));e.target.reset();return false;
+}
+
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

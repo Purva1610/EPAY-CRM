@@ -1,0 +1,1409 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ePay · Gallery District Manager</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+
+
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #f1f5f9;
+        }
+        .sidebar-link {
+            transition: all 0.15s;
+            cursor: pointer;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.75rem !important;
+            padding: 0.5rem 0.75rem !important;
+            border-radius: 0.5rem !important;
+        }
+        .sidebar-link:hover {
+            background: #1e293b;
+        }
+        .sidebar-link.active {
+            background: #1e3a5f;
+            color: white;
+        }
+        .sidebar-link.active i {
+            color: #818cf8;
+        }
+        .sidebar-nav::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 20px;
+        }
+        .card-hover {
+            transition: all 0.2s;
+        }
+        .card-hover:hover {
+            box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+        .fade-in {
+            animation: fadeIn 0.25s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #0b0f19;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 13px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(120px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .toast i {
+            color: #34d399;
+            font-size: 18px;
+        }
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 620px;
+            width: 92%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+        .modal-box input,
+        .modal-box select,
+        .modal-box textarea {
+            width: 100%;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 14px;
+            margin-top: 6px;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .modal-box input:focus,
+        .modal-box select:focus,
+        .modal-box textarea:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        .modal-box label {
+            font-weight: 500;
+            font-size: 13px;
+            color: #334155;
+            margin-top: 14px;
+            display: block;
+        }
+        .modal-box .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        @media (max-width: 480px) {
+            .modal-box .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        .status-badge {
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .status-badge.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.completed {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.in-progress {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+        .status-badge.review {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+        .status-badge.error {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.verified {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.missing {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.rejected {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.approved {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.critical {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.positive {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.active {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.inactive {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.high {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.medium {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.low {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+        .status-badge.open {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.resolved {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.interested {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.converted {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.follow-up {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+        .status-badge.paid {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.overdue {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.submitted {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .delete-btn {
+            color: #ef4444;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .delete-btn:hover {
+            color: #dc2626;
+            transform: scale(1.1);
+        }
+        .edit-btn {
+            color: #4f46e5;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .edit-btn:hover {
+            color: #4338ca;
+        }
+        .scrollable-table {
+            overflow-x: auto;
+        }
+        .scrollable-table table {
+            min-width: 600px;
+        }
+        .drill-card {
+            cursor: pointer;
+        }
+        .drill-card:hover {
+            box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.15);
+        }
+        .chart-bar {
+            height: 8px;
+            border-radius: 999px;
+            background: #e2e8f0;
+            overflow: hidden;
+        }
+        .chart-bar .fill {
+            height: 100%;
+            border-radius: 999px;
+        }
+        .progress-ring {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            position: relative;
+        }
+        .progress-ring .bg {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: conic-gradient(var(--color) var(--pct), #e2e8f0 var(--pct));
+        }
+        .progress-ring .inner {
+            position: relative;
+            z-index: 2;
+            background: white;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: #0b0f19;
+        }
+        .ranking-medal {
+            font-size: 20px;
+        }
+    </style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-[#0b0f19] text-white/80 flex flex-col shrink-0 h-full border-r border-slate-800/60 fixed inset-y-0 left-0 z-50">
+        <div class="px-5 py-5 border-b border-slate-800/50 flex items-center gap-3 shrink-0">
+            <i class="fa-solid fa-layer-group text-indigo-400 text-xl"></i>
+            <span class="text-white font-bold tracking-tight">ePay <span class="text-indigo-300">·</span> District</span>
+            <span class="ml-auto text-[10px] bg-indigo-600/30 text-indigo-200 px-2 py-0.5 rounded-full">GDM</span>
+        </div>
+        <nav class="flex-1 px-3 py-4 space-y-5 text-sm overflow-y-auto sidebar-nav" id="sidebarNav">
+            <!-- rendered by JS -->
+        </nav>
+        <div class="p-4 border-t border-slate-800/50 text-xs text-slate-400 flex items-center gap-3 shrink-0">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=40&auto=format&fit=crop&q=80" class="w-7 h-7 rounded-full" alt="profile" />
+            <div>
+                <p class="text-white text-sm font-medium" id="userNameDisplay">Ravi</p>
+                <p class="text-[10px] text-slate-400">District Manager</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="ml-64 flex flex-col h-screen overflow-hidden">
+        <!-- TOP NAV -->
+        <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
+            <div class="relative w-80">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input id="globalSearch" type="text" placeholder="Search galleries, employees, customers..." class="w-full bg-slate-50 border border-slate-200 rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-indigo-500 transition" />
+            </div>
+            <div class="flex items-center gap-4">
+                <button id="switchRoleBtn" class="flex items-center gap-2 border border-slate-200 hover:bg-slate-50 text-xs font-semibold px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-arrow-right-arrow-left text-indigo-600"></i> Switch</button>
+                <div class="relative">
+                    <button id="notifBtn" class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition relative">
+                        <i class="fa-regular fa-bell text-lg"></i>
+                        <span id="notifBadge" class="absolute -top-0.5 -right-0.5 bg-rose-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">6</span>
+                    </button>
+                </div>
+                <div class="h-6 w-px bg-slate-200"></div>
+                <div class="flex items-center gap-2">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80" class="w-8 h-8 rounded-full object-cover ring-2 ring-indigo-300" alt="" />
+                </div>
+            </div>
+        </header>
+
+        <!-- SCROLLABLE MAIN -->
+        <main class="flex-1 overflow-y-auto p-5 space-y-6 bg-slate-50/80" id="mainContent">
+            <!-- dynamic content -->
+        </main>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast"><i class="fa-regular fa-circle-check"></i><span id="toastMsg">Done!</span></div>
+
+    <!-- MODAL -->
+    <div id="modalOverlay" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+        <div class="modal-box" id="modalBox">
+            <!-- filled by JS -->
+        </div>
+    </div>
+
+    <script>
+        // ================================================================
+        // DATA STORE
+        // ================================================================
+        const STORAGE_KEY = 'gdmData_v1';
+        let AppData = {};
+
+        function initDefaultData() {
+            AppData = {
+                user: { name: 'Ravi', role: 'Gallery District Manager' },
+                district: { id: 1, name: 'District A', region: 'North', hq: 'HQ North' },
+                galleries: [
+                    { id: 1, name: 'Gallery Alpha', manager: 'Rajesh', revenue: 600000, target: 700000,
+                        achievement: 86, customers: 85, newCustomers: 12, leads: 18, conversion: 67,
+                        collection: 500000, outstanding: 100000, complaints: 2, staff: 8, present: 7, visits: 45,
+                        performance: 84 },
+                    { id: 2, name: 'Gallery Beta', manager: 'Sneha', revenue: 700000, target: 750000,
+                        achievement: 93, customers: 95, newCustomers: 15, leads: 22, conversion: 68,
+                        collection: 620000, outstanding: 80000, complaints: 1, staff: 7, present: 6, visits: 38,
+                        performance: 91 },
+                    { id: 3, name: 'Gallery Gamma', manager: 'Amit', revenue: 500000, target: 550000,
+                        achievement: 91, customers: 75, newCustomers: 10, leads: 15, conversion: 67,
+                        collection: 450000, outstanding: 50000, complaints: 0, staff: 6, present: 5, visits: 32,
+                        performance: 88 },
+                    { id: 4, name: 'Gallery Delta', manager: 'Priya', revenue: 550000, target: 600000,
+                        achievement: 92, customers: 80, newCustomers: 14, leads: 20, conversion: 70,
+                        collection: 490000, outstanding: 60000, complaints: 1, staff: 7, present: 6, visits: 40,
+                        performance: 90 },
+                ],
+                employees: [
+                    { id: 1, name: 'Rajesh', role: 'Gallery Manager', galleryId: 1, present: true, tasks: 5,
+                        visits: 25, leads: 18, revenue: 600000, dailyReport: true, performance: 84 },
+                    { id: 2, name: 'Sneha', role: 'Gallery Manager', galleryId: 2, present: true, tasks: 4,
+                        visits: 20, leads: 22, revenue: 700000, dailyReport: true, performance: 91 },
+                    { id: 3, name: 'Amit', role: 'Gallery Manager', galleryId: 3, present: false, tasks: 3,
+                        visits: 18, leads: 15, revenue: 500000, dailyReport: false, performance: 88 },
+                    { id: 4, name: 'Priya', role: 'Gallery Manager', galleryId: 4, present: true, tasks: 6,
+                        visits: 22, leads: 20, revenue: 550000, dailyReport: true, performance: 90 },
+                    { id: 5, name: 'Suresh', role: 'BDE', galleryId: 1, present: true, tasks: 8, visits: 40,
+                        leads: 30, revenue: 0, dailyReport: true, performance: 82 },
+                    { id: 6, name: 'Meena', role: 'BDO', galleryId: 2, present: true, tasks: 6, visits: 35,
+                        leads: 20, revenue: 0, dailyReport: true, performance: 80 },
+                    { id: 7, name: 'Arjun', role: 'Marketing Executive', galleryId: 3, present: true, tasks: 7,
+                        visits: 15, leads: 45, revenue: 0, dailyReport: true, performance: 86 },
+                    { id: 8, name: 'Kiran', role: 'BDE', galleryId: 4, present: true, tasks: 9, visits: 38,
+                        leads: 25, revenue: 0, dailyReport: true, performance: 78 },
+                ],
+                tasks: [
+                    { id: 1, title: 'Review gallery sales reports', assignedTo: 'Rajesh', due: '2025-05-20',
+                        priority: 'High', status: 'Pending', category: 'Review' },
+                    { id: 2, title: 'Visit Gallery Gamma for audit', assignedTo: 'Amit', due: '2025-05-18',
+                        priority: 'Medium', status: 'In Progress', category: 'Visit' },
+                    { id: 3, title: 'Submit weekly district summary', assignedTo: 'Sneha', due: '2025-05-17',
+                        priority: 'Low', status: 'Pending', category: 'Reporting' },
+                    { id: 4, title: 'Follow-up with high-value leads', assignedTo: 'Suresh', due: '2025-05-16',
+                        priority: 'High', status: 'Completed', category: 'Sales' },
+                ],
+                visits: [
+                    { id: 1, employeeId: 5, galleryId: 1, customer: 'ABC Corp', date: '2025-05-16', status: 'Completed',
+                        gpsVerified: true, photoVerified: true, purpose: 'Sales meeting' },
+                    { id: 2, employeeId: 6, galleryId: 2, customer: 'XYZ Ltd', date: '2025-05-16', status: 'Pending',
+                        gpsVerified: false, photoVerified: false, purpose: 'Follow-up' },
+                    { id: 3, employeeId: 7, galleryId: 3, customer: 'PQR Inc', date: '2025-05-15', status: 'Completed',
+                        gpsVerified: true, photoVerified: true, purpose: 'Marketing campaign' },
+                    { id: 4, employeeId: 8, galleryId: 4, customer: 'LMN Enterprises', date: '2025-05-16',
+                        status: 'Completed', gpsVerified: true, photoVerified: true, purpose: 'New business' },
+                ],
+                leads: [
+                    { id: 1, customer: 'ABC Corp', source: 'BDE', status: 'Interested', assignedTo: 'Suresh',
+                        galleryId: 1, value: 50000, created: '2025-05-15' },
+                    { id: 2, customer: 'XYZ Ltd', source: 'Referral', status: 'Follow-up', assignedTo: 'Meena',
+                        galleryId: 2, value: 30000, created: '2025-05-14' },
+                    { id: 3, customer: 'LMN Enterprises', source: 'BDE', status: 'Converted', assignedTo: 'Kiran',
+                        galleryId: 4, value: 75000, created: '2025-05-13' },
+                    { id: 4, customer: 'PQR Inc', source: 'Marketing', status: 'Interested', assignedTo: 'Arjun',
+                        galleryId: 3, value: 45000, created: '2025-05-12' },
+                ],
+                collections: [
+                    { id: 1, customer: 'Art Gallery', amount: 25000, date: '2025-05-15', status: 'Paid',
+                        galleryId: 1 },
+                    { id: 2, customer: 'Modern Arts', amount: 15000, date: '2025-05-14', status: 'Overdue',
+                        galleryId: 2 },
+                    { id: 3, customer: 'Creative Hub', amount: 30000, date: '2025-05-13', status: 'Due Today',
+                        galleryId: 3 },
+                    { id: 4, customer: 'Design Studio', amount: 20000, date: '2025-05-12', status: 'Paid',
+                        galleryId: 4 },
+                ],
+                customers: [
+                    { id: 1, name: 'Art Gallery', galleryId: 1, email: 'art@example.com', phone: '9876543210',
+                        balance: 25000, status: 'Active' },
+                    { id: 2, name: 'Modern Arts', galleryId: 2, email: 'modern@example.com', phone: '9876543211',
+                        balance: 15000, status: 'Active' },
+                    { id: 3, name: 'Creative Hub', galleryId: 3, email: 'creative@example.com', phone: '9876543212',
+                        balance: 30000, status: 'Inactive' },
+                    { id: 4, name: 'Design Studio', galleryId: 4, email: 'design@example.com', phone: '9876543213',
+                        balance: 20000, status: 'Active' },
+                ],
+                complaints: [
+                    { id: 1, galleryId: 1, customer: 'Ravi', issue: 'Billing error', status: 'Open', priority: 'High',
+                        created: '2025-05-15' },
+                    { id: 2, galleryId: 2, customer: 'Sita', issue: 'Delay in delivery', status: 'In Progress',
+                        priority: 'Medium', created: '2025-05-14' },
+                    { id: 3, galleryId: 3, customer: 'Mohan', issue: 'Product quality issue', status: 'Resolved',
+                        priority: 'Low', created: '2025-05-13' },
+                ],
+                dailyReports: [
+                    { employeeId: 1, date: '2025-05-16', tasksCompleted: 4, visits: 5, leads: 3, revenue: 120000,
+                        status: 'Submitted' },
+                    { employeeId: 2, date: '2025-05-16', tasksCompleted: 3, visits: 4, leads: 2, revenue: 150000,
+                        status: 'Submitted' },
+                    { employeeId: 5, date: '2025-05-16', tasksCompleted: 5, visits: 8, leads: 4, revenue: 0,
+                        status: 'Pending' },
+                ],
+                stats: {}
+            };
+            updateStats();
+            saveData();
+        }
+
+        function loadData() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    AppData = JSON.parse(stored);
+                    // Ensure arrays
+                    if (!AppData.galleries) AppData.galleries = [];
+                    if (!AppData.employees) AppData.employees = [];
+                    if (!AppData.tasks) AppData.tasks = [];
+                    if (!AppData.visits) AppData.visits = [];
+                    if (!AppData.leads) AppData.leads = [];
+                    if (!AppData.collections) AppData.collections = [];
+                    if (!AppData.customers) AppData.customers = [];
+                    if (!AppData.complaints) AppData.complaints = [];
+                    if (!AppData.dailyReports) AppData.dailyReports = [];
+                    if (!AppData.stats) AppData.stats = {};
+                    if (!AppData.user) AppData.user = { name: 'Ravi', role: 'Gallery District Manager' };
+                    if (!AppData.district) AppData.district = { id: 1, name: 'District A', region: 'North',
+                        hq: 'HQ North' };
+                    updateStats();
+                    saveData();
+                } else {
+                    initDefaultData();
+                    saveData();
+                }
+            } catch (e) {
+                console.warn('Data load error, resetting', e);
+                initDefaultData();
+                saveData();
+            }
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(AppData));
+            } catch (e) {}
+        }
+
+        function updateStats() {
+            const galleries = AppData.galleries || [];
+            const employees = AppData.employees || [];
+            const tasks = AppData.tasks || [];
+            const visits = AppData.visits || [];
+            const leads = AppData.leads || [];
+            const collections = AppData.collections || [];
+            const complaints = AppData.complaints || [];
+            const customers = AppData.customers || [];
+
+            const totalRevenue = galleries.reduce((s, g) => s + g.revenue, 0);
+            const totalTarget = galleries.reduce((s, g) => s + g.target, 0);
+            const totalEmployees = employees.length;
+            const present = employees.filter(e => e.present).length;
+            const absent = totalEmployees - present;
+            const totalGalleries = galleries.length;
+            const totalLeads = leads.length;
+            const totalCollections = collections.reduce((s, c) => s + (c.status === 'Paid' ? c.amount : 0), 0);
+            const totalOutstanding = collections.reduce((s, c) => s + (c.status === 'Overdue' ? c.amount : 0), 0);
+            const pendingTasks = tasks.filter(t => t.status === 'Pending').length;
+            const overdueTasks = tasks.filter(t => t.status === 'Pending' && t.due < new Date().toISOString().slice(0, 10))
+                .length;
+            const criticalIssues = complaints.filter(c => c.priority === 'High' && c.status !== 'Resolved').length;
+            const visitsCompleted = visits.filter(v => v.status === 'Completed').length;
+            const visitsPlanned = visits.length;
+            const reportsSubmitted = AppData.dailyReports ? AppData.dailyReports.filter(r => r.status === 'Submitted')
+                .length : 0;
+
+            // Gallery ranking
+            const ranked = [...galleries].sort((a, b) => b.performance - a.performance);
+            const topGallery = ranked.length ? ranked[0] : null;
+            const lowestGallery = ranked.length ? ranked[ranked.length - 1] : null;
+
+            AppData.stats = {
+                districtName: AppData.district ? AppData.district.name : '—',
+                totalGalleries: totalGalleries,
+                totalEmployees: totalEmployees,
+                present: present,
+                absent: absent,
+                todayRevenue: 450000,
+                monthlyRevenue: totalRevenue,
+                districtTarget: totalTarget,
+                achievement: totalTarget ? Math.round((totalRevenue / totalTarget) * 100) : 0,
+                newCustomers: galleries.reduce((s, g) => s + g.newCustomers, 0),
+                newLeads: totalLeads,
+                fieldVisits: visitsCompleted,
+                collections: totalCollections,
+                outstanding: totalOutstanding,
+                pendingTasks: pendingTasks,
+                criticalIssues: criticalIssues,
+                overdueTasks: overdueTasks,
+                visitsPlanned: visitsPlanned,
+                visitsCompleted: visitsCompleted,
+                reportsSubmitted: reportsSubmitted,
+                topGallery: topGallery,
+                lowestGallery: lowestGallery,
+                averageGalleryRevenue: totalGalleries ? Math.round(totalRevenue / totalGalleries) : 0,
+                performanceScore: Math.round(galleries.reduce((s, g) => s + g.performance, 0) / (galleries.length || 1)),
+            };
+            saveData();
+        }
+
+        // ================================================================
+        // SIDEBAR
+        // ================================================================
+        const menuStructure = [
+            { section: 'Overview', items: [{ id: 'dashboard', label: 'Dashboard', icon: 'fa-house' }] },
+            { section: 'District', items: [
+                    { id: 'district-performance', label: 'District Performance', icon: 'fa-regular fa-layer-group' },
+                    { id: 'galleries', label: 'Gallery Performance', icon: 'fa-regular fa-images' },
+                ] },
+            { section: 'Team', items: [
+                    { id: 'team', label: 'Team Management', icon: 'fa-regular fa-users' },
+                    { id: 'bde', label: 'BDE Performance', icon: 'fa-regular fa-user-tie' },
+                    { id: 'bdo', label: 'BDO Performance', icon: 'fa-regular fa-user-check' },
+                    { id: 'marketing', label: 'Marketing Executive', icon: 'fa-regular fa-bullhorn' },
+                ] },
+            { section: 'Field', items: [
+                    { id: 'field-visits', label: 'Field Visits', icon: 'fa-regular fa-location-dot' },
+                ] },
+            { section: 'Operations', items: [
+                    { id: 'tasks', label: 'Tasks', icon: 'fa-regular fa-list-check' },
+                    { id: 'daily-reports', label: 'Daily Reports', icon: 'fa-regular fa-file-lines' },
+                    { id: 'leads', label: 'Leads', icon: 'fa-regular fa-user-plus' },
+                    { id: 'customers', label: 'Customers', icon: 'fa-regular fa-user' },
+                    { id: 'sales', label: 'Sales', icon: 'fa-regular fa-chart-line' },
+                    { id: 'collections', label: 'Collections', icon: 'fa-regular fa-hand-holding-usd' },
+                    { id: 'complaints', label: 'Complaints', icon: 'fa-regular fa-message' },
+                ] },
+            { section: 'Alerts', items: [
+                    { id: 'alerts', label: 'Operational Alerts', icon: 'fa-regular fa-triangle-exclamation' },
+                ] },
+            { section: 'Settings', items: [
+                    { id: 'settings', label: 'Settings', icon: 'fa-regular fa-gear' },
+                ] },
+        ];
+
+        let currentPage = 'dashboard';
+        let drillContext = null;
+
+        function renderSidebar() {
+            const nav = document.getElementById('sidebarNav');
+            if (!nav) return;
+            nav.innerHTML = '';
+            menuStructure.forEach(group => {
+                const div = document.createElement('div');
+                const label = document.createElement('span');
+                label.className = 'text-[10px] uppercase tracking-wider text-slate-500 font-semibold';
+                label.textContent = group.section;
+                div.appendChild(label);
+                const ul = document.createElement('ul');
+                ul.className = 'mt-2 space-y-1';
+                group.items.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className =
+                        `sidebar-link ${currentPage === item.id ? 'active' : ''}`;
+                    li.dataset.page = item.id;
+                    li.innerHTML = `<i class="${item.icon} w-4"></i>${item.label}`;
+                    li.addEventListener('click', () => {
+                        drillContext = null;
+                        navigateTo(item.id);
+                    });
+                    ul.appendChild(li);
+                });
+                div.appendChild(ul);
+                nav.appendChild(div);
+            });
+        }
+
+        function navigateTo(pageId) {
+            currentPage = pageId;
+            renderSidebar();
+            renderPage(pageId);
+        }
+
+        // ================================================================
+        // PAGE RENDERER
+        // ================================================================
+        function renderPage(pageId) {
+            const main = document.getElementById('mainContent');
+            if (!main) return;
+            main.className = 'flex-1 overflow-y-auto p-5 space-y-6 bg-slate-50/80 fade-in';
+            updateStats();
+            switch (pageId) {
+                case 'dashboard':
+                    renderDashboard(main);
+                    break;
+                case 'district-performance':
+                    renderDistrictPerformance(main);
+                    break;
+                case 'galleries':
+                    renderGalleries(main);
+                    break;
+                case 'team':
+                    renderTeam(main);
+                    break;
+                case 'bde':
+                    renderBDE(main);
+                    break;
+                case 'bdo':
+                    renderBDO(main);
+                    break;
+                case 'marketing':
+                    renderMarketing(main);
+                    break;
+                case 'field-visits':
+                    renderFieldVisits(main);
+                    break;
+                case 'tasks':
+                    renderTasks(main);
+                    break;
+                case 'daily-reports':
+                    renderDailyReports(main);
+                    break;
+                case 'leads':
+                    renderLeads(main);
+                    break;
+                case 'customers':
+                    renderCustomers(main);
+                    break;
+                case 'sales':
+                    renderSales(main);
+                    break;
+                case 'collections':
+                    renderCollections(main);
+                    break;
+                case 'complaints':
+                    renderComplaints(main);
+                    break;
+                case 'alerts':
+                    renderAlerts(main);
+                    break;
+                default:
+                    renderDashboard(main);
+            }
+        }
+
+        // ---------- DASHBOARD ----------
+        function renderDashboard(container) {
+            const s = AppData.stats;
+            const top = s.topGallery;
+            const low = s.lowestGallery;
+            container.innerHTML = `
+            <!-- Top KPI Cards -->
+            <section class="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-8 gap-3">
+              ${[
+                ['District', s.districtName, 'fa-layer-group', 'indigo'],
+                ['Galleries', s.totalGalleries, 'fa-images', 'blue'],
+                ['Employees', s.totalEmployees, 'fa-users', 'purple'],
+                ['Present', s.present, 'fa-user-check', 'emerald'],
+                ['Absent', s.absent, 'fa-user-xmark', 'rose'],
+                ["Today's Revenue", '₹'+formatNum(s.todayRevenue), 'fa-arrow-trend-up', 'teal'],
+                ['Monthly Revenue', '₹'+formatNum(s.monthlyRevenue), 'fa-calendar', 'cyan'],
+                ['District Target', '₹'+formatNum(s.districtTarget), 'fa-bullseye', 'amber'],
+                ['Achievement', s.achievement+'%', 'fa-percent', 'violet'],
+                ['New Customers', s.newCustomers, 'fa-user-plus', 'emerald'],
+                ['New Leads', s.newLeads, 'fa-user-plus', 'sky'],
+                ['Field Visits', s.fieldVisits, 'fa-location-dot', 'green'],
+                ['Collections', '₹'+formatNum(s.collections), 'fa-hand-holding-usd', 'green'],
+                ['Outstanding', '₹'+formatNum(s.outstanding), 'fa-circle-exclamation', 'rose'],
+                ['Pending Tasks', s.pendingTasks, 'fa-clock', 'orange'],
+                ['Critical Issues', s.criticalIssues, 'fa-triangle-exclamation', 'red'],
+              ].map(([label, value, icon, color]) => `
+                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm card-hover drill-card" onclick="drill('${label}')">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-${color}-50 text-${color}-600 flex items-center justify-center"><i class="fa-regular ${icon}"></i></div>
+                    <div><p class="text-[10px] text-slate-400">${label}</p><h4 class="font-bold text-sm">${value}</h4></div>
+                  </div>
+                </div>
+              `).join('')}
+            </section>
+
+            <!-- Gallery Ranking -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <p class="text-xs text-slate-400">Average Gallery Revenue</p>
+                <h3 class="text-2xl font-bold">₹${formatNum(s.averageGalleryRevenue)}</h3>
+              </div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <p class="text-xs text-slate-400">🏆 Top Gallery</p>
+                <h3 class="text-xl font-bold text-emerald-600">${top ? top.name : '—'}</h3>
+                <p class="text-xs text-slate-400">${top ? top.performance + '%' : ''}</p>
+              </div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <p class="text-xs text-slate-400">⚠️ Lowest Gallery</p>
+                <h3 class="text-xl font-bold text-rose-500">${low ? low.name : '—'}</h3>
+                <p class="text-xs text-slate-400">${low ? low.performance + '%' : ''}</p>
+              </div>
+            </div>
+
+            <!-- District Performance Score -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+              <div class="flex items-center justify-between">
+                <h4 class="font-bold text-sm text-slate-800">District Performance Score</h4>
+                <span class="text-2xl font-bold text-indigo-600">${s.performanceScore}%</span>
+              </div>
+              <div class="chart-bar mt-2"><div class="fill bg-indigo-600" style="width:${s.performanceScore}%"></div></div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+              <h4 class="font-bold text-sm text-slate-800"><i class="fa-regular fa-bolt mr-2 text-amber-500"></i>Quick Actions</h4>
+              <div class="flex flex-wrap gap-2 mt-2">
+                ${['Create Task','View Galleries','View Field Visits','View Reports','View Alerts','View Team'].map(label => `
+                  <button onclick="quickAction('${label}')" class="border border-slate-200 rounded-lg px-3 py-1.5 text-xs hover:bg-indigo-50 transition"><i class="fa-regular ${label.includes('Task') ? 'fa-list-check' : label.includes('Galleries') ? 'fa-images' : label.includes('Field') ? 'fa-location-dot' : label.includes('Reports') ? 'fa-file-lines' : label.includes('Alerts') ? 'fa-triangle-exclamation' : 'fa-users'} text-indigo-500 mr-1"></i>${label}</button>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Alerts -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+              <h4 class="font-bold text-sm text-slate-800"><i class="fa-regular fa-triangle-exclamation mr-2 text-amber-500"></i>Operational Alerts</h4>
+              <div class="space-y-2 mt-2 text-sm">
+                <div class="flex items-center gap-3 border-b pb-2"><span class="status-badge critical">Critical</span><span>Gallery Alpha target below 70%</span></div>
+                <div class="flex items-center gap-3 border-b pb-2"><span class="status-badge warning">Warning</span><span>Low attendance in Gallery Gamma</span></div>
+                <div class="flex items-center gap-3"><span class="status-badge positive">Positive</span><span>Gallery Beta achieved 93%</span></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // ---------- DISTRICT PERFORMANCE ----------
+        function renderDistrictPerformance(container) {
+            const s = AppData.stats;
+            const galleries = AppData.galleries;
+            container.innerHTML = `
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">District Revenue</p><h3 class="text-2xl font-bold">₹${formatNum(s.monthlyRevenue)}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Target</p><h3 class="text-2xl font-bold">₹${formatNum(s.districtTarget)}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Achievement</p><h3 class="text-2xl font-bold">${s.achievement}%</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Performance Score</p><h3 class="text-2xl font-bold text-indigo-600">${s.performanceScore}%</h3></div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h3 class="font-bold text-sm text-slate-800">Gallery Ranking</h3>
+              <div class="space-y-2 mt-2">
+                ${galleries.sort((a,b)=>b.performance-a.performance).map((g, i) => `
+                  <div class="flex items-center justify-between border-b pb-2">
+                    <div><span class="ranking-medal">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '#'+(i+1)}</span> ${g.name}</div>
+                    <div><span class="status-badge ${g.performance >= 90 ? 'positive' : g.performance >= 80 ? 'warning' : 'critical'}">${g.performance}%</span></div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+
+        // ---------- GALLERIES ----------
+        function renderGalleries(container) {
+            const galleries = AppData.galleries;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-images mr-2 text-purple-500"></i>Gallery Performance</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Gallery</th><th class="pb-3 text-left">Manager</th><th class="pb-3 text-left">Revenue</th><th class="pb-3 text-left">Target</th><th class="pb-3 text-left">Achievement</th><th class="pb-3 text-left">Customers</th><th class="pb-3 text-left">Leads</th><th class="pb-3 text-left">Complaints</th><th class="pb-3 text-left">Performance</th></tr></thead>
+                <tbody>${galleries.map(g => `
+                  <tr><td>${g.name}</td><td>${g.manager}</td><td>₹${formatNum(g.revenue)}</td><td>₹${formatNum(g.target)}</td><td>${g.achievement}%</td><td>${g.customers}</td><td>${g.leads}</td><td>${g.complaints}</td><td><span class="status-badge ${g.performance >= 90 ? 'positive' : g.performance >= 80 ? 'warning' : 'critical'}">${g.performance}%</span></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- TEAM ----------
+        function renderTeam(container) {
+            const employees = AppData.employees;
+            const galleries = AppData.galleries;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-users mr-2 text-indigo-500"></i>Team Management</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Name</th><th class="pb-3 text-left">Role</th><th class="pb-3 text-left">Gallery</th><th class="pb-3 text-left">Tasks</th><th class="pb-3 text-left">Visits</th><th class="pb-3 text-left">Leads</th><th class="pb-3 text-left">Performance</th><th class="pb-3 text-left">Status</th></tr></thead>
+                <tbody>${employees.map(e => {
+                  const g = galleries.find(g => g.id === e.galleryId);
+                  return `<tr><td>${e.name}</td><td>${e.role}</td><td>${g ? g.name : '—'}</td><td>${e.tasks}</td><td>${e.visits || 0}</td><td>${e.leads || 0}</td><td>${e.performance || 0}%</td><td><span class="status-badge ${e.present ? 'positive' : 'error'}">${e.present ? 'Active' : 'Inactive'}</span></td></tr>`;
+                }).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- BDE ----------
+        function renderBDE(container) {
+            const bdes = AppData.employees.filter(e => e.role === 'BDE');
+            const galleries = AppData.galleries;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-user-tie mr-2 text-emerald-500"></i>BDE Performance</h2>
+              ${bdes.length ? `<div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Name</th><th class="pb-3 text-left">Gallery</th><th class="pb-3 text-left">Leads</th><th class="pb-3 text-left">Visits</th><th class="pb-3 text-left">Tasks</th><th class="pb-3 text-left">Performance</th></tr></thead><tbody>${bdes.map(e => {
+                const g = galleries.find(g => g.id === e.galleryId);
+                return `<tr><td>${e.name}</td><td>${g ? g.name : '—'}</td><td>${e.leads}</td><td>${e.visits}</td><td>${e.tasks}</td><td>${e.performance}%</td></tr>`;
+              }).join('')}</tbody></table></div>` : '<p class="text-slate-400 text-sm mt-2">No BDEs assigned.</p>'}
+            </div>
+          `;
+        }
+
+        // ---------- BDO ----------
+        function renderBDO(container) {
+            const bdos = AppData.employees.filter(e => e.role === 'BDO');
+            const galleries = AppData.galleries;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-user-check mr-2 text-blue-500"></i>BDO Performance</h2>
+              ${bdos.length ? `<div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Name</th><th class="pb-3 text-left">Gallery</th><th class="pb-3 text-left">Visits</th><th class="pb-3 text-left">Leads</th><th class="pb-3 text-left">Tasks</th><th class="pb-3 text-left">Performance</th></tr></thead><tbody>${bdos.map(e => {
+                const g = galleries.find(g => g.id === e.galleryId);
+                return `<tr><td>${e.name}</td><td>${g ? g.name : '—'}</td><td>${e.visits}</td><td>${e.leads}</td><td>${e.tasks}</td><td>${e.performance}%</td></tr>`;
+              }).join('')}</tbody></table></div>` : '<p class="text-slate-400 text-sm mt-2">No BDOs assigned.</p>'}
+            </div>
+          `;
+        }
+
+        // ---------- MARKETING ----------
+        function renderMarketing(container) {
+            const marketers = AppData.employees.filter(e => e.role === 'Marketing Executive');
+            const galleries = AppData.galleries;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-bullhorn mr-2 text-purple-500"></i>Marketing Executive Performance</h2>
+              ${marketers.length ? `<div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Name</th><th class="pb-3 text-left">Gallery</th><th class="pb-3 text-left">Leads</th><th class="pb-3 text-left">Visits</th><th class="pb-3 text-left">Tasks</th><th class="pb-3 text-left">Performance</th></tr></thead><tbody>${marketers.map(e => {
+                const g = galleries.find(g => g.id === e.galleryId);
+                return `<tr><td>${e.name}</td><td>${g ? g.name : '—'}</td><td>${e.leads}</td><td>${e.visits}</td><td>${e.tasks}</td><td>${e.performance}%</td></tr>`;
+              }).join('')}</tbody></table></div>` : '<p class="text-slate-400 text-sm mt-2">No Marketing Executives assigned.</p>'}
+            </div>
+          `;
+        }
+
+        // ---------- FIELD VISITS ----------
+        function renderFieldVisits(container) {
+            const visits = AppData.visits;
+            const employees = AppData.employees;
+            const galleries = AppData.galleries;
+            const s = AppData.stats;
+            container.innerHTML = `
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Employees in Field</p><h3 class="text-2xl font-bold">${s.totalEmployees}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Visits Planned</p><h3 class="text-2xl font-bold">${s.visitsPlanned}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Visits Completed</p><h3 class="text-2xl font-bold text-emerald-600">${s.visitsCompleted}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">GPS Verified</p><h3 class="text-2xl font-bold text-blue-600">${visits.filter(v=>v.gpsVerified).length}</h3></div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h3 class="font-bold text-sm text-slate-800">Visit Details</h3>
+              <div class="overflow-x-auto mt-2"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-2 text-left">Employee</th><th class="pb-2 text-left">Gallery</th><th class="pb-2 text-left">Customer</th><th class="pb-2 text-left">Date</th><th class="pb-2 text-left">Status</th><th class="pb-2 text-left">GPS</th><th class="pb-2 text-left">Photo</th></tr></thead>
+                <tbody>${visits.map(v => {
+                  const emp = employees.find(e => e.id === v.employeeId);
+                  const g = galleries.find(g => g.id === v.galleryId);
+                  return `<tr><td>${emp ? emp.name : '—'}</td><td>${g ? g.name : '—'}</td><td>${v.customer}</td><td>${v.date}</td><td><span class="status-badge ${v.status === 'Completed' ? 'positive' : 'pending'}">${v.status}</span></td><td>${v.gpsVerified ? '✅' : '❌'}</td><td>${v.photoVerified ? '✅' : '❌'}</td></tr>`;
+                }).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- TASKS ----------
+        function renderTasks(container) {
+            const tasks = AppData.tasks;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between"><h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-list-check mr-2 text-indigo-500"></i>Tasks (${tasks.length})</h2><button onclick="openModal('task')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus"></i> Create Task</button></div>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Title</th><th class="pb-3 text-left">Assigned To</th><th class="pb-3 text-left">Due</th><th class="pb-3 text-left">Priority</th><th class="pb-3 text-left">Status</th></tr></thead>
+                <tbody>${tasks.map(t => `
+                  <tr><td>${t.title}</td><td>${t.assignedTo}</td><td>${t.due}</td><td><span class="status-badge ${t.priority.toLowerCase()}">${t.priority}</span></td><td><span class="status-badge ${t.status.toLowerCase().replace(' ', '-')}">${t.status}</span></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- DAILY REPORTS ----------
+        function renderDailyReports(container) {
+            const reports = AppData.dailyReports || [];
+            const employees = AppData.employees;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-file-lines mr-2 text-amber-500"></i>Daily Reports</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Employee</th><th class="pb-3 text-left">Date</th><th class="pb-3 text-left">Tasks</th><th class="pb-3 text-left">Visits</th><th class="pb-3 text-left">Leads</th><th class="pb-3 text-left">Revenue</th><th class="pb-3 text-left">Status</th></tr></thead>
+                <tbody>${reports.map(r => {
+                  const emp = employees.find(e => e.id === r.employeeId);
+                  return `<tr><td>${emp ? emp.name : '—'}</td><td>${r.date}</td><td>${r.tasksCompleted}</td><td>${r.visits}</td><td>${r.leads}</td><td>₹${formatNum(r.revenue)}</td><td><span class="status-badge ${r.status === 'Submitted' ? 'positive' : 'pending'}">${r.status}</span></td></tr>`;
+                }).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- LEADS ----------
+        function renderLeads(container) {
+            const leads = AppData.leads;
+            const galleries = AppData.galleries;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-user-plus mr-2 text-blue-500"></i>Leads (${leads.length})</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Customer</th><th class="pb-3 text-left">Source</th><th class="pb-3 text-left">Status</th><th class="pb-3 text-left">Gallery</th><th class="pb-3 text-left">Assigned To</th><th class="pb-3 text-left">Value</th></tr></thead>
+                <tbody>${leads.map(l => {
+                  const g = galleries.find(g => g.id === l.galleryId);
+                  return `<tr><td>${l.customer}</td><td>${l.source}</td><td><span class="status-badge ${l.status.toLowerCase().replace(' ', '-')}">${l.status}</span></td><td>${g ? g.name : '—'}</td><td>${l.assignedTo}</td><td>₹${formatNum(l.value)}</td></tr>`;
+                }).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- CUSTOMERS ----------
+        function renderCustomers(container) {
+            const customers = AppData.customers;
+            const galleries = AppData.galleries;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-user mr-2 text-blue-500"></i>Customers</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Name</th><th class="pb-3 text-left">Gallery</th><th class="pb-3 text-left">Phone</th><th class="pb-3 text-left">Balance</th><th class="pb-3 text-left">Status</th></tr></thead>
+                <tbody>${customers.map(c => {
+                  const g = galleries.find(g => g.id === c.galleryId);
+                  return `<tr><td>${c.name}</td><td>${g ? g.name : '—'}</td><td>${c.phone}</td><td>₹${formatNum(c.balance)}</td><td><span class="status-badge ${c.status === 'Active' ? 'positive' : 'inactive'}">${c.status}</span></td></tr>`;
+                }).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- SALES ----------
+        function renderSales(container) {
+            const galleries = AppData.galleries;
+            const s = AppData.stats;
+            container.innerHTML = `
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Today's Sales</p><h3 class="text-2xl font-bold">₹${formatNum(s.todayRevenue)}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Monthly Sales</p><h3 class="text-2xl font-bold">₹${formatNum(s.monthlyRevenue)}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Target</p><h3 class="text-2xl font-bold">₹${formatNum(s.districtTarget)}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Achievement</p><h3 class="text-2xl font-bold">${s.achievement}%</h3></div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h3 class="font-bold text-sm text-slate-800">Gallery-wise Sales</h3>
+              <div class="overflow-x-auto mt-2"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-2 text-left">Gallery</th><th class="pb-2 text-left">Revenue</th><th class="pb-2 text-left">Target</th><th class="pb-2 text-left">Achievement</th></tr></thead>
+                <tbody>${galleries.map(g => `<tr><td>${g.name}</td><td>₹${formatNum(g.revenue)}</td><td>₹${formatNum(g.target)}</td><td>${g.achievement}%</td></tr>`).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- COLLECTIONS ----------
+        function renderCollections(container) {
+            const collections = AppData.collections;
+            const galleries = AppData.galleries;
+            const s = AppData.stats;
+            container.innerHTML = `
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Total Collections</p><h3 class="text-2xl font-bold">₹${formatNum(s.collections)}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Outstanding</p><h3 class="text-2xl font-bold text-rose-500">₹${formatNum(s.outstanding)}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Collection Target</p><h3 class="text-2xl font-bold">₹${formatNum(s.districtTarget * 0.8)}</h3></div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h3 class="font-bold text-sm text-slate-800">Collection Details</h3>
+              <div class="overflow-x-auto mt-2"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-2 text-left">Customer</th><th class="pb-2 text-left">Gallery</th><th class="pb-2 text-left">Amount</th><th class="pb-2 text-left">Date</th><th class="pb-2 text-left">Status</th></tr></thead>
+                <tbody>${collections.map(c => {
+                  const g = galleries.find(g => g.id === c.galleryId);
+                  return `<tr><td>${c.customer}</td><td>${g ? g.name : '—'}</td><td>₹${formatNum(c.amount)}</td><td>${c.date}</td><td><span class="status-badge ${c.status === 'Paid' ? 'positive' : c.status === 'Overdue' ? 'critical' : 'pending'}">${c.status}</span></td></tr>`;
+                }).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- COMPLAINTS ----------
+        function renderComplaints(container) {
+            const complaints = AppData.complaints;
+            const galleries = AppData.galleries;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-message mr-2 text-rose-500"></i>Complaints</h2>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Customer</th><th class="pb-3 text-left">Issue</th><th class="pb-3 text-left">Gallery</th><th class="pb-3 text-left">Priority</th><th class="pb-3 text-left">Status</th></tr></thead>
+                <tbody>${complaints.map(c => {
+                  const g = galleries.find(g => g.id === c.galleryId);
+                  return `<tr><td>${c.customer}</td><td>${c.issue}</td><td>${g ? g.name : '—'}</td><td><span class="status-badge ${c.priority.toLowerCase()}">${c.priority}</span></td><td><span class="status-badge ${c.status.toLowerCase().replace(' ', '-')}">${c.status}</span></td></tr>`;
+                }).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- ALERTS ----------
+        function renderAlerts(container) {
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-triangle-exclamation mr-2 text-amber-500"></i>Operational Alerts</h2>
+              <div class="space-y-3 mt-4">
+                <div class="flex items-start gap-3 border-b pb-3"><span class="status-badge critical">Critical</span><div><p class="font-medium">Gallery Alpha below 70% target</p><p class="text-xs text-slate-400">Revenue: ₹6,00,000 vs Target ₹7,00,000</p></div></div>
+                <div class="flex items-start gap-3 border-b pb-3"><span class="status-badge warning">Warning</span><div><p class="font-medium">Low attendance in Gallery Gamma</p><p class="text-xs text-slate-400">Only 5 of 6 staff present today</p></div></div>
+                <div class="flex items-start gap-3 border-b pb-3"><span class="status-badge warning">Warning</span><div><p class="font-medium">2 overdue tasks</p><p class="text-xs text-slate-400">Review gallery sales reports overdue by 2 days</p></div></div>
+                <div class="flex items-start gap-3"><span class="status-badge positive">Positive</span><div><p class="font-medium">Gallery Beta achieved 93% revenue</p><p class="text-xs text-slate-400">Revenue: ₹7,00,000 vs Target ₹7,50,000</p></div></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // ================================================================
+        // MODAL (task creation)
+        // ================================================================
+        function openModal(action, data = null) {
+            const overlay = document.getElementById('modalOverlay');
+            const box = document.getElementById('modalBox');
+            let html = '';
+            const closeBtn = `<button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 text-xl">&times;</button>`;
+
+            if (action === 'task') {
+                const employees = AppData.employees.map(e => e.name).join(',');
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Create Task</h3>${closeBtn}</div>
+              <label>Title</label><input id="taskTitle" placeholder="Task title" />
+              <div class="form-row"><div><label>Assigned To</label><input id="taskAssigned" placeholder="Employee name" /></div><div><label>Due Date</label><input type="date" id="taskDue" value="${new Date().toISOString().slice(0,10)}" /></div></div>
+              <div class="form-row"><div><label>Priority</label><select id="taskPriority"><option>High</option><option>Medium</option><option>Low</option></select></div><div><label>Category</label><input id="taskCategory" placeholder="e.g. Visit, Reporting" /></div></div>
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitTask()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Create</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else {
+                closeModal();
+            }
+        }
+
+        function submitTask() {
+            const title = document.getElementById('taskTitle')?.value || 'New Task';
+            const assignedTo = document.getElementById('taskAssigned')?.value || 'Unassigned';
+            const due = document.getElementById('taskDue')?.value || new Date().toISOString().slice(0, 10);
+            const priority = document.getElementById('taskPriority')?.value || 'Medium';
+            const category = document.getElementById('taskCategory')?.value || 'General';
+            AppData.tasks.push({
+                id: Date.now(),
+                title,
+                assignedTo,
+                due,
+                priority,
+                status: 'Pending',
+                category
+            });
+            saveData();
+            renderPage(currentPage);
+            showToast('✅ Task created');
+            closeModal();
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        // ================================================================
+        // UTILITY
+        // ================================================================
+        function formatNum(n) {
+            if (n >= 10000000) return (n / 10000000).toFixed(1) + 'Cr';
+            if (n >= 100000) return (n / 100000).toFixed(1) + 'L';
+            if (n >= 1000) return (n / 1000).toFixed(1) + 'k';
+            return n;
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            t.classList.add('show');
+            clearTimeout(t._timer);
+            t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+        }
+
+        function quickAction(action) {
+            showToast('⚡ ' + action);
+            if (action.includes('Create Task')) openModal('task');
+            else if (action.includes('View Galleries')) navigateTo('galleries');
+            else if (action.includes('View Field Visits')) navigateTo('field-visits');
+            else if (action.includes('View Reports')) navigateTo('daily-reports');
+            else if (action.includes('View Alerts')) navigateTo('alerts');
+            else if (action.includes('View Team')) navigateTo('team');
+        }
+
+        function drill(label) {
+            showToast('🔍 Drilling into: ' + label);
+            if (label.includes('Gallery')) navigateTo('galleries');
+            else if (label.includes('District')) navigateTo('district-performance');
+            else if (label.includes('Team') || label.includes('Employee')) navigateTo('team');
+            else if (label.includes('Lead')) navigateTo('leads');
+            else if (label.includes('Task')) navigateTo('tasks');
+            else if (label.includes('Visit')) navigateTo('field-visits');
+            else if (label.includes('Collection')) navigateTo('collections');
+            else if (label.includes('Sales')) navigateTo('sales');
+            else if (label.includes('Customer')) navigateTo('customers');
+            else if (label.includes('Complaint')) navigateTo('complaints');
+        }
+
+        // ================================================================
+        // SEARCH
+        // ================================================================
+        document.getElementById('globalSearch').addEventListener('input', function(e) {
+            const q = e.target.value.toLowerCase().trim();
+            if (!q) { renderPage(currentPage); return; }
+            const all = [...AppData.galleries, ...AppData.employees, ...AppData.tasks, ...AppData.customers];
+            const results = all.filter(item => JSON.stringify(item).toLowerCase().includes(q));
+            showToast(`🔍 Found ${results.length} matches`);
+        });
+
+        // ================================================================
+        // NOTIFICATIONS
+        // ================================================================
+        document.getElementById('notifBtn').addEventListener('click', function() {
+            const badge = document.getElementById('notifBadge');
+            if (badge.textContent !== '0') {
+                badge.textContent = '0';
+                showToast('📬 Notifications cleared');
+            } else {
+                showToast('🔔 No new notifications');
+            }
+        });
+
+        // ================================================================
+        // SWITCH ROLE
+        // ================================================================
+        document.getElementById('switchRoleBtn').addEventListener('click', function() {
+            const name = document.getElementById('userNameDisplay');
+            if (name.textContent === 'Ravi') {
+                name.textContent = 'Admin';
+                showToast('🔄 Switched to Admin');
+            } else {
+                name.textContent = 'Ravi';
+                showToast('🔄 Switched to District Manager');
+            }
+        });
+
+        // ================================================================
+        // INIT
+        // ================================================================
+        loadData();
+        renderSidebar();
+        renderPage('dashboard');
+
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        console.log('🚀 Gallery District Manager Dashboard loaded');
+        console.log('💾 Data:', AppData);
+    </script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

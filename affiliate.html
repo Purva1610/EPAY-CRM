@@ -1,0 +1,2719 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Referral Management — CRM</title>
+
+    <!-- Font Awesome 6 (Free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+
+    <style>
+
+
+
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0b0e17;
+            --bg-secondary: #111827;
+            --bg-card: rgba(17, 24, 39, 0.75);
+            --bg-glass: rgba(255, 255, 255, 0.04);
+            --border-glass: rgba(255, 255, 255, 0.06);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --accent-green: #22c55e;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-pink: #ec4899;
+            --accent-indigo: #6366f1;
+            --accent-teal: #14b8a6;
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.45);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.25s ease;
+        }
+
+        html {
+            font-size: 14px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-purple);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-cyan);
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 72px;
+            min-height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-glass);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0 24px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+            z-index: 100;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar:hover {
+            width: 260px;
+        }
+
+        .sidebar .logo {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 28px;
+            white-space: nowrap;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 12px;
+        }
+
+        .sidebar .logo i {
+            -webkit-text-fill-color: var(--accent-cyan);
+            font-size: 24px;
+        }
+
+        .sidebar .logo span {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 15px;
+        }
+
+        .sidebar:hover .logo span {
+            opacity: 1;
+        }
+
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            width: 100%;
+            padding: 0 8px;
+            flex: 1;
+        }
+
+        .sidebar nav .nav-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            padding: 12px 12px 6px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-weight: 600;
+        }
+
+        .sidebar:hover nav .nav-label {
+            opacity: 1;
+        }
+
+        .sidebar nav a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            transition: all var(--transition);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .sidebar nav a i {
+            font-size: 17px;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .sidebar nav a span {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar:hover nav a span {
+            opacity: 1;
+        }
+
+        .sidebar nav a:hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        .sidebar nav a.active {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--accent-purple);
+            border-left: 3px solid var(--accent-purple);
+        }
+
+        .sidebar nav a .badge-nav {
+            margin-left: auto;
+            font-size: 10px;
+            background: var(--accent-red);
+            color: #fff;
+            padding: 1px 8px;
+            border-radius: 50px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar:hover nav a .badge-nav {
+            opacity: 1;
+        }
+
+        .sidebar .bottom {
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-glass);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 16px 10px 0;
+        }
+
+        .sidebar .bottom .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .sidebar .bottom .user-name {
+            font-size: 12px;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .sidebar:hover .bottom .user-name {
+            opacity: 1;
+        }
+
+        .sidebar .bottom .user-role {
+            font-size: 10px;
+            color: var(--text-muted);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar:hover .bottom .user-role {
+            opacity: 1;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main {
+            flex: 1;
+            padding: 24px 32px 60px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* ===== HEADER ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .page-header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #fff, var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-header .sub {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .page-header .sub i {
+            color: var(--accent-cyan);
+            margin-right: 4px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .header-actions .date-badge {
+            background: var(--bg-glass);
+            padding: 8px 18px;
+            border-radius: 50px;
+            border: 1px solid var(--border-glass);
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-actions .date-badge i {
+            color: var(--accent-cyan);
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            border: 1px solid var(--border-glass);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            color: #fff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-teal));
+            color: #fff;
+            border: none;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--accent-red), #dc2626);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 11px;
+        }
+
+        /* ===== VIEWS ===== */
+        .view {
+            display: none;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== KPI GRID ===== */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius);
+            padding: 16px 18px;
+            transition: all var(--transition);
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(139, 92, 246, 0.2);
+            box-shadow: var(--shadow-card);
+        }
+
+        .kpi-card .label {
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+
+        .kpi-card .label i {
+            font-size: 13px;
+            color: var(--accent-cyan);
+        }
+
+        .kpi-card .value {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #fff;
+        }
+
+        .kpi-card .change {
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 10px;
+            border-radius: 50px;
+        }
+
+        .change.up {
+            color: var(--accent-green);
+            background: rgba(34, 197, 94, 0.12);
+        }
+        .change.down {
+            color: var(--accent-red);
+            background: rgba(239, 68, 68, 0.12);
+        }
+        .change.neutral {
+            color: var(--accent-amber);
+            background: rgba(245, 158, 11, 0.12);
+        }
+
+        .kpi-card .sub-value {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* ===== CARDS ===== */
+        .row {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .row-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+        .row-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        .row-2-1 {
+            grid-template-columns: 2fr 1fr;
+        }
+        .row-1-2 {
+            grid-template-columns: 1fr 2fr;
+        }
+
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius);
+            padding: 20px 22px;
+            transition: all var(--transition);
+        }
+
+        .card:hover {
+            border-color: rgba(139, 92, 246, 0.12);
+        }
+
+        .card .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card .card-header h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card .card-header .badge {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 50px;
+            background: var(--bg-glass);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-glass);
+        }
+
+        .card .card-header .action-link {
+            font-size: 12px;
+            color: var(--accent-purple);
+            cursor: pointer;
+            font-weight: 500;
+            transition: color var(--transition);
+        }
+
+        .card .card-header .action-link:hover {
+            color: var(--accent-cyan);
+        }
+
+        /* ===== STATUS BADGES ===== */
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        .status-dot.green {
+            background: var(--accent-green);
+        }
+        .status-dot.amber {
+            background: var(--accent-amber);
+        }
+        .status-dot.orange {
+            background: #f97316;
+        }
+        .status-dot.red {
+            background: var(--accent-red);
+        }
+        .status-dot.blue {
+            background: var(--accent-blue);
+        }
+        .status-dot.purple {
+            background: var(--accent-purple);
+        }
+        .status-dot.cyan {
+            background: var(--accent-cyan);
+        }
+        .status-dot.pink {
+            background: var(--accent-pink);
+        }
+        .status-dot.gray {
+            background: var(--text-muted);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.green {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--accent-green);
+        }
+        .status-badge.amber {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-amber);
+        }
+        .status-badge.red {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+        }
+        .status-badge.blue {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+        }
+        .status-badge.purple {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--accent-purple);
+        }
+        .status-badge.cyan {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--accent-cyan);
+        }
+        .status-badge.pink {
+            background: rgba(236, 72, 153, 0.15);
+            color: var(--accent-pink);
+        }
+        .status-badge.gray {
+            background: rgba(100, 116, 139, 0.15);
+            color: var(--text-muted);
+        }
+
+        /* ===== TABLE ===== */
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        table th {
+            text-align: left;
+            padding: 10px 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            font-size: 10px;
+            border-bottom: 1px solid var(--border-glass);
+            position: sticky;
+            top: 0;
+            background: var(--bg-secondary);
+            z-index: 2;
+        }
+
+        table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            vertical-align: middle;
+        }
+
+        table td .highlight {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .table-scroll {
+            max-height: 420px;
+            overflow-y: auto;
+        }
+
+        /* ===== PROGRESS BAR ===== */
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: var(--bg-glass);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            border-radius: 8px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+            transition: width 0.6s ease;
+        }
+
+        /* ===== FORMS ===== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px 24px;
+        }
+
+        .form-grid .full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-group label .required {
+            color: var(--accent-red);
+            margin-left: 2px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-family: inherit;
+            transition: all var(--transition);
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .form-group select option {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .form-group .radio-group {
+            display: flex;
+            gap: 20px;
+            padding: 6px 0;
+        }
+
+        .form-group .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 400;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .form-group .radio-group input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent-purple);
+            cursor: pointer;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-glass);
+        }
+
+        /* ===== REFERRAL TREE ===== */
+        .tree-container {
+            padding: 20px 0;
+            overflow-x: auto;
+        }
+
+        .tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 600px;
+        }
+
+        .tree-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tree-node .node-card {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-sm);
+            padding: 12px 18px;
+            min-width: 160px;
+            text-align: center;
+            transition: all var(--transition);
+            cursor: default;
+        }
+
+        .tree-node .node-card:hover {
+            border-color: var(--accent-purple);
+            transform: scale(1.02);
+        }
+
+        .tree-node .node-card .node-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .tree-node .node-card .node-type {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .tree-node .node-card .node-status {
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .tree-node .node-card .node-amount {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            margin-top: 2px;
+        }
+
+        .tree-children {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .tree-children::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 10px;
+            background: var(--border-glass);
+        }
+
+        .tree-child-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .tree-child-group::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            width: 2px;
+            height: 10px;
+            background: var(--border-glass);
+        }
+
+        .tree-connector {
+            display: flex;
+            gap: 40px;
+            position: relative;
+            padding-top: 10px;
+        }
+
+        .tree-connector::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border-glass);
+        }
+
+        .tree-connector .connector-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .tree-connector .connector-item::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            width: 2px;
+            height: 10px;
+            background: var(--border-glass);
+        }
+
+        /* ===== GLASS TAGS ===== */
+        .glass-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 12px;
+            border-radius: 50px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        .glass-tag i {
+            font-size: 10px;
+        }
+
+        /* ===== DRILL PATH ===== */
+        .drill-path {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+            padding: 8px 14px;
+            background: var(--bg-glass);
+            border-radius: 50px;
+            border: 1px solid var(--border-glass);
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .drill-path span {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .drill-path i {
+            font-size: 10px;
+            color: var(--accent-cyan);
+        }
+
+        /* ===== TIMELINE ===== */
+        .timeline {
+            position: relative;
+            padding-left: 28px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-glass);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 10px 0 10px 20px;
+            border-left: 2px solid transparent;
+            transition: all var(--transition);
+        }
+
+        .timeline-item:hover {
+            border-left-color: var(--accent-purple);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 14px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-glass);
+        }
+
+        .timeline-item .time {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .timeline-item .title {
+            font-weight: 600;
+            font-size: 13px;
+            color: #fff;
+        }
+
+        .timeline-item .desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .timeline-item .badge-timeline {
+            font-size: 10px;
+            padding: 1px 10px;
+            border-radius: 50px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            color: var(--text-secondary);
+        }
+
+        /* ===== MINI GRID ===== */
+        .mini-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 16px;
+        }
+
+        .mini-grid .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .mini-grid .item .label {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+        .mini-grid .item .val {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        /* ===== RANK LIST ===== */
+        .rank-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .rank-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition);
+            border-left: 3px solid transparent;
+        }
+
+        .rank-item:hover {
+            background: rgba(139, 92, 246, 0.06);
+        }
+
+        .rank-item .left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .rank-item .left .pos {
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--text-muted);
+            width: 24px;
+        }
+
+        .rank-item .left .name {
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .rank-item .left .sub-info {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .rank-item .right {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .rank-item.gold {
+            border-left-color: #fbbf24;
+        }
+        .rank-item.silver {
+            border-left-color: #9ca3af;
+        }
+        .rank-item.bronze {
+            border-left-color: #d97706;
+        }
+        .rank-item.success {
+            border-left-color: var(--accent-green);
+        }
+        .rank-item.warning {
+            border-left-color: var(--accent-amber);
+        }
+        .rank-item.danger {
+            border-left-color: var(--accent-red);
+        }
+
+        /* ===== ALERT LIST ===== */
+        .alert-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-glass);
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        .alert-item .icon {
+            font-size: 16px;
+            margin-top: 1px;
+        }
+
+        .alert-item .content {
+            flex: 1;
+        }
+
+        .alert-item .content .title {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .alert-item .content .desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .alert-item .time {
+            font-size: 10px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .row-2 {
+                grid-template-columns: 1fr;
+            }
+            .row-3 {
+                grid-template-columns: 1fr 1fr;
+            }
+            .row-2-1 {
+                grid-template-columns: 1fr;
+            }
+            .row-1-2 {
+                grid-template-columns: 1fr;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-grid .full {
+                grid-column: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 56px;
+                padding: 16px 0;
+            }
+            .sidebar:hover {
+                width: 56px;
+            }
+            .sidebar .logo span,
+            .sidebar nav a span,
+            .sidebar .bottom .user-name,
+            .sidebar .bottom .user-role,
+            .sidebar nav .nav-label,
+            .sidebar nav a .badge-nav {
+                display: none;
+            }
+            .sidebar .logo {
+                font-size: 18px;
+                padding: 0;
+                justify-content: center;
+            }
+            .sidebar nav a {
+                padding: 10px;
+                justify-content: center;
+            }
+            .sidebar nav a i {
+                margin: 0;
+            }
+            .main {
+                padding: 16px;
+            }
+            .kpi-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 10px;
+            }
+            .kpi-card .value {
+                font-size: 18px;
+            }
+            .page-header h1 {
+                font-size: 20px;
+            }
+            .row-3 {
+                grid-template-columns: 1fr;
+            }
+            .header-actions .date-badge {
+                font-size: 11px;
+                padding: 6px 14px;
+            }
+            .tree-children {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            .tree-connector {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            .tree-connector::before {
+                display: none;
+            }
+            .tree-child-group::before {
+                display: none;
+            }
+            .tree-children::before {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .kpi-card {
+                padding: 12px;
+            }
+            .kpi-card .value {
+                font-size: 16px;
+            }
+            .card {
+                padding: 14px;
+            }
+            .mini-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== UTILITIES ===== */
+        .flex {
+            display: flex;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .flex-center {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .text-muted {
+            color: var(--text-muted);
+        }
+        .text-sm {
+            font-size: 12px;
+        }
+        .fw-600 {
+            font-weight: 600;
+        }
+        .mt-2 {
+            margin-top: 8px;
+        }
+        .mb-2 {
+            margin-bottom: 8px;
+        }
+        .gap-2 {
+            gap: 8px;
+        }
+        .w-full {
+            width: 100%;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-right {
+            text-align: right;
+        }
+
+        .clickable {
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .clickable:hover {
+            opacity: 0.8;
+        }
+
+        .badge-count {
+            background: var(--accent-red);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 1px 8px;
+            border-radius: 50px;
+            margin-left: 4px;
+        }
+
+        /* Package selector cards */
+        .package-selector {
+            display: flex;
+            gap: 20px;
+            padding: 8px 0;
+            flex-wrap: wrap;
+        }
+
+        .package-option {
+            background: var(--bg-glass);
+            border: 2px solid var(--border-glass);
+            border-radius: var(--radius-sm);
+            padding: 16px 24px;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-align: center;
+            min-width: 160px;
+        }
+
+        .package-option:hover {
+            border-color: var(--accent-purple);
+        }
+
+        .package-option.selected {
+            border-color: var(--accent-purple);
+            background: rgba(139, 92, 246, 0.1);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.1);
+        }
+
+        .package-option .amount {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .package-option .label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .package-option .check {
+            display: none;
+            color: var(--accent-green);
+            font-size: 18px;
+            margin-top: 4px;
+        }
+
+        .package-option.selected .check {
+            display: block;
+        }
+
+        /* Duplicate alert */
+        .duplicate-alert {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .duplicate-alert.show {
+            display: block;
+        }
+
+        .duplicate-alert .title {
+            color: var(--accent-red);
+            font-weight: 600;
+        }
+
+        .duplicate-alert .details {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Tab navigation inside views */
+        .sub-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            background: var(--bg-glass);
+            border-radius: var(--radius-sm);
+            padding: 4px;
+        }
+
+        .sub-tabs .tab-btn {
+            padding: 6px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: inherit;
+        }
+
+        .sub-tabs .tab-btn:hover {
+            color: var(--text-primary);
+            background: var(--bg-glass);
+        }
+
+        .sub-tabs .tab-btn.active {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-glass);
+        }
+
+        .sub-view {
+            display: none;
+        }
+
+        .sub-view.active {
+            display: block;
+        }
+    </style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+        <div class="logo">
+            <i class="fas fa-handshake"></i>
+            <span>Referral CRM</span>
+        </div>
+        <nav>
+            <div class="nav-label">Main</div>
+            <a href="#" class="active" data-view="dashboard"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+
+            <div class="nav-label" style="margin-top:8px;">Referrals</div>
+            <a href="#" data-view="my-referrals"><i class="fas fa-list"></i><span>My Referrals</span><span class="badge-nav">24</span></a>
+            <a href="#" data-view="refer-employee"><i class="fas fa-user-plus"></i><span>Refer Employee</span></a>
+            <a href="#" data-view="refer-gallery"><i class="fas fa-store"></i><span>Refer a Gallery</span></a>
+            <a href="#" data-view="refer-epay"><i class="fas fa-credit-card"></i><span>Refer Epay</span></a>
+
+            <div class="nav-label" style="margin-top:8px;">Tracking</div>
+            <a href="#" data-view="referral-tree"><i class="fas fa-sitemap"></i><span>Referral Tree</span></a>
+            <a href="#" data-view="activities"><i class="fas fa-clock"></i><span>Activities</span></a>
+            <a href="#" data-view="followups"><i class="fas fa-calendar-check"></i><span>Follow-ups</span></a>
+
+            <div class="nav-label" style="margin-top:8px;">Reports</div>
+            <a href="#" data-view="reports"><i class="fas fa-chart-bar"></i><span>Referral Reports</span></a>
+            <a href="#" data-view="management"><i class="fas fa-users-cog"></i><span>Management</span></a>
+            <a href="#" data-view="audit"><i class="fas fa-history"></i><span>Audit Log</span></a>
+        </nav>
+        <div class="bottom">
+            <div class="avatar">RK</div>
+            <div class="user-name">Rajesh Kumar</div>
+            <div class="user-role">Senior BDE · Pune</div>
+        </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main">
+
+        <!-- HEADER -->
+        <div class="page-header">
+            <div>
+                <h1 id="pageTitle">Referral Dashboard</h1>
+                <div class="sub">
+                    <span><i class="fas fa-user"></i> Rajesh Kumar · BDE</span>
+                    <span><i class="fas fa-calendar-alt"></i> FY 2025–26 · Q2</span>
+                    <span><i class="fas fa-handshake"></i> Referral Network: 42</span>
+                    <span class="glass-tag"><i class="fas fa-circle" style="color:var(--accent-green);font-size:8px;"></i> Active</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="date-badge"><i class="far fa-calendar"></i> Aug 11, 2026</div>
+                <button class="btn btn-primary" onclick="refreshData()"><i class="fas fa-sync-alt"></i> Refresh</button>
+            </div>
+        </div>
+
+        <!-- DRILL PATH -->
+        <div class="drill-path" id="drillPath">
+            <i class="fas fa-home"></i> Referral Management <i class="fas fa-chevron-right"></i>
+            <span id="drillCurrent">Dashboard</span>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- VIEW: DASHBOARD -->
+        <!-- ============================================================ -->
+        <div class="view active" id="view-dashboard">
+
+            <!-- KPI Grid -->
+            <div class="kpi-grid">
+                <div class="kpi-card"><div class="label"><i class="fas fa-handshake"></i> Total Referrals</div><div class="value">42</div><div class="change up"><i class="fas fa-arrow-up"></i> +8</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-user-tie"></i> Employee Referrals</div><div class="value">18</div><div class="change up"><i class="fas fa-arrow-up"></i> +3</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-store"></i> Gallery Referrals</div><div class="value">12</div><div class="change up"><i class="fas fa-arrow-up"></i> +4</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-credit-card"></i> Epay Referrals</div><div class="value">12</div><div class="change neutral">—</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-clock"></i> Pending</div><div class="value" style="color:var(--accent-amber);">15</div><div class="change down"><i class="fas fa-arrow-down"></i> -2</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-search"></i> Under Verification</div><div class="value" style="color:var(--accent-blue);">6</div><div class="change neutral">—</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-check-circle" style="color:var(--accent-green);"></i> Activated</div><div class="value" style="color:var(--accent-green);">21</div><div class="change up"><i class="fas fa-arrow-up"></i> +5</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-spinner"></i> In Progress</div><div class="value" style="color:var(--accent-cyan);">9</div><div class="change neutral">—</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-check-double" style="color:var(--accent-green);"></i> Completed</div><div class="value" style="color:var(--accent-green);">14</div><div class="change up"><i class="fas fa-arrow-up"></i> +3</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-times-circle" style="color:var(--accent-red);"></i> Rejected</div><div class="value" style="color:var(--accent-red);">3</div><div class="change neutral">—</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-money-bill-wave"></i> Gallery Value</div><div class="value" style="color:var(--accent-amber);">₹2.25Cr</div><div class="sub-value">Potential</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-percent"></i> Conversion %</div><div class="value" style="color:var(--accent-cyan);">33.3%</div><div class="change up"><i class="fas fa-arrow-up"></i> +5.2%</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-sitemap"></i> Referral Network</div><div class="value">42</div><div class="change up"><i class="fas fa-arrow-up"></i> +8</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-trophy"></i> Referral Rank</div><div class="value" style="color:var(--accent-amber);">#3</div><div class="change up"><i class="fas fa-arrow-up"></i> +2</div></div>
+            </div>
+
+            <!-- Row: Gallery Package Split + Leaderboard -->
+            <div class="row row-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-store" style="color:var(--accent-amber);margin-right:8px;"></i>Gallery Referral Packages</h3>
+                        <span class="badge">12 total</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:14px;text-align:center;border:1px solid var(--border-glass);">
+                            <div style="font-size:11px;color:var(--text-muted);">₹15,00,000 Package</div>
+                            <div style="font-size:28px;font-weight:700;color:var(--accent-cyan);">7</div>
+                            <div style="font-size:11px;color:var(--text-secondary);">Activated: 4 · Completed: 3</div>
+                        </div>
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:14px;text-align:center;border:1px solid var(--border-glass);">
+                            <div style="font-size:11px;color:var(--text-muted);">₹30,00,000 Package</div>
+                            <div style="font-size:28px;font-weight:700;color:var(--accent-purple);">5</div>
+                            <div style="font-size:11px;color:var(--text-secondary);">Activated: 3 · Completed: 2</div>
+                        </div>
+                    </div>
+                    <div class="flex-between text-sm text-muted mt-2">
+                        <span>Total Potential Value: <span style="color:#fff;font-weight:600;">₹2.25Cr</span></span>
+                        <span>Completed Value: <span style="color:var(--accent-green);font-weight:600;">₹1.80Cr</span></span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-trophy" style="color:var(--accent-amber);margin-right:8px;"></i>Top Referrers</h3>
+                        <span class="action-link">Leaderboard <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                    <div class="rank-list">
+                        <div class="rank-item gold"><div class="left"><span class="pos">🥇</span><span class="name">Priya Sharma</span><span class="sub-info">HQ Mumbai · 28 referrals</span></div><div class="right" style="color:var(--accent-amber);">96%</div></div>
+                        <div class="rank-item silver"><div class="left"><span class="pos">🥈</span><span class="name">Amit Patel</span><span class="sub-info">Gallery Pune · 24 referrals</span></div><div class="right" style="color:#9ca3af;">88%</div></div>
+                        <div class="rank-item bronze"><div class="left"><span class="pos">🥉</span><span class="name">Rajesh Kumar</span><span class="sub-info">BDE Pune · 21 referrals</span></div><div class="right" style="color:#d97706;">76%</div></div>
+                        <div class="rank-item"><div class="left"><span class="pos">4</span><span class="name">Sneha Reddy</span><span class="sub-info">Marketing · 18 referrals</span></div><div class="right" style="color:var(--accent-cyan);">68%</div></div>
+                        <div class="rank-item"><div class="left"><span class="pos">5</span><span class="name">Vikram Singh</span><span class="sub-info">BDO Nashik · 15 referrals</span></div><div class="right" style="color:var(--accent-cyan);">62%</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row: Recent Activity + Quick Actions -->
+            <div class="row row-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-clock" style="color:var(--accent-cyan);margin-right:8px;"></i>Recent Activity</h3>
+                        <span class="action-link">View all <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                    <div class="timeline" style="max-height:260px;overflow-y:auto;">
+                        <div class="timeline-item"><div class="time">Today, 10:30 AM</div><div class="title">Gallery referral activated</div><div class="desc">Investor A · ₹15,00,000 package · Gallery Prime, Pune</div></div>
+                        <div class="timeline-item"><div class="time">Today, 09:15 AM</div><div class="title">Employee referral joined</div><div class="desc">Candidate: Riya Mehta · Joined as BDE · Mumbai HQ</div></div>
+                        <div class="timeline-item"><div class="time">Yesterday, 04:20 PM</div><div class="title">Follow-up completed</div><div class="desc">Investor B · Meeting scheduled for Aug 14</div></div>
+                        <div class="timeline-item"><div class="time">Yesterday, 02:00 PM</div><div class="title">Epay referral verified</div><div class="desc">Business: Radha Traders · KYC completed</div></div>
+                        <div class="timeline-item"><div class="time">Aug 10, 11:45 AM</div><div class="title">New gallery referral</div><div class="desc">Investor C · ₹30,00,000 · Aurangabad</div></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-bolt" style="color:var(--accent-amber);margin-right:8px;"></i>Quick Actions</h3>
+                        <span class="badge">3 pending</span>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <button class="btn btn-primary w-full" onclick="navigateTo('refer-gallery')"><i class="fas fa-store"></i> Refer a Gallery</button>
+                        <button class="btn btn-success w-full" onclick="navigateTo('refer-employee')"><i class="fas fa-user-plus"></i> Refer an Employee</button>
+                        <button class="btn w-full" onclick="navigateTo('refer-epay')" style="border-color:var(--accent-cyan);color:var(--accent-cyan);"><i class="fas fa-credit-card"></i> Refer Epay</button>
+                        <button class="btn w-full" onclick="navigateTo('followups')" style="border-color:var(--accent-amber);color:var(--accent-amber);"><i class="fas fa-calendar-check"></i> View Follow-ups <span class="badge-count" style="background:var(--accent-amber);">6</span></button>
+                    </div>
+                    <div class="flex-between text-sm text-muted mt-2">
+                        <span><i class="fas fa-circle" style="color:var(--accent-green);font-size:8px;"></i> 3 pending verifications</span>
+                        <span><i class="fas fa-circle" style="color:var(--accent-amber);font-size:8px;"></i> 2 overdue follow-ups</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- VIEW: MY REFERRALS -->
+        <!-- ============================================================ -->
+        <div class="view" id="view-my-referrals">
+            <div class="flex-between mb-2">
+                <div class="flex-center">
+                    <span class="glass-tag"><i class="fas fa-filter"></i> All Types</span>
+                    <span class="glass-tag"><i class="fas fa-calendar"></i> Last 30 days</span>
+                </div>
+                <span class="text-muted text-sm">Showing 24 referrals</span>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-list" style="color:var(--accent-cyan);margin-right:8px;"></i>My Referrals</h3>
+                    <span class="badge">24 total</span>
+                </div>
+                <div class="table-wrap table-scroll" style="max-height:500px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Referral ID</th>
+                                <th>Type</th>
+                                <th>Referred</th>
+                                <th>Mobile</th>
+                                <th>Location</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Activation</th>
+                                <th>Completion</th>
+                                <th>Value</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="highlight">REF-2026-001</span></td>
+                                <td><span class="status-badge purple">Gallery</span></td>
+                                <td>Mahesh Enterprises</td>
+                                <td>98765 43210</td>
+                                <td>Pune</td>
+                                <td>Aug 11</td>
+                                <td><span class="status-badge green">Completed</span></td>
+                                <td><span class="status-badge green">Activated</span></td>
+                                <td><span class="status-badge green">Completed</span></td>
+                                <td><span style="color:var(--accent-cyan);font-weight:600;">₹15,00,000</span></td>
+                                <td><span class="glass-tag clickable"><i class="fas fa-eye"></i></span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight">REF-2026-002</span></td>
+                                <td><span class="status-badge purple">Gallery</span></td>
+                                <td>Sunita Investments</td>
+                                <td>87654 32109</td>
+                                <td>Mumbai</td>
+                                <td>Aug 10</td>
+                                <td><span class="status-badge cyan">In Progress</span></td>
+                                <td><span class="status-badge green">Activated</span></td>
+                                <td><span class="status-badge amber">In Progress</span></td>
+                                <td><span style="color:var(--accent-purple);font-weight:600;">₹30,00,000</span></td>
+                                <td><span class="glass-tag clickable"><i class="fas fa-eye"></i></span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight">REF-2026-003</span></td>
+                                <td><span class="status-badge blue">Employee</span></td>
+                                <td>Rahul Verma</td>
+                                <td>76543 21098</td>
+                                <td>Nashik</td>
+                                <td>Aug 09</td>
+                                <td><span class="status-badge green">Completed</span></td>
+                                <td><span class="status-badge gray">N/A</span></td>
+                                <td><span class="status-badge green">Completed</span></td>
+                                <td><span style="color:var(--text-muted);">—</span></td>
+                                <td><span class="glass-tag clickable"><i class="fas fa-eye"></i></span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight">REF-2026-004</span></td>
+                                <td><span class="status-badge cyan">Epay</span></td>
+                                <td>Radha Traders</td>
+                                <td>65432 10987</td>
+                                <td>Pune</td>
+                                <td>Aug 08</td>
+                                <td><span class="status-badge green">Completed</span></td>
+                                <td><span class="status-badge green">Activated</span></td>
+                                <td><span class="status-badge green">Completed</span></td>
+                                <td><span style="color:var(--text-muted);">—</span></td>
+                                <td><span class="glass-tag clickable"><i class="fas fa-eye"></i></span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight">REF-2026-005</span></td>
+                                <td><span class="status-badge purple">Gallery</span></td>
+                                <td>Sharma Constructions</td>
+                                <td>54321 09876</td>
+                                <td>Aurangabad</td>
+                                <td>Aug 07</td>
+                                <td><span class="status-badge amber">Under Review</span></td>
+                                <td><span class="status-badge amber">Pending Activation</span></td>
+                                <td><span class="status-badge gray">Not Started</span></td>
+                                <td><span style="color:var(--accent-cyan);font-weight:600;">₹15,00,000</span></td>
+                                <td><span class="glass-tag clickable"><i class="fas fa-eye"></i></span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight">REF-2026-006</span></td>
+                                <td><span class="status-badge purple">Gallery</span></td>
+                                <td>Patel Group</td>
+                                <td>43210 98765</td>
+                                <td>Mumbai</td>
+                                <td>Aug 05</td>
+                                <td><span class="status-badge cyan">In Progress</span></td>
+                                <td><span class="status-badge green">Activated</span></td>
+                                <td><span class="status-badge amber">In Progress</span></td>
+                                <td><span style="color:var(--accent-purple);font-weight:600;">₹30,00,000</span></td>
+                                <td><span class="glass-tag clickable"><i class="fas fa-eye"></i></span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight">REF-2026-007</span></td>
+                                <td><span class="status-badge blue">Employee</span></td>
+                                <td>Priya Nair</td>
+                                <td>32109 87654</td>
+                                <td>Pune</td>
+                                <td>Aug 03</td>
+                                <td><span class="status-badge red">Rejected</span></td>
+                                <td><span class="status-badge gray">N/A</span></td>
+                                <td><span class="status-badge gray">Cancelled</span></td>
+                                <td><span style="color:var(--text-muted);">—</span></td>
+                                <td><span class="glass-tag clickable"><i class="fas fa-eye"></i></span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight">REF-2026-008</span></td>
+                                <td><span class="status-badge cyan">Epay</span></td>
+                                <td>Digital Solutions</td>
+                                <td>21098 76543</td>
+                                <td>Nashik</td>
+                                <td>Aug 01</td>
+                                <td><span class="status-badge amber">Under Review</span></td>
+                                <td><span class="status-badge amber">Pending Activation</span></td>
+                                <td><span class="status-badge gray">Not Started</span></td>
+                                <td><span style="color:var(--text-muted);">—</span></td>
+                                <td><span class="glass-tag clickable"><i class="fas fa-eye"></i></span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight">REF-2026-009</span></td>
+                                <td><span class="status-badge purple">Gallery</span></td>
+                                <td>Mehta Properties</td>
+                                <td>10987 65432</td>
+                                <td>Nagpur</td>
+                                <td>Jul 28</td>
+                                <td><span class="status-badge green">Completed</span></td>
+                                <td><span class="status-badge green">Activated</span></td>
+                                <td><span class="status-badge green">Completed</span></td>
+                                <td><span style="color:var(--accent-purple);font-weight:600;">₹30,00,000</span></td>
+                                <td><span class="glass-tag clickable"><i class="fas fa-eye"></i></span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="highlight">REF-2026-010</span></td>
+                                <td><span class="status-badge purple">Gallery</span></td>
+                                <td>Desai &amp; Sons</td>
+                                <td>09876 54321</td>
+                                <td>Kolhapur</td>
+                                <td>Jul 25</td>
+                                <td><span class="status-badge green">Completed</span></td>
+                                <td><span class="status-badge green">Activated</span></td>
+                                <td><span class="status-badge green">Completed</span></td>
+                                <td><span style="color:var(--accent-cyan);font-weight:600;">₹15,00,000</span></td>
+                                <td><span class="glass-tag clickable"><i class="fas fa-eye"></i></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- VIEW: REFER EMPLOYEE -->
+        <!-- ============================================================ -->
+        <div class="view" id="view-refer-employee">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-user-plus" style="color:var(--accent-blue);margin-right:8px;"></i>Refer an Employee</h3>
+                    <span class="badge">Referral ID: REF-EMP-2026-011</span>
+                </div>
+
+                <!-- Duplicate Alert -->
+                <div class="duplicate-alert" id="dupEmployeeAlert">
+                    <div class="title"><i class="fas fa-exclamation-triangle"></i> Possible Duplicate Detected</div>
+                    <div class="details">A referral with this mobile number already exists: <strong>REF-2026-003</strong> · Referrer: Rajesh Kumar · Status: Completed</div>
+                </div>
+
+                <form onsubmit="event.preventDefault();alert('Employee referral submitted successfully!');">
+                    <div style="margin-bottom:16px;">
+                        <h4 style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><i class="fas fa-user"></i> Personal Details</h4>
+                        <div class="form-grid">
+                            <div class="form-group"><label>Referral ID <span class="required">*</span></label><input type="text" value="REF-EMP-2026-011" readonly style="opacity:0.7;"/></div>
+                            <div class="form-group"><label>Referrer Employee ID <span class="required">*</span></label><input type="text" value="EMP-0042" readonly style="opacity:0.7;"/></div>
+                            <div class="form-group"><label>Referrer Name <span class="required">*</span></label><input type="text" value="Rajesh Kumar" readonly style="opacity:0.7;"/></div>
+                            <div class="form-group"><label>Employee Name <span class="required">*</span></label><input type="text" placeholder="Full name of candidate" /></div>
+                            <div class="form-group"><label>Mobile Number <span class="required">*</span></label><input type="tel" placeholder="10-digit mobile" id="empMobile" oninput="checkDuplicateEmployee(this.value)" /></div>
+                            <div class="form-group"><label>Alternate Mobile</label><input type="tel" placeholder="Alternate number" /></div>
+                            <div class="form-group"><label>Email <span class="required">*</span></label><input type="email" placeholder="Email address" /></div>
+                            <div class="form-group"><label>Gender</label><select><option>Male</option><option>Female</option><option>Other</option></select></div>
+                            <div class="form-group"><label>Date of Birth</label><input type="date" /></div>
+                            <div class="form-group"><label>Current City</label><input type="text" placeholder="City" /></div>
+                            <div class="form-group full"><label>Current Address</label><textarea placeholder="Full address"></textarea></div>
+                            <div class="form-group"><label>Preferred Location</label><input type="text" placeholder="Preferred work location" /></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:16px;">
+                        <h4 style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><i class="fas fa-briefcase"></i> Professional Details</h4>
+                        <div class="form-grid">
+                            <div class="form-group"><label>Current Company</label><input type="text" placeholder="Current employer" /></div>
+                            <div class="form-group"><label>Current Designation</label><input type="text" placeholder="Job title" /></div>
+                            <div class="form-group"><label>Total Experience (years)</label><input type="number" placeholder="0" /></div>
+                            <div class="form-group"><label>Relevant Experience (years)</label><input type="number" placeholder="0" /></div>
+                            <div class="form-group"><label>Current Salary (₹ LPA)</label><input type="number" placeholder="0" /></div>
+                            <div class="form-group"><label>Expected Salary (₹ LPA)</label><input type="number" placeholder="0" /></div>
+                            <div class="form-group"><label>Notice Period (days)</label><input type="number" placeholder="0" /></div>
+                            <div class="form-group"><label>Highest Qualification</label><input type="text" placeholder="e.g. MBA, B.Tech" /></div>
+                            <div class="form-group"><label>Skills</label><input type="text" placeholder="Comma separated skills" /></div>
+                            <div class="form-group"><label>Department</label><select><option>Sales</option><option>Marketing</option><option>Operations</option><option>HR</option><option>IT</option><option>Finance</option></select></div>
+                            <div class="form-group"><label>Preferred Role</label><input type="text" placeholder="Desired role" /></div>
+                            <div class="form-group full"><label>Previous Experience</label><textarea placeholder="Brief description of previous experience"></textarea></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:16px;">
+                        <h4 style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><i class="fas fa-info-circle"></i> Referral Information</h4>
+                        <div class="form-grid">
+                            <div class="form-group"><label>Relationship with Referrer</label><input type="text" placeholder="e.g. College friend, Former colleague" /></div>
+                            <div class="form-group"><label>How do you know this person?</label><input type="text" placeholder="Brief description" /></div>
+                            <div class="form-group"><label>Recommended Role</label><input type="text" placeholder="Role you recommend for" /></div>
+                            <div class="form-group full"><label>Reason for Recommendation</label><textarea placeholder="Why do you recommend this candidate?"></textarea></div>
+                            <div class="form-group full"><label>Referral Remarks</label><textarea placeholder="Any additional remarks"></textarea></div>
+                            <div class="form-group full"><label>Resume Upload</label><input type="file" accept=".pdf,.doc,.docx" /></div>
+                            <div class="form-group full"><label>Supporting Documents</label><input type="file" accept=".pdf,.jpg,.png" multiple /></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:16px;">
+                        <h4 style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><i class="fas fa-clipboard-check"></i> Recruitment</h4>
+                        <div class="form-grid">
+                            <div class="form-group"><label>Recruiter Assigned</label><input type="text" placeholder="Recruiter name" value="Anita HR" /></div>
+                            <div class="form-group"><label>Interview Required</label><select><option>Yes</option><option>No</option></select></div>
+                            <div class="form-group"><label>Interview Date</label><input type="date" /></div>
+                            <div class="form-group"><label>Interview Status</label><select><option>Not Scheduled</option><option>Scheduled</option><option>Completed</option><option>Postponed</option></select></div>
+                            <div class="form-group"><label>Selection Status</label><select><option>Pending</option><option>Selected</option><option>Rejected</option><option>On Hold</option></select></div>
+                            <div class="form-group"><label>Joining Date</label><input type="date" /></div>
+                            <div class="form-group"><label>Employee ID after Joining</label><input type="text" placeholder="Will be auto-generated" readonly style="opacity:0.7;"/></div>
+                            <div class="form-group"><label>Referral Status</label><select><option>Draft</option><option>Submitted</option><option>Under Review</option><option>Contacted</option><option>Screening</option><option>Interview Scheduled</option><option>Interview Completed</option><option>Selected</option><option>Offer Released</option><option>Joined</option><option>Completed</option><option>Rejected</option><option>Withdrawn</option></select></div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Referral</button>
+                        <button type="reset" class="btn"><i class="fas fa-undo"></i> Reset</button>
+                        <button type="button" class="btn" onclick="navigateTo('my-referrals')"><i class="fas fa-arrow-left"></i> Back to Referrals</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- VIEW: REFER A GALLERY -->
+        <!-- ============================================================ -->
+        <div class="view" id="view-refer-gallery">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-store" style="color:var(--accent-purple);margin-right:8px;"></i>Refer a Gallery</h3>
+                    <span class="badge">₹15L / ₹30L packages</span>
+                </div>
+
+                <div class="duplicate-alert" id="dupGalleryAlert">
+                    <div class="title"><i class="fas fa-exclamation-triangle"></i> Possible Duplicate Detected</div>
+                    <div class="details">An investor with this mobile number already exists: <strong>REF-2026-001</strong> · Referrer: Rajesh Kumar · Status: Completed</div>
+                </div>
+
+                <form onsubmit="event.preventDefault();alert('Gallery referral submitted successfully!');">
+                    <div style="margin-bottom:16px;">
+                        <h4 style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><i class="fas fa-info-circle"></i> Referral Information</h4>
+                        <div class="form-grid">
+                            <div class="form-group"><label>Referral ID</label><input type="text" value="REF-GAL-2026-012" readonly style="opacity:0.7;"/></div>
+                            <div class="form-group"><label>Referral Date</label><input type="date" value="2026-08-11" /></div>
+                            <div class="form-group"><label>Referrer Employee ID</label><input type="text" value="EMP-0042" readonly style="opacity:0.7;"/></div>
+                            <div class="form-group"><label>Referrer Name</label><input type="text" value="Rajesh Kumar" readonly style="opacity:0.7;"/></div>
+                            <div class="form-group"><label>Department</label><input type="text" value="Sales" readonly style="opacity:0.7;"/></div>
+                            <div class="form-group"><label>Role</label><input type="text" value="BDE" readonly style="opacity:0.7;"/></div>
+                            <div class="form-group"><label>HQ</label><input type="text" value="HQ Pune" readonly style="opacity:0.7;"/></div>
+                            <div class="form-group"><label>District</label><input type="text" value="Pune City" readonly style="opacity:0.7;"/></div>
+                            <div class="form-group"><label>Gallery</label><input type="text" value="Gallery Prime" readonly style="opacity:0.7;"/></div>
+                            <div class="form-group"><label>Territory</label><input type="text" value="West Pune" readonly style="opacity:0.7;"/></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:16px;">
+                        <h4 style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><i class="fas fa-user-tie"></i> Investor Details</h4>
+                        <div class="form-grid">
+                            <div class="form-group"><label>Investor Name <span class="required">*</span></label><input type="text" placeholder="Full name" id="invName" /></div>
+                            <div class="form-group"><label>Company Name</label><input type="text" placeholder="Company name" /></div>
+                            <div class="form-group"><label>Mobile Number <span class="required">*</span></label><input type="tel" placeholder="10-digit mobile" id="invMobile" oninput="checkDuplicateGallery(this.value)" /></div>
+                            <div class="form-group"><label>Alternate Number</label><input type="tel" placeholder="Alternate number" /></div>
+                            <div class="form-group"><label>Email <span class="required">*</span></label><input type="email" placeholder="Email address" /></div>
+                            <div class="form-group"><label>City <span class="required">*</span></label><input type="text" placeholder="City" /></div>
+                            <div class="form-group"><label>State <span class="required">*</span></label><select><option>Maharashtra</option><option>Gujarat</option><option>Karnataka</option><option>Tamil Nadu</option><option>Delhi</option><option>Other</option></select></div>
+                            <div class="form-group full"><label>Address</label><textarea placeholder="Full address"></textarea></div>
+                            <div class="form-group"><label>Occupation</label><input type="text" placeholder="Occupation" /></div>
+                            <div class="form-group"><label>Business Type</label><input type="text" placeholder="Business type" /></div>
+                            <div class="form-group"><label>Investor Type</label><select><option>Individual</option><option>Partnership</option><option>Private Limited</option><option>Public Limited</option><option>Trust</option><option>Other</option></select></div>
+                            <div class="form-group"><label>Existing Business</label><input type="text" placeholder="Existing business name" /></div>
+                            <div class="form-group"><label>Years in Business</label><input type="number" placeholder="0" /></div>
+                            <div class="form-group"><label>Investment Capacity</label><input type="text" placeholder="Estimated capacity" /></div>
+                            <div class="form-group"><label>Preferred Location</label><input type="text" placeholder="Preferred gallery location" /></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:16px;background:var(--bg-glass);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border-glass);">
+                        <h4 style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;"><i class="fas fa-coins"></i> Gallery Investment Package <span class="required" style="color:var(--accent-red);">*</span></h4>
+                        <div class="package-selector" id="packageSelector">
+                            <div class="package-option selected" data-value="1500000" onclick="selectPackage(this)">
+                                <div class="amount">₹15,00,000</div>
+                                <div class="label">Standard Gallery</div>
+                                <div class="check"><i class="fas fa-check-circle"></i></div>
+                            </div>
+                            <div class="package-option" data-value="3000000" onclick="selectPackage(this)">
+                                <div class="amount">₹30,00,000</div>
+                                <div class="label">Premium Gallery</div>
+                                <div class="check"><i class="fas fa-check-circle"></i></div>
+                            </div>
+                        </div>
+                        <div style="margin-top:8px;font-size:11px;color:var(--text-muted);">Select one of the two available gallery investment plans.</div>
+                        <input type="hidden" id="selectedPackage" value="1500000" />
+                    </div>
+
+                    <div style="margin-bottom:16px;">
+                        <h4 style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><i class="fas fa-chart-line"></i> Investment Details</h4>
+                        <div class="form-grid">
+                            <div class="form-group"><label>Preferred Gallery Location</label><input type="text" placeholder="Exact location" /></div>
+                            <div class="form-group"><label>Preferred District</label><input type="text" placeholder="District" /></div>
+                            <div class="form-group"><label>Preferred State</label><select><option>Maharashtra</option><option>Gujarat</option><option>Karnataka</option><option>Tamil Nadu</option><option>Delhi</option><option>Other</option></select></div>
+                            <div class="form-group"><label>Expected Investment Date</label><input type="date" /></div>
+                            <div class="form-group"><label>Funding Source Category</label><select><option>Self</option><option>Bank Loan</option><option>Investor Pool</option><option>Family Office</option><option>Other</option></select></div>
+                            <div class="form-group"><label>Investment Readiness</label><select><option>Ready</option><option>In Process</option><option>Exploring</option></select></div>
+                            <div class="form-group"><label>Expected Opening Timeline</label><input type="text" placeholder="e.g. 3-6 months" /></div>
+                            <div class="form-group"><label>Investor Interest</label><select><option>Very High</option><option>High</option><option>Medium</option><option>Low</option><option>Not Interested</option></select></div>
+                            <div class="form-group"><label>Investment Stage</label><select><option>New Referral</option><option>Interested</option><option>Requirement Shared</option><option>Meeting Scheduled</option><option>Meeting Completed</option><option>Proposal Shared</option><option>Negotiation</option><option>Documentation</option><option>Payment Pending</option><option>Investment Received</option><option>Gallery Activated</option><option>Completed</option></select></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:16px;">
+                        <h4 style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><i class="fas fa-building"></i> Business Information</h4>
+                        <div class="form-grid">
+                            <div class="form-group"><label>Proposed Gallery Name</label><input type="text" placeholder="Name" /></div>
+                            <div class="form-group"><label>Preferred Area</label><input type="text" placeholder="Area/Locality" /></div>
+                            <div class="form-group"><label>Expected Footfall</label><input type="text" placeholder="Estimated daily footfall" /></div>
+                            <div class="form-group"><label>Nearby Market</label><input type="text" placeholder="Market name" /></div>
+                            <div class="form-group"><label>Nearby Competitors</label><input type="text" placeholder="Competitor names" /></div>
+                            <div class="form-group"><label>Property Available?</label><select><option>Yes</option><option>No</option><option>Under Negotiation</option></select></div>
+                            <div class="form-group"><label>Property Type</label><input type="text" placeholder="e.g. Commercial, Retail" /></div>
+                            <div class="form-group"><label>Property Size (sq.ft)</label><input type="number" placeholder="0" /></div>
+                            <div class="form-group"><label>Property Status</label><select><option>Owned</option><option>Rented</option><option>Leased</option><option>Under Construction</option></select></div>
+                            <div class="form-group"><label>Owner Contact</label><input type="text" placeholder="Owner name &amp; number" /></div>
+                            <div class="form-group"><label>Rent Estimate (₹)</label><input type="number" placeholder="0" /></div>
+                            <div class="form-group"><label>Location Photos</label><input type="file" accept="image/*" multiple /></div>
+                            <div class="form-group"><label>Property Documents</label><input type="file" accept=".pdf,.jpg,.png" multiple /></div>
+                            <div class="form-group"><label>Google/Map Location</label><input type="text" placeholder="Google Maps URL" /></div>
+                            <div class="form-group"><label>GPS Coordinates</label><input type="text" placeholder="Lat, Long" /></div>
+                            <div class="form-group full"><label>Market Potential</label><textarea placeholder="Describe the market potential"></textarea></div>
+                            <div class="form-group full"><label>Referrer Remarks</label><textarea placeholder="Any additional remarks"></textarea></div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Gallery Referral</button>
+                        <button type="reset" class="btn"><i class="fas fa-undo"></i> Reset</button>
+                        <button type="button" class="btn" onclick="navigateTo('my-referrals')"><i class="fas fa-arrow-left"></i> Back to Referrals</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- VIEW: REFER EPAY -->
+        <!-- ============================================================ -->
+        <div class="view" id="view-refer-epay">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-credit-card" style="color:var(--accent-teal);margin-right:8px;"></i>Refer Epay</h3>
+                    <span class="badge">Digital Payment Referral</span>
+                </div>
+
+                <form onsubmit="event.preventDefault();alert('Epay referral submitted successfully!');">
+                    <div style="margin-bottom:16px;">
+                        <h4 style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><i class="fas fa-user"></i> Contact Details</h4>
+                        <div class="form-grid">
+                            <div class="form-group"><label>Referral ID</label><input type="text" value="REF-EPAY-2026-013" readonly style="opacity:0.7;"/></div>
+                            <div class="form-group"><label>Referrer</label><input type="text" value="Rajesh Kumar" readonly style="opacity:0.7;"/></div>
+                            <div class="form-group"><label>Name <span class="required">*</span></label><input type="text" placeholder="Full name" /></div>
+                            <div class="form-group"><label>Business Name</label><input type="text" placeholder="Business name" /></div>
+                            <div class="form-group"><label>Mobile <span class="required">*</span></label><input type="tel" placeholder="10-digit mobile" /></div>
+                            <div class="form-group"><label>Email</label><input type="email" placeholder="Email" /></div>
+                            <div class="form-group"><label>City</label><input type="text" placeholder="City" /></div>
+                            <div class="form-group"><label>State</label><select><option>Maharashtra</option><option>Gujarat</option><option>Karnataka</option><option>Other</option></select></div>
+                            <div class="form-group"><label>Business Type</label><input type="text" placeholder="Type" /></div>
+                            <div class="form-group"><label>Business Category</label><input type="text" placeholder="Category" /></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:16px;">
+                        <h4 style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;"><i class="fas fa-cogs"></i> Epay Requirements</h4>
+                        <div class="form-grid">
+                            <div class="form-group"><label>Epay Product</label><select><option>Epay Pro</option><option>Epay Lite</option><option>Epay Enterprise</option><option>Epay Custom</option></select></div>
+                            <div class="form-group"><label>Service Required</label><input type="text" placeholder="Service description" /></div>
+                            <div class="form-group"><label>Current Payment Provider</label><input type="text" placeholder="Existing provider" /></div>
+                            <div class="form-group"><label>Transaction Volume (Monthly)</label><input type="number" placeholder="0" /></div>
+                            <div class="form-group"><label>Number of Locations</label><input type="number" placeholder="0" /></div>
+                            <div class="form-group"><label>Expected Monthly Transactions</label><input type="number" placeholder="0" /></div>
+                            <div class="form-group full"><label>Business Requirement</label><textarea placeholder="Describe the business requirement"></textarea></div>
+                            <div class="form-group"><label>Lead Potential</label><select><option>Very High</option><option>High</option><option>Medium</option><option>Low</option></select></div>
+                            <div class="form-group full"><label>Remarks</label><textarea placeholder="Additional remarks"></textarea></div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Epay Referral</button>
+                        <button type="reset" class="btn"><i class="fas fa-undo"></i> Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- VIEW: REFERRAL TREE -->
+        <!-- ============================================================ -->
+        <div class="view" id="view-referral-tree">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-sitemap" style="color:var(--accent-purple);margin-right:8px;"></i>My Referral Tree</h3>
+                    <span class="badge">42 nodes</span>
+                </div>
+                <div class="tree-container">
+                    <div class="tree">
+                        <!-- Level 0: You -->
+                        <div class="tree-node">
+                            <div class="node-card" style="background:rgba(139,92,246,0.15);border-color:var(--accent-purple);">
+                                <div class="node-name"><i class="fas fa-user-circle" style="color:var(--accent-purple);"></i> Rajesh Kumar</div>
+                                <div class="node-type">You · BDE</div>
+                                <div class="node-status"><span class="status-badge green">42 Referrals</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Level 1: Direct referrals -->
+                        <div class="tree-connector" style="padding-top:20px;">
+                            <div class="connector-item">
+                                <div class="tree-node">
+                                    <div class="node-card" style="border-color:var(--accent-amber);">
+                                        <div class="node-name">🏪 Gallery Referrals</div>
+                                        <div class="node-type">12 total</div>
+                                        <div class="node-status"><span class="status-badge green">8 Activated</span></div>
+                                        <div class="node-amount">₹2.25Cr</div>
+                                    </div>
+                                    <div class="tree-children" style="margin-top:12px;">
+                                        <div class="tree-child-group">
+                                            <div class="node-card" style="border-color:var(--accent-cyan);min-width:140px;">
+                                                <div class="node-name">Mahesh Enterprises</div>
+                                                <div class="node-type">₹15L · Completed ✅</div>
+                                                <div class="node-status"><span class="status-badge green">Activated</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="tree-child-group">
+                                            <div class="node-card" style="border-color:var(--accent-purple);min-width:140px;">
+                                                <div class="node-name">Sunita Investments</div>
+                                                <div class="node-type">₹30L · In Progress ⏳</div>
+                                                <div class="node-status"><span class="status-badge cyan">Activated</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="tree-child-group">
+                                            <div class="node-card" style="border-color:var(--accent-cyan);min-width:140px;">
+                                                <div class="node-name">Sharma Constructions</div>
+                                                <div class="node-type">₹15L · Under Review</div>
+                                                <div class="node-status"><span class="status-badge amber">Pending</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="connector-item">
+                                <div class="tree-node">
+                                    <div class="node-card" style="border-color:var(--accent-blue);">
+                                        <div class="node-name">👤 Employee Referrals</div>
+                                        <div class="node-type">18 total</div>
+                                        <div class="node-status"><span class="status-badge green">12 Completed</span></div>
+                                    </div>
+                                    <div class="tree-children" style="margin-top:12px;">
+                                        <div class="tree-child-group">
+                                            <div class="node-card" style="border-color:var(--accent-green);min-width:140px;">
+                                                <div class="node-name">Rahul Verma</div>
+                                                <div class="node-type">Joined ✅</div>
+                                                <div class="node-status"><span class="status-badge green">Completed</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="tree-child-group">
+                                            <div class="node-card" style="border-color:var(--accent-amber);min-width:140px;">
+                                                <div class="node-name">Priya Nair</div>
+                                                <div class="node-type">Rejected ❌</div>
+                                                <div class="node-status"><span class="status-badge red">Rejected</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="connector-item">
+                                <div class="tree-node">
+                                    <div class="node-card" style="border-color:var(--accent-teal);">
+                                        <div class="node-name">💳 Epay Referrals</div>
+                                        <div class="node-type">12 total</div>
+                                        <div class="node-status"><span class="status-badge green">8 Activated</span></div>
+                                    </div>
+                                    <div class="tree-children" style="margin-top:12px;">
+                                        <div class="tree-child-group">
+                                            <div class="node-card" style="border-color:var(--accent-green);min-width:140px;">
+                                                <div class="node-name">Radha Traders</div>
+                                                <div class="node-type">Activated ✅</div>
+                                                <div class="node-status"><span class="status-badge green">Completed</span></div>
+                                            </div>
+                                        </div>
+                                        <div class="tree-child-group">
+                                            <div class="node-card" style="border-color:var(--accent-amber);min-width:140px;">
+                                                <div class="node-name">Digital Solutions</div>
+                                                <div class="node-type">Pending Verification</div>
+                                                <div class="node-status"><span class="status-badge amber">Under Review</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-between text-sm text-muted mt-2">
+                    <span><span class="status-dot green"></span> Completed · <span class="status-dot cyan"></span> In Progress · <span class="status-dot amber"></span> Pending · <span class="status-dot red"></span> Rejected</span>
+                    <span class="glass-tag"><i class="fas fa-sitemap"></i> Level 1: 3 types · 42 referrals</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- VIEW: ACTIVITIES -->
+        <!-- ============================================================ -->
+        <div class="view" id="view-activities">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-clock" style="color:var(--accent-cyan);margin-right:8px;"></i>Referral Activity Log</h3>
+                    <span class="badge">84 activities</span>
+                </div>
+                <div class="table-wrap table-scroll" style="max-height:450px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Activity ID</th>
+                                <th>Referral ID</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Employee</th>
+                                <th>Activity Type</th>
+                                <th>Remarks</th>
+                                <th>Next Action</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>ACT-001</td><td>REF-2026-001</td><td>Aug 11</td><td>10:30</td><td>Rajesh Kumar</td><td><span class="status-badge green">Call</span></td><td>Investor confirmed interest</td><td>Send proposal</td><td><span class="status-badge green">Completed</span></td></tr>
+                            <tr><td>ACT-002</td><td>REF-2026-002</td><td>Aug 10</td><td>15:20</td><td>Rajesh Kumar</td><td><span class="status-badge blue">Meeting</span></td><td>Met with Sunita Investments</td><td>Share ₹30L proposal</td><td><span class="status-badge cyan">In Progress</span></td></tr>
+                            <tr><td>ACT-003</td><td>REF-2026-005</td><td>Aug 09</td><td>11:00</td><td>Rajesh Kumar</td><td><span class="status-badge amber">Follow-up</span></td><td>Follow-up call with Sharma Constructions</td><td>Schedule site visit</td><td><span class="status-badge amber">Pending</span></td></tr>
+                            <tr><td>ACT-004</td><td>REF-2026-003</td><td>Aug 08</td><td>09:30</td><td>Rajesh Kumar</td><td><span class="status-badge purple">WhatsApp</span></td><td>Sent document checklist</td><td>Collect documents</td><td><span class="status-badge green">Completed</span></td></tr>
+                            <tr><td>ACT-005</td><td>REF-2026-004</td><td>Aug 07</td><td>16:45</td><td>Rajesh Kumar</td><td><span class="status-badge cyan">Email</span></td><td>Shared Epay product brochure</td><td>Follow-up call</td><td><span class="status-badge green">Completed</span></td></tr>
+                            <tr><td>ACT-006</td><td>REF-2026-006</td><td>Aug 06</td><td>14:00</td><td>Rajesh Kumar</td><td><span class="status-badge blue">Meeting</span></td><td>Site visit with Patel Group</td><td>Prepare proposal</td><td><span class="status-badge cyan">In Progress</span></td></tr>
+                            <tr><td>ACT-007</td><td>REF-2026-009</td><td>Aug 05</td><td>12:15</td><td>Rajesh Kumar</td><td><span class="status-badge green">Call</span></td><td>Investment confirmed</td><td>Complete documentation</td><td><span class="status-badge green">Completed</span></td></tr>
+                            <tr><td>ACT-008</td><td>REF-2026-008</td><td>Aug 04</td><td>10:00</td><td>Rajesh Kumar</td><td><span class="status-badge amber">Follow-up</span></td><td>KYC pending from Digital Solutions</td><td>Remind for KYC</td><td><span class="status-badge amber">Pending</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- VIEW: FOLLOW-UPS -->
+        <!-- ============================================================ -->
+        <div class="view" id="view-followups">
+            <div class="row row-3">
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-calendar-day" style="color:var(--accent-cyan);"></i> Today's Follow-ups</h3><span class="badge">4</span></div>
+                    <div class="rank-list">
+                        <div class="rank-item success"><div class="left"><span class="name">REF-2026-002</span><span class="sub-info">Sunita Investments · 3:00 PM</span></div><div class="right"><span class="status-badge green">Call</span></div></div>
+                        <div class="rank-item warning"><div class="left"><span class="name">REF-2026-005</span><span class="sub-info">Sharma Constructions · 4:30 PM</span></div><div class="right"><span class="status-badge amber">Meeting</span></div></div>
+                        <div class="rank-item"><div class="left"><span class="name">REF-2026-008</span><span class="sub-info">Digital Solutions · 5:00 PM</span></div><div class="right"><span class="status-badge blue">Follow-up</span></div></div>
+                        <div class="rank-item"><div class="left"><span class="name">REF-EPAY-013</span><span class="sub-info">New Epay Lead · 6:00 PM</span></div><div class="right"><span class="status-badge purple">Intro Call</span></div></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-clock" style="color:var(--accent-amber);"></i> Overdue</h3><span class="badge">2</span></div>
+                    <div class="rank-list">
+                        <div class="rank-item danger"><div class="left"><span class="name">REF-2026-010</span><span class="sub-info">Desai &amp; Sons · Due: Aug 09</span></div><div class="right"><span class="status-badge red">Overdue</span></div></div>
+                        <div class="rank-item danger"><div class="left"><span class="name">REF-2026-007</span><span class="sub-info">Priya Nair · Due: Aug 08</span></div><div class="right"><span class="status-badge red">Overdue</span></div></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-arrow-up" style="color:var(--accent-green);"></i> Upcoming</h3><span class="badge">5</span></div>
+                    <div class="rank-list">
+                        <div class="rank-item"><div class="left"><span class="name">REF-2026-006</span><span class="sub-info">Patel Group · Aug 12</span></div></div>
+                        <div class="rank-item"><div class="left"><span class="name">REF-2026-011</span><span class="sub-info">New Employee · Aug 13</span></div></div>
+                        <div class="rank-item"><div class="left"><span class="name">REF-2026-012</span><span class="sub-info">New Gallery · Aug 14</span></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- VIEW: REPORTS -->
+        <!-- ============================================================ -->
+        <div class="view" id="view-reports">
+            <div class="sub-tabs">
+                <button class="tab-btn active" data-subview="report-daily">Daily</button>
+                <button class="tab-btn" data-subview="report-weekly">Weekly</button>
+                <button class="tab-btn" data-subview="report-monthly">Monthly</button>
+                <button class="tab-btn" data-subview="report-funnel">Funnel</button>
+                <button class="tab-btn" data-subview="report-ageing">Ageing</button>
+                <button class="tab-btn" data-subview="report-source">Source</button>
+            </div>
+
+            <!-- Daily Report -->
+            <div class="sub-view active" id="sub-report-daily">
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-calendar-day"></i> Daily Referral Report</h3><span class="badge">Aug 11, 2026</span></div>
+                    <div class="mini-grid">
+                        <div class="item"><span class="label">New Referrals</span><span class="val" style="color:var(--accent-cyan);">4</span></div>
+                        <div class="item"><span class="label">Employee Referrals</span><span class="val">2</span></div>
+                        <div class="item"><span class="label">Gallery Referrals</span><span class="val" style="color:var(--accent-purple);">1</span></div>
+                        <div class="item"><span class="label">Epay Referrals</span><span class="val">1</span></div>
+                        <div class="item"><span class="label">Pending Verification</span><span class="val" style="color:var(--accent-amber);">3</span></div>
+                        <div class="item"><span class="label">Activated</span><span class="val" style="color:var(--accent-green);">2</span></div>
+                        <div class="item"><span class="label">Completed</span><span class="val" style="color:var(--accent-green);">1</span></div>
+                        <div class="item"><span class="label">₹15L Referrals</span><span class="val" style="color:var(--accent-cyan);">1</span></div>
+                        <div class="item"><span class="label">₹30L Referrals</span><span class="val" style="color:var(--accent-purple);">0</span></div>
+                        <div class="item"><span class="label">Follow-ups Due</span><span class="val" style="color:var(--accent-amber);">4</span></div>
+                        <div class="item"><span class="label">Overdue</span><span class="val" style="color:var(--accent-red);">2</span></div>
+                        <div class="item"><span class="label">Potential Value (Today)</span><span class="val" style="color:var(--accent-cyan);">₹15L</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Report -->
+            <div class="sub-view" id="sub-report-weekly">
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-calendar-week"></i> Weekly Referral Report</h3><span class="badge">Aug 5–11, 2026</span></div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Employee</th><th>Total</th><th>Gallery</th><th>Employee</th><th>Epay</th><th>Activated</th><th>Completed</th><th>Conversion %</th><th>Value</th></tr></thead>
+                            <tbody>
+                                <tr><td><span class="highlight">Rajesh Kumar</span></td><td>8</td><td>3</td><td>3</td><td>2</td><td>5</td><td>3</td><td>37.5%</td><td>₹45L</td></tr>
+                                <tr><td>Priya Sharma</td><td>6</td><td>4</td><td>1</td><td>1</td><td>4</td><td>2</td><td>33.3%</td><td>₹60L</td></tr>
+                                <tr><td>Amit Patel</td><td>5</td><td>2</td><td>2</td><td>1</td><td>3</td><td>2</td><td>40.0%</td><td>₹30L</td></tr>
+                                <tr><td>Sneha Reddy</td><td>4</td><td>1</td><td>2</td><td>1</td><td>2</td><td>1</td><td>25.0%</td><td>₹15L</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Report -->
+            <div class="sub-view" id="sub-report-monthly">
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-calendar-alt"></i> Monthly Referral MIS</h3><span class="badge">July 2026</span></div>
+                    <div class="mini-grid">
+                        <div class="item"><span class="label">Total Referrals</span><span class="val">42</span></div>
+                        <div class="item"><span class="label">Gallery Referrals</span><span class="val">12</span></div>
+                        <div class="item"><span class="label">Employee Referrals</span><span class="val">18</span></div>
+                        <div class="item"><span class="label">Epay Referrals</span><span class="val">12</span></div>
+                        <div class="item"><span class="label">Total Activated</span><span class="val" style="color:var(--accent-green);">21</span></div>
+                        <div class="item"><span class="label">Total Completed</span><span class="val" style="color:var(--accent-green);">14</span></div>
+                        <div class="item"><span class="label">Rejected</span><span class="val" style="color:var(--accent-red);">3</span></div>
+                        <div class="item"><span class="label">₹15L Referrals</span><span class="val" style="color:var(--accent-cyan);">7</span></div>
+                        <div class="item"><span class="label">₹30L Referrals</span><span class="val" style="color:var(--accent-purple);">5</span></div>
+                        <div class="item"><span class="label">Potential Gallery Value</span><span class="val" style="color:var(--accent-cyan);">₹2.25Cr</span></div>
+                        <div class="item"><span class="label">Activated Value</span><span class="val" style="color:var(--accent-green);">₹1.95Cr</span></div>
+                        <div class="item"><span class="label">Completed Value</span><span class="val" style="color:var(--accent-green);">₹1.80Cr</span></div>
+                        <div class="item"><span class="label">Conversion %</span><span class="val" style="color:var(--accent-cyan);">33.3%</span></div>
+                        <div class="item"><span class="label">Activation %</span><span class="val" style="color:var(--accent-green);">50.0%</span></div>
+                        <div class="item"><span class="label">Completion %</span><span class="val" style="color:var(--accent-green);">33.3%</span></div>
+                        <div class="item"><span class="label">Avg. Time to Complete</span><span class="val">18 days</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Funnel Report -->
+            <div class="sub-view" id="sub-report-funnel">
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-funnel-dollar"></i> Referral Funnel</h3><span class="badge">All time</span></div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;text-align:center;">
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:12px;"><div style="font-size:11px;color:var(--text-muted);">Total</div><div style="font-size:24px;font-weight:700;color:#fff;">42</div><div style="font-size:11px;color:var(--text-secondary);">100%</div></div>
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:12px;"><div style="font-size:11px;color:var(--text-muted);">Valid</div><div style="font-size:24px;font-weight:700;color:var(--accent-cyan);">39</div><div style="font-size:11px;color:var(--text-secondary);">92.9%</div></div>
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:12px;"><div style="font-size:11px;color:var(--text-muted);">Verified</div><div style="font-size:24px;font-weight:700;color:var(--accent-blue);">33</div><div style="font-size:11px;color:var(--text-secondary);">78.6%</div></div>
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:12px;"><div style="font-size:11px;color:var(--text-muted);">Assigned</div><div style="font-size:24px;font-weight:700;color:var(--accent-purple);">30</div><div style="font-size:11px;color:var(--text-secondary);">71.4%</div></div>
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:12px;"><div style="font-size:11px;color:var(--text-muted);">Contacted</div><div style="font-size:24px;font-weight:700;color:var(--accent-cyan);">27</div><div style="font-size:11px;color:var(--text-secondary);">64.3%</div></div>
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:12px;"><div style="font-size:11px;color:var(--text-muted);">Interested</div><div style="font-size:24px;font-weight:700;color:var(--accent-amber);">24</div><div style="font-size:11px;color:var(--text-secondary);">57.1%</div></div>
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:12px;"><div style="font-size:11px;color:var(--text-muted);">Meeting</div><div style="font-size:24px;font-weight:700;color:var(--accent-purple);">21</div><div style="font-size:11px;color:var(--text-secondary);">50.0%</div></div>
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:12px;"><div style="font-size:11px;color:var(--text-muted);">Proposal</div><div style="font-size:24px;font-weight:700;color:var(--accent-blue);">18</div><div style="font-size:11px;color:var(--text-secondary);">42.9%</div></div>
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:12px;"><div style="font-size:11px;color:var(--text-muted);">Investment</div><div style="font-size:24px;font-weight:700;color:var(--accent-cyan);">16</div><div style="font-size:11px;color:var(--text-secondary);">38.1%</div></div>
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:12px;"><div style="font-size:11px;color:var(--text-muted);">Activated</div><div style="font-size:24px;font-weight:700;color:var(--accent-green);">21</div><div style="font-size:11px;color:var(--text-secondary);">50.0%</div></div>
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:12px;"><div style="font-size:11px;color:var(--text-muted);">Completed</div><div style="font-size:24px;font-weight:700;color:var(--accent-green);">14</div><div style="font-size:11px;color:var(--text-secondary);">33.3%</div></div>
+                    </div>
+                    <div class="progress-bar mt-2"><div class="fill" style="width:33.3%;background:linear-gradient(90deg,var(--accent-amber),var(--accent-green));"></div></div>
+                    <div class="flex-between text-sm text-muted mt-2"><span>Conversion rate: 33.3%</span><span>Avg. time in funnel: 12 days</span></div>
+                </div>
+            </div>
+
+            <!-- Ageing Report -->
+            <div class="sub-view" id="sub-report-ageing">
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-clock"></i> Referral Ageing Report</h3><span class="badge">42 referrals</span></div>
+                    <div class="mini-grid">
+                        <div class="item"><span class="label">0–3 Days</span><span class="val" style="color:var(--accent-green);">8</span></div>
+                        <div class="item"><span class="label">4–7 Days</span><span class="val" style="color:var(--accent-cyan);">12</span></div>
+                        <div class="item"><span class="label">8–15 Days</span><span class="val" style="color:var(--accent-blue);">9</span></div>
+                        <div class="item"><span class="label">16–30 Days</span><span class="val" style="color:var(--accent-amber);">7</span></div>
+                        <div class="item"><span class="label">31–60 Days</span><span class="val" style="color:var(--accent-orange);">4</span></div>
+                        <div class="item"><span class="label">60+ Days</span><span class="val" style="color:var(--accent-red);">2</span></div>
+                    </div>
+                    <div class="progress-bar mt-2"><div class="fill" style="width:62%;background:linear-gradient(90deg,var(--accent-green),var(--accent-amber),var(--accent-red));"></div></div>
+                    <div class="flex-between text-sm text-muted mt-2"><span>Average age: 14.2 days</span><span class="glass-tag"><i class="fas fa-exclamation-triangle" style="color:var(--accent-amber);"></i> 6 referrals > 30 days</span></div>
+                </div>
+            </div>
+
+            <!-- Source Report -->
+            <div class="sub-view" id="sub-report-source">
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-chart-pie"></i> Referral Source Report</h3><span class="badge">All sources</span></div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Source</th><th>Referrals</th><th>Activated</th><th>Completed</th><th>Value</th><th>Conversion</th></tr></thead>
+                            <tbody>
+                                <tr><td><span class="highlight">Employee</span></td><td>18</td><td>10</td><td>7</td><td>₹1.05Cr</td><td>38.9%</td></tr>
+                                <tr><td>BDE</td><td>12</td><td>6</td><td>4</td><td>₹60L</td><td>33.3%</td></tr>
+                                <tr><td>BDO</td><td>4</td><td>2</td><td>1</td><td>₹15L</td><td>25.0%</td></tr>
+                                <tr><td>Marketing</td><td>3</td><td>1</td><td>1</td><td>₹15L</td><td>33.3%</td></tr>
+                                <tr><td>Gallery Manager</td><td>3</td><td>1</td><td>1</td><td>₹30L</td><td>33.3%</td></tr>
+                                <tr><td>HQ Manager</td><td>2</td><td>1</td><td>0</td><td>—</td><td>0.0%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- VIEW: MANAGEMENT -->
+        <!-- ============================================================ -->
+        <div class="view" id="view-management">
+            <div class="kpi-grid">
+                <div class="kpi-card"><div class="label"><i class="fas fa-sitemap"></i> Total Referral Network</div><div class="value">42</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-arrow-right"></i> Direct Referrals</div><div class="value">42</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-arrow-left"></i> Indirect Referrals</div><div class="value">0</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-check-circle" style="color:var(--accent-green);"></i> Active Referrals</div><div class="value" style="color:var(--accent-green);">21</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-check-double" style="color:var(--accent-green);"></i> Completed</div><div class="value" style="color:var(--accent-green);">14</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-clock" style="color:var(--accent-amber);"></i> Pending</div><div class="value" style="color:var(--accent-amber);">15</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-times-circle" style="color:var(--accent-red);"></i> Rejected</div><div class="value" style="color:var(--accent-red);">3</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-coins" style="color:var(--accent-cyan);"></i> ₹15L Pipeline</div><div class="value" style="color:var(--accent-cyan);">7</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-coins" style="color:var(--accent-purple);"></i> ₹30L Pipeline</div><div class="value" style="color:var(--accent-purple);">5</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-trophy" style="color:var(--accent-amber);"></i> Top Referrer</div><div class="value" style="font-size:18px;">Priya Sharma</div><div class="sub-value">28 referrals</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-store" style="color:var(--accent-amber);"></i> Top Gallery Referrer</div><div class="value" style="font-size:18px;">Amit Patel</div><div class="sub-value">8 gallery referrals</div></div>
+                <div class="kpi-card"><div class="label"><i class="fas fa-percent"></i> Best Conversion</div><div class="value" style="color:var(--accent-green);">42.8%</div><div class="sub-value">Rajesh Kumar</div></div>
+            </div>
+
+            <div class="row row-2">
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-store"></i> Gallery Referral Pipeline</h3><span class="badge">12 total</span></div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;">
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:12px;"><div style="font-size:11px;color:var(--text-muted);">₹15L</div><div style="font-size:20px;font-weight:700;color:var(--accent-cyan);">7</div><div style="font-size:10px;color:var(--text-secondary);">Activated: 4</div></div>
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:12px;"><div style="font-size:11px;color:var(--text-muted);">₹30L</div><div style="font-size:20px;font-weight:700;color:var(--accent-purple);">5</div><div style="font-size:10px;color:var(--text-secondary);">Activated: 3</div></div>
+                        <div style="background:var(--bg-glass);border-radius:var(--radius-sm);padding:12px;"><div style="font-size:11px;color:var(--text-muted);">Total Value</div><div style="font-size:20px;font-weight:700;color:var(--accent-amber);">₹2.25Cr</div><div style="font-size:10px;color:var(--text-secondary);">Completed: ₹1.80Cr</div></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h3><i class="fas fa-chart-line"></i> Referral Performance</h3><span class="badge">Score: 76%</span></div>
+                    <div class="mini-grid">
+                        <div class="item"><span class="label">Valid Referrals</span><span class="val" style="color:var(--accent-green);">92.9%</span></div>
+                        <div class="item"><span class="label">Gallery Referrals</span><span class="val" style="color:var(--accent-cyan);">28.6%</span></div>
+                        <div class="item"><span class="label">Referral Activation</span><span class="val" style="color:var(--accent-green);">50.0%</span></div>
+                        <div class="item"><span class="label">Completed Referrals</span><span class="val" style="color:var(--accent-green);">33.3%</span></div>
+                        <div class="item"><span class="label">Referral Quality</span><span class="val" style="color:var(--accent-cyan);">82%</span></div>
+                        <div class="item"><span class="label">Follow-up Discipline</span><span class="val" style="color:var(--accent-amber);">68%</span></div>
+                    </div>
+                    <div class="progress-bar mt-2"><div class="fill" style="width:76%;"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- VIEW: AUDIT LOG -->
+        <!-- ============================================================ -->
+        <div class="view" id="view-audit">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-history" style="color:var(--accent-purple);margin-right:8px;"></i>Referral Audit Log</h3>
+                    <span class="badge">1,247 entries</span>
+                </div>
+                <div class="table-wrap table-scroll" style="max-height:450px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Audit ID</th>
+                                <th>Referral ID</th>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                                <th>Previous Status</th>
+                                <th>New Status</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>AUD-001</td><td>REF-2026-001</td><td>Rajesh Kumar</td><td>BDE</td><td>Aug 11 10:30</td><td>Status Update</td><td>In Progress</td><td><span class="status-badge green">Completed</span></td><td>Gallery activated</td></tr>
+                            <tr><td>AUD-002</td><td>REF-2026-002</td><td>Rajesh Kumar</td><td>BDE</td><td>Aug 10 15:20</td><td>Status Update</td><td>Under Review</td><td><span class="status-badge cyan">In Progress</span></td><td>Meeting completed</td></tr>
+                            <tr><td>AUD-003</td><td>REF-2026-005</td><td>Anita HR</td><td>HR</td><td>Aug 09 11:00</td><td>Assignment</td><td>Unassigned</td><td><span class="status-badge purple">Assigned</span></td><td>Assigned to BDE</td></tr>
+                            <tr><td>AUD-004</td><td>REF-2026-003</td><td>Rajesh Kumar</td><td>BDE</td><td>Aug 08 09:30</td><td>Status Update</td><td>Selected</td><td><span class="status-badge green">Joined</span></td><td>Candidate joined</td></tr>
+                            <tr><td>AUD-005</td><td>REF-2026-007</td><td>Anita HR</td><td>HR</td><td>Aug 06 14:00</td><td>Status Update</td><td>Interview</td><td><span class="status-badge red">Rejected</span></td><td>Did not meet criteria</td></tr>
+                            <tr><td>AUD-006</td><td>REF-2026-009</td><td>Rajesh Kumar</td><td>BDE</td><td>Aug 05 12:15</td><td>Amount Update</td><td>₹15L</td><td><span class="status-badge green">₹30L</span></td><td>Package upgraded</td></tr>
+                            <tr><td>AUD-007</td><td>REF-2026-006</td><td>Rajesh Kumar</td><td>BDE</td><td>Aug 04 16:00</td><td>Owner Transfer</td><td>Rajesh Kumar</td><td>Priya Sharma</td><td>Reassigned to HQ</td></tr>
+                            <tr><td>AUD-008</td><td>REF-2026-004</td><td>Rajesh Kumar</td><td>BDE</td><td>Aug 03 10:00</td><td>Status Update</td><td>Verification</td><td><span class="status-badge green">Activated</span></td><td>KYC completed</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <div style="margin-top:32px;padding:16px 0;border-top:1px solid var(--border-glass);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--text-muted);">
+            <span>© 2026 Referral CRM · v3.0 · <i class="fas fa-handshake"></i> Referral Management</span>
+            <span>Data refreshed: <span id="refreshTime">Just now</span> · <i class="fas fa-sync-alt" style="cursor:pointer;" onclick="refreshData()"></i></span>
+            <span><i class="fas fa-shield-alt"></i> Audit Trail · SOC2</span>
+        </div>
+
+    </main>
+
+    <script>
+        // ============================================================
+        // NAVIGATION
+        // ============================================================
+        const views = {
+            dashboard: 'Dashboard',
+            'my-referrals': 'My Referrals',
+            'refer-employee': 'Refer Employee',
+            'refer-gallery': 'Refer a Gallery',
+            'refer-epay': 'Refer Epay',
+            'referral-tree': 'Referral Tree',
+            activities: 'Activities',
+            followups: 'Follow-ups',
+            reports: 'Referral Reports',
+            management: 'Management Dashboard',
+            audit: 'Audit Log'
+        };
+
+        function navigateTo(viewId) {
+            // Hide all views
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            // Show target
+            const target = document.getElementById('view-' + viewId);
+            if (target) target.classList.add('active');
+
+            // Update sidebar
+            document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
+            const link = document.querySelector(`.sidebar nav a[data-view="${viewId}"]`);
+            if (link) link.classList.add('active');
+
+            // Update title
+            document.getElementById('pageTitle').textContent = views[viewId] || viewId;
+            document.getElementById('drillCurrent').textContent = views[viewId] || viewId;
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Sidebar clicks
+        document.querySelectorAll('.sidebar nav a[data-view]').forEach(a => {
+            a.addEventListener('click', function(e) {
+                e.preventDefault();
+                navigateTo(this.dataset.view);
+            });
+        });
+
+        // Sub-tabs within Reports
+        document.querySelectorAll('.sub-tabs .tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const parent = this.closest('.sub-tabs');
+                parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const viewId = this.dataset.subview;
+                const container = this.closest('.view');
+                container.querySelectorAll('.sub-view').forEach(sv => sv.classList.remove('active'));
+                const target = container.querySelector('#sub-' + viewId);
+                if (target) target.classList.add('active');
+            });
+        });
+
+        // ============================================================
+        // PACKAGE SELECTOR
+        // ============================================================
+        function selectPackage(el) {
+            const parent = el.closest('.package-selector');
+            parent.querySelectorAll('.package-option').forEach(p => p.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('selectedPackage').value = el.dataset.value;
+        }
+
+        // ============================================================
+        // DUPLICATE CHECK (simulated)
+        // ============================================================
+        function checkDuplicateEmployee(mobile) {
+            const alert = document.getElementById('dupEmployeeAlert');
+            if (mobile === '7654321098') {
+                alert.classList.add('show');
+            } else {
+                alert.classList.remove('show');
+            }
+        }
+
+        function checkDuplicateGallery(mobile) {
+            const alert = document.getElementById('dupGalleryAlert');
+            if (mobile === '9876543210') {
+                alert.classList.add('show');
+            } else {
+                alert.classList.remove('show');
+            }
+        }
+
+        // ============================================================
+        // REFRESH
+        // ============================================================
+        function refreshData() {
+            const el = document.getElementById('refreshTime');
+            el.textContent = new Date().toLocaleTimeString();
+            // Simulate loading
+            el.textContent = 'Refreshing...';
+            setTimeout(() => {
+                el.textContent = new Date().toLocaleTimeString();
+            }, 800);
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshData();
+            // Default dashboard active
+            navigateTo('dashboard');
+        });
+    </script>
+
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

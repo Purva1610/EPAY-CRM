@@ -1,0 +1,5 @@
+backend/
+├── package.json
+├── server.js
+├── .env (example)
+└── README.md

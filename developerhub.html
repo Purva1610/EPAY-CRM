@@ -1,0 +1,2406 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Developer Hub â€” Enterprise ERP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+    <style>
+
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --bg-primary: #0b0d11;
+            --bg-secondary: #13161c;
+            --bg-card: #1a1f2a;
+            --bg-hover: #242b3a;
+            --bg-input: #1a1f2a;
+            --border-color: #2a3142;
+            --text-primary: #e8edf5;
+            --text-secondary: #8b95b0;
+            --text-muted: #5a6480;
+            --accent: #6c8cff;
+            --accent-hover: #5a7ae8;
+            --accent-glow: rgba(108, 140, 255, 0.15);
+            --success: #4ade80;
+            --warning: #facc15;
+            --danger: #f87171;
+            --info: #60a5fa;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --transition: all 0.25s ease;
+            --sidebar-width: 260px;
+            --header-height: 64px;
+        }
+        html,
+        body {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* â”€â”€â”€ LAYOUT â”€â”€â”€ */
+        .app {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* â”€â”€â”€ SIDEBAR â”€â”€â”€ */
+        .sidebar {
+            width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: var(--transition);
+            z-index: 100;
+        }
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            min-height: var(--header-height);
+            flex-shrink: 0;
+        }
+        .sidebar-brand .logo {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .sidebar-brand h1 {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #fff 60%, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .sidebar-brand .badge {
+            font-size: 9px;
+            background: var(--accent);
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            -webkit-text-fill-color: #fff;
+            margin-left: auto;
+        }
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 12px 20px;
+        }
+        .sidebar-nav .nav-group {
+            margin-bottom: 6px;
+        }
+        .sidebar-nav .nav-group-title {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            padding: 12px 12px 6px;
+        }
+        .sidebar-nav .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            position: relative;
+        }
+        .sidebar-nav .nav-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        .sidebar-nav .nav-item.active {
+            background: var(--accent-glow);
+            color: var(--accent);
+        }
+        .sidebar-nav .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 24px;
+            border-radius: 4px;
+            background: var(--accent);
+        }
+        .sidebar-nav .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+        .sidebar-nav .nav-item .count {
+            margin-left: auto;
+            font-size: 11px;
+            background: var(--bg-card);
+            padding: 1px 10px;
+            border-radius: 20px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* â”€â”€â”€ MAIN â”€â”€â”€ */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg-primary);
+        }
+
+        /* â”€â”€â”€ HEADER â”€â”€â”€ */
+        .header {
+            height: var(--header-height);
+            min-height: var(--header-height);
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            flex-shrink: 0;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .header-left .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .header-left .page-title {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+        .header-left .page-title small {
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-left: 8px;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .header-right .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 0 14px;
+            gap: 10px;
+            transition: var(--transition);
+        }
+        .header-right .search-box:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        .header-right .search-box input {
+            background: none;
+            border: none;
+            padding: 8px 0;
+            color: var(--text-primary);
+            font-size: 13px;
+            outline: none;
+            width: 180px;
+        }
+        .header-right .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+        .header-right .search-box i {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        .header-right .header-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .header-right .header-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        .header-right .header-btn .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--danger);
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            border: 2px solid var(--bg-secondary);
+        }
+        .header-right .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: #fff;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        /* â”€â”€â”€ CONTENT â”€â”€â”€ */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px 30px;
+        }
+
+        /* â”€â”€â”€ CARDS / STATS â”€â”€â”€ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            transition: var(--transition);
+        }
+        .stat-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        .stat-card .label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 4px 0 2px;
+            letter-spacing: -0.5px;
+        }
+        .stat-card .change {
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+        .stat-card .change.up {
+            color: var(--success);
+            background: rgba(74, 222, 128, 0.12);
+        }
+        .stat-card .change.down {
+            color: var(--danger);
+            background: rgba(248, 113, 113, 0.12);
+        }
+        .stat-card .change.neutral {
+            color: var(--text-muted);
+            background: rgba(139, 149, 176, 0.12);
+        }
+        .stat-card .icon {
+            float: right;
+            font-size: 28px;
+            color: var(--accent);
+            opacity: 0.3;
+        }
+
+        /* â”€â”€â”€ CHARTS â”€â”€â”€ */
+        .charts-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .chart-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 18px 20px;
+        }
+        .chart-box .chart-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+        .chart-box canvas {
+            max-height: 200px;
+            max-width: 100%;
+        }
+
+        /* â”€â”€â”€ TABLE WRAPPER â”€â”€â”€ */
+        .table-wrapper {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .table-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .table-toolbar .left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .table-toolbar .left h3 {
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .table-toolbar .left .count-badge {
+            font-size: 12px;
+            background: var(--bg-hover);
+            padding: 1px 12px;
+            border-radius: 20px;
+            color: var(--text-secondary);
+        }
+        .table-toolbar .right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .table-toolbar .right .filter-select {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 6px 12px;
+            color: var(--text-primary);
+            font-size: 12px;
+            outline: none;
+            cursor: pointer;
+        }
+        .table-toolbar .right .filter-select:focus {
+            border-color: var(--accent);
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 16px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+        .btn-success {
+            background: var(--success);
+            color: #0b0d11;
+        }
+        .btn-success:hover {
+            opacity: 0.85;
+        }
+        .btn-danger {
+            background: var(--danger);
+            color: #0b0d11;
+        }
+        .btn-danger:hover {
+            opacity: 0.85;
+        }
+        .btn-warning {
+            background: var(--warning);
+            color: #0b0d11;
+        }
+        .btn-warning:hover {
+            opacity: 0.85;
+        }
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 12px;
+        }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+        .btn-ghost:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+        }
+
+        /* â”€â”€â”€ TABLE â”€â”€â”€ */
+        .table-scroll {
+            overflow-x: auto;
+            padding: 0 4px 4px 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        table thead {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+        table thead th {
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            background: var(--bg-secondary);
+            z-index: 5;
+        }
+        table tbody td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            vertical-align: middle;
+        }
+        table tbody tr:hover {
+            background: var(--bg-hover);
+        }
+        table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        table .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        table .status-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-badge.active {
+            background: rgba(74, 222, 128, 0.15);
+            color: var(--success);
+        }
+        .status-badge.active .dot {
+            background: var(--success);
+        }
+        .status-badge.inactive {
+            background: rgba(248, 113, 113, 0.15);
+            color: var(--danger);
+        }
+        .status-badge.inactive .dot {
+            background: var(--danger);
+        }
+        .status-badge.pending {
+            background: rgba(250, 204, 21, 0.15);
+            color: var(--warning);
+        }
+        .status-badge.pending .dot {
+            background: var(--warning);
+        }
+        .status-badge.info {
+            background: rgba(96, 165, 250, 0.15);
+            color: var(--info);
+        }
+        .status-badge.info .dot {
+            background: var(--info);
+        }
+        .status-badge.draft {
+            background: rgba(139, 149, 176, 0.15);
+            color: var(--text-muted);
+        }
+        .status-badge.draft .dot {
+            background: var(--text-muted);
+        }
+        table .actions {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        table .actions .btn {
+            padding: 3px 8px;
+            font-size: 12px;
+        }
+
+        /* â”€â”€â”€ MODAL â”€â”€â”€ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            padding: 20px;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            max-width: 680px;
+            width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            animation: modalIn 0.25s ease;
+        }
+        @keyframes modalIn {
+            from {
+                transform: scale(0.95) translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .modal-header h2 {
+            font-size: 17px;
+            font-weight: 600;
+        }
+        .modal-header .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 22px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .modal-header .close-btn:hover {
+            color: var(--text-primary);
+        }
+        .modal-body {
+            padding: 20px 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .modal-body .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 20px;
+        }
+        .modal-body .form-grid .full {
+            grid-column: 1 / -1;
+        }
+        .modal-body .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .modal-body .form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .modal-body .form-group input,
+        .modal-body .form-group select,
+        .modal-body .form-group textarea {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: var(--transition);
+        }
+        .modal-body .form-group input:focus,
+        .modal-body .form-group select:focus,
+        .modal-body .form-group textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        .modal-body .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .modal-footer {
+            padding: 14px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        /* â”€â”€â”€ RESPONSIVE â”€â”€â”€ */
+        @media (max-width: 1024px) {
+            .charts-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: -280px;
+                height: 100%;
+                z-index: 200;
+                box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+                transition: left 0.3s ease;
+            }
+            .sidebar.open {
+                left: 0;
+            }
+            .header-left .menu-toggle {
+                display: block;
+            }
+            .header-right .search-box input {
+                width: 120px;
+            }
+            .header-right .search-box {
+                padding: 0 10px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .modal-body .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal {
+                max-width: 100%;
+                margin: 10px;
+                max-height: 95vh;
+            }
+            .table-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .table-toolbar .right {
+                flex-wrap: wrap;
+            }
+            .content {
+                padding: 14px 14px 20px;
+            }
+            .header {
+                padding: 0 14px;
+            }
+        }
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .header-right .search-box input {
+                width: 80px;
+            }
+            .header-right .search-box {
+                padding: 0 8px;
+            }
+            .header-right .header-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 14px;
+            }
+            .header-right .avatar {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+        }
+
+        /* overlay for mobile sidebar */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 150;
+        }
+        .sidebar-overlay.open {
+            display: block;
+        }
+
+        /* â”€â”€â”€ UTILITIES â”€â”€â”€ */
+        .text-muted {
+            color: var(--text-muted);
+        }
+        .text-success {
+            color: var(--success);
+        }
+        .text-danger {
+            color: var(--danger);
+        }
+        .text-warning {
+            color: var(--warning);
+        }
+        .text-accent {
+            color: var(--accent);
+        }
+        .fw-600 {
+            font-weight: 600;
+        }
+        .gap-2 {
+            gap: 8px;
+        }
+        .flex {
+            display: flex;
+        }
+        .flex-center {
+            display: flex;
+            align-items: center;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .mt-2 {
+            margin-top: 8px;
+        }
+        .mb-2 {
+            margin-bottom: 8px;
+        }
+        .w-full {
+            width: 100%;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .table-empty {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--text-muted);
+        }
+        .table-empty i {
+            font-size: 40px;
+            margin-bottom: 12px;
+            opacity: 0.3;
+        }
+        .table-empty p {
+            font-size: 14px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 1px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            background: var(--bg-hover);
+            color: var(--text-secondary);
+            margin: 2px 4px 2px 0;
+        }
+        .tag.accent {
+            background: var(--accent-glow);
+            color: var(--accent);
+        }
+        .tag.success {
+            background: rgba(74, 222, 128, 0.12);
+            color: var(--success);
+        }
+        .tag.danger {
+            background: rgba(248, 113, 113, 0.12);
+            color: var(--danger);
+        }
+        .tag.warning {
+            background: rgba(250, 204, 21, 0.12);
+            color: var(--warning);
+        }
+    </style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+    <!-- â”€â”€â”€ SIDEBAR OVERLAY (mobile) â”€â”€â”€ -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="app">
+        <!-- â”€â”€â”€ SIDEBAR â”€â”€â”€ -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="logo">DH</div>
+                <h1>Developer Hub</h1>
+                <span class="badge">v3.0</span>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav">
+                <!-- populated by JS -->
+            </nav>
+        </aside>
+
+        <!-- â”€â”€â”€ MAIN â”€â”€â”€ -->
+        <div class="main">
+            <!-- HEADER -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                    <span class="page-title" id="pageTitle">Dashboard <small>overview</small></span>
+                </div>
+                <div class="header-right">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search..." id="globalSearch" />
+                    </div>
+                    <button class="header-btn" title="Notifications"><i class="fas fa-bell"></i><span class="dot"></span></button>
+                    <button class="header-btn" title="Settings"><i class="fas fa-cog"></i></button>
+                    <div class="avatar">JD</div>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <div class="content" id="mainContent">
+                <!-- rendered by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- â”€â”€â”€ MODAL â”€â”€â”€ -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Record</h2>
+                <button class="close-btn" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- dynamic form -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="modalCancel">Cancel</button>
+                <button class="btn btn-primary" id="modalSave">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+        //  DATA STORE
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+
+        // Each section has a collection of records.
+        // We'll use a simple object keyed by sectionId.
+        const DB = {};
+
+        // Default sample data for each section
+        const SAMPLE_DATA = {
+            dashboard: [],
+            developer: [
+                { id: 1, code: 'DEV001', name: 'Alice Johnson', email: 'alice@dev.co', role: 'Senior Engineer', team: 'Frontend',
+                    status: 'Active', skills: 'React,TS,Node' },
+                { id: 2, code: 'DEV002', name: 'Bob Smith', email: 'bob@dev.co', role: 'Lead Engineer', team: 'Backend',
+                    status: 'Active', skills: 'Go,Python,K8s' },
+                { id: 3, code: 'DEV003', name: 'Carol White', email: 'carol@dev.co', role: 'DevOps Engineer', team: 'Platform',
+                    status: 'Active', skills: 'AWS,Terraform,CI' },
+                { id: 4, code: 'DEV004', name: 'David Brown', email: 'david@dev.co', role: 'Full Stack', team: 'Product',
+                    status: 'Inactive', skills: 'JS,Python,React' },
+            ],
+            skillmatrix: [
+                { id: 1, skill: 'React', category: 'Frontend', level: 'Expert', years: 5, score: 92 },
+                { id: 2, skill: 'TypeScript', category: 'Frontend', level: 'Advanced', years: 4, score: 85 },
+                { id: 3, skill: 'Node.js', category: 'Backend', level: 'Advanced', years: 4, score: 80 },
+                { id: 4, skill: 'AWS', category: 'Cloud', level: 'Expert', years: 6, score: 90 },
+                { id: 5, skill: 'Python', category: 'Backend', level: 'Intermediate', years: 3, score: 70 },
+            ],
+            project: [
+                { id: 1, code: 'PRJ-001', name: 'Customer Portal', manager: 'Alice Johnson', lead: 'Bob Smith',
+                    status: 'Active', priority: 'High', progress: 78 },
+                { id: 2, code: 'PRJ-002', name: 'Mobile App', manager: 'Carol White', lead: 'David Brown', status: 'Active',
+                    priority: 'Medium', progress: 45 },
+                { id: 3, code: 'PRJ-003', name: 'Data Pipeline', manager: 'Bob Smith', lead: 'Alice Johnson', status: 'On Hold',
+                    priority: 'Low', progress: 30 },
+            ],
+            sprint: [
+                { id: 1, name: 'Sprint 12', project: 'Customer Portal', goal: 'Payment Integration', start: '2026-01-10',
+                    end: '2026-01-24', velocity: 42, completion: 85 },
+                { id: 2, name: 'Sprint 13', project: 'Mobile App', goal: 'User Auth', start: '2026-01-17', end: '2026-01-31',
+                    velocity: 38, completion: 60 },
+            ],
+            task: [
+                { id: 1, title: 'Implement Payment Gateway', project: 'Customer Portal', developer: 'Alice Johnson',
+                    priority: 'High', status: 'In Progress', points: 8 },
+                { id: 2, title: 'Design Login Screen', project: 'Mobile App', developer: 'David Brown', priority: 'Medium',
+                    status: 'Review', points: 5 },
+                { id: 3, title: 'Setup CI Pipeline', project: 'Data Pipeline', developer: 'Carol White', priority: 'High',
+                    status: 'Done', points: 3 },
+            ],
+            userstory: [
+                { id: 1, title: 'As a user I can pay with card', epic: 'Payments', feature: 'Checkout', priority: 'High',
+                    points: 8, status: 'In Progress' },
+                { id: 2, title: 'As a user I can login with Google', epic: 'Auth', feature: 'Login', priority: 'Medium',
+                    points: 5, status: 'Done' },
+            ],
+            epic: [
+                { id: 1, name: 'Payments', product: 'Customer Portal', owner: 'Bob Smith', priority: 'High', progress: 70 },
+                { id: 2, name: 'Auth', product: 'Mobile App', owner: 'Alice Johnson', priority: 'Medium', progress: 90 },
+            ],
+            repository: [
+                { id: 1, name: 'customer-portal', org: 'devhub', language: 'TypeScript', visibility: 'Private',
+                    lastCommit: '2026-01-20', branches: 4, contributors: 6 },
+                { id: 2, name: 'mobile-app', org: 'devhub', language: 'Swift', visibility: 'Private', lastCommit: '2026-01-18',
+                    branches: 3, contributors: 4 },
+            ],
+            branch: [
+                { id: 1, repository: 'customer-portal', name: 'feature/payments', type: 'Feature', created: '2026-01-12',
+                    status: 'Active' },
+                { id: 2, repository: 'mobile-app', name: 'feature/auth', type: 'Feature', created: '2026-01-15',
+                    status: 'Merged' },
+            ],
+            commit: [
+                { id: 1, hash: 'a1b2c3d', repository: 'customer-portal', branch: 'feature/payments', developer: 'Alice Johnson',
+                    message: 'Add payment service', date: '2026-01-20', files: 3 },
+                { id: 2, hash: 'e4f5g6h', repository: 'mobile-app', branch: 'feature/auth', developer: 'David Brown',
+                    message: 'Implement Google login', date: '2026-01-18', files: 2 },
+            ],
+            pullrequest: [
+                { id: 1, number: 45, repository: 'customer-portal', source: 'feature/payments', target: 'main',
+                    developer: 'Alice Johnson', status: 'Open', approvals: 1 },
+                { id: 2, number: 46, repository: 'mobile-app', source: 'feature/auth', target: 'main', developer: 'David Brown',
+                    status: 'Merged', approvals: 2 },
+            ],
+            codereview: [
+                { id: 1, pr: 45, reviewer: 'Bob Smith', quality: 88, security: 90, performance: 85, coverage: 80,
+                    status: 'Approved' },
+                { id: 2, pr: 46, reviewer: 'Carol White', quality: 92, security: 88, performance: 90, coverage: 85,
+                    status: 'Approved' },
+            ],
+            bug: [
+                { id: 1, number: 'BUG-101', project: 'Customer Portal', severity: 'Critical', priority: 'High',
+                    assigned: 'Alice Johnson', status: 'Open' },
+                { id: 2, number: 'BUG-102', project: 'Mobile App', severity: 'Major', priority: 'Medium', assigned: 'David Brown',
+                    status: 'Fixed' },
+            ],
+            qa: [
+                { id: 1, suite: 'Regression', project: 'Customer Portal', type: 'Functional', tester: 'Carol White',
+                    status: 'Pass', duration: '15m' },
+                { id: 2, suite: 'Smoke', project: 'Mobile App', type: 'Smoke', tester: 'Bob Smith', status: 'Fail',
+                    duration: '8m' },
+            ],
+            api: [
+                { id: 1, name: 'Payment API', version: 'v2', endpoint: '/api/pay', method: 'POST', owner: 'Alice Johnson',
+                    status: 'Active' },
+                { id: 2, name: 'User API', version: 'v1', endpoint: '/api/user', method: 'GET', owner: 'David Brown',
+                    status: 'Deprecated' },
+            ],
+            database: [
+                { id: 1, name: 'customer-db', type: 'PostgreSQL', env: 'Production', owner: 'Bob Smith', tables: 24,
+                    storage: '120GB' },
+                { id: 2, name: 'analytics-db', type: 'MongoDB', env: 'Staging', owner: 'Carol White', tables: 12,
+                    storage: '45GB' },
+            ],
+            environment: [
+                { id: 1, name: 'dev', type: 'Development', project: 'Customer Portal', url: 'dev.portal.com', status: 'Healthy' },
+                { id: 2, name: 'prod', type: 'Production', project: 'Customer Portal', url: 'portal.com', status: 'Healthy' },
+                { id: 3, name: 'staging', type: 'Staging', project: 'Mobile App', url: 'staging.app.com', status: 'Degraded' },
+            ],
+            deployment: [
+                { id: 1, project: 'Customer Portal', env: 'Production', version: 'v2.1.0', status: 'Success', duration: '4m' },
+                { id: 2, project: 'Mobile App', env: 'Staging', version: 'v1.8.0', status: 'Failed', duration: '2m' },
+            ],
+            cicd: [
+                { id: 1, name: 'Portal CI', project: 'Customer Portal', branch: 'main', status: 'Passed', duration: '6m' },
+                { id: 2, name: 'Mobile CI', project: 'Mobile App', branch: 'develop', status: 'Failed', duration: '3m' },
+            ],
+            release: [
+                { id: 1, name: 'v2.1.0', project: 'Customer Portal', type: 'Major', planned: '2026-01-25', status: 'Scheduled' },
+                { id: 2, name: 'v1.8.0', project: 'Mobile App', type: 'Minor', planned: '2026-01-20', status: 'Released' },
+            ],
+            devopsmon: [
+                { id: 1, service: 'Portal API', env: 'Production', cpu: 32, ram: 68, uptime: 99.9, status: 'Healthy' },
+                { id: 2, service: 'Mobile API', env: 'Production', cpu: 45, ram: 72, uptime: 99.2, status: 'Degraded' },
+            ],
+            cloud: [
+                { id: 1, provider: 'AWS', region: 'us-east-1', resource: 'EC2', name: 'portal-app', cost: '$420/mo',
+                    status: 'Running' },
+                { id: 2, provider: 'Azure', region: 'eastus', resource: 'SQL', name: 'customer-db', cost: '$310/mo',
+                    status: 'Running' },
+            ],
+            security: [
+                { id: 1, cve: 'CVE-2024-1234', asset: 'Portal API', severity: 'High', status: 'Open', assigned: 'Bob Smith' },
+                { id: 2, cve: 'CVE-2024-5678', asset: 'Mobile App', severity: 'Medium', status: 'Fixed', assigned: 'David Brown' },
+            ],
+            dependency: [
+                { id: 1, package: 'lodash', version: '4.17.20', latest: '4.17.21', risk: 'Medium', status: 'Outdated' },
+                { id: 2, package: 'axios', version: '0.27.2', latest: '1.6.0', risk: 'Low', status: 'Outdated' },
+            ],
+            doc: [
+                { id: 1, name: 'API Reference', project: 'Customer Portal', type: 'Technical', author: 'Alice Johnson',
+                    status: 'Published' },
+                { id: 2, name: 'Onboarding Guide', project: 'Mobile App', type: 'User', author: 'David Brown', status: 'Draft' },
+            ],
+            worklog: [
+                { id: 1, developer: 'Alice Johnson', project: 'Customer Portal', date: '2026-01-20', hours: 6.5,
+                    type: 'Development' },
+                { id: 2, developer: 'Bob Smith', project: 'Data Pipeline', date: '2026-01-20', hours: 5.0, type: 'Review' },
+            ],
+            productivity: [
+                { id: 1, developer: 'Alice Johnson', commits: 12, prs: 6, points: 28, bugs: 2, score: 89 },
+                { id: 2, developer: 'Bob Smith', commits: 8, prs: 9, points: 32, bugs: 1, score: 92 },
+                { id: 3, developer: 'Carol White', commits: 15, prs: 4, points: 20, bugs: 4, score: 76 },
+            ],
+            support: [
+                { id: 1, ticket: 'SUP-101', developer: 'Alice Johnson', issue: 'Payment failure', severity: 'Critical',
+                    status: 'Open' },
+                { id: 2, ticket: 'SUP-102', developer: 'David Brown', issue: 'Login timeout', severity: 'Major', status: 'Resolved' },
+            ],
+            changerequest: [
+                { id: 1, project: 'Customer Portal', requester: 'Product', type: 'Enhancement', status: 'Approved',
+                    risk: 'Medium' },
+                { id: 2, project: 'Mobile App', requester: 'Security', type: 'Patch', status: 'Pending', risk: 'Low' },
+            ],
+            access: [
+                { id: 1, developer: 'Alice Johnson', system: 'GitHub', role: 'Admin', status: 'Active' },
+                { id: 2, developer: 'Bob Smith', system: 'AWS', role: 'Read', status: 'Active' },
+            ],
+            performance: [
+                { id: 1, developer: 'Alice Johnson', projects: 3, tasks: 18, points: 42, quality: 88, score: 86 },
+                { id: 2, developer: 'Bob Smith', projects: 2, tasks: 14, points: 38, quality: 92, score: 90 },
+            ],
+            training: [
+                { id: 1, developer: 'Alice Johnson', skill: 'Kubernetes', course: 'K8s Advanced', provider: 'Pluralsight',
+                    status: 'Completed' },
+                { id: 2, developer: 'Bob Smith', skill: 'Rust', course: 'Rust Basics', provider: 'Udemy', status: 'In Progress' },
+            ],
+            dailytasks: [
+                { id: 1, developer: 'Alice Johnson', task: 'Review PR #45', priority: 'High', due: '2026-01-21', status: 'Open' },
+                { id: 2, developer: 'Bob Smith', task: 'Fix BUG-101', priority: 'Critical', due: '2026-01-22',
+                status: 'In Progress' },
+            ],
+        };
+
+        // Section definitions for nav and rendering
+        const SECTIONS = [{
+            id: 'dashboard',
+            label: 'Dashboard',
+            icon: 'fa-gauge-high',
+            group: 'Overview',
+        }, {
+            id: 'developer',
+            label: 'Developer Master',
+            icon: 'fa-user-tie',
+            group: 'People',
+        }, {
+            id: 'skillmatrix',
+            label: 'Skill Matrix',
+            icon: 'fa-chart-bar',
+            group: 'People',
+        }, {
+            id: 'project',
+            label: 'Projects',
+            icon: 'fa-diagram-project',
+            group: 'Projects',
+        }, {
+            id: 'sprint',
+            label: 'Sprints',
+            icon: 'fa-arrows-rotate',
+            group: 'Projects',
+        }, {
+            id: 'task',
+            label: 'Tasks',
+            icon: 'fa-list-check',
+            group: 'Projects',
+        }, {
+            id: 'userstory',
+            label: 'User Stories',
+            icon: 'fa-book',
+            group: 'Projects',
+        }, {
+            id: 'epic',
+            label: 'Epics & Features',
+            icon: 'fa-layer-group',
+            group: 'Projects',
+        }, {
+            id: 'repository',
+            label: 'Repositories',
+            icon: 'fa-code-fork',
+            group: 'Code',
+        }, {
+            id: 'branch',
+            label: 'Branches',
+            icon: 'fa-code-branch',
+            group: 'Code',
+        }, {
+            id: 'commit',
+            label: 'Commits',
+            icon: 'fa-history',
+            group: 'Code',
+        }, {
+            id: 'pullrequest',
+            label: 'Pull Requests',
+            icon: 'fa-code-pull-request',
+            group: 'Code',
+        }, {
+            id: 'codereview',
+            label: 'Code Reviews',
+            icon: 'fa-eye',
+            group: 'Code',
+        }, {
+            id: 'bug',
+            label: 'Bugs',
+            icon: 'fa-bug',
+            group: 'QA',
+        }, {
+            id: 'qa',
+            label: 'QA / Testing',
+            icon: 'fa-flask',
+            group: 'QA',
+        }, {
+            id: 'api',
+            label: 'API Management',
+            icon: 'fa-plug',
+            group: 'Infra',
+        }, {
+            id: 'database',
+            label: 'Database',
+            icon: 'fa-database',
+            group: 'Infra',
+        }, {
+            id: 'environment',
+            label: 'Environments',
+            icon: 'fa-server',
+            group: 'Infra',
+        }, {
+            id: 'deployment',
+            label: 'Deployments',
+            icon: 'fa-rocket',
+            group: 'DevOps',
+        }, {
+            id: 'cicd',
+            label: 'CI/CD Pipeline',
+            icon: 'fa-arrows-spin',
+            group: 'DevOps',
+        }, {
+            id: 'release',
+            label: 'Release Management',
+            icon: 'fa-tags',
+            group: 'DevOps',
+        }, {
+            id: 'devopsmon',
+            label: 'DevOps Monitoring',
+            icon: 'fa-chart-simple',
+            group: 'DevOps',
+        }, {
+            id: 'cloud',
+            label: 'Cloud Infrastructure',
+            icon: 'fa-cloud',
+            group: 'Infra',
+        }, {
+            id: 'security',
+            label: 'Security & Vuln.',
+            icon: 'fa-shield-halved',
+            group: 'Security',
+        }, {
+            id: 'dependency',
+            label: 'Dependencies',
+            icon: 'fa-cubes',
+            group: 'Security',
+        }, {
+            id: 'doc',
+            label: 'Documentation',
+            icon: 'fa-file-lines',
+            group: 'Other',
+        }, {
+            id: 'worklog',
+            label: 'Work Log',
+            icon: 'fa-clock',
+            group: 'People',
+        }, {
+            id: 'productivity',
+            label: 'Productivity',
+            icon: 'fa-bolt',
+            group: 'People',
+        }, {
+            id: 'support',
+            label: 'Support Tickets',
+            icon: 'fa-headset',
+            group: 'Other',
+        }, {
+            id: 'changerequest',
+            label: 'Change Requests',
+            icon: 'fa-pen-to-square',
+            group: 'Projects',
+        }, {
+            id: 'access',
+            label: 'Access & Permissions',
+            icon: 'fa-lock',
+            group: 'Security',
+        }, {
+            id: 'performance',
+            label: 'Developer Performance',
+            icon: 'fa-trophy',
+            group: 'People',
+        }, {
+            id: 'training',
+            label: 'Training',
+            icon: 'fa-graduation-cap',
+            group: 'People',
+        }, {
+            id: 'dailytasks',
+            label: 'Daily Tasks',
+            icon: 'fa-tasks',
+            group: 'People',
+        }, ];
+
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+        //  INIT
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+
+        // Seed DB with sample data
+        function initDB() {
+            for (const [key, data] of Object.entries(SAMPLE_DATA)) {
+                DB[key] = data.map(item => ({ ...item }));
+            }
+            // ensure dashboard has a placeholder
+            if (!DB.dashboard) DB.dashboard = [];
+        }
+        initDB();
+
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+        //  HELPERS
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+
+        function getSectionLabel(id) {
+            const s = SECTIONS.find(s => s.id === id);
+            return s ? s.label : id;
+        }
+
+        function getFields(sectionId) {
+            // Return field definitions for the form based on section
+            const map = {
+                developer: [
+                    { key: 'code', label: 'Developer Code', type: 'text' },
+                    { key: 'name', label: 'Full Name', type: 'text' },
+                    { key: 'email', label: 'Email', type: 'text' },
+                    { key: 'role', label: 'Role', type: 'text' },
+                    { key: 'team', label: 'Team', type: 'text' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Active', 'Inactive', 'On Leave'] },
+                    { key: 'skills', label: 'Skills', type: 'text' },
+                ],
+                skillmatrix: [
+                    { key: 'skill', label: 'Skill Name', type: 'text' },
+                    { key: 'category', label: 'Category', type: 'select', options: ['Frontend', 'Backend', 'Cloud', 'DevOps',
+                            'Database', 'AI/ML', 'Security'
+                        ] },
+                    { key: 'level', label: 'Level', type: 'select', options: ['Beginner', 'Intermediate', 'Advanced',
+                            'Expert', 'Architect'
+                        ] },
+                    { key: 'years', label: 'Years Exp.', type: 'number' },
+                    { key: 'score', label: 'Score', type: 'number' },
+                ],
+                project: [
+                    { key: 'code', label: 'Project Code', type: 'text' },
+                    { key: 'name', label: 'Project Name', type: 'text' },
+                    { key: 'manager', label: 'Manager', type: 'text' },
+                    { key: 'lead', label: 'Tech Lead', type: 'text' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Active', 'On Hold', 'Completed',
+                            'Cancelled'
+                        ] },
+                    { key: 'priority', label: 'Priority', type: 'select', options: ['Low', 'Medium', 'High', 'Critical'] },
+                    { key: 'progress', label: 'Progress %', type: 'number' },
+                ],
+                sprint: [
+                    { key: 'name', label: 'Sprint Name', type: 'text' },
+                    { key: 'project', label: 'Project', type: 'text' },
+                    { key: 'goal', label: 'Goal', type: 'text' },
+                    { key: 'start', label: 'Start Date', type: 'date' },
+                    { key: 'end', label: 'End Date', type: 'date' },
+                    { key: 'velocity', label: 'Velocity', type: 'number' },
+                    { key: 'completion', label: 'Completion %', type: 'number' },
+                ],
+                task: [
+                    { key: 'title', label: 'Task Title', type: 'text' },
+                    { key: 'project', label: 'Project', type: 'text' },
+                    { key: 'developer', label: 'Developer', type: 'text' },
+                    { key: 'priority', label: 'Priority', type: 'select', options: ['Low', 'Medium', 'High', 'Critical'] },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Open', 'In Progress', 'Review', 'Done',
+                            'Blocked'
+                        ] },
+                    { key: 'points', label: 'Story Points', type: 'number' },
+                ],
+                userstory: [
+                    { key: 'title', label: 'Story Title', type: 'text' },
+                    { key: 'epic', label: 'Epic', type: 'text' },
+                    { key: 'feature', label: 'Feature', type: 'text' },
+                    { key: 'priority', label: 'Priority', type: 'select', options: ['Low', 'Medium', 'High', 'Critical'] },
+                    { key: 'points', label: 'Story Points', type: 'number' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Open', 'In Progress', 'Done', 'Blocked'] },
+                ],
+                epic: [
+                    { key: 'name', label: 'Epic Name', type: 'text' },
+                    { key: 'product', label: 'Product', type: 'text' },
+                    { key: 'owner', label: 'Owner', type: 'text' },
+                    { key: 'priority', label: 'Priority', type: 'select', options: ['Low', 'Medium', 'High'] },
+                    { key: 'progress', label: 'Progress %', type: 'number' },
+                ],
+                repository: [
+                    { key: 'name', label: 'Repo Name', type: 'text' },
+                    { key: 'org', label: 'Organization', type: 'text' },
+                    { key: 'language', label: 'Primary Language', type: 'text' },
+                    { key: 'visibility', label: 'Visibility', type: 'select', options: ['Public', 'Private'] },
+                    { key: 'lastCommit', label: 'Last Commit', type: 'date' },
+                    { key: 'branches', label: 'Branch Count', type: 'number' },
+                    { key: 'contributors', label: 'Contributors', type: 'number' },
+                ],
+                branch: [
+                    { key: 'repository', label: 'Repository', type: 'text' },
+                    { key: 'name', label: 'Branch Name', type: 'text' },
+                    { key: 'type', label: 'Type', type: 'select', options: ['Feature', 'Bugfix', 'Hotfix', 'Release',
+                            'Main'
+                        ] },
+                    { key: 'created', label: 'Created Date', type: 'date' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Active', 'Merged', 'Stale'] },
+                ],
+                commit: [
+                    { key: 'hash', label: 'Hash', type: 'text' },
+                    { key: 'repository', label: 'Repository', type: 'text' },
+                    { key: 'branch', label: 'Branch', type: 'text' },
+                    { key: 'developer', label: 'Developer', type: 'text' },
+                    { key: 'message', label: 'Message', type: 'text' },
+                    { key: 'date', label: 'Date', type: 'date' },
+                    { key: 'files', label: 'Files Changed', type: 'number' },
+                ],
+                pullrequest: [
+                    { key: 'number', label: 'PR Number', type: 'number' },
+                    { key: 'repository', label: 'Repository', type: 'text' },
+                    { key: 'source', label: 'Source Branch', type: 'text' },
+                    { key: 'target', label: 'Target Branch', type: 'text' },
+                    { key: 'developer', label: 'Developer', type: 'text' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Open', 'Merged', 'Closed', 'Draft'] },
+                    { key: 'approvals', label: 'Approvals', type: 'number' },
+                ],
+                codereview: [
+                    { key: 'pr', label: 'PR #', type: 'number' },
+                    { key: 'reviewer', label: 'Reviewer', type: 'text' },
+                    { key: 'quality', label: 'Quality Score', type: 'number' },
+                    { key: 'security', label: 'Security Score', type: 'number' },
+                    { key: 'performance', label: 'Performance Score', type: 'number' },
+                    { key: 'coverage', label: 'Coverage', type: 'number' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Pending', 'Approved', 'Changes Requested'] },
+                ],
+                bug: [
+                    { key: 'number', label: 'Bug #', type: 'text' },
+                    { key: 'project', label: 'Project', type: 'text' },
+                    { key: 'severity', label: 'Severity', type: 'select', options: ['Critical', 'Major', 'Minor',
+                            'Trivial'
+                        ] },
+                    { key: 'priority', label: 'Priority', type: 'select', options: ['Low', 'Medium', 'High', 'Critical'] },
+                    { key: 'assigned', label: 'Assigned To', type: 'text' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Open', 'In Progress', 'Fixed', 'Closed',
+                            'Reopened'
+                        ] },
+                ],
+                qa: [
+                    { key: 'suite', label: 'Test Suite', type: 'text' },
+                    { key: 'project', label: 'Project', type: 'text' },
+                    { key: 'type', label: 'Type', type: 'select', options: ['Functional', 'Regression', 'Smoke', 'Performance',
+                            'Security'
+                        ] },
+                    { key: 'tester', label: 'Tester', type: 'text' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Pass', 'Fail', 'Blocked', 'Skipped'] },
+                    { key: 'duration', label: 'Duration', type: 'text' },
+                ],
+                api: [
+                    { key: 'name', label: 'API Name', type: 'text' },
+                    { key: 'version', label: 'Version', type: 'text' },
+                    { key: 'endpoint', label: 'Endpoint', type: 'text' },
+                    { key: 'method', label: 'Method', type: 'select', options: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'] },
+                    { key: 'owner', label: 'Owner', type: 'text' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Active', 'Deprecated', 'Draft'] },
+                ],
+                database: [
+                    { key: 'name', label: 'DB Name', type: 'text' },
+                    { key: 'type', label: 'Type', type: 'select', options: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis',
+                            'Other'
+                        ] },
+                    { key: 'env', label: 'Environment', type: 'select', options: ['Dev', 'QA', 'Staging', 'Production'] },
+                    { key: 'owner', label: 'Owner', type: 'text' },
+                    { key: 'tables', label: 'Tables/Collections', type: 'number' },
+                    { key: 'storage', label: 'Storage', type: 'text' },
+                ],
+                environment: [
+                    { key: 'name', label: 'Env Name', type: 'text' },
+                    { key: 'type', label: 'Type', type: 'select', options: ['Development', 'QA', 'Staging', 'UAT',
+                            'Production', 'DR'
+                        ] },
+                    { key: 'project', label: 'Project', type: 'text' },
+                    { key: 'url', label: 'URL', type: 'text' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Healthy', 'Degraded', 'Down'] },
+                ],
+                deployment: [
+                    { key: 'project', label: 'Project', type: 'text' },
+                    { key: 'env', label: 'Environment', type: 'text' },
+                    { key: 'version', label: 'Version', type: 'text' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Success', 'Failed', 'In Progress',
+                            'Rollback'
+                        ] },
+                    { key: 'duration', label: 'Duration', type: 'text' },
+                ],
+                cicd: [
+                    { key: 'name', label: 'Pipeline Name', type: 'text' },
+                    { key: 'project', label: 'Project', type: 'text' },
+                    { key: 'branch', label: 'Branch', type: 'text' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Passed', 'Failed', 'Running', 'Skipped'] },
+                    { key: 'duration', label: 'Duration', type: 'text' },
+                ],
+                release: [
+                    { key: 'name', label: 'Release Name', type: 'text' },
+                    { key: 'project', label: 'Project', type: 'text' },
+                    { key: 'type', label: 'Type', type: 'select', options: ['Major', 'Minor', 'Patch', 'Hotfix'] },
+                    { key: 'planned', label: 'Planned Date', type: 'date' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Scheduled', 'Released', 'Cancelled',
+                            'Delayed'
+                        ] },
+                ],
+                devopsmon: [
+                    { key: 'service', label: 'Service', type: 'text' },
+                    { key: 'env', label: 'Environment', type: 'text' },
+                    { key: 'cpu', label: 'CPU %', type: 'number' },
+                    { key: 'ram', label: 'RAM %', type: 'number' },
+                    { key: 'uptime', label: 'Uptime %', type: 'number' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Healthy', 'Degraded', 'Down'] },
+                ],
+                cloud: [
+                    { key: 'provider', label: 'Provider', type: 'select', options: ['AWS', 'Azure', 'Google Cloud',
+                            'Firebase', 'DigitalOcean', 'Other'
+                        ] },
+                    { key: 'region', label: 'Region', type: 'text' },
+                    { key: 'resource', label: 'Resource Type', type: 'text' },
+                    { key: 'name', label: 'Resource Name', type: 'text' },
+                    { key: 'cost', label: 'Monthly Cost', type: 'text' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Running', 'Stopped', 'Terminated'] },
+                ],
+                security: [
+                    { key: 'cve', label: 'CVE ID', type: 'text' },
+                    { key: 'asset', label: 'Asset', type: 'text' },
+                    { key: 'severity', label: 'Severity', type: 'select', options: ['Critical', 'High', 'Medium', 'Low'] },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Open', 'In Progress', 'Fixed', 'Closed'] },
+                    { key: 'assigned', label: 'Assigned To', type: 'text' },
+                ],
+                dependency: [
+                    { key: 'package', label: 'Package', type: 'text' },
+                    { key: 'version', label: 'Version', type: 'text' },
+                    { key: 'latest', label: 'Latest', type: 'text' },
+                    { key: 'risk', label: 'Risk', type: 'select', options: ['Low', 'Medium', 'High', 'Critical'] },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Up to date', 'Outdated', 'Vulnerable'] },
+                ],
+                doc: [
+                    { key: 'name', label: 'Document Name', type: 'text' },
+                    { key: 'project', label: 'Project', type: 'text' },
+                    { key: 'type', label: 'Type', type: 'select', options: ['Technical', 'User', 'API', 'Design', 'Other'] },
+                    { key: 'author', label: 'Author', type: 'text' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Draft', 'Published', 'Archived'] },
+                ],
+                worklog: [
+                    { key: 'developer', label: 'Developer', type: 'text' },
+                    { key: 'project', label: 'Project', type: 'text' },
+                    { key: 'date', label: 'Date', type: 'date' },
+                    { key: 'hours', label: 'Hours', type: 'number' },
+                    { key: 'type', label: 'Type', type: 'select', options: ['Development', 'Review', 'Meeting', 'Bug Fix',
+                            'Other'
+                        ] },
+                ],
+                productivity: [
+                    { key: 'developer', label: 'Developer', type: 'text' },
+                    { key: 'commits', label: 'Commits', type: 'number' },
+                    { key: 'prs', label: 'PRs', type: 'number' },
+                    { key: 'points', label: 'Story Points', type: 'number' },
+                    { key: 'bugs', label: 'Bugs', type: 'number' },
+                    { key: 'score', label: 'Productivity Score', type: 'number' },
+                ],
+                support: [
+                    { key: 'ticket', label: 'Ticket #', type: 'text' },
+                    { key: 'developer', label: 'Developer', type: 'text' },
+                    { key: 'issue', label: 'Issue', type: 'text' },
+                    { key: 'severity', label: 'Severity', type: 'select', options: ['Critical', 'Major', 'Minor',
+                            'Trivial'
+                        ] },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Open', 'In Progress', 'Resolved',
+                            'Closed'
+                        ] },
+                ],
+                changerequest: [
+                    { key: 'project', label: 'Project', type: 'text' },
+                    { key: 'requester', label: 'Requester', type: 'text' },
+                    { key: 'type', label: 'Type', type: 'select', options: ['Enhancement', 'Patch', 'Bug Fix', 'Feature'] },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Pending', 'Approved', 'Rejected',
+                            'Implemented'
+                        ] },
+                    { key: 'risk', label: 'Risk', type: 'select', options: ['Low', 'Medium', 'High'] },
+                ],
+                access: [
+                    { key: 'developer', label: 'Developer', type: 'text' },
+                    { key: 'system', label: 'System', type: 'text' },
+                    { key: 'role', label: 'Role', type: 'text' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Active', 'Expired', 'Revoked'] },
+                ],
+                performance: [
+                    { key: 'developer', label: 'Developer', type: 'text' },
+                    { key: 'projects', label: 'Projects', type: 'number' },
+                    { key: 'tasks', label: 'Tasks', type: 'number' },
+                    { key: 'points', label: 'Story Points', type: 'number' },
+                    { key: 'quality', label: 'Quality Score', type: 'number' },
+                    { key: 'score', label: 'Overall Score', type: 'number' },
+                ],
+                training: [
+                    { key: 'developer', label: 'Developer', type: 'text' },
+                    { key: 'skill', label: 'Skill', type: 'text' },
+                    { key: 'course', label: 'Course', type: 'text' },
+                    { key: 'provider', label: 'Provider', type: 'text' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['In Progress', 'Completed', 'Cancelled'] },
+                ],
+                dailytasks: [
+                    { key: 'developer', label: 'Developer', type: 'text' },
+                    { key: 'task', label: 'Task', type: 'text' },
+                    { key: 'priority', label: 'Priority', type: 'select', options: ['Low', 'Medium', 'High', 'Critical'] },
+                    { key: 'due', label: 'Due Date', type: 'date' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Open', 'In Progress', 'Done', 'Blocked'] },
+                ],
+            };
+            return map[sectionId] || [];
+        }
+
+        function getColumns(sectionId) {
+            // Return column definitions for table
+            const map = {
+                developer: ['code', 'name', 'email', 'role', 'team', 'status'],
+                skillmatrix: ['skill', 'category', 'level', 'years', 'score'],
+                project: ['code', 'name', 'manager', 'status', 'priority', 'progress'],
+                sprint: ['name', 'project', 'goal', 'start', 'end', 'velocity', 'completion'],
+                task: ['title', 'project', 'developer', 'priority', 'status', 'points'],
+                userstory: ['title', 'epic', 'feature', 'priority', 'points', 'status'],
+                epic: ['name', 'product', 'owner', 'priority', 'progress'],
+                repository: ['name', 'org', 'language', 'visibility', 'lastCommit', 'branches', 'contributors'],
+                branch: ['repository', 'name', 'type', 'created', 'status'],
+                commit: ['hash', 'repository', 'branch', 'developer', 'message', 'date', 'files'],
+                pullrequest: ['number', 'repository', 'source', 'target', 'developer', 'status', 'approvals'],
+                codereview: ['pr', 'reviewer', 'quality', 'security', 'performance', 'coverage', 'status'],
+                bug: ['number', 'project', 'severity', 'priority', 'assigned', 'status'],
+                qa: ['suite', 'project', 'type', 'tester', 'status', 'duration'],
+                api: ['name', 'version', 'endpoint', 'method', 'owner', 'status'],
+                database: ['name', 'type', 'env', 'owner', 'tables', 'storage'],
+                environment: ['name', 'type', 'project', 'url', 'status'],
+                deployment: ['project', 'env', 'version', 'status', 'duration'],
+                cicd: ['name', 'project', 'branch', 'status', 'duration'],
+                release: ['name', 'project', 'type', 'planned', 'status'],
+                devopsmon: ['service', 'env', 'cpu', 'ram', 'uptime', 'status'],
+                cloud: ['provider', 'region', 'resource', 'name', 'cost', 'status'],
+                security: ['cve', 'asset', 'severity', 'status', 'assigned'],
+                dependency: ['package', 'version', 'latest', 'risk', 'status'],
+                doc: ['name', 'project', 'type', 'author', 'status'],
+                worklog: ['developer', 'project', 'date', 'hours', 'type'],
+                productivity: ['developer', 'commits', 'prs', 'points', 'bugs', 'score'],
+                support: ['ticket', 'developer', 'issue', 'severity', 'status'],
+                changerequest: ['project', 'requester', 'type', 'status', 'risk'],
+                access: ['developer', 'system', 'role', 'status'],
+                performance: ['developer', 'projects', 'tasks', 'points', 'quality', 'score'],
+                training: ['developer', 'skill', 'course', 'provider', 'status'],
+                dailytasks: ['developer', 'task', 'priority', 'due', 'status'],
+            };
+            return map[sectionId] || [];
+        }
+
+        function getStatusBadge(value) {
+            const map = {
+                'Active': 'active',
+                'Inactive': 'inactive',
+                'Open': 'pending',
+                'Done': 'active',
+                'Completed': 'active',
+                'In Progress': 'pending',
+                'Review': 'info',
+                'Pending': 'pending',
+                'Approved': 'active',
+                'Merged': 'active',
+                'Closed': 'inactive',
+                'Failed': 'inactive',
+                'Pass': 'active',
+                'Fail': 'inactive',
+                'Healthy': 'active',
+                'Degraded': 'warning',
+                'Down': 'inactive',
+                'Running': 'active',
+                'Stopped': 'inactive',
+                'Scheduled': 'info',
+                'Released': 'active',
+                'Draft': 'draft',
+                'Published': 'active',
+                'Blocked': 'inactive',
+                'Fixed': 'active',
+                'Resolved': 'active',
+                'On Hold': 'draft',
+                'Cancelled': 'inactive',
+                'Expired': 'inactive',
+                'Revoked': 'inactive',
+                'Archived': 'inactive',
+                'Outdated': 'warning',
+                'Vulnerable': 'danger',
+                'Critical': 'danger',
+                'High': 'danger',
+                'Medium': 'warning',
+                'Low': 'info',
+                'Trivial': 'draft',
+            };
+            const cls = map[value] || 'draft';
+            return `<span class="status-badge ${cls}"><span class="dot"></span>${value || 'â€”'}</span>`;
+        }
+
+        function formatValue(v) {
+            if (v === undefined || v === null) return 'â€”';
+            if (typeof v === 'string' && v.length > 50) return v.slice(0, 50) + 'â€¦';
+            return v;
+        }
+
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+        //  RENDER ENGINE
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+
+        let currentSection = 'dashboard';
+        let chartInstances = {};
+
+        function renderSidebar() {
+            const nav = document.getElementById('sidebarNav');
+            const groups = {};
+            for (const s of SECTIONS) {
+                if (!groups[s.group]) groups[s.group] = [];
+                groups[s.group].push(s);
+            }
+            let html = '';
+            for (const [group, items] of Object.entries(groups)) {
+                html += `<div class="nav-group"><div class="nav-group-title">${group}</div>`;
+                for (const s of items) {
+                    const active = s.id === currentSection ? 'active' : '';
+                    const count = DB[s.id] ? DB[s.id].length : 0;
+                    html += `<div class="nav-item ${active}" data-section="${s.id}">
+                                <i class="fas ${s.icon}"></i> ${s.label}
+                                ${count > 0 ? `<span class="count">${count}</span>` : ''}
+                            </div>`;
+                }
+                html += '</div>';
+            }
+            nav.innerHTML = html;
+
+            // click handler
+            nav.querySelectorAll('.nav-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    const id = el.dataset.section;
+                    if (id) navigateTo(id);
+                });
+            });
+        }
+
+        function navigateTo(sectionId) {
+            currentSection = sectionId;
+            renderSidebar();
+            renderContent(sectionId);
+            // close mobile sidebar
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('open');
+            // update page title
+            const label = getSectionLabel(sectionId);
+            document.getElementById('pageTitle').innerHTML = `${label} <small>${sectionId === 'dashboard' ? 'overview' : 'management'}</small>`;
+        }
+
+        function renderContent(sectionId) {
+            const container = document.getElementById('mainContent');
+            if (sectionId === 'dashboard') {
+                container.innerHTML = renderDashboard();
+                initDashboardCharts();
+                return;
+            }
+            container.innerHTML = renderTable(sectionId);
+            // attach event listeners for this section
+            attachTableEvents(sectionId);
+        }
+
+        function renderDashboard() {
+            // Stats
+            const stats = [
+                { label: 'Developers', value: DB.developer?.length || 0, icon: 'fa-user-tie', change: '+12%', up: true },
+                { label: 'Projects', value: DB.project?.length || 0, icon: 'fa-diagram-project', change: '+4%', up: true },
+                { label: 'Tasks', value: DB.task?.length || 0, icon: 'fa-list-check', change: '+8%', up: true },
+                { label: 'Bugs Open', value: DB.bug?.filter(b => b.status === 'Open').length || 0, icon: 'fa-bug',
+                    change: '-2%', up: false },
+                { label: 'PRs Open', value: DB.pullrequest?.filter(p => p.status === 'Open').length || 0,
+                    icon: 'fa-code-pull-request', change: '+5%', up: true },
+                { label: 'Deployments', value: DB.deployment?.filter(d => d.status === 'Success').length || 0,
+                    icon: 'fa-rocket', change: '+18%', up: true },
+            ];
+
+            let statsHtml = stats.map(s => `
+                        <div class="stat-card">
+                            <div class="icon"><i class="fas ${s.icon}"></i></div>
+                            <div class="label">${s.label}</div>
+                            <div class="value">${s.value}</div>
+                            <div class="change ${s.up ? 'up' : 'down'}">${s.change}</div>
+                        </div>
+                    `).join('');
+
+            // Recent activity
+            const recent = [];
+            const allTasks = DB.task || [];
+            for (const t of allTasks.slice(0, 5)) {
+                recent.push({ type: 'task', title: t.title, project: t.project, status: t.status, date: 'Today' });
+            }
+            const allBugs = DB.bug || [];
+            for (const b of allBugs.slice(0, 3)) {
+                recent.push({ type: 'bug', title: b.number, project: b.project, status: b.status, date: 'Today' });
+            }
+            const allPRs = DB.pullrequest || [];
+            for (const p of allPRs.slice(0, 3)) {
+                recent.push({ type: 'pr', title: `PR #${p.number}`, project: p.repository, status: p.status, date: 'Today' });
+            }
+            recent.sort(() => Math.random() - 0.5);
+            const recentHtml = recent.slice(0, 8).map(r => `
+                        <div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border-color);font-size:13px;">
+                            <span class="tag ${r.status === 'Done' || r.status === 'Merged' || r.status === 'Fixed' ? 'success' : r.status === 'Open' || r.status === 'In Progress' ? 'warning' : 'draft'}">${r.type}</span>
+                            <span style="flex:1;color:var(--text-primary)">${r.title}</span>
+                            <span style="color:var(--text-muted);font-size:12px;">${r.project}</span>
+                            <span class="status-badge ${r.status === 'Done' || r.status === 'Merged' || r.status === 'Fixed' ? 'active' : r.status === 'Open' || r.status === 'In Progress' ? 'pending' : 'draft'}"><span class="dot"></span>${r.status}</span>
+                        </div>
+                    `).join('');
+
+            return `
+                        <div class="stats-grid">${statsHtml}</div>
+                        <div class="charts-row">
+                            <div class="chart-box">
+                                <div class="chart-title">ðŸ“Š Sprint Velocity</div>
+                                <canvas id="velocityChart"></canvas>
+                            </div>
+                            <div class="chart-box">
+                                <div class="chart-title">ðŸ“ˆ Task Status</div>
+                                <canvas id="taskStatusChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <div class="table-toolbar">
+                                <div class="left"><h3>ðŸ”„ Recent Activity</h3></div>
+                                <div class="right"><span class="text-muted" style="font-size:12px;">Last 24h</span></div>
+                            </div>
+                            <div style="padding:4px 20px 12px;">${recentHtml || '<div class="table-empty"><i class="fas fa-inbox"></i><p>No recent activity</p></div>'}</div>
+                        </div>
+                    `;
+        }
+
+        function initDashboardCharts() {
+            // Destroy old charts
+            for (const key of Object.keys(chartInstances)) {
+                try { chartInstances[key].destroy(); } catch (e) {}
+            }
+            chartInstances = {};
+
+            // Velocity chart
+            const velCtx = document.getElementById('velocityChart');
+            if (velCtx) {
+                const sprints = DB.sprint || [];
+                const labels = sprints.map(s => s.name || 'Sprint');
+                const data = sprints.map(s => s.velocity || 0);
+                chartInstances.velocity = new Chart(velCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels.length ? labels : ['Sprint 1', 'Sprint 2', 'Sprint 3'],
+                        datasets: [{
+                            label: 'Velocity',
+                            data: data.length ? data : [32, 38, 42],
+                            backgroundColor: 'rgba(108, 140, 255, 0.6)',
+                            borderColor: '#6c8cff',
+                            borderWidth: 2,
+                            borderRadius: 4,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.04)' },
+                            ticks: { color: '#5a6480' } },
+                            x: { grid: { display: false }, ticks: { color: '#5a6480' } }
+                        }
+                    }
+                });
+            }
+
+            // Task status chart
+            const taskCtx = document.getElementById('taskStatusChart');
+            if (taskCtx) {
+                const tasks = DB.task || [];
+                const statuses = ['Open', 'In Progress', 'Review', 'Done', 'Blocked'];
+                const counts = statuses.map(s => tasks.filter(t => t.status === s).length);
+                chartInstances.taskStatus = new Chart(taskCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: statuses,
+                        datasets: [{
+                            data: counts.every(c => c === 0) ? [4, 3, 2, 5, 1] : counts,
+                            backgroundColor: ['#facc15', '#60a5fa', '#8b95b0', '#4ade80', '#f87171'],
+                            borderColor: 'transparent',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { position: 'right', labels: { color: '#8b95b0', boxWidth: 12 } } },
+                        cutout: '65%',
+                    }
+                });
+            }
+        }
+
+        function renderTable(sectionId) {
+            const data = DB[sectionId] || [];
+            const columns = getColumns(sectionId);
+            const label = getSectionLabel(sectionId);
+
+            if (!columns.length) {
+                return `<div class="table-wrapper"><div class="table-empty"><i class="fas fa-table"></i><p>No fields defined for ${label}</p></div></div>`;
+            }
+
+            let headerHtml = columns.map(col => `<th>${col.replace(/_/g,' ').toUpperCase()}</th>`).join('');
+            headerHtml += '<th style="text-align:right;">Actions</th>';
+
+            let bodyHtml = '';
+            if (data.length === 0) {
+                bodyHtml =
+                `<tr><td colspan="${columns.length + 1}" class="table-empty"><i class="fas fa-inbox"></i><p>No records found</p></td></tr>`;
+            } else {
+                for (const row of data) {
+                    let rowHtml = '';
+                    for (const col of columns) {
+                        const val = row[col];
+                        // Special rendering for status fields
+                        if (col === 'status' || col === 'severity' || col === 'priority' || col === 'level') {
+                            rowHtml += `<td>${getStatusBadge(val)}</td>`;
+                        } else {
+                            rowHtml += `<td>${formatValue(val)}</td>`;
+                        }
+                    }
+                    rowHtml += `<td style="text-align:right;">
+                                <div class="actions">
+                                    <button class="btn btn-sm btn-primary edit-btn" data-id="${row.id}"><i class="fas fa-pen"></i></button>
+                                    <button class="btn btn-sm btn-danger delete-btn" data-id="${row.id}"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>`;
+                    bodyHtml += `<tr>${rowHtml}</tr>`;
+                }
+            }
+
+            return `
+                        <div class="table-wrapper">
+                            <div class="table-toolbar">
+                                <div class="left">
+                                    <h3>${label}</h3>
+                                    <span class="count-badge">${data.length} records</span>
+                                </div>
+                                <div class="right">
+                                    <button class="btn btn-primary btn-sm" id="addRecordBtn"><i class="fas fa-plus"></i> Add</button>
+                                </div>
+                            </div>
+                            <div class="table-scroll">
+                                <table>
+                                    <thead><tr>${headerHtml}</tr></thead>
+                                    <tbody>${bodyHtml}</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+        }
+
+        function attachTableEvents(sectionId) {
+            // Add button
+            const addBtn = document.getElementById('addRecordBtn');
+            if (addBtn) {
+                addBtn.addEventListener('click', () => openModal(sectionId, null));
+            }
+
+            // Edit buttons
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = parseInt(btn.dataset.id);
+                    openModal(sectionId, id);
+                });
+            });
+
+            // Delete buttons
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = parseInt(btn.dataset.id);
+                    if (confirm('Delete this record?')) {
+                        const data = DB[sectionId] || [];
+                        DB[sectionId] = data.filter(r => r.id !== id);
+                        renderContent(sectionId);
+                        renderSidebar();
+                    }
+                });
+            });
+        }
+
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+        //  MODAL
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+
+        let modalSection = '';
+        let modalEditId = null;
+
+        function openModal(sectionId, editId) {
+            modalSection = sectionId;
+            modalEditId = editId;
+            const fields = getFields(sectionId);
+            const data = DB[sectionId] || [];
+            const record = editId ? data.find(r => r.id === editId) : null;
+            const label = getSectionLabel(sectionId);
+
+            document.getElementById('modalTitle').textContent = record ? `Edit ${label}` : `Add ${label}`;
+
+            let formHtml = '<div class="form-grid">';
+            for (const f of fields) {
+                const val = record ? (record[f.key] ?? '') : '';
+                let input = '';
+                if (f.type === 'select') {
+                    const opts = (f.options || []).map(o =>
+                        `<option value="${o}" ${val === o ? 'selected' : ''}>${o}</option>`
+                    ).join('');
+                    input = `<select id="field_${f.key}">${opts}</select>`;
+                } else if (f.type === 'textarea') {
+                    input = `<textarea id="field_${f.key}" rows="2">${val}</textarea>`;
+                } else {
+                    input = `<input type="${f.type || 'text'}" id="field_${f.key}" value="${val}" />`;
+                }
+                formHtml += `<div class="form-group">
+                            <label>${f.label}</label>
+                            ${input}
+                        </div>`;
+            }
+            formHtml += '</div>';
+
+            document.getElementById('modalBody').innerHTML = formHtml;
+            document.getElementById('modalOverlay').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('open');
+            modalSection = '';
+            modalEditId = null;
+        }
+
+        function saveModal() {
+            const sectionId = modalSection;
+            const editId = modalEditId;
+            const fields = getFields(sectionId);
+            const data = DB[sectionId] || [];
+
+            const record = {};
+            let valid = true;
+            for (const f of fields) {
+                const el = document.getElementById(`field_${f.key}`);
+                if (el) {
+                    let val = el.value;
+                    if (f.type === 'number') val = parseFloat(val) || 0;
+                    record[f.key] = val;
+                } else {
+                    record[f.key] = '';
+                }
+            }
+
+            if (editId) {
+                // Edit existing
+                const idx = data.findIndex(r => r.id === editId);
+                if (idx !== -1) {
+                    // Preserve id
+                    record.id = editId;
+                    data[idx] = { ...data[idx], ...record };
+                    DB[sectionId] = data;
+                }
+            } else {
+                // Add new
+                const maxId = data.reduce((max, r) => Math.max(max, r.id || 0), 0);
+                record.id = maxId + 1;
+                data.push(record);
+                DB[sectionId] = data;
+            }
+
+            closeModal();
+            renderContent(sectionId);
+            renderSidebar();
+        }
+
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+        //  EVENT BINDINGS
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+
+        // Menu toggle
+        document.getElementById('menuToggle').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('open');
+        });
+        document.getElementById('sidebarOverlay').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('open');
+        });
+
+        // Modal controls
+        document.getElementById('modalClose').addEventListener('click', closeModal);
+        document.getElementById('modalCancel').addEventListener('click', closeModal);
+        document.getElementById('modalOverlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeModal();
+        });
+        document.getElementById('modalSave').addEventListener('click', saveModal);
+
+        // Global search
+        document.getElementById('globalSearch').addEventListener('input', (e) => {
+            const q = e.target.value.toLowerCase().trim();
+            if (!q) {
+                renderContent(currentSection);
+                return;
+            }
+            const data = DB[currentSection] || [];
+            const filtered = data.filter(row => {
+                return Object.values(row).some(v =>
+                    String(v).toLowerCase().includes(q)
+                );
+            });
+            // Re-render with filtered data
+            const container = document.getElementById('mainContent');
+            if (currentSection === 'dashboard') {
+                // search on dashboard shows a filtered list
+                return;
+            }
+            container.innerHTML = renderTableWithData(currentSection, filtered);
+            attachTableEvents(currentSection);
+        });
+
+        function renderTableWithData(sectionId, data) {
+            const columns = getColumns(sectionId);
+            const label = getSectionLabel(sectionId);
+            if (!columns.length) return `<div class="table-wrapper"><div class="table-empty"><p>No fields</p></div></div>`;
+
+            let headerHtml = columns.map(col => `<th>${col.replace(/_/g,' ').toUpperCase()}</th>`).join('');
+            headerHtml += '<th style="text-align:right;">Actions</th>';
+
+            let bodyHtml = '';
+            if (data.length === 0) {
+                bodyHtml =
+                `<tr><td colspan="${columns.length + 1}" class="table-empty"><i class="fas fa-search"></i><p>No matching records</p></td></tr>`;
+            } else {
+                for (const row of data) {
+                    let rowHtml = '';
+                    for (const col of columns) {
+                        const val = row[col];
+                        if (col === 'status' || col === 'severity' || col === 'priority' || col === 'level') {
+                            rowHtml += `<td>${getStatusBadge(val)}</td>`;
+                        } else {
+                            rowHtml += `<td>${formatValue(val)}</td>`;
+                        }
+                    }
+                    rowHtml += `<td style="text-align:right;">
+                                <div class="actions">
+                                    <button class="btn btn-sm btn-primary edit-btn" data-id="${row.id}"><i class="fas fa-pen"></i></button>
+                                    <button class="btn btn-sm btn-danger delete-btn" data-id="${row.id}"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>`;
+                    bodyHtml += `<tr>${rowHtml}</tr>`;
+                }
+            }
+
+            return `
+                        <div class="table-wrapper">
+                            <div class="table-toolbar">
+                                <div class="left">
+                                    <h3>${label}</h3>
+                                    <span class="count-badge">${data.length} records (filtered)</span>
+                                </div>
+                                <div class="right">
+                                    <button class="btn btn-primary btn-sm" id="addRecordBtn"><i class="fas fa-plus"></i> Add</button>
+                                </div>
+                            </div>
+                            <div class="table-scroll">
+                                <table>
+                                    <thead><tr>${headerHtml}</tr></thead>
+                                    <tbody>${bodyHtml}</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+        }
+
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+        //  KEYBOARD SHORTCUTS
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+            if (e.ctrlKey && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('globalSearch').focus();
+            }
+        });
+
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+        //  BOOT
+        // â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”
+
+        renderSidebar();
+        renderContent('dashboard');
+        document.getElementById('pageTitle').innerHTML = 'Dashboard <small>overview</small>';
+
+        console.log('ðŸš€ Developer Hub ERP loaded');
+        console.log(`ðŸ“Š ${Object.keys(DB).reduce((acc, k) => acc + DB[k].length, 0)} total records across ${Object.keys(DB).length} sections`);
+    </script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,697 @@
+﻿<!-- 
+    LogoutButton Component
+    
+    Universal logout button for all ePay CRM portals
+    Displays session timer and logout functionality in top-right corner
+    
+    Features:
+    - Show session timer in HH:MM:SS format
+    - Send logout email with active duration
+    - Clear session data
+    - Redirect to login page
+    - Works across all portal types (Admin, HR, Finance, etc.)
+    
+    Integration:
+    - Requires AuthManager for authentication
+    - Requires SessionTimerService for timer display
+    - Requires EmailService for logout notifications
+    - Include in portal header/navbar
+    
+    Usage:
+    
+</template>
+
+<style>
+    .logout-button-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 8px 16px;
+        background: transparent;
+    }
+    
+    /* Session Timer */
+    .session-timer {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        background: #f1f5f9;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #1e293b;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .session-timer i {
+        color: #0f172a;
+    }
+    
+    .timer-display {
+        font-family: 'Courier New', monospace;
+        letter-spacing: 0.5px;
+    }
+    
+    .session-timer.warning {
+        background: #fef3c7;
+        border-color: #fcd34d;
+        color: #92400e;
+    }
+    
+    .session-timer.warning i {
+        color: #d97706;
+    }
+    
+    /* User Profile Menu */
+    .user-profile-menu {
+        position: relative;
+    }
+    
+    .profile-button {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 12px;
+        background: transparent;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        color: #1e293b;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    
+    .profile-button:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+    }
+    
+    .profile-button:active {
+        background: #e2e8f0;
+    }
+    
+    .avatar {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: white;
+        font-size: 14px;
+    }
+    
+    .profile-button .fa-chevron-down {
+        font-size: 11px;
+        margin-left: 4px;
+        transition: transform 0.2s ease;
+    }
+    
+    .profile-button.active .fa-chevron-down {
+        transform: rotate(180deg);
+    }
+    
+    /* Dropdown Menu */
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        min-width: 240px;
+        margin-top: 8px;
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(-8px);
+        transition: all 0.2s ease;
+        z-index: 100;
+    }
+    
+    .dropdown-menu.visible {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .dropdown-user-info {
+        padding: 12px 16px;
+    }
+    
+    .dropdown-name {
+        font-weight: 600;
+        color: #0f172a;
+        margin: 0 0 4px 0;
+        font-size: 13px;
+    }
+    
+    .dropdown-email {
+        color: #64748b;
+        margin: 0;
+        font-size: 12px;
+    }
+    
+    .dropdown-divider {
+        border: none;
+        border-top: 1px solid #e2e8f0;
+        margin: 8px 0;
+    }
+    
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 10px 16px;
+        background: transparent;
+        border: none;
+        text-align: left;
+        cursor: pointer;
+        color: #1e293b;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.15s ease;
+    }
+    
+    .dropdown-item:hover {
+        background: #f1f5f9;
+        color: #0f172a;
+    }
+    
+    .dropdown-item i {
+        width: 16px;
+        text-align: center;
+        color: #64748b;
+    }
+    
+    .dropdown-item:hover i {
+        color: #0f172a;
+    }
+    
+    .dropdown-item.logout-btn {
+        color: #dc2626;
+    }
+    
+    .dropdown-item.logout-btn:hover {
+        background: #fee2e2;
+    }
+    
+    .dropdown-item.logout-btn i {
+        color: #dc2626;
+    }
+    
+    .dropdown-item.logout-btn:hover i {
+        color: #991b1b;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .logout-button-wrapper {
+            gap: 12px;
+            padding: 8px 8px;
+        }
+        
+        .session-timer {
+            font-size: 12px;
+        }
+        
+        .user-name {
+            display: none;
+        }
+        
+        .profile-button {
+            padding: 6px 8px;
+        }
+        
+        .dropdown-menu {
+            min-width: 220px;
+        }
+    }
+    
+    /* Loading State */
+    .logout-loading {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+    
+    /* Toast Notification */
+    .logout-toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #10b981;
+        color: white;
+        padding: 12px 16px;
+        border-radius: 6px;
+        font-size: 13px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        animation: slideIn 0.3s ease;
+    }
+    
+    .logout-toast.error {
+        background: #ef4444;
+    }
+    
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+</style>
+
+<script type="module">
+    /**
+     * LogoutButton Component
+     * Manages user logout with session timer display and email notification
+     */
+    
+    class LogoutButton {
+        constructor() {
+            this.container = null;
+            this.template = null;
+            this.authManager = null;
+            this.sessionTimerService = null;
+            this.emailService = null;
+            
+            // Elements
+            this.profileButton = null;
+            this.dropdownMenu = null;
+            this.logoutBtn = null;
+            this.timerDisplay = null;
+            this.userNameEl = null;
+            this.dropdownNameEl = null;
+            this.dropdownEmailEl = null;
+            
+            // State
+            this.isLogoutInProgress = false;
+            this.timerUnsubscriber = null;
+            this.authUnsubscriber = null;
+            
+            console.info('[LogoutButton] Created');
+        }
+        
+        /**
+         * Initialize LogoutButton component
+         * Mounts component to DOM and sets up event listeners
+         * 
+         * @param {string} containerId - ID of container element
+         * @returns {Promise<void>}
+         */
+        async init(containerId = 'logout-button-container') {
+            try {
+                // Get container
+                this.container = document.getElementById(containerId);
+                if (!this.container) {
+                    throw new Error(`Container #${containerId} not found`);
+                }
+                
+                // Wait for required services
+                this.authManager = await this._waitForService('authManager', 5000);
+                this.sessionTimerService = await this._waitForService('SessionTimerService', 5000);
+                this.emailService = await this._waitForService('EmailService', 5000);
+                
+                // Get template
+                this.template = document.getElementById('logout-button-template');
+                if (!this.template) {
+                    throw new Error('logout-button-template not found in DOM');
+                }
+                
+                // Mount component
+                this._mount();
+                
+                // Set up event listeners
+                this._setupEventListeners();
+                
+                // Subscribe to auth state changes
+                if (this.authManager) {
+                    this.authUnsubscriber = this.authManager.onAuthStateChanged((state) => {
+                        this._updateUserInfo(state);
+                    });
+                }
+                
+                // Subscribe to timer updates
+                if (this.sessionTimerService) {
+                    this.timerUnsubscriber = this.sessionTimerService.onStateChanged((state) => {
+                        this._updateTimer(state);
+                    });
+                }
+                
+                console.info('[LogoutButton] Initialized successfully');
+            } catch (error) {
+                console.error('[LogoutButton] Initialization error:', error);
+                this._showError('Failed to initialize logout button');
+            }
+        }
+        
+        /**
+         * Clean up component
+         * 
+         * @returns {void}
+         */
+        destroy() {
+            try {
+                // Unsubscribe from listeners
+                if (this.timerUnsubscriber) {
+                    this.timerUnsubscriber();
+                }
+                
+                if (this.authUnsubscriber) {
+                    this.authUnsubscriber();
+                }
+                
+                // Remove event listeners
+                if (this.profileButton) {
+                    this.profileButton.removeEventListener('click', this._toggleDropdown);
+                }
+                
+                if (this.logoutBtn) {
+                    this.logoutBtn.removeEventListener('click', this._handleLogout);
+                }
+                
+                // Remove from DOM
+                if (this.container) {
+                    this.container.innerHTML = '';
+                }
+                
+                console.info('[LogoutButton] Destroyed');
+            } catch (error) {
+                console.error('[LogoutButton] Error during destroy:', error);
+            }
+        }
+        
+        // ===== Private Methods =====
+        
+        /**
+         * Mount component to container
+         * 
+         * @private
+         */
+        _mount() {
+            // Clone template
+            const clone = this.template.content.cloneNode(true);
+            this.container.appendChild(clone);
+            
+            // Get element references
+            this.profileButton = this.container.querySelector('#profile-menu-btn');
+            this.dropdownMenu = this.container.querySelector('#profile-dropdown');
+            this.logoutBtn = this.container.querySelector('#logout-btn');
+            this.timerDisplay = this.container.querySelector('.timer-display');
+            this.userNameEl = this.container.querySelector('.user-name');
+            this.dropdownNameEl = this.container.querySelector('.dropdown-name');
+            this.dropdownEmailEl = this.container.querySelector('.dropdown-email');
+        }
+        
+        /**
+         * Set up event listeners
+         * 
+         * @private
+         */
+        _setupEventListeners() {
+            // Profile button toggle
+            this.profileButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this._toggleDropdown();
+            });
+            
+            // Logout button
+            this.logoutBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                await this._handleLogout();
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', () => {
+                this._closeDropdown();
+            });
+            
+            // Close dropdown on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    this._closeDropdown();
+                }
+            });
+        }
+        
+        /**
+         * Toggle dropdown menu visibility
+         * 
+         * @private
+         */
+        _toggleDropdown() {
+            const isVisible = this.dropdownMenu.classList.contains('visible');
+            
+            if (isVisible) {
+                this._closeDropdown();
+            } else {
+                this.dropdownMenu.classList.add('visible');
+                this.profileButton.classList.add('active');
+            }
+        }
+        
+        /**
+         * Close dropdown menu
+         * 
+         * @private
+         */
+        _closeDropdown() {
+            this.dropdownMenu.classList.remove('visible');
+            this.profileButton.classList.remove('active');
+        }
+        
+        /**
+         * Handle logout action
+         * 
+         * @private
+         * @returns {Promise<void>}
+         */
+        async _handleLogout() {
+            try {
+                if (this.isLogoutInProgress) {
+                    return;
+                }
+                
+                this.isLogoutInProgress = true;
+                this.logoutBtn.classList.add('logout-loading');
+                this.logoutBtn.disabled = true;
+                
+                // Get current user and session info
+                const authState = this.authManager.getAuthState();
+                const currentSession = this.sessionTimerService.getCurrentSession();
+                
+                // Send logout notification email
+                if (this.emailService && authState.isAuthenticated) {
+                    const activeTime = currentSession?.totalActiveTime || 0;
+                    
+                    try {
+                        await this.emailService.sendLogoutNotification(
+                            {
+                                uid: authState.uid,
+                                email: authState.email,
+                                displayName: authState.displayName
+                            },
+                            activeTime
+                        );
+                        
+                        console.info('[LogoutButton] Logout email sent');
+                    } catch (error) {
+                        console.warn('[LogoutButton] Error sending logout email:', error);
+                        // Continue with logout even if email fails
+                    }
+                }
+                
+                // Stop session timer
+                if (this.sessionTimerService) {
+                    try {
+                        await this.sessionTimerService.stopSession();
+                    } catch (error) {
+                        console.warn('[LogoutButton] Error stopping session:', error);
+                    }
+                }
+                
+                // Clear local storage
+                this._clearLocalStorage();
+                
+                // Sign out from auth manager
+                if (this.authManager) {
+                    await this.authManager.logout();
+                }
+                
+                // Show success message
+                this._showSuccess('You have been logged out');
+                
+                // Redirect to login page
+                setTimeout(() => {
+                    window.location.href = '/login.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('[LogoutButton] Error during logout:', error);
+                this._showError('Logout failed. Please try again.');
+                
+                this.isLogoutInProgress = false;
+                this.logoutBtn.classList.remove('logout-loading');
+                this.logoutBtn.disabled = false;
+            }
+        }
+        
+        /**
+         * Update user information display
+         * 
+         * @private
+         * @param {Object} authState - Auth state object
+         */
+        _updateUserInfo(authState) {
+            if (authState.isAuthenticated) {
+                // Update user name
+                const displayName = authState.displayName || 'User';
+                this.userNameEl.textContent = displayName.split(' ')[0];
+                this.dropdownNameEl.textContent = displayName;
+                
+                // Update email
+                this.dropdownEmailEl.textContent = authState.email || '';
+            }
+        }
+        
+        /**
+         * Update timer display
+         * 
+         * @private
+         * @param {Object} timerState - Timer state object
+         */
+        _updateTimer(timerState) {
+            if (timerState.formattedTime) {
+                this.timerDisplay.textContent = timerState.formattedTime;
+                
+                // Show warning if approaching shift end (close to 6 hours or 6 PM)
+                const totalMs = timerState.totalTime;
+                const sixHoursMs = 6 * 60 * 60 * 1000;
+                
+                if (totalMs > sixHoursMs * 0.9) {
+                    this.container.querySelector('.session-timer').classList.add('warning');
+                } else {
+                    this.container.querySelector('.session-timer').classList.remove('warning');
+                }
+            }
+        }
+        
+        /**
+         * Clear relevant local storage items
+         * 
+         * @private
+         */
+        _clearLocalStorage() {
+            try {
+                localStorage.removeItem('epay_crm_auth_token');
+                localStorage.removeItem('epay_crm_user');
+                localStorage.removeItem('epay_crm_session');
+            } catch (error) {
+                console.warn('[LogoutButton] Error clearing localStorage:', error);
+            }
+        }
+        
+        /**
+         * Show success toast notification
+         * 
+         * @private
+         * @param {string} message - Message to display
+         */
+        _showSuccess(message) {
+            this._showToast(message, 'success');
+        }
+        
+        /**
+         * Show error toast notification
+         * 
+         * @private
+         * @param {string} message - Message to display
+         */
+        _showError(message) {
+            this._showToast(message, 'error');
+        }
+        
+        /**
+         * Show toast notification
+         * 
+         * @private
+         * @param {string} message - Message to display
+         * @param {string} type - Toast type ('success' or 'error')
+         */
+        _showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `logout-toast ${type === 'error' ? 'error' : ''}`;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        /**
+         * Wait for a service to be available
+         * 
+         * @private
+         * @param {string} serviceName - Name of service to wait for
+         * @param {number} timeout - Timeout in milliseconds
+         * @returns {Promise<any>}
+         */
+        async _waitForService(serviceName, timeout) {
+            const startTime = Date.now();
+            
+            return new Promise((resolve, reject) => {
+                const checkService = () => {
+                    const service = window[serviceName];
+                    
+                    if (service) {
+                        // If it's a class, instantiate it
+                        if (typeof service === 'function' && serviceName === 'SessionTimerService') {
+                            resolve(new service());
+                        } else if (typeof service === 'function' && serviceName === 'EmailService') {
+                            resolve(new service());
+                        } else if (typeof service === 'object') {
+                            // Already an instance
+                            resolve(service);
+                        } else {
+                            resolve(service);
+                        }
+                    } else if (Date.now() - startTime > timeout) {
+                        reject(new Error(`Timeout waiting for ${serviceName}`));
+                    } else {
+                        setTimeout(checkService, 100);
+                    }
+                };
+                
+                checkService();
+            });
+        }
+    }
+    
+    // Initialize component when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            const logoutButton = new LogoutButton();
+            logoutButton.init();
+        });
+    } else {
+        const logoutButton = new LogoutButton();
+        logoutButton.init();
+    }
+    
+    // Expose globally for manual control if needed
+    if (typeof window !== 'undefined') {
+        window.LogoutButton = LogoutButton;
+    }
+</script>

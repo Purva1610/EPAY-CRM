@@ -1,0 +1,979 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ePay Jobs · AI-Powered Career Platform</title>
+<meta name="description" content="AI-powered job matching, resume optimization, and end-to-end hiring support." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+
+
+
+:root {
+  --ink: #0a0b10;
+  --ink-2: #12141c;
+  --ink-3: #1a1d2a;
+  --purple: #8b5cf6;
+  --purple-light: #a78bfa;
+  --purple-dim: rgba(139,92,246,0.15);
+  --cyan: #06b6d4;
+  --cyan-dim: rgba(6,182,212,0.12);
+  --emerald: #10b981;
+  --emerald-dim: rgba(16,185,129,0.12);
+  --amber: #f59e0b;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --glass: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --radius: 20px;
+  --radius-sm: 12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--ink);
+  color:var(--text);
+  line-height:1.65;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+.container{width:100%;max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* Ambient */
+.ambient{
+  position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+}
+.ambient .orb{
+  position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;
+  animation:floatOrb 18s ease-in-out infinite;
+}
+.orb.o1{width:480px;height:480px;background:radial-gradient(circle,#8b5cf6,transparent 70%);top:-10%;right:-5%}
+.orb.o2{width:360px;height:360px;background:radial-gradient(circle,#06b6d4,transparent 70%);bottom:10%;left:-8%;animation-delay:-6s}
+.orb.o3{width:280px;height:280px;background:radial-gradient(circle,#10b981,transparent 70%);top:45%;left:40%;animation-delay:-12s;opacity:.2}
+@keyframes floatOrb{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(40px,-50px) scale(1.1)}
+  66%{transform:translate(-30px,30px) scale(.95)}
+}
+
+/* Nav */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(10,11,16,.7);backdrop-filter:blur(20px) saturate(160%);
+  border-bottom:1px solid transparent;transition:.4s;
+}
+.nav.scrolled{border-bottom-color:var(--border);box-shadow:0 8px 40px rgba(0,0,0,.4)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem;letter-spacing:-.02em}
+.logo-mark{
+  width:36px;height:36px;border-radius:11px;
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#fff;font-weight:900;
+  box-shadow:0 4px 16px rgba(139,92,246,.4);
+}
+.logo span{background:linear-gradient(135deg,var(--purple-light),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:26px;list-style:none}
+.nav-links a{font-size:.88rem;font-weight:500;color:var(--muted);transition:.25s}
+.nav-links a:hover{color:var(--purple-light)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 24px;font-size:.9rem;font-weight:600;border-radius:100px;border:none;cursor:pointer;
+  transition:.4s cubic-bezier(.34,1.56,.64,1);font-family:inherit;position:relative;overflow:hidden;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  color:#fff;box-shadow:0 4px 24px rgba(139,92,246,.35);
+}
+.btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 36px rgba(139,92,246,.5)}
+.btn-ghost{
+  background:transparent;color:var(--text);border:1.5px solid var(--border);
+}
+.btn-ghost:hover{border-color:var(--purple);color:var(--purple-light);background:var(--purple-dim)}
+.btn-lg{padding:16px 32px;font-size:1rem}
+.btn-sm{padding:6px 16px;font-size:.8rem}
+.mobile-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.mobile-toggle span{display:block;width:22px;height:2px;background:var(--text);margin:5px 0;border-radius:2px}
+
+/* Hero */
+.hero{
+  min-height:100vh;display:flex;align-items:center;padding:120px 0 80px;position:relative;z-index:1;
+}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--purple-dim);border:1px solid rgba(139,92,246,.3);
+  color:var(--purple-light);font-size:.78rem;font-weight:600;padding:7px 16px;border-radius:100px;margin-bottom:22px;
+}
+.hero-badge .dot{width:7px;height:7px;background:var(--purple);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,.5)}50%{box-shadow:0 0 0 8px transparent}}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.4rem,5vw,3.6rem);font-weight:700;line-height:1.12;letter-spacing:-.03em;margin-bottom:18px;
+}
+.hero h1 .gradient{
+  background:linear-gradient(135deg,var(--purple-light),var(--cyan),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{font-size:1.08rem;color:var(--muted);max-width:520px;margin-bottom:28px;line-height:1.7}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:32px}
+.hero-tagline{
+  font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--purple-light);
+  border-left:3px solid var(--purple);padding-left:16px;opacity:.9;
+}
+
+/* Hero visual */
+.hero-visual{position:relative}
+.hero-card{
+  background:linear-gradient(160deg,rgba(26,29,42,.9),rgba(18,20,28,.95));
+  border:1px solid var(--border);border-radius:24px;padding:24px;backdrop-filter:blur(20px);
+  box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 1px rgba(139,92,246,.08);
+  position:relative;overflow:hidden;
+}
+.hero-card::before{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:conic-gradient(from 0deg,transparent,rgba(139,92,246,.06),transparent 40%);
+  animation:spin 20s linear infinite;pointer-events:none;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-card-img{
+  height:200px;border-radius:16px;background-size:cover;background-position:center;
+  margin-bottom:18px;position:relative;overflow:hidden;
+}
+.hero-card-img .overlay{
+  position:absolute;inset:0;background:linear-gradient(to top,rgba(10,11,16,.8),transparent 50%);
+}
+.metric-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative;z-index:1}
+.metric{
+  background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:12px 14px;
+  transition:.3s;
+}
+.metric:hover{border-color:rgba(139,92,246,.3);background:rgba(139,92,246,.06)}
+.metric .label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.metric .val{font-size:1.25rem;font-weight:800;color:var(--purple-light);margin-top:2px}
+
+/* Trust strip */
+.trust{
+  padding:40px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  position:relative;z-index:1;background:rgba(18,20,28,.5);
+}
+.trust h3{text-align:center;font-size:.85rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:24px}
+.trust-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;text-align:center}
+.trust-item{
+  padding:18px 12px;border-radius:var(--radius-sm);border:1px solid transparent;
+  transition:.35s;background:var(--glass);
+}
+.trust-item:hover{border-color:rgba(139,92,246,.25);transform:translateY(-4px);background:var(--purple-dim)}
+.trust-item .icon{font-size:1.6rem;margin-bottom:8px}
+.trust-item span{font-size:.82rem;font-weight:600;color:var(--text)}
+
+/* Sections */
+section{padding:90px 0;position:relative;z-index:1}
+.section-label{
+  display:inline-block;font-size:.72rem;font-weight:700;color:var(--purple);
+  text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;
+  background:var(--purple-dim);padding:6px 14px;border-radius:100px;border:1px solid rgba(139,92,246,.2);
+}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin-bottom:12px;
+}
+.section-sub{font-size:1.02rem;color:var(--muted);max-width:560px;margin-bottom:40px;line-height:1.7}
+.text-center{text-align:center}
+.text-center .section-sub{margin-left:auto;margin-right:auto}
+
+/* Cards grid */
+.cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.cards-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{
+  background:linear-gradient(160deg,rgba(26,29,42,.85),rgba(18,20,28,.9));
+  border:1px solid var(--border);border-radius:var(--radius);padding:26px 24px;
+  transition:.4s;position:relative;overflow:hidden;
+}
+.card:hover{border-color:rgba(139,92,246,.3);transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.card .icon{font-size:1.8rem;margin-bottom:14px}
+.card h3{font-size:1.05rem;font-weight:700;margin-bottom:8px}
+.card p{font-size:.9rem;color:var(--muted);line-height:1.6}
+
+/* Journey flow */
+.journey{
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;padding:30px 0;
+}
+.journey-node{
+  background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:14px 20px;
+  text-align:center;min-width:120px;transition:.3s;
+}
+.journey-node:hover{border-color:var(--purple);background:var(--purple-dim)}
+.journey-node .step{font-size:.7rem;color:var(--purple);font-weight:700;text-transform:uppercase}
+.journey-node .name{font-size:.88rem;font-weight:600;margin-top:4px}
+.journey-arrow{color:var(--purple);font-size:1.1rem;opacity:.6}
+
+/* Categories slider */
+.cat-slider{display:flex;gap:14px;overflow-x:auto;padding:10px 0 20px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.cat-slider::-webkit-scrollbar{height:4px}
+.cat-slider::-webkit-scrollbar-thumb{background:var(--purple);border-radius:4px}
+.cat-card{
+  flex:0 0 200px;scroll-snap-align:start;
+  background:var(--ink-3);border:1px solid var(--border);border-radius:16px;overflow:hidden;
+  transition:.35s;cursor:pointer;
+}
+.cat-card:hover{border-color:var(--purple);transform:translateY(-4px)}
+.cat-card .img{height:120px;background-size:cover;background-position:center}
+.cat-card .body{padding:14px}
+.cat-card h4{font-size:.92rem;font-weight:700}
+.cat-card p{font-size:.78rem;color:var(--muted);margin-top:4px}
+
+/* Dashboard preview */
+.dash-preview{
+  background:linear-gradient(160deg,#12141c,#1a1d2a);
+  border:1px solid var(--border);border-radius:24px;padding:28px;
+  box-shadow:0 30px 80px rgba(0,0,0,.4);
+}
+.dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.dash-tile{
+  background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:18px;
+  transition:.3s;
+}
+.dash-tile:hover{border-color:rgba(139,92,246,.3);background:rgba(139,92,246,.05)}
+.dash-tile .icon{font-size:1.4rem;margin-bottom:8px}
+.dash-tile h4{font-size:.9rem;font-weight:700}
+.dash-tile p{font-size:.78rem;color:var(--muted);margin-top:4px}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.step-card{
+  background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);padding:24px;
+  position:relative;transition:.35s;
+}
+.step-card:hover{border-color:rgba(139,92,246,.3);transform:translateY(-4px)}
+.step-num{
+  font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;
+  background:linear-gradient(135deg,var(--purple-light),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;
+}
+.step-card h3{font-size:1rem;font-weight:700;margin-bottom:6px}
+.step-card p{font-size:.88rem;color:var(--muted)}
+
+/* Expect grid */
+.expect-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.expect-item{
+  display:flex;gap:14px;align-items:flex-start;
+  background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:18px;
+  transition:.3s;
+}
+.expect-item:hover{border-color:rgba(139,92,246,.25)}
+.expect-item .ei{font-size:1.5rem;flex-shrink:0}
+.expect-item h4{font-size:.92rem;font-weight:700;margin-bottom:4px}
+.expect-item p{font-size:.82rem;color:var(--muted)}
+
+/* CTA band */
+.cta-band{
+  background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(6,182,212,.08));
+  border:1px solid rgba(139,92,246,.25);border-radius:28px;padding:48px 40px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-band::before{
+  content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);
+  animation:shimmer 4s infinite;
+}
+@keyframes shimmer{100%{left:150%}}
+.cta-band h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:12px}
+.cta-band p{color:var(--muted);max-width:480px;margin:0 auto 24px}
+
+/* Form modal */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
+  z-index:200;display:none;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--ink-2);border:1px solid var(--border);border-radius:24px;
+  max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:32px;
+  box-shadow:0 40px 100px rgba(0,0,0,.6);animation:modalIn .4s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+.modal h2{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:6px}
+.modal .sub{color:var(--muted);font-size:.9rem;margin-bottom:22px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid .full{grid-column:1/-1}
+.form-group label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:5px}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--glass);color:var(--text);font-family:inherit;font-size:.9rem;outline:none;transition:.25s;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  border-color:var(--purple);box-shadow:0 0 0 3px rgba(139,92,246,.15);
+}
+.form-group select option{background:var(--ink-2)}
+.modal-close{
+  position:absolute;top:16px;right:16px;background:var(--glass);border:1px solid var(--border);
+  width:36px;height:36px;border-radius:50%;color:var(--muted);cursor:pointer;font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.modal{position:relative}
+
+/* FAQ */
+.faq-list{max-width:720px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{
+  width:100%;text-align:left;background:none;border:none;color:var(--text);
+  padding:18px 0;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+}
+.faq-q:hover{color:var(--purple-light)}
+.faq-q .chev{transition:.3s;color:var(--purple)}
+.faq-item.open .chev{transform:rotate(180deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease;color:var(--muted);font-size:.92rem}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:16px}
+
+/* Footer */
+footer{
+  border-top:1px solid var(--border);padding:40px 0 28px;position:relative;z-index:1;
+  text-align:center;color:var(--muted);font-size:.85rem;
+}
+footer .logo{justify-content:center;margin-bottom:12px}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:none}
+.reveal-d1{transition-delay:.1s}
+.reveal-d2{transition-delay:.2s}
+.reveal-d3{transition-delay:.3s}
+
+/* Toast */
+.toast-box{position:fixed;bottom:24px;right:24px;z-index:300}
+.toast{
+  background:var(--ink-3);border:1px solid rgba(139,92,246,.3);border-left:3px solid var(--purple);
+  border-radius:12px;padding:14px 18px;min-width:240px;font-size:.9rem;
+  box-shadow:0 12px 40px rgba(0,0,0,.4);animation:slideIn .35s ease;margin-top:8px;
+}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:none;opacity:1}}
+
+/* Responsive */
+@media(max-width:900px){
+  .hero-grid,.cards-3,.cards-2,.steps,.expect-grid,.dash-grid,.trust-grid{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:var(--ink-2);padding:20px;border-bottom:1px solid var(--border)}
+}
+@media(max-width:600px){
+  .hero-grid,.cards-3,.cards-2,.steps,.expect-grid,.dash-grid,.trust-grid,.form-grid{grid-template-columns:1fr}
+  .hero{padding:100px 0 60px;min-height:auto}
+  .cta-band{padding:32px 20px}
+}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+<div class="ambient">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+</div>
+
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo"><div class="logo-mark">eJ</div> <span>ePay Jobs</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#why">Why ePay Jobs</a></li>
+      <li><a href="#roles">Roles</a></li>
+      <li><a href="#ai-tools">AI Tools</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="btn btn-ghost" onclick="openModal('login')">Sign In</button>
+      <button class="btn btn-primary" onclick="openModal('apply')">Post a Job</button>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-badge"><span class="dot"></span> AI-Powered Career Platform</div>
+      <h1>Find Your Next <span class="gradient">Career Move</span></h1>
+      <p class="hero-sub">AI-powered job matching, resume optimization, and end-to-end hiring support — all in one platform.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-primary btn-lg" onclick="openModal('apply')">🚀 Find Jobs</button>
+        <button class="btn btn-ghost btn-lg" onclick="openModal('talk')">📞 Talk to Career Coach</button>
+      </div>
+      <p class="hero-tagline">Your Career. AI-Powered. Future-Ready.</p>
+    </div>
+    <div class="hero-visual reveal">
+      <div class="hero-card">
+        <div class="hero-card-img" style="background-image:url('https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?w=800&q=80')">
+          <div class="overlay"></div>
+        </div>
+        <div class="metric-row">
+          <div class="metric"><div class="label">Open Positions</div><div class="val" id="mJobs">1,284+</div></div>
+          <div class="metric"><div class="label">Active Candidates</div><div class="val" id="mCandidates">8,420+</div></div>
+          <div class="metric"><div class="label">AI Match Rate</div><div class="val">89%</div></div>
+          <div class="metric"><div class="label">Companies</div><div class="val">2,340+</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<div class="trust">
+  <div class="container">
+    <h3>Trusted by Top Companies & Talent</h3>
+    <div class="trust-grid">
+      <div class="trust-item"><div class="icon">🏢</div><span>Verified Companies</span></div>
+      <div class="trust-item"><div class="icon">🤖</div><span>AI-Powered Matching</span></div>
+      <div class="trust-item"><div class="icon">📄</div><span>ATS-Optimized Resumes</span></div>
+      <div class="trust-item"><div class="icon">🎯</div><span>Skill-Gap Analysis</span></div>
+      <div class="trust-item"><div class="icon">⭐</div><span>Career Roadmap</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY EPAY JOBS -->
+<section id="why">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Why ePay Jobs</span>
+      <h2 class="section-title">AI-Powered Career Platform</h2>
+      <p class="section-sub">From resume building to career roadmap — everything you need to grow your career.</p>
+    </div>
+    <div class="cards-3">
+      <div class="card reveal reveal-d1"><div class="icon">🤖</div><h3>AI Job Matching</h3><p>Find jobs perfectly aligned with your skills, experience, and career goals.</p></div>
+      <div class="card reveal reveal-d2"><div class="icon">📄</div><h3>ATS Resume Builder</h3><p>Create ATS-optimized resumes that get noticed by recruiters.</p></div>
+      <div class="card reveal reveal-d3"><div class="icon">📊</div><h3>Skill-Gap Analysis</h3><p>Identify what skills you need to advance your career.</p></div>
+      <div class="card reveal"><div class="icon">🎤</div><h3>Interview Preparation</h3><p>AI-generated questions, mock interviews, and real-time feedback.</p></div>
+      <div class="card reveal reveal-d1"><div class="icon">🗺️</div><h3>Career Roadmap</h3><p>Personalised career path with milestones and skill recommendations.</p></div>
+      <div class="card reveal reveal-d2"><div class="icon">💰</div><h3>Salary Comparison</h3><p>Benchmark your compensation against market standards.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<section style="padding-top:40px">
+  <div class="container text-center">
+    <span class="section-label">The Journey</span>
+    <h2 class="section-title">From Candidate to Hired</h2>
+    <p class="section-sub">Your career journey, powered by AI at every step.</p>
+    <div class="journey reveal">
+      <div class="journey-node"><div class="step">01</div><div class="name">Profile</div></div>
+      <div class="journey-arrow">→</div>
+      <div class="journey-node"><div class="step">02</div><div class="name">Resume</div></div>
+      <div class="journey-arrow">→</div>
+      <div class="journey-node"><div class="step">03</div><div class="name">Match</div></div>
+      <div class="journey-arrow">→</div>
+      <div class="journey-node"><div class="step">04</div><div class="name">Interview</div></div>
+      <div class="journey-arrow">→</div>
+      <div class="journey-node"><div class="step">05</div><div class="name">Offer</div></div>
+      <div class="journey-arrow">→</div>
+      <div class="journey-node"><div class="step">06</div><div class="name">Onboarding</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLES -->
+<section id="roles" style="background:rgba(18,20,28,.4)">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Open Positions</span>
+      <h2 class="section-title">Featured Roles</h2>
+      <p class="section-sub">Explore top opportunities matched to your skills.</p>
+    </div>
+    <div class="cards-2">
+      <div class="card reveal">
+        <h3 style="margin-bottom:14px">💼 Top Roles</h3>
+        <ul style="list-style:none;font-size:.92rem;color:var(--muted);line-height:2.2">
+          <li>✓ Senior Frontend Developer · React, Next.js</li>
+          <li>✓ Backend Engineer · Node.js, Express</li>
+          <li>✓ Data Scientist · Python, ML, SQL</li>
+          <li>✓ DevOps Engineer · AWS, Kubernetes</li>
+          <li>✓ Product Manager · Agile, Analytics</li>
+          <li>✓ UI/UX Designer · Figma, Prototyping</li>
+        </ul>
+      </div>
+      <div class="card reveal reveal-d1" style="background-image:linear-gradient(to top,rgba(10,11,16,.92),rgba(10,11,16,.4)),url('https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?w=800&q=80');background-size:cover;background-position:center;min-height:320px;display:flex;flex-direction:column;justify-content:flex-end">
+        <h3 style="color:var(--purple-light)">AI-Powered Job Matching</h3>
+        <p style="color:rgba(255,255,255,.8);margin:8px 0 16px">Get matched with roles that fit your skills and career aspirations.</p>
+        <button class="btn btn-primary" onclick="openModal('apply')">Find Your Match</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI TOOLS -->
+<section id="ai-tools">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">AI Tools</span>
+      <h2 class="section-title">AI-Powered Career Tools</h2>
+      <p class="section-sub">From resume building to interview preparation — AI at every step.</p>
+    </div>
+    <div class="cat-slider reveal" id="catSlider">
+      <div class="cat-card" onclick="showToast('AI Resume Builder opened')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&q=80')"></div><div class="body"><h4>📄 AI Resume Builder</h4><p>ATS-optimized in minutes</p></div></div>
+      <div class="cat-card" onclick="showToast('ATS Resume Checker opened')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&q=80')"></div><div class="body"><h4>✅ ATS Resume Checker</h4><p>Scan against job descriptions</p></div></div>
+      <div class="cat-card" onclick="showToast('AI Job Matching opened')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400&q=80')"></div><div class="body"><h4>🧠 AI Job Matching</h4><p>94% match accuracy</p></div></div>
+      <div class="cat-card" onclick="showToast('Skill Gap Analysis opened')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400&q=80')"></div><div class="body"><h4>📊 Skill-Gap Analysis</h4><p>Identify growth areas</p></div></div>
+      <div class="cat-card" onclick="showToast('Interview Preparation opened')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=80')"></div><div class="body"><h4>🎤 Interview Prep</h4><p>AI-generated questions</p></div></div>
+      <div class="cat-card" onclick="showToast('Mock Interviews opened')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80')"></div><div class="body"><h4>🎯 Mock Interviews</h4><p>Real-time feedback</p></div></div>
+      <div class="cat-card" onclick="showToast('Career Counselling opened')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1521791136064-7986c2920216?w=400&q=80')"></div><div class="body"><h4>💬 Career Counselling</h4><p>Expert guidance</p></div></div>
+      <div class="cat-card" onclick="showToast('Salary Comparison opened')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&q=80')"></div><div class="body"><h4>💰 Salary Comparison</h4><p>Market insights</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section style="background:rgba(18,20,28,.4)">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Dashboard</span>
+      <h2 class="section-title">Your Career Dashboard</h2>
+      <p class="section-sub">Track applications, interviews, offers, and career growth — all in one place.</p>
+    </div>
+    <div class="dash-preview reveal">
+      <div class="dash-grid">
+        <div class="dash-tile"><div class="icon">📋</div><h4>Applications</h4><p>Track your applications</p></div>
+        <div class="dash-tile"><div class="icon">📊</div><h4>Interviews</h4><p>Upcoming & past</p></div>
+        <div class="dash-tile"><div class="icon">📄</div><h4>Offers</h4><p>Manage offers</p></div>
+        <div class="dash-tile"><div class="icon">🎯</div><h4>Skill Score</h4><p>Track your progress</p></div>
+        <div class="dash-tile"><div class="icon">🗺️</div><h4>Career Roadmap</h4><p>AI-suggested path</p></div>
+        <div class="dash-tile"><div class="icon">💰</div><h4>Salary Insights</h4><p>Market benchmarks</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Process</span>
+      <h2 class="section-title">Your Career Journey Starts Here</h2>
+    </div>
+    <div class="steps">
+      <div class="step-card reveal"><div class="step-num">01</div><h3>Create Profile</h3><p>Tell us about your skills and experience.</p></div>
+      <div class="step-card reveal reveal-d1"><div class="step-num">02</div><h3>AI Resume Builder</h3><p>Generate an ATS-optimized resume.</p></div>
+      <div class="step-card reveal reveal-d2"><div class="step-num">03</div><h3>Skill-Gap Analysis</h3><p>Identify areas for growth.</p></div>
+      <div class="step-card reveal"><div class="step-num">04</div><h3>AI Job Matching</h3><p>Get matched with top roles.</p></div>
+      <div class="step-card reveal reveal-d1"><div class="step-num">05</div><h3>Interview Prep</h3><p>Practice with AI-generated questions.</p></div>
+      <div class="step-card reveal reveal-d2"><div class="step-num">06</div><h3>Offer & Onboarding</h3><p>From offer letter to joining.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO WE SERVE -->
+<section style="background:rgba(18,20,28,.4)">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Who We Serve</span>
+      <h2 class="section-title">For Candidates & Companies</h2>
+      <p class="section-sub">Whether you're looking for your next role or hiring top talent — we've got you covered.</p>
+    </div>
+    <div class="expect-grid reveal">
+      <div class="expect-item"><div class="ei">👤</div><div><h4>Job Seekers</h4><p>Find the right role with AI matching.</p></div></div>
+      <div class="expect-item"><div class="ei">🏢</div><div><h4>Companies</h4><p>Hire verified, pre-screened talent.</p></div></div>
+      <div class="expect-item"><div class="ei">🎓</div><div><h4>Fresh Graduates</h4><p>Start your career with confidence.</p></div></div>
+      <div class="expect-item"><div class="ei">💼</div><div><h4>Professionals</h4><p>Take the next step in your career.</p></div></div>
+      <div class="expect-item"><div class="ei">🚀</div><div><h4>Career Changers</h4><p>Explore new opportunities.</p></div></div>
+      <div class="expect-item"><div class="ei">🤝</div><div><h4>Recruiters</h4><p>Find the perfect match.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EARLY PARTNERS CTA -->
+<section>
+  <div class="container">
+    <div class="cta-band reveal">
+      <span class="section-label">AI-Powered Hiring</span>
+      <h2>Get Hired Faster With AI</h2>
+      <p>Join thousands of professionals who found their dream roles through AI-powered matching, resume optimization, and interview preparation.</p>
+      <button class="btn btn-primary btn-lg" onclick="openModal('apply')">Start Your Career Journey</button>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<section class="text-center" style="padding-bottom:40px">
+  <div class="container reveal">
+    <span class="section-label">The Ecosystem</span>
+    <h2 class="section-title">AI + Human Intelligence</h2>
+    <p class="section-sub" style="max-width:640px">AI-powered matching combined with expert guidance — the best of both worlds for your career.</p>
+    <p style="font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--purple-light);margin-top:8px">
+      Profile → Resume → Match → Interview → Offer → Onboarding
+    </p>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section>
+  <div class="container">
+    <div class="cta-band reveal" style="background:linear-gradient(135deg,rgba(6,182,212,.1),rgba(139,92,246,.12))">
+      <h2>Ready to Take Your Career Further?</h2>
+      <p>AI-powered job matching, resume optimization, and career guidance — all in one platform.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary btn-lg" onclick="openModal('apply')">🚀 Find Your Next Role</button>
+        <button class="btn btn-ghost btn-lg" onclick="openModal('talk')">📞 Talk to Career Coach</button>
+      </div>
+      <p style="margin-top:18px;font-size:.85rem"><a href="#" onclick="openModal('login');return false" style="color:var(--purple-light);text-decoration:underline">Already registered? Sign In</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title">Questions, Answered</h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How does AI job matching work? <span class="chev">▾</span></button><div class="faq-a">AI analyzes your skills, experience, and preferences to match you with the most relevant roles.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is the resume builder free? <span class="chev">▾</span></button><div class="faq-a">Yes. All candidates get free access to AI resume builder and ATS checker.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can companies verify candidates? <span class="chev">▾</span></button><div class="faq-a">Yes. Companies can verify candidate credentials and background.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What is the career roadmap? <span class="chev">▾</span></button><div class="faq-a">AI generates a personalised career path with milestones and skill recommendations.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I get interview coaching? <span class="chev">▾</span></button><div class="faq-a">Yes. Access AI-generated questions, mock interviews, and real-time feedback.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I talk to a career coach? <span class="chev">▾</span></button><div class="faq-a">Absolutely. <a href="#" onclick="openModal('talk');return false" style="color:var(--purple-light)">Book a session with our career coach</a>.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL MESSAGE -->
+<section class="text-center" style="padding-bottom:100px">
+  <div class="container reveal">
+    <h2 class="section-title" style="font-size:clamp(1.8rem,3.5vw,2.6rem)">Your Career. AI-Powered. Future-Ready.</h2>
+    <p class="section-sub">From resume to offer — everything you need to grow your career.</p>
+    <button class="btn btn-primary btn-lg" onclick="openModal('apply')">GET STARTED →</button>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo" style="margin-bottom:16px"><div class="logo-mark">eJ</div> <span>ePay Jobs</span></div>
+    <p>© 2026 ePay Jobs · AI-Powered Career Platform</p>
+  </div>
+</footer>
+
+<!-- APPLY MODAL -->
+<div class="modal-overlay" id="modal-apply">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('apply')">×</button>
+    <h2>Find Your Dream Job</h2>
+    <p class="sub">Create your profile and let AI match you with the right opportunities.</p>
+    <form id="applyForm" onsubmit="return submitApply(event)">
+      <div class="form-grid">
+        <div class="form-group full"><label>Full Name *</label><input name="name" required placeholder="Your full name" /></div>
+        <div class="form-group"><label>Email *</label><input name="email" required type="email" placeholder="you@email.com" /></div>
+        <div class="form-group"><label>Mobile *</label><input name="mobile" required type="tel" placeholder="10-digit mobile" /></div>
+        <div class="form-group"><label>Current Role</label><input name="role" placeholder="Your current job title" /></div>
+        <div class="form-group"><label>Years of Experience</label><select name="exp"><option>0-1</option><option>2-3</option><option>4-6</option><option>7-10</option><option>10+</option></select></div>
+        <div class="form-group"><label>Preferred Role</label><input name="prefRole" placeholder="Role you're looking for" /></div>
+        <div class="form-group"><label>Preferred Location</label><input name="location" placeholder="City" /></div>
+        <div class="form-group"><label>Skills</label><input name="skills" placeholder="e.g. React, Python, AWS" /></div>
+        <div class="form-group full"><label>About your career goals</label><textarea name="goals" rows="3" placeholder="What are you looking for in your next role?"></textarea></div>
+        <div class="form-group full"><label>Upload Resume (PDF)</label><input type="file" accept=".pdf" /></div>
+        <div class="form-group full"><button type="submit" class="btn btn-primary btn-lg" style="width:100%">Submit Profile</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- TALK MODAL -->
+<div class="modal-overlay" id="modal-talk">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('talk')">×</button>
+    <h2>Talk to a Career Coach</h2>
+    <p class="sub">Get personalised career guidance from an expert coach.</p>
+    <form onsubmit="return submitTalk(event)">
+      <div class="form-grid">
+        <div class="form-group"><label>Name *</label><input name="name" required /></div>
+        <div class="form-group"><label>Mobile *</label><input name="mobile" required type="tel" /></div>
+        <div class="form-group"><label>Email *</label><input name="email" required type="email" /></div>
+        <div class="form-group"><label>Current Role</label><input name="role" /></div>
+        <div class="form-group full"><label>What do you need help with?</label><select name="help"><option>Resume review</option><option>Interview preparation</option><option>Career change</option><option>Salary negotiation</option><option>Skill development</option><option>Other</option></select></div>
+        <div class="form-group full"><label>Message</label><textarea name="msg" rows="2" placeholder="Tell us about your career goals"></textarea></div>
+        <div class="form-group full"><button type="submit" class="btn btn-primary btn-lg" style="width:100%">Request a Session</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('login')">×</button>
+    <h2>Sign In</h2>
+    <p class="sub">Access your career dashboard and AI tools.</p>
+    <form onsubmit="return submitLogin(event)">
+      <div class="form-grid">
+        <div class="form-group full"><label>Email</label><input name="email" required type="email" placeholder="you@email.com" /></div>
+        <div class="form-group full"><label>Password</label><input name="pass" type="password" required /></div>
+        <div class="form-group full"><button type="submit" class="btn btn-primary btn-lg" style="width:100%">Sign In</button></div>
+        <div class="form-group full text-center" style="font-size:.85rem;color:var(--muted)">Don't have an account? <a href="#" onclick="closeModal('login');openModal('apply');return false" style="color:var(--purple-light)">Create one</a></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast-box" id="toasts"></div>
+
+<script>
+function toast(msg){
+  var box=document.getElementById('toasts');
+  var t=document.createElement('div');
+  t.className='toast';
+  t.textContent=msg;
+  box.appendChild(t);
+  setTimeout(function(){t.style.opacity='0';t.style.transition='.3s';setTimeout(function(){t.remove()},300)},3000);
+}
+function openModal(id){
+  document.getElementById('modal-'+id).classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(id){
+  document.getElementById('modal-'+id).classList.remove('open');
+  document.body.style.overflow='';
+}
+document.querySelectorAll('.modal-overlay').forEach(function(o){
+  o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('open');document.body.style.overflow='';});
+});
+function toggleFaq(btn){
+  var item=btn.parentElement;
+  var open=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(function(i){i.classList.remove('open')});
+  if(!open)item.classList.add('open');
+}
+function submitApply(e){
+  e.preventDefault();
+  var fd=new FormData(e.target);
+  var data={type:'job-seeker',name:fd.get('name'),email:fd.get('email'),mobile:fd.get('mobile'),role:fd.get('role'),exp:fd.get('exp'),prefRole:fd.get('prefRole'),location:fd.get('location'),skills:fd.get('skills'),goals:fd.get('goals'),ts:new Date().toISOString()};
+  try{
+    var arr=JSON.parse(localStorage.getItem('epay-jobs-leads')||'[]');
+    arr.push(data);
+    localStorage.setItem('epay-jobs-leads',JSON.stringify(arr));
+  }catch(err){}
+  closeModal('apply');
+  toast('Profile submitted · Ref JOB-'+Date.now().toString().slice(-6));
+  e.target.reset();
+  return false;
+}
+function submitTalk(e){
+  e.preventDefault();
+  var fd=new FormData(e.target);
+  try{
+    var arr=JSON.parse(localStorage.getItem('epay-jobs-leads')||'[]');
+    arr.push({type:'career-coach',name:fd.get('name'),mobile:fd.get('mobile'),email:fd.get('email'),role:fd.get('role'),help:fd.get('help'),msg:fd.get('msg'),ts:new Date().toISOString()});
+    localStorage.setItem('epay-jobs-leads',JSON.stringify(arr));
+  }catch(err){}
+  closeModal('talk');
+  toast('Session requested · Career coach will contact you');
+  e.target.reset();
+  return false;
+}
+function submitLogin(e){
+  e.preventDefault();
+  toast('Signed in successfully (demo)');
+  closeModal('login');
+  return false;
+}
+// Nav scroll
+window.addEventListener('scroll',function(){
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40);
+});
+document.getElementById('mobileToggle').addEventListener('click',function(){
+  document.getElementById('navLinks').classList.toggle('open');
+});
+// Reveal
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('visible');obs.unobserve(en.target)}});
+},{threshold:0.12,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
+// Live metrics jitter
+setInterval(function(){
+  var j=document.getElementById('mJobs');
+  var c=document.getElementById('mCandidates');
+  if(j) j.textContent=(1280+Math.floor(Math.random()*20))+'+';
+  if(c) c.textContent=(8400+Math.floor(Math.random()*100))+'+';
+},5000);
+// Auto-scroll categories gently
+(function(){
+  var sl=document.getElementById('catSlider');
+  if(!sl) return;
+  var dir=1;
+  setInterval(function(){
+    if(sl.scrollLeft+sl.clientWidth>=sl.scrollWidth-10) dir=-1;
+    if(sl.scrollLeft<=0) dir=1;
+    sl.scrollBy({left:dir*1.2,behavior:'auto'});
+  },40);
+})();
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){['apply','talk','login'].forEach(closeModal)}});
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ePay Institution Marketplace — Colleges, Universities &amp; Training Partners</title>
+<meta name="description" content="Verified profiles for colleges, universities, training institutes, skill academies, coaching centres and international institutions. Receive applications through ePay." />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet" />
+<style>
+
+
+
+:root{--indigo:#4f46e5;--indigo-d:#3730a3;--indigo-l:#818cf8;--navy:#0f172a;--text:#0f172a;--muted:#64748b;--green:#10b981;--amber:#f59e0b;--bg:#f8fafc;--white:#fff}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{font-family:Inter,system-ui,sans-serif;color:var(--text);background:var(--white);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+.container{max-width:1120px;margin:0 auto;padding:0 20px}
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid #e2e8f0}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-weight:800;font-size:1.1rem;display:flex;align-items:center;gap:8px}
+.logo-mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--indigo-l),var(--indigo-d));color:#fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:900}
+.logo span{color:var(--indigo)}
+.nav a{font-size:.88rem;font-weight:500;color:var(--muted);margin-left:18px}
+.nav a:hover{color:var(--indigo)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 20px;font-size:.88rem;font-weight:600;border-radius:100px;border:none;cursor:pointer;font-family:inherit;transition:.25s}
+.btn-primary{background:linear-gradient(135deg,var(--indigo-l),var(--indigo-d));color:#fff;box-shadow:0 4px 14px rgba(79,70,229,.3)}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-ghost{background:#fff;border:1.5px solid #e2e8f0;color:var(--text)}
+.btn-ghost:hover{border-color:var(--indigo)}
+.btn-sm{padding:7px 14px;font-size:.8rem}
+.btn-success{background:var(--green);color:#fff}
+.hero{padding:56px 0 40px;background:linear-gradient(165deg,#eef2ff,#f8fafc 50%,#fff)}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
+.badge{display:inline-block;font-size:.75rem;font-weight:700;color:var(--indigo-d);background:#e0e7ff;padding:5px 12px;border-radius:100px;margin-bottom:12px}
+.hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:12px}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--indigo),#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--muted);font-size:1.02rem;margin-bottom:22px;max-width:480px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:10px}
+.hero-card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:20px;box-shadow:0 16px 40px rgba(79,70,229,.1)}
+.hero-card img{width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:12px}
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#eef2ff;border-radius:10px;padding:10px}
+.stat .n{font-weight:800;font-size:1.15rem;color:var(--indigo-d)}
+.stat .l{font-size:.72rem;color:var(--muted)}
+section{padding:56px 0}
+.section-label{font-size:.72rem;font-weight:700;color:var(--indigo);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.section-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.4rem,3vw,1.9rem);font-weight:800;margin-bottom:8px}
+.section-sub{color:var(--muted);max-width:520px;margin-bottom:28px}
+.text-center{text-align:center}
+.text-center .section-sub{margin-left:auto;margin-right:auto}
+.bg-soft{background:var(--bg)}
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.type-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:16px;padding:20px;transition:.25s}
+.type-card:hover{border-color:var(--indigo-l);box-shadow:0 10px 28px rgba(79,70,229,.1);transform:translateY(-3px)}
+.type-card .ic{font-size:1.6rem;margin-bottom:8px}
+.type-card h3{font-size:1rem;font-weight:700;margin-bottom:4px}
+.type-card p{font-size:.85rem;color:var(--muted)}
+.filter-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;align-items:center}
+.filter-bar input,.filter-bar select{padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:.88rem;font-family:inherit;outline:none}
+.filter-bar input:focus,.filter-bar select:focus{border-color:var(--indigo)}
+.filter-bar input{flex:1;min-width:180px}
+.inst-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.inst-card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px;display:flex;gap:14px;transition:.25s;cursor:pointer}
+.inst-card:hover{border-color:var(--indigo-l);box-shadow:0 8px 24px rgba(79,70,229,.08)}
+.inst-av{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#c7d2fe,#818cf8);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;color:#fff;font-weight:800}
+.inst-body{flex:1;min-width:0}
+.inst-body h3{font-size:.98rem;font-weight:700;margin-bottom:2px}
+.inst-meta{font-size:.78rem;color:var(--muted);margin-bottom:6px}
+.badge-v{display:inline-block;font-size:.68rem;font-weight:700;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:100px}
+.badge-p{background:#e0e7ff;color:#3730a3}
+.inst-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.inst-tags span{font-size:.7rem;background:#f1f5f9;padding:2px 8px;border-radius:100px;color:var(--muted)}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.why-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:18px}
+.why-card h4{font-size:.95rem;font-weight:700;margin:6px 0 4px}
+.why-card p{font-size:.85rem;color:var(--muted)}
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(5px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:18px;max-width:480px;width:100%;padding:24px;max-height:90vh;overflow-y:auto;position:relative}
+.modal h2{font-size:1.2rem;margin-bottom:4px}
+.modal .sub{font-size:.88rem;color:var(--muted);margin-bottom:14px}
+.modal-x{position:absolute;top:12px;right:12px;border:none;background:#f1f5f9;width:30px;height:30px;border-radius:50%;cursor:pointer}
+.form-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-g .full{grid-column:1/-1}
+.form-g label{font-size:.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:3px}
+.form-g input,.form-g select,.form-g textarea{width:100%;padding:9px 11px;border:1.5px solid #e2e8f0;border-radius:9px;font-size:.88rem;font-family:inherit;outline:none}
+.form-g input:focus,.form-g select:focus{border-color:var(--indigo)}
+footer{background:var(--navy);color:#94a3b8;padding:28px;text-align:center;font-size:.85rem}
+footer .logo{justify-content:center;margin-bottom:8px;color:#fff}
+@media(max-width:800px){.hero-grid,.type-grid,.inst-grid,.why-grid,.form-g{grid-template-columns:1fr}}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+<nav class="nav"><div class="container nav-inner">
+  <div class="logo"><div class="logo-mark">eP</div> ePay <span>Institutions</span></div>
+  <div>
+    <a href="#browse">Browse</a>
+    <a href="#types">Who joins</a>
+    <button class="btn btn-primary btn-sm" style="margin-left:12px" onclick="openModal('join')">List your institution</button>
+  </div>
+</div></nav>
+
+<section class="hero"><div class="container hero-grid">
+  <div>
+    <div class="badge">🏫 Institution Marketplace</div>
+    <h1>Verified institutions.<br/><em>Real applications.</em></h1>
+    <p>Colleges, universities, training institutes, skill academies, coaching centres and international institutions create verified profiles and receive applications through ePay.</p>
+    <div class="hero-ctas">
+      <button class="btn btn-primary" onclick="openModal('apply')">Find a programme</button>
+      <button class="btn btn-ghost" onclick="openModal('join')">List your institution</button>
+    </div>
+  </div>
+  <div class="hero-card">
+    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80" alt="Campus" />
+    <div class="stat-row">
+      <div class="stat"><div class="n">420+</div><div class="l">Verified institutions</div></div>
+      <div class="stat"><div class="n">18K+</div><div class="l">Applications routed*</div></div>
+      <div class="stat"><div class="n">12</div><div class="l">Countries</div></div>
+      <div class="stat"><div class="n">✓ KYC</div><div class="l">Profile verification</div></div>
+    </div>
+    <p style="font-size:.7rem;color:var(--muted);margin-top:10px">*Illustrative. Admissions decided by institutions.</p>
+  </div>
+</div></section>
+
+<section id="types" class="bg-soft"><div class="container">
+  <div class="text-center"><div class="section-label">Partners</div><h2 class="section-title">Who can join</h2><p class="section-sub">Build a verified presence and receive structured applications from ePay journeys.</p></div>
+  <div class="type-grid">
+    <div class="type-card"><div class="ic">🎓</div><h3>Colleges</h3><p>Undergraduate and diploma programmes with application intake.</p></div>
+    <div class="type-card"><div class="ic">🏛️</div><h3>Universities</h3><p>Domestic and international degree pathways.</p></div>
+    <div class="type-card"><div class="ic">📚</div><h3>Training institutes</h3><p>Vocational and professional skill programmes.</p></div>
+    <div class="type-card"><div class="ic">⚡</div><h3>Skill academies</h3><p>Short courses, certifications and upskilling.</p></div>
+    <div class="type-card"><div class="ic">✏️</div><h3>Coaching centres</h3><p>Exam prep and language training.</p></div>
+    <div class="type-card"><div class="ic">🌍</div><h3>International institutions</h3><p>Overseas colleges and pathway partners.</p></div>
+  </div>
+</div></section>
+
+<section id="browse"><div class="container">
+  <div class="section-label">Directory</div>
+  <h2 class="section-title">Browse institutions</h2>
+  <p class="section-sub">Filter by type, location and programme focus.</p>
+  <div class="filter-bar">
+    <input id="q" placeholder="Search name or city..." oninput="renderInst()" />
+    <select id="typeF" onchange="renderInst()">
+      <option value="">All types</option>
+      <option>College</option><option>University</option><option>Training</option>
+      <option>Skill academy</option><option>Coaching</option><option>International</option>
+    </select>
+    <select id="locF" onchange="renderInst()">
+      <option value="">All locations</option>
+      <option>India</option><option>UAE</option><option>UK</option><option>Canada</option><option>Germany</option>
+    </select>
+  </div>
+  <div class="inst-grid" id="instGrid"></div>
+</div></section>
+
+<section class="bg-soft"><div class="container">
+  <div class="text-center"><div class="section-label">For institutions</div><h2 class="section-title">Why list on ePay</h2></div>
+  <div class="why-grid" style="margin-top:20px">
+    <div class="why-card"><div style="font-size:1.3rem">✅</div><h4>Verified profile</h4><p>Stand out with KYC-backed institution status.</p></div>
+    <div class="why-card"><div style="font-size:1.3rem">📥</div><h4>Receive applications</h4><p>Structured enquiries from journey-ready candidates.</p></div>
+    <div class="why-card"><div style="font-size:1.3rem">🔗</div><h4>Journey integration</h4><p>Connect with study, skills and career pathways on ePay.</p></div>
+    <div class="why-card"><div style="font-size:1.3rem">📊</div><h4>Lead tracking</h4><p>See application status and follow-ups in one place.</p></div>
+    <div class="why-card"><div style="font-size:1.3rem">🏢</div><h4>Gallery network</h4><p>Local ePay Galleries can guide applicants to you.</p></div>
+    <div class="why-card"><div style="font-size:1.3rem">🛡️</div><h4>Controlled presence</h4><p>You decide programmes, seats and intake windows.</p></div>
+  </div>
+  <div style="text-align:center;margin-top:28px">
+    <button class="btn btn-primary" onclick="openModal('join')">Create institution profile</button>
+  </div>
+</div></section>
+
+<footer><div class="container"><div class="logo" style="justify-content:center;margin-bottom:8px"><div class="logo-mark">eP</div> ePay Institutions</div>
+<p>© 2026 ePay Digital Gallery · Admissions decided by institutions. ePay routes applications and support.</p></div></footer>
+
+<div class="modal-bg" id="modal-join"><div class="modal">
+  <button class="modal-x" onclick="closeModal('join')">×</button>
+  <h2>List your institution</h2>
+  <p class="sub">Apply for a verified profile. Our team reviews documents before go-live.</p>
+  <form onsubmit="return submitJoin(event)">
+    <div class="form-g">
+      <div class="full"><label>Institution name *</label><input name="name" required /></div>
+      <div><label>Type *</label><select name="type" required><option>College</option><option>University</option><option>Training</option><option>Skill academy</option><option>Coaching</option><option>International</option></select></div>
+      <div><label>Country *</label><input name="country" required placeholder="India" /></div>
+      <div><label>City</label><input name="city" /></div>
+      <div><label>Contact mobile *</label><input name="mobile" required type="tel" /></div>
+      <div class="full"><label>Email *</label><input name="email" type="email" required /></div>
+      <div class="full"><label>Programmes / focus</label><textarea name="focus" rows="2" placeholder="e.g. B.Tech, Nursing, IELTS"></textarea></div>
+      <div class="full"><button type="submit" class="btn btn-primary" style="width:100%">Submit for verification</button></div>
+    </div>
+  </form>
+</div></div>
+
+<div class="modal-bg" id="modal-apply"><div class="modal">
+  <button class="modal-x" onclick="closeModal('apply')">×</button>
+  <h2>Apply / enquire</h2>
+  <p class="sub" id="applySub">Tell us what you’re looking for. We’ll route to matching institutions.</p>
+  <form onsubmit="return submitApply(event)">
+    <div class="form-g">
+      <div class="full"><label>Your name *</label><input name="name" required /></div>
+      <div><label>Mobile *</label><input name="mobile" required type="tel" /></div>
+      <div><label>Email</label><input name="email" type="email" /></div>
+      <div class="full"><label>Institution (optional)</label><input name="inst" id="applyInst" placeholder="Any / specific name" /></div>
+      <div class="full"><label>Programme interest</label><input name="prog" placeholder="e.g. MBA, Nursing, German A1" /></div>
+      <div class="full"><button type="submit" class="btn btn-primary" style="width:100%">Submit application interest</button></div>
+    </div>
+  </form>
+</div></div>
+
+<script>
+var INST=[
+  {name:'Pune Institute of Technology',type:'College',loc:'India',city:'Pune',tags:['Engineering','B.Tech'],v:true},
+  {name:'Global Skills Academy',type:'Skill academy',loc:'India',city:'Mumbai',tags:['IT','Digital'],v:true},
+  {name:'Northern Pathways College',type:'International',loc:'Canada',city:'Toronto',tags:['Pathway','Business'],v:true},
+  {name:'Berlin Language & Career',type:'Training',loc:'Germany',city:'Berlin',tags:['German','Nursing prep'],v:true},
+  {name:'IELTS Pro Coaching',type:'Coaching',loc:'India',city:'Hyderabad',tags:['IELTS','TOEFL'],v:true},
+  {name:'Gulf Hospitality Institute',type:'Training',loc:'UAE',city:'Dubai',tags:['Hotels','F&B'],v:true},
+  {name:'State University of Applied Sciences',type:'University',loc:'Germany',city:'Munich',tags:['Applied Science'],v:true},
+  {name:'UK Care Training Hub',type:'Training',loc:'UK',city:'Manchester',tags:['Healthcare','Care'],v:true},
+  {name:'National Coaching Centre',type:'Coaching',loc:'India',city:'Delhi',tags:['Competitive exams'],v:false},
+  {name:'Pacific Business School',type:'University',loc:'Canada',city:'Vancouver',tags:['MBA','PG'],v:true}
+];
+function renderInst(){
+  var q=(document.getElementById('q').value||'').toLowerCase();
+  var t=document.getElementById('typeF').value;
+  var l=document.getElementById('locF').value;
+  var grid=document.getElementById('instGrid');
+  var rows=INST.filter(function(i){
+    return(!t||i.type===t)&&(!l||i.loc===l)&&(!q||(i.name+i.city+i.tags.join(' ')).toLowerCase().indexOf(q)>=0);
+  });
+  grid.innerHTML=rows.map(function(i){
+    return '<div class="inst-card" onclick="applyTo(\''+i.name.replace(/'/g,"\\'")+'\')"><div class="inst-av">'+(i.name.charAt(0))+'</div><div class="inst-body"><h3>'+i.name+' '+(i.v?'<span class="badge-v">Verified</span>':'<span class="badge-v badge-p">Pending</span>')+'</h3><div class="inst-meta">'+i.type+' · '+i.city+', '+i.loc+'</div><div class="inst-tags">'+i.tags.map(function(x){return '<span>'+x+'</span>';}).join('')+'</div></div></div>';
+  }).join('')||'<p style="color:var(--muted)">No institutions match.</p>';
+}
+function openModal(id){document.getElementById('modal-'+id).classList.add('open');}
+function closeModal(id){document.getElementById('modal-'+id).classList.remove('open');}
+document.querySelectorAll('.modal-bg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});});
+function applyTo(name){document.getElementById('applyInst').value=name;document.getElementById('applySub').textContent='Applying interest for: '+name;openModal('apply');}
+function save(key,data){try{var a=JSON.parse(localStorage.getItem(key)||'[]');a.push(Object.assign({ts:new Date().toISOString()},data));localStorage.setItem(key,JSON.stringify(a));}catch(e){}}
+function submitJoin(e){e.preventDefault();var fd=new FormData(e.target);save('epay-institution-partners',Object.fromEntries(fd));closeModal('join');alert('Institution application submitted.\\nRef: INS-'+Date.now().toString().slice(-6)+'\\nVerification team will contact you.');e.target.reset();return false;}
+function submitApply(e){e.preventDefault();var fd=new FormData(e.target);save('epay-institution-apps',Object.fromEntries(fd));closeModal('apply');alert('Application interest submitted.\\nRef: APP-'+Date.now().toString().slice(-6));e.target.reset();return false;}
+renderInst();
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
+

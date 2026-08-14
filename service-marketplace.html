@@ -1,0 +1,467 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ePay — Your Journey Starts Here | Verified Service Marketplace</title>
+<meta name="description" content="What are you planning? Travel, work, study, relocate, learn or finance — ePay builds a personalized journey with verified partners for flights, hotels, recruiters, colleges, insurance and more." />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet" />
+<style>
+
+
+
+:root{--violet:#7c3aed;--violet-d:#5b21b6;--violet-l:#a78bfa;--pink:#ec4899;--navy:#0f172a;--text:#0f172a;--muted:#64748b;--green:#10b981;--bg:#f8fafc;--white:#fff}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{font-family:Inter,system-ui,sans-serif;color:var(--text);background:var(--white);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+.container{max-width:1120px;margin:0 auto;padding:0 20px}
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid #e2e8f0}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-weight:800;font-size:1.1rem;display:flex;align-items:center;gap:8px}
+.logo-mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--violet-l),var(--violet-d));color:#fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:900}
+.logo span{background:linear-gradient(135deg,var(--violet),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links a{font-size:.86rem;font-weight:500;color:var(--muted);margin-left:16px}
+.nav-links a:hover{color:var(--violet)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 20px;font-size:.88rem;font-weight:600;border-radius:100px;border:none;cursor:pointer;font-family:inherit;transition:.25s}
+.btn-primary{background:linear-gradient(135deg,var(--violet-l),var(--violet-d));color:#fff;box-shadow:0 4px 16px rgba(124,58,237,.3)}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-ghost{background:#fff;border:1.5px solid #e2e8f0}
+.btn-ghost:hover{border-color:var(--violet)}
+.btn-sm{padding:7px 14px;font-size:.8rem}
+.btn-dark{background:var(--navy);color:#fff}
+
+.hero{padding:64px 0 48px;background:linear-gradient(165deg,#f5f3ff 0%,#fdf4ff 40%,#fff 80%);text-align:center}
+.badge{display:inline-block;font-size:.75rem;font-weight:700;color:var(--violet-d);background:#ede9fe;padding:5px 12px;border-radius:100px;margin-bottom:14px}
+.hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.12;margin-bottom:12px}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--violet),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--muted);font-size:1.05rem;max-width:520px;margin:0 auto 28px}
+
+.goal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:900px;margin:0 auto;text-align:left}
+.goal-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:18px;padding:22px 18px;cursor:pointer;transition:.3s}
+.goal-card:hover,.goal-card.selected{border-color:var(--violet);box-shadow:0 12px 32px rgba(124,58,237,.14);transform:translateY(-4px)}
+.goal-card .ic{font-size:1.8rem;margin-bottom:8px}
+.goal-card h3{font-size:1.05rem;font-weight:700;margin-bottom:4px}
+.goal-card p{font-size:.85rem;color:var(--muted)}
+
+section{padding:56px 0}
+.section-label{font-size:.72rem;font-weight:700;color:var(--violet);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.section-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.4rem,3vw,1.9rem);font-weight:800;margin-bottom:8px}
+.section-sub{color:var(--muted);max-width:540px;margin-bottom:28px}
+.text-center{text-align:center}
+.text-center .section-sub{margin-left:auto;margin-right:auto}
+.bg-soft{background:var(--bg)}
+.bg-violet{background:linear-gradient(180deg,#f5f3ff,#fff)}
+
+.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.svc-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:18px 14px;text-align:center;transition:.25s;cursor:pointer}
+.svc-card:hover{border-color:var(--violet-l);box-shadow:0 8px 22px rgba(124,58,237,.1)}
+.svc-card .ic{font-size:1.5rem;margin-bottom:6px}
+.svc-card h4{font-size:.88rem;font-weight:700}
+.svc-card p{font-size:.75rem;color:var(--muted);margin-top:2px}
+
+.partner-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.partner-pill{background:#fff;border:1px solid #e2e8f0;border-radius:100px;padding:8px 16px;font-size:.82rem;font-weight:600;display:flex;align-items:center;gap:6px}
+.partner-pill .v{font-size:.65rem;background:#d1fae5;color:#065f46;padding:2px 6px;border-radius:100px}
+
+.plan-box{background:linear-gradient(145deg,#1e1b4b,#4c1d95);color:#fff;border-radius:20px;padding:28px;max-width:640px;margin:0 auto}
+.plan-box h3{font-size:1.2rem;font-weight:800;margin-bottom:8px}
+.plan-box ul{list-style:none;margin:14px 0}
+.plan-box li{padding:6px 0;font-size:.9rem;display:flex;gap:8px}
+.plan-box li::before{content:'→';opacity:.7}
+
+.how{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;align-items:center}
+.how-step{background:#ede9fe;border:1px solid #ddd6fe;border-radius:12px;padding:10px 14px;font-size:.82rem;font-weight:600;color:var(--violet-d)}
+.how-arrow{color:var(--violet)}
+
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(5px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:18px;max-width:480px;width:100%;padding:24px;max-height:90vh;overflow-y:auto;position:relative}
+.modal h2{font-size:1.2rem;margin-bottom:4px}
+.modal .sub{font-size:.88rem;color:var(--muted);margin-bottom:14px}
+.modal-x{position:absolute;top:12px;right:12px;border:none;background:#f1f5f9;width:30px;height:30px;border-radius:50%;cursor:pointer}
+.form-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-g .full{grid-column:1/-1}
+.form-g label{font-size:.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:3px}
+.form-g input,.form-g select,.form-g textarea{width:100%;padding:9px 11px;border:1.5px solid #e2e8f0;border-radius:9px;font-size:.88rem;font-family:inherit;outline:none}
+.form-g input:focus,.form-g select:focus{border-color:var(--violet)}
+
+footer{background:var(--navy);color:#94a3b8;padding:28px;text-align:center;font-size:.85rem}
+footer .logo{justify-content:center;margin-bottom:8px;color:#fff}
+@media(max-width:800px){.goal-grid{grid-template-columns:1fr 1fr}.svc-grid{grid-template-columns:1fr 1fr}.form-g{grid-template-columns:1fr}}
+@media(max-width:500px){.goal-grid{grid-template-columns:1fr}}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+<nav class="nav"><div class="container nav-inner">
+  <div class="logo"><div class="logo-mark">eP</div> ePay <span>Journey</span></div>
+  <div class="nav-links">
+    <a href="#goals">Goals</a>
+    <a href="#services">Services</a>
+    <a href="#partners">Partners</a>
+    <a href="#how">How it works</a>
+    <button class="btn btn-primary btn-sm" style="margin-left:12px" onclick="openModal('partner')">Become a partner</button>
+  </div>
+</div></nav>
+
+<!-- BIG IDEA: Journey first -->
+<section class="hero">
+  <div class="container">
+    <div class="badge">🔥 Your Journey Starts Here</div>
+    <h1>ePay — <em>Your Journey Starts Here.</em></h1>
+    <p>Not a menu of services. A question: <b>What are you planning?</b> Then we build a personalized path with verified partners.</p>
+  </div>
+</section>
+
+<section id="goals" style="padding-top:0">
+  <div class="container">
+    <div class="goal-grid" id="goals">
+      <div class="goal-card" data-goal="Travel" onclick="selectGoal(this)">
+        <div class="ic">✈️</div><h3>Travel</h3><p>I want to visit another country.</p>
+      </div>
+      <div class="goal-card" data-goal="Work" onclick="selectGoal(this)">
+        <div class="ic">💼</div><h3>Work</h3><p>I want a job in India or abroad.</p>
+      </div>
+      <div class="goal-card" data-goal="Study" onclick="selectGoal(this)">
+        <div class="ic">🎓</div><h3>Study</h3><p>I want to study in India or abroad.</p>
+      </div>
+      <div class="goal-card" data-goal="Relocate" onclick="selectGoal(this)">
+        <div class="ic">🏠</div><h3>Relocate</h3><p>I am moving to another city or country.</p>
+      </div>
+      <div class="goal-card" data-goal="Learn" onclick="selectGoal(this)">
+        <div class="ic">📚</div><h3>Learn</h3><p>I want to develop skills.</p>
+      </div>
+      <div class="goal-card" data-goal="Finance" onclick="selectGoal(this)">
+        <div class="ic">💰</div><h3>Finance</h3><p>I need financial assistance for my journey.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="plan" class="bg-violet" style="display:none">
+  <div class="container">
+    <div class="plan-box" id="planBox"></div>
+  </div>
+</section>
+
+<section id="services" class="bg-soft">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-label">Verified Service Marketplace</div>
+      <h2 class="section-title">Partners behind every journey</h2>
+      <p class="section-sub">Flights, stays, recruiters, colleges, insurance and more — under a verified partner ecosystem.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card" onclick="openModal('partner')"><div class="ic">✈️</div><h4>Flights</h4><p>Travel partners</p></div>
+      <div class="svc-card" onclick="openModal('partner')"><div class="ic">🏨</div><h4>Hotels</h4><p>Stay network</p></div>
+      <div class="svc-card" onclick="openModal('partner')"><div class="ic">🛏️</div><h4>Hostels / PGs</h4><p>Budget stay</p></div>
+      <div class="svc-card" onclick="openModal('partner')"><div class="ic">👔</div><h4>Recruiters</h4><p>Talent partners</p></div>
+      <div class="svc-card" onclick="openModal('partner')"><div class="ic">🏢</div><h4>Employers</h4><p>Hiring orgs</p></div>
+      <div class="svc-card" onclick="openModal('partner')"><div class="ic">🏫</div><h4>Colleges</h4><p>Institutions</p></div>
+      <div class="svc-card" onclick="openModal('partner')"><div class="ic">📖</div><h4>Training institutes</h4><p>Skills &amp; coaching</p></div>
+      <div class="svc-card" onclick="openModal('partner')"><div class="ic">🛡️</div><h4>Insurance</h4><p>Travel &amp; health</p></div>
+      <div class="svc-card" onclick="openModal('partner')"><div class="ic">💱</div><h4>Forex</h4><p>Currency partners</p></div>
+      <div class="svc-card" onclick="openModal('partner')"><div class="ic">🚕</div><h4>Transport</h4><p>Transfers &amp; local</p></div>
+      <div class="svc-card" onclick="openModal('partner')"><div class="ic">⚖️</div><h4>Legal / docs</h4><p>Attestation &amp; more</p></div>
+      <div class="svc-card" onclick="openModal('partner')"><div class="ic">✅</div><h4>Verified only</h4><p>Partner KYC</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="partners">
+  <div class="container text-center">
+    <div class="section-label">Ecosystem</div>
+    <h2 class="section-title">One network. Many verified services.</h2>
+    <p class="section-sub">Instead of “Visa | Jobs | Education | Travel” as separate silos — one journey that pulls the right partners.</p>
+    <div class="partner-row">
+      <span class="partner-pill">✈️ Flight partners <span class="v">Verified</span></span>
+      <span class="partner-pill">🏨 Hotels &amp; PGs <span class="v">Verified</span></span>
+      <span class="partner-pill">👔 Recruiters <span class="v">Verified</span></span>
+      <span class="partner-pill">🏫 Institutions <span class="v">Verified</span></span>
+      <span class="partner-pill">🛡️ Insurance <span class="v">Verified</span></span>
+      <span class="partner-pill">💱 Forex <span class="v">Verified</span></span>
+      <span class="partner-pill">🚕 Transport <span class="v">Verified</span></span>
+      <span class="partner-pill">📄 Document services <span class="v">Verified</span></span>
+    </div>
+  </div>
+</section>
+
+<section id="how" class="bg-soft">
+  <div class="container text-center">
+    <div class="section-label">How it works</div>
+    <h2 class="section-title">From goal to personalized plan</h2>
+    <div class="how" style="margin-top:24px">
+      <div class="how-step">Choose your goal</div><span class="how-arrow">→</span>
+      <div class="how-step">Share a few details</div><span class="how-arrow">→</span>
+      <div class="how-step">Get a journey plan</div><span class="how-arrow">→</span>
+      <div class="how-step">Verified partners unlock</div><span class="how-arrow">→</span>
+      <div class="how-step">Gallery support</div><span class="how-arrow">→</span>
+      <div class="how-step">Track &amp; complete</div>
+    </div>
+    <button class="btn btn-primary" style="margin-top:28px" onclick="document.getElementById('goals').scrollIntoView({behavior:'smooth'})">What are you planning?</button>
+  </div>
+</section>
+
+<section>
+  <div class="container" style="text-align:center">
+    <h2 class="section-title">Build the ecosystem with us</h2>
+    <p class="section-sub" style="margin-left:auto;margin-right:auto">Are you a flight, stay, recruiter, college, insurance or document partner? Join the verified marketplace.</p>
+    <button class="btn btn-primary" onclick="openModal('partner')">Become a verified partner</button>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo" style="justify-content:center;margin-bottom:8px"><div class="logo-mark">eP</div> ePay Journey</div>
+    <p>© 2026 ePay Digital Gallery · Verified partners · Journeys coordinated, outcomes decided by providers &amp; authorities.</p>
+  </div>
+</footer>
+
+<div class="modal-bg" id="modal-journey"><div class="modal">
+  <button class="modal-x" onclick="closeModal('journey')">×</button>
+  <h2 id="jTitle">Start your journey</h2>
+  <p class="sub" id="jSub">We’ll personalize the next steps.</p>
+  <form onsubmit="return submitJourney(event)">
+    <div class="form-g">
+      <div class="full"><label>Name *</label><input name="name" required /></div>
+      <div><label>Mobile *</label><input name="mobile" required type="tel" /></div>
+      <div><label>Email</label><input name="email" type="email" /></div>
+      <div class="full"><label>Goal</label><input name="goal" id="jGoal" readonly /></div>
+      <div class="full"><label>Where / what (optional)</label><input name="detail" placeholder="Country, course, city..." /></div>
+      <div class="full"><button type="submit" class="btn btn-primary" style="width:100%">Build my journey plan</button></div>
+    </div>
+  </form>
+</div></div>
+
+<div class="modal-bg" id="modal-partner"><div class="modal">
+  <button class="modal-x" onclick="closeModal('partner')">×</button>
+  <h2>Become a verified partner</h2>
+  <p class="sub">Join the ePay service marketplace.</p>
+  <form onsubmit="return submitPartner(event)">
+    <div class="form-g">
+      <div class="full"><label>Business name *</label><input name="name" required /></div>
+      <div><label>Category *</label>
+        <select name="cat" required>
+          <option>Flights</option><option>Hotels</option><option>Hostels / PGs</option>
+          <option>Recruiters</option><option>Employers</option><option>Colleges</option>
+          <option>Training Institutes</option><option>Insurance</option><option>Forex</option>
+          <option>Transport</option><option>Legal / document services</option>
+        </select>
+      </div>
+      <div><label>Mobile *</label><input name="mobile" required type="tel" /></div>
+      <div class="full"><label>Email *</label><input name="email" type="email" required /></div>
+      <div class="full"><label>Notes</label><textarea name="notes" rows="2"></textarea></div>
+      <div class="full"><button type="submit" class="btn btn-primary" style="width:100%">Apply for verification</button></div>
+    </div>
+  </form>
+</div></div>
+
+<script>
+var PLANS={
+  Travel:{title:'✈️ Travel journey plan',steps:['Destination & dates','Visa check if needed','Flights via partners','Stay (hotel / hostel)','Insurance & transfers','Pre-departure checklist','Gallery support']},
+  Work:{title:'💼 Work journey plan',steps:['Profile & eligibility','Role / country match','Recruiter or employer path','Documents & interviews','Offer & permit/visa path','Relocation stack','Joining support']},
+  Study:{title:'🎓 Study journey plan',steps:['Course & country shortlist','Institution match','Applications','Tests & documents','Offer / LOA','Finance & permit','Travel & arrival']},
+  Relocate:{title:'🏠 Relocation plan',steps:['Origin → destination','Travel booking','Pickup','Temp stay','Longer accommodation','SIM / local setup','Workplace joining']},
+  Learn:{title:'📚 Skills journey plan',steps:['Skill goal','Course / academy match','Schedule & fees','Learning track','Certification','Career link-up']},
+  Finance:{title:'💰 Finance journey plan',steps:['Journey cost estimate','Funding options overview','Partner product intro (if eligible)','Document checklist','Gallery guidance','Repayment awareness']}
+};
+
+function selectGoal(el){
+  document.querySelectorAll('.goal-card').forEach(function(c){c.classList.remove('selected');});
+  el.classList.add('selected');
+  var g=el.getAttribute('data-goal');
+  var plan=PLANS[g];
+  var box=document.getElementById('planBox');
+  var sec=document.getElementById('plan');
+  sec.style.display='block';
+  box.innerHTML='<h3>'+plan.title+'</h3><p style="opacity:.85;font-size:.9rem">Personalized path — verified partners unlock at each step.</p><ul>'+plan.steps.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul><button class="btn btn-primary" style="background:#fff;color:#5b21b6;margin-top:8px" onclick="startGoal(\''+g+'\')">Continue — '+g+'</button>';
+  sec.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function startGoal(g){
+  document.getElementById('jGoal').value=g;
+  document.getElementById('jTitle').textContent='Start: '+g;
+  document.getElementById('jSub').textContent='We’ll build your '+g.toLowerCase()+' journey and connect verified partners.';
+  openModal('journey');
+}
+function openModal(id){document.getElementById('modal-'+id).classList.add('open');}
+function closeModal(id){document.getElementById('modal-'+id).classList.remove('open');}
+document.querySelectorAll('.modal-bg').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('open');});});
+function save(key,d){try{var a=JSON.parse(localStorage.getItem(key)||'[]');a.push(Object.assign({ts:new Date().toISOString()},d));localStorage.setItem(key,JSON.stringify(a));}catch(e){}}
+function submitJourney(e){
+  e.preventDefault();var fd=new FormData(e.target);
+  save('epay-journey-starts',Object.fromEntries(fd));
+  closeModal('journey');
+  alert('Journey plan started!\\n\\nGoal: '+fd.get('goal')+'\\nRef: JRN-'+Date.now().toString().slice(-6)+'\\n\\nAn ePay Gallery / coordinator will follow up with partner options.');
+  e.target.reset();return false;
+}
+function submitPartner(e){
+  e.preventDefault();var fd=new FormData(e.target);
+  save('epay-service-partners',Object.fromEntries(fd));
+  closeModal('partner');
+  alert('Partner application received.\\nRef: PTR-'+Date.now().toString().slice(-6)+'\\nVerification team will contact you.');
+  e.target.reset();return false;
+}
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,1551 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ePay Â· Gallery Social Manager</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+
+
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #f8fafc;
+        }
+        .sidebar-link {
+            transition: all 0.15s;
+            cursor: pointer;
+        }
+        .sidebar-link:hover {
+            background: #1e293b;
+        }
+        .sidebar-link.active {
+            background: #1e3a5f;
+            color: white;
+        }
+        .sidebar-link.active i {
+            color: #34d399;
+        }
+        .sidebar-nav::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 20px;
+        }
+        .card-hover {
+            transition: all 0.2s;
+        }
+        .card-hover:hover {
+            box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+        .fade-in {
+            animation: fadeIn 0.25s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #0b0f19;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 13px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(120px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .toast i {
+            color: #34d399;
+            font-size: 18px;
+        }
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 540px;
+            width: 92%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+        .modal-box input,
+        .modal-box select,
+        .modal-box textarea {
+            width: 100%;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 14px;
+            margin-top: 6px;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .modal-box input:focus,
+        .modal-box select:focus,
+        .modal-box textarea:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16,185,129, 0.1);
+        }
+        .modal-box label {
+            font-weight: 500;
+            font-size: 13px;
+            color: #334155;
+            margin-top: 14px;
+            display: block;
+        }
+        .modal-box .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        @media (max-width: 480px) {
+            .modal-box .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        .status-badge {
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .status-badge.published {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.scheduled {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.draft {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+        .status-badge.active {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.paused {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.connected {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.new {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.converted {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.follow-up {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+        .delete-btn {
+            color: #ef4444;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .delete-btn:hover {
+            color: #dc2626;
+            transform: scale(1.1);
+        }
+        .edit-btn {
+            color: #10b981;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .edit-btn:hover {
+            color: #059669;
+        }
+        .platform-icon {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+        .scrollable-table {
+            overflow-x: auto;
+        }
+        .scrollable-table table {
+            min-width: 600px;
+        }
+        .empty-state {
+            padding: 40px 20px;
+            text-align: center;
+            color: #94a3b8;
+        }
+        .empty-state i {
+            font-size: 40px;
+            margin-bottom: 12px;
+            display: block;
+        }
+        /* fix for sidebar visibility */
+        .sidebar-link {
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.75rem !important;
+            padding: 0.5rem 0.75rem !important;
+            border-radius: 0.5rem !important;
+        }
+        #sidebarNav {
+            display: block !important;
+        }
+        #sidebarNav ul {
+            display: block !important;
+        }
+        #sidebarNav li {
+            display: flex !important;
+        }
+    </style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-[#0b0f19] text-white/80 flex flex-col shrink-0 h-full border-r border-slate-800/60 fixed inset-y-0 left-0 z-50">
+        <div class="px-5 py-5 border-b border-slate-800/50 flex items-center gap-3 shrink-0">
+            <i class="fa-solid fa-hashtag text-indigo-400 text-xl"></i>
+            <span class="text-white font-bold tracking-tight">ePay <span class="text-indigo-300">Â·</span> Gallery</span>
+            <span class="ml-auto text-[10px] bg-indigo-600/30 text-indigo-200 px-2 py-0.5 rounded-full">v3</span>
+        </div>
+        <nav class="flex-1 px-3 py-4 space-y-5 text-sm overflow-y-auto sidebar-nav" id="sidebarNav">
+            <!-- rendered by JS -->
+        </nav>
+        <div class="p-4 border-t border-slate-800/50 text-xs text-slate-400 flex items-center gap-3 shrink-0">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=40&auto=format&fit=crop&q=80" class="w-7 h-7 rounded-full" alt="profile" />
+            <div>
+                <p class="text-white text-sm font-medium" id="userNameDisplay">Yashraj</p>
+                <p class="text-[10px] text-slate-400">Gallery Manager</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT (offset for sidebar) -->
+    <div class="ml-64 flex flex-col h-screen overflow-hidden">
+        <!-- TOP NAV -->
+        <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
+            <div class="relative w-80">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input id="globalSearch" type="text" placeholder="Search posts, campaigns, media..." class="w-full bg-slate-50 border border-slate-200 rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-indigo-500 transition" />
+            </div>
+            <div class="flex items-center gap-4">
+                <button id="switchRoleBtn" class="flex items-center gap-2 border border-slate-200 hover:bg-slate-50 text-xs font-semibold px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-arrow-right-arrow-left text-indigo-600"></i> Switch</button>
+                <div class="relative">
+                    <button id="notifBtn" class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition relative">
+                        <i class="fa-regular fa-bell text-lg"></i>
+                        <span id="notifBadge" class="absolute -top-0.5 -right-0.5 bg-rose-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">15</span>
+                    </button>
+                </div>
+                <div class="h-6 w-px bg-slate-200"></div>
+                <div class="flex items-center gap-2">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80" class="w-8 h-8 rounded-full object-cover ring-2 ring-indigo-300" alt="" />
+                </div>
+            </div>
+        </header>
+
+        <!-- SCROLLABLE MAIN CONTENT -->
+        <main class="flex-1 overflow-y-auto p-5 space-y-6 bg-slate-50/80" id="mainContent">
+            <!-- dynamic content -->
+        </main>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast"><i class="fa-regular fa-circle-check"></i><span id="toastMsg">Done!</span></div>
+
+    <!-- MODAL -->
+    <div id="modalOverlay" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+        <div class="modal-box" id="modalBox">
+            <!-- filled by JS -->
+        </div>
+    </div>
+
+    <script>
+        // ================================================================
+        // DATA STORE with localStorage persistence
+        // ================================================================
+        const STORAGE_KEY = 'gallerySocialData_v4';
+        let AppData = {};
+
+        function resetData() {
+            localStorage.removeItem(STORAGE_KEY);
+            initDefaultData();
+            saveData();
+            renderSidebar();
+            renderPage('dashboard');
+            showToast('ðŸ”„ Data reset successfully');
+        }
+
+        function initDefaultData() {
+            AppData = {
+                user: { name: 'Yashraj', role: 'Gallery Manager' },
+                platforms: [
+                    { id: 'fb', name: 'Facebook', icon: 'fa-brands fa-facebook', color: 'text-blue-600',
+                        handle: 'GalleryPage', followers: '12.4k', status: 'connected' },
+                    { id: 'ig', name: 'Instagram', icon: 'fa-brands fa-instagram', color: 'text-rose-500',
+                        handle: '@gallery.india', followers: '8.2k', status: 'connected' },
+                    { id: 'wa', name: 'WhatsApp Business', icon: 'fa-brands fa-whatsapp', color: 'text-emerald-500',
+                        handle: '+91 98765 43210', followers: '', status: 'connected' },
+                    { id: 'gb', name: 'Google Business', icon: 'fa-brands fa-google', color: 'text-amber-500',
+                        handle: 'Gallery Profile', followers: '', status: 'connected' },
+                    { id: 'x', name: 'X', icon: 'fa-brands fa-x-twitter', color: 'text-black', handle: '@gallery_epay',
+                        followers: '', status: 'pending' },
+                    { id: 'yt', name: 'YouTube', icon: 'fa-brands fa-youtube', color: 'text-red-600',
+                        handle: 'Gallery Channel', followers: '', status: 'connected' },
+                    { id: 'pin', name: 'Pinterest', icon: 'fa-brands fa-pinterest', color: 'text-red-400',
+                        handle: 'gallery.india', followers: '', status: 'pending' },
+                    { id: 'th', name: 'Threads', icon: 'fa-brands fa-threads', color: 'text-black', handle: '@gallery',
+                        followers: '', status: 'connected' },
+                    { id: 'li', name: 'LinkedIn', icon: 'fa-brands fa-linkedin', color: 'text-sky-700',
+                        handle: 'gallery-epay', followers: '', status: 'pending' },
+                    { id: 'tg', name: 'Telegram', icon: 'fa-brands fa-telegram', color: 'text-blue-500',
+                        handle: 'gallery_offers', followers: '', status: 'pending' },
+                ],
+                posts: [
+                    { id: 1, caption: 'Summer collection 2025', platform: 'Instagram', type: 'Reel',
+                        status: 'Published', engagement: 245, date: '2025-05-14' },
+                    { id: 2, caption: 'Franchise offer', platform: 'Facebook', type: 'Image', status: 'Published',
+                        engagement: 112, date: '2025-05-14' },
+                    { id: 3, caption: 'Behind the scenes', platform: 'YouTube', type: 'Video', status: 'Scheduled',
+                        engagement: 0, date: '2025-05-16' },
+                    { id: 4, caption: 'New arrival reel', platform: 'Instagram', type: 'Reel', status: 'Draft',
+                        engagement: 0, date: '' },
+                    { id: 5, caption: 'Member spotlight', platform: 'Facebook', type: 'Carousel',
+                        status: 'Published', engagement: 89, date: '2025-05-13' },
+                ],
+                campaigns: [
+                    { id: 1, name: 'Festival campaign', reach: '12.4k', roi: '4.2x', status: 'Active' },
+                    { id: 2, name: 'Product launch', reach: '8.1k', roi: '2.8x', status: 'Paused' },
+                    { id: 3, name: 'Membership drive', reach: '5.3k', roi: '3.1x', status: 'Active' },
+                ],
+                influencers: [
+                    { id: 1, name: '@art_gallery', followers: '12.4k', status: 'active' },
+                    { id: 2, name: '@moderncanvas', followers: '8.7k', status: 'pending' },
+                    { id: 3, name: '@urbanframes', followers: '5.2k', status: 'active' },
+                ],
+                offers: [
+                    { id: 1, code: 'SUMMER25', clicks: 120, redemptions: 34, status: 'active' },
+                    { id: 2, code: 'GALLERY10', clicks: 45, redemptions: 12, status: 'active' },
+                ],
+                leads: [
+                    { id: 1, name: 'Vikram S.', phone: '+91 98765 12345', source: 'Instagram', status: 'New',
+                        followup: '' },
+                    { id: 2, name: 'Neha G.', phone: '+91 87654 32109', source: 'Facebook', status: 'Converted',
+                        followup: '' },
+                    { id: 3, name: 'Arjun P.', phone: '+91 76543 21098', source: 'Google', status: 'Follow-up',
+                        followup: '2025-05-20' },
+                ],
+                reviews: { avg: 4.8, total: 23, pending: 2 },
+                inbox: { new: 8, urgent: 3 },
+                analytics: { reach: 48200, impressions: 124000, engagement: 4.2, leads: 42, conversions: 17,
+                    revenue: 3200 },
+                mediaAssets: 24,
+                mediaCategories: 5,
+                stats: {}
+            };
+            updateStats();
+        }
+
+        function loadData() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    AppData = JSON.parse(stored);
+                    // ensure all fields exist
+                    if (!AppData.platforms) AppData.platforms = [];
+                    if (!AppData.posts) AppData.posts = [];
+                    if (!AppData.campaigns) AppData.campaigns = [];
+                    if (!AppData.influencers) AppData.influencers = [];
+                    if (!AppData.offers) AppData.offers = [];
+                    if (!AppData.leads) AppData.leads = [];
+                    if (!AppData.reviews) AppData.reviews = { avg: 4.8, total: 23, pending: 2 };
+                    if (!AppData.inbox) AppData.inbox = { new: 8, urgent: 3 };
+                    if (!AppData.analytics) AppData.analytics = { reach: 48200, impressions: 124000, engagement: 4.2,
+                        leads: 42, conversions: 17, revenue: 3200 };
+                    if (!AppData.stats) AppData.stats = {};
+                    if (!AppData.mediaAssets) AppData.mediaAssets = 24;
+                    if (!AppData.mediaCategories) AppData.mediaCategories = 5;
+                    if (!AppData.user) AppData.user = { name: 'Yashraj', role: 'Gallery Manager' };
+                    updateStats();
+                    saveData();
+                } else {
+                    initDefaultData();
+                    saveData();
+                }
+            } catch (e) {
+                console.warn('Data load error, resetting:', e);
+                initDefaultData();
+                saveData();
+            }
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(AppData));
+            } catch (e) {
+                console.warn('Save error:', e);
+            }
+        }
+
+        function updateStats() {
+            const posts = AppData.posts || [];
+            const campaigns = AppData.campaigns || [];
+            const leads = AppData.leads || [];
+            const platforms = AppData.platforms || [];
+            const today = new Date().toISOString().slice(0, 10);
+            AppData.stats = {
+                accounts: platforms.length,
+                publishedToday: posts.filter(p => p.status === 'Published' && p.date === today).length,
+                scheduled: posts.filter(p => p.status === 'Scheduled').length,
+                drafts: posts.filter(p => p.status === 'Draft').length,
+                campaigns: campaigns.length,
+                followers: 23400,
+                newToday: 127,
+                reach: 48200,
+                impressions: 124000,
+                engagement: 4.2,
+                messages: 34,
+                reviewsPending: AppData.reviews?.pending || 0,
+                adSpendToday: 245,
+                monthlyAdSpend: 2800,
+                leads: leads.length,
+                bookings: 17,
+            };
+            saveData();
+        }
+
+        // ================================================================
+        // SIDEBAR NAVIGATION
+        // ================================================================
+        const menuStructure = [{
+            section: 'Overview',
+            items: [
+                { id: 'dashboard', label: 'Dashboard', icon: 'fa-house' },
+                { id: 'calendar', label: 'Calendar', icon: 'fa-regular fa-calendar' },
+                { id: 'planner', label: 'Planner', icon: 'fa-regular fa-file-lines' },
+            ]
+        }, {
+            section: 'Content',
+            items: [
+                { id: 'posts', label: 'Posts', icon: 'fa-regular fa-pen-to-square' },
+                { id: 'media', label: 'Media Library', icon: 'fa-regular fa-image' },
+                { id: 'campaigns', label: 'Campaigns', icon: 'fa-regular fa-bullhorn' },
+                { id: 'offers', label: 'Offers', icon: 'fa-regular fa-ticket' },
+            ]
+        }, {
+            section: 'Engage',
+            items: [
+                { id: 'inbox', label: 'Inbox', icon: 'fa-regular fa-inbox', badge: '23' },
+                { id: 'reviews', label: 'Reviews', icon: 'fa-regular fa-star' },
+                { id: 'influencers', label: 'Influencers', icon: 'fa-regular fa-user-plus' },
+            ]
+        }, {
+            section: 'Analytics',
+            items: [
+                { id: 'analytics', label: 'Analytics', icon: 'fa-regular fa-chart-line' },
+                { id: 'leads', label: 'Leads', icon: 'fa-regular fa-user-tie' },
+            ]
+        }, {
+            section: 'AI Tools',
+            items: [
+                { id: 'ai-assistant', label: 'AI Assistant', icon: 'fa-regular fa-wand-magic-sparkles' },
+            ]
+        }, {
+            section: 'Settings',
+            items: [
+                { id: 'settings', label: 'Settings', icon: 'fa-regular fa-gear' },
+                { id: 'reset', label: 'â†» Reset Data', icon: 'fa-regular fa-rotate-right' },
+            ]
+        }, ];
+
+        let currentPage = 'dashboard';
+
+        function renderSidebar() {
+            const nav = document.getElementById('sidebarNav');
+            if (!nav) return;
+            nav.innerHTML = '';
+            menuStructure.forEach(group => {
+                const div = document.createElement('div');
+                const label = document.createElement('span');
+                label.className = 'text-[10px] uppercase tracking-wider text-slate-500 font-semibold';
+                label.textContent = group.section;
+                div.appendChild(label);
+                const ul = document.createElement('ul');
+                ul.className = 'mt-2 space-y-1';
+                group.items.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className =
+                        `sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg ${currentPage === item.id ? 'active' : ''}`;
+                    li.dataset.page = item.id;
+                    li.innerHTML =
+                        `<i class="${item.icon} w-4"></i>${item.label}${item.badge ? `<span class="ml-auto bg-rose-500/80 text-[10px] px-2 py-0.5 rounded-full">${item.badge}</span>` : ''}`;
+                    li.addEventListener('click', () => {
+                        if (item.id === 'reset') {
+                            if (confirm('Reset all data to defaults?')) resetData();
+                            return;
+                        }
+                        navigateTo(item.id);
+                    });
+                    ul.appendChild(li);
+                });
+                div.appendChild(ul);
+                nav.appendChild(div);
+            });
+        }
+
+        function navigateTo(pageId) {
+            currentPage = pageId;
+            renderSidebar();
+            renderPage(pageId);
+        }
+
+        // ================================================================
+        // PAGE RENDERER
+        // ================================================================
+        function renderPage(pageId) {
+            const main = document.getElementById('mainContent');
+            if (!main) return;
+            main.className = 'flex-1 overflow-y-auto p-5 space-y-6 bg-slate-50/80 fade-in';
+            updateStats();
+            switch (pageId) {
+                case 'dashboard':
+                    renderDashboard(main);
+                    break;
+                case 'posts':
+                    renderPosts(main);
+                    break;
+                case 'campaigns':
+                    renderCampaigns(main);
+                    break;
+                case 'inbox':
+                    renderInbox(main);
+                    break;
+                case 'reviews':
+                    renderReviews(main);
+                    break;
+                case 'media':
+                    renderMedia(main);
+                    break;
+                case 'influencers':
+                    renderInfluencers(main);
+                    break;
+                case 'offers':
+                    renderOffers(main);
+                    break;
+                case 'analytics':
+                    renderAnalytics(main);
+                    break;
+                case 'leads':
+                    renderLeads(main);
+                    break;
+                case 'ai-assistant':
+                    renderAIAssistant(main);
+                    break;
+                case 'calendar':
+                    renderCalendar(main);
+                    break;
+                case 'planner':
+                    renderPlanner(main);
+                    break;
+                case 'settings':
+                    renderSettings(main);
+                    break;
+                default:
+                    renderDashboard(main);
+            }
+        }
+
+        // ---------- DASHBOARD ----------
+        function renderDashboard(container) {
+            const s = AppData.stats;
+            const posts = AppData.posts.slice(0, 4);
+            const campaigns = AppData.campaigns.slice(0, 3);
+            const platforms = AppData.platforms;
+
+            container.innerHTML = `
+            <section class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3">
+              ${[
+                ['Accounts', s.accounts, 'fa-hashtag', 'indigo'],
+                ['Published today', s.publishedToday, 'fa-pen-to-square', 'emerald'],
+                ['Scheduled', s.scheduled, 'fa-clock', 'amber'],
+                ['Drafts', s.drafts, 'fa-file-lines', 'rose'],
+                ['Campaigns', s.campaigns, 'fa-bullhorn', 'purple'],
+                ['Followers', formatNum(s.followers), 'fa-users', 'sky'],
+                ['New today', s.newToday, 'fa-user-plus', 'teal'],
+                ['Reach', formatNum(s.reach), 'fa-eye', 'blue'],
+                ['Impressions', formatNum(s.impressions), 'fa-chart-simple', 'violet'],
+                ['Engagement', s.engagement+'%', 'fa-heart', 'pink'],
+                ['Messages', s.messages, 'fa-message', 'orange'],
+                ['Reviews pending', s.reviewsPending, 'fa-star', 'cyan'],
+                ['Ad spend (today)','$${s.adSpendToday}','fa-credit-card','rose'],
+                ['Monthly spend','$${s.monthlyAdSpend}','fa-calendar-check','indigo'],
+                ['Leads', s.leads, 'fa-user-tie', 'emerald'],
+                ['Bookings', s.bookings, 'fa-calendar-plus', 'yellow'],
+              ].map(([label, value, icon, color]) => `
+                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm card-hover">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-${color}-50 text-${color}-600 flex items-center justify-center"><i class="fa-regular ${icon}"></i></div>
+                    <div><p class="text-[10px] text-slate-400">${label}</p><h4 class="font-bold text-sm">${value}</h4></div>
+                  </div>
+                </div>
+              `).join('')}
+            </section>
+
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <h3 class="font-bold text-sm text-slate-800"><i class="fa-regular fa-link text-indigo-500 mr-2"></i>Connected platforms</h3>
+                <div class="flex gap-2">
+                  <button onclick="openModal('connect')" class="text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus mr-1"></i>Connect</button>
+                  <button onclick="refreshPlatforms()" class="text-xs border border-slate-200 px-3 py-1.5 rounded-lg hover:bg-slate-50"><i class="fa-regular fa-rotate-right"></i> Refresh</button>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3 text-xs">
+                ${platforms.map(p => `
+                  <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg card-hover">
+                    <i class="${p.icon} ${p.color} text-lg"></i>
+                    <div><p class="font-medium text-slate-700">${p.name}</p><p class="text-slate-400">${p.handle}${p.followers ? ' Â· '+p.followers : ''}</p></div>
+                    <span class="ml-auto ${p.status === 'connected' ? 'text-emerald-600' : 'text-slate-300'}"><i class="fa-regular ${p.status === 'connected' ? 'fa-circle-check' : 'fa-circle'}"></i></span>
+                  </div>
+                `).join('')}
+              </div>
+              <div class="text-[10px] text-slate-400 mt-2 flex gap-4"><span>Last sync: 2 min ago</span><span><i class="fa-regular fa-user-gear"></i> Admin: ${AppData.user?.name || 'Yashraj'}</span></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+              <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+                <div class="flex items-center justify-between flex-wrap"><h4 class="font-bold text-sm text-slate-800"><i class="fa-regular fa-pen-to-square mr-2 text-indigo-500"></i>Recent posts</h4><div class="flex gap-2"><button onclick="openModal('post')" class="text-xs border border-slate-200 px-3 py-1 rounded-lg hover:bg-slate-50"><i class="fa-regular fa-plus"></i> Create</button><button onclick="openModal('schedule')" class="text-xs border border-slate-200 px-3 py-1 rounded-lg hover:bg-slate-50"><i class="fa-regular fa-clock"></i> Schedule</button></div></div>
+                <div class="overflow-x-auto mt-3"><table class="w-full text-xs"><thead><tr class="text-slate-400 border-b"><th class="pb-2 text-left font-medium">Post</th><th class="pb-2 text-left font-medium">Platform</th><th class="pb-2 text-left font-medium">Type</th><th class="pb-2 text-left font-medium">Status</th><th class="pb-2 text-left font-medium">Eng.</th></tr></thead>
+                  <tbody class="divide-y divide-slate-100">
+                    ${posts.length ? posts.map(p => `
+                      <tr><td class="py-2 flex items-center gap-2"><span class="w-6 h-6 bg-slate-200 rounded"></span>${p.caption}</td><td><i class="${p.platform === 'Instagram' ? 'fa-brands fa-instagram text-rose-400' : p.platform === 'Facebook' ? 'fa-brands fa-facebook text-blue-500' : 'fa-brands fa-youtube text-red-500'}"></i></td><td>${p.type}</td><td><span class="status-badge ${p.status.toLowerCase()}">${p.status}</span></td><td>${p.engagement || 'â€”'}</td></tr>
+                    `).join('') : '<tr><td colspan="5" class="py-4 text-slate-400 text-center">No posts yet</td></tr>'}
+                  </tbody></table></div>
+              </div>
+              <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+                <h4 class="font-bold text-sm text-slate-800"><i class="fa-regular fa-calendar mr-2 text-indigo-500"></i>Content calendar</h4>
+                <div class="mt-2 text-xs"><div class="flex justify-between border-b py-1"><span>Today</span><span class="font-medium">${AppData.posts.filter(p=>p.date===new Date().toISOString().slice(0,10)).length} posts</span><span class="text-emerald-600">${AppData.posts.filter(p=>p.date===new Date().toISOString().slice(0,10) && p.status==='Published').length} published</span></div><div class="flex justify-between border-b py-1"><span>Tomorrow</span><span class="font-medium">${AppData.posts.filter(p=>p.date===new Date(Date.now()+86400000).toISOString().slice(0,10)).length} posts</span><span class="text-amber-600">${AppData.posts.filter(p=>p.date===new Date(Date.now()+86400000).toISOString().slice(0,10) && p.status==='Scheduled').length} scheduled</span></div></div>
+                <button onclick="navigateTo('calendar')" class="mt-2 text-xs text-indigo-600 font-medium">View full calendar <i class="fa-regular fa-arrow-right"></i></button>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+              <div class="flex items-center justify-between"><h4 class="font-bold text-sm text-slate-800"><i class="fa-regular fa-bullhorn mr-2 text-purple-500"></i>Campaigns</h4><button onclick="openModal('campaign')" class="text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg"><i class="fa-regular fa-plus"></i> Create</button></div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3 text-xs">
+                ${campaigns.length ? campaigns.map(c => `
+                  <div class="border rounded-lg p-3"><p class="font-semibold">${c.name}</p><div class="flex justify-between text-slate-500"><span>Reach: ${c.reach}</span><span>ROI: ${c.roi}</span></div><span class="status-badge ${c.status.toLowerCase()}">${c.status}</span></div>
+                `).join('') : '<div class="col-span-3 text-slate-400 text-center py-2">No campaigns</div>'}
+              </div>
+            </div>
+
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+              <h4 class="font-bold text-sm text-slate-800"><i class="fa-regular fa-bolt mr-2 text-amber-500"></i>Quick actions</h4>
+              <div class="flex flex-wrap gap-2 mt-2">
+                ${['Create post','Schedule','Upload media','Reply comments','Reply messages','Launch campaign','Create offer','AI caption','AI hashtags','Export report','Share performance','AI auto reply'].map(label => `
+                  <button onclick="quickAction('${label}')" class="border border-slate-200 rounded-lg px-3 py-1.5 text-xs hover:bg-indigo-50 transition"><i class="fa-regular ${label === 'Create post' ? 'fa-pen-to-square' : label === 'Schedule' ? 'fa-clock' : label === 'Upload media' ? 'fa-upload' : label === 'Reply comments' ? 'fa-comment' : label === 'Reply messages' ? 'fa-message' : label === 'Launch campaign' ? 'fa-bullhorn' : label === 'Create offer' ? 'fa-ticket' : label === 'AI caption' ? 'fa-wand-magic-sparkles' : label === 'AI hashtags' ? 'fa-hashtag' : label === 'Export report' ? 'fa-file-lines' : label === 'Share performance' ? 'fa-chart-pie' : 'fa-robot'} text-indigo-500 mr-1"></i>${label}</button>
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-200 flex justify-between text-[10px] text-slate-400"><span>Â© 2026 ePay Gallery Manager Â· Social module v3.0</span><span><i class="fa-regular fa-circle-check text-emerald-500"></i> ${AppData.platforms.filter(p=>p.status==='connected').length} platforms connected</span></div>
+          `;
+        }
+
+        // ---------- POSTS ----------
+        function renderPosts(container) {
+            const posts = AppData.posts;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between flex-wrap gap-3">
+                <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-pen-to-square mr-2 text-indigo-500"></i>All Posts (${posts.length})</h2>
+                <div class="flex gap-2">
+                  <button onclick="openModal('post')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus mr-1"></i> Create</button>
+                  <button onclick="openModal('schedule')" class="text-sm border border-slate-200 px-4 py-2 rounded-lg hover:bg-slate-50"><i class="fa-regular fa-clock mr-1"></i> Schedule</button>
+                </div>
+              </div>
+              <div class="overflow-x-auto mt-4 scrollable-table"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left font-medium">Caption</th><th class="pb-3 text-left font-medium">Platform</th><th class="pb-3 text-left font-medium">Type</th><th class="pb-3 text-left font-medium">Status</th><th class="pb-3 text-left font-medium">Eng.</th><th class="pb-3 text-left font-medium">Date</th><th class="pb-3 text-left font-medium">Actions</th></tr></thead>
+                <tbody class="divide-y divide-slate-100">
+                  ${posts.length ? posts.map(p => `
+                    <tr><td class="py-3 font-medium">${p.caption}</td><td><i class="${p.platform === 'Instagram' ? 'fa-brands fa-instagram text-rose-400' : p.platform === 'Facebook' ? 'fa-brands fa-facebook text-blue-500' : 'fa-brands fa-youtube text-red-500'}"></i> ${p.platform}</td><td>${p.type}</td><td><span class="status-badge ${p.status.toLowerCase()}">${p.status}</span></td><td>${p.engagement || 'â€”'}</td><td class="text-slate-400">${p.date || 'â€”'}</td><td><button onclick="editPost(${p.id})" class="edit-btn mr-2"><i class="fa-regular fa-pen-to-square"></i></button><button onclick="deletePost(${p.id})" class="delete-btn"><i class="fa-regular fa-trash-can"></i></button></td></tr>
+                  `).join('') : '<tr><td colspan="7" class="py-8 text-center text-slate-400"><i class="fa-regular fa-pen-to-square text-2xl block mb-2"></i>No posts yet. Create your first post!</td></tr>'}
+                </tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- CAMPAIGNS ----------
+        function renderCampaigns(container) {
+            const campaigns = AppData.campaigns;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between flex-wrap gap-3">
+                <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-bullhorn mr-2 text-purple-500"></i>Campaigns (${campaigns.length})</h2>
+                <button onclick="openModal('campaign')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus mr-1"></i> Create</button>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                ${campaigns.length ? campaigns.map(c => `
+                  <div class="border rounded-xl p-4 card-hover">
+                    <div class="flex justify-between items-start"><h4 class="font-bold">${c.name}</h4><span class="status-badge ${c.status.toLowerCase()}">${c.status}</span></div>
+                    <div class="grid grid-cols-2 gap-2 mt-2 text-sm"><span>Reach: ${c.reach}</span><span>ROI: ${c.roi}</span></div>
+                    <div class="flex gap-2 mt-3"><button onclick="updateCampaignStatus(${c.id},'Paused')" class="text-xs border border-slate-200 px-3 py-1 rounded hover:bg-slate-50">Pause</button><button onclick="updateCampaignStatus(${c.id},'Active')" class="text-xs border border-slate-200 px-3 py-1 rounded hover:bg-slate-50">Resume</button><button onclick="deleteCampaign(${c.id})" class="text-xs border border-slate-200 px-3 py-1 rounded hover:bg-red-50 text-red-500">Delete</button></div>
+                  </div>
+                `).join('') : '<div class="col-span-2 text-center text-slate-400 py-8"><i class="fa-regular fa-bullhorn text-2xl block mb-2"></i>No campaigns yet</div>'}
+              </div>
+            </div>
+          `;
+        }
+
+        // ---------- INBOX ----------
+        function renderInbox(container) {
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-inbox mr-2 text-emerald-500"></i>Inbox</h2>
+              <div class="mt-4 space-y-3">
+                <div class="flex items-center justify-between border-b pb-3"><div><p class="font-medium">Sarah Johnson</p><p class="text-xs text-slate-400">"Is the new collection available?"</p></div><div><span class="status-badge" style="background:#fee2e2;color:#dc2626;">Urgent</span><button onclick="quickAction('Reply to Sarah')" class="ml-2 text-xs text-indigo-600">Reply</button></div></div>
+                <div class="flex items-center justify-between border-b pb-3"><div><p class="font-medium">Mike Chen</p><p class="text-xs text-slate-400">"Can I schedule a visit?"</p></div><div><span class="status-badge" style="background:#fef3c7;color:#d97706;">New</span><button onclick="quickAction('Reply to Mike')" class="ml-2 text-xs text-indigo-600">Reply</button></div></div>
+                <div class="flex items-center justify-between border-b pb-3"><div><p class="font-medium">Priya Sharma</p><p class="text-xs text-slate-400">"Thank you for the offer!"</p></div><div><span class="status-badge" style="background:#dcfce7;color:#16a34a;">Resolved</span><button onclick="quickAction('View conversation')" class="ml-2 text-xs text-indigo-600">View</button></div></div>
+                <div class="flex items-center justify-between"><div><p class="font-medium">David Kim</p><p class="text-xs text-slate-400">"Do you have wedding packages?"</p></div><div><span class="status-badge" style="background:#fee2e2;color:#dc2626;">Urgent</span><button onclick="quickAction('Reply to David')" class="ml-2 text-xs text-indigo-600">Reply</button></div></div>
+              </div>
+              <div class="mt-4 flex gap-2"><button onclick="quickAction('Mark all read')" class="text-xs border border-slate-200 px-3 py-1 rounded hover:bg-slate-50">Mark all read</button><button onclick="quickAction('Convert to lead')" class="text-xs border border-slate-200 px-3 py-1 rounded hover:bg-slate-50">Convert to lead</button></div>
+            </div>
+          `;
+        }
+
+        // ---------- REVIEWS ----------
+        function renderReviews(container) {
+            const r = AppData.reviews;
+            container.innerHTML = `
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+              <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4"><p class="text-[10px] text-slate-400">Average Rating</p><h3 class="text-2xl font-bold">${r.avg}</h3><span class="text-amber-400">â˜…â˜…â˜…â˜…â˜…</span></div>
+              <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4"><p class="text-[10px] text-slate-400">5 Star Reviews</p><h3 class="text-2xl font-bold">${r.total}</h3></div>
+              <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4"><p class="text-[10px] text-slate-400">Negative Reviews</p><h3 class="text-2xl font-bold text-rose-500">2</h3></div>
+              <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4"><p class="text-[10px] text-slate-400">Pending Replies</p><h3 class="text-2xl font-bold text-amber-500">${r.pending}</h3></div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h3 class="font-bold text-sm text-slate-800">Recent Reviews</h3>
+              <div class="mt-3 space-y-3 text-sm">
+                <div class="flex items-start gap-3 border-b pb-3"><div class="w-8 h-8 rounded-full bg-slate-200 shrink-0"></div><div><p class="font-medium">Ananya R. <span class="text-amber-400">â˜…â˜…â˜…â˜…â˜…</span></p><p class="text-slate-500 text-xs">"Amazing collection! Loved the new arrivals."</p><button onclick="quickAction('Reply to Ananya')" class="text-xs text-indigo-600 mt-1">Reply</button></div></div>
+                <div class="flex items-start gap-3 border-b pb-3"><div class="w-8 h-8 rounded-full bg-slate-200 shrink-0"></div><div><p class="font-medium">Rahul K. <span class="text-amber-400">â˜…â˜…â˜…â˜…â˜†</span></p><p class="text-slate-500 text-xs">"Good but shipping took longer than expected."</p><button onclick="quickAction('Reply to Rahul')" class="text-xs text-indigo-600 mt-1">Reply</button></div></div>
+                <div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-slate-200 shrink-0"></div><div><p class="font-medium">Sneha M. <span class="text-amber-400">â˜…â˜…â˜…â˜…â˜…</span></p><p class="text-slate-500 text-xs">"The frames are gorgeous! Highly recommend."</p><button onclick="quickAction('Reply to Sneha')" class="text-xs text-indigo-600 mt-1">Reply</button></div></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // ---------- MEDIA ----------
+        function renderMedia(container) {
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between flex-wrap gap-3">
+                <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-image mr-2 text-sky-500"></i>Media Library</h2>
+                <div class="flex gap-2">
+                  <button onclick="quickAction('Upload media')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-upload mr-1"></i> Upload</button>
+                  <button onclick="quickAction('Preview media')" class="text-sm border border-slate-200 px-4 py-2 rounded-lg hover:bg-slate-50"><i class="fa-regular fa-magnifying-glass mr-1"></i> Preview</button>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
+                ${[1,2,3,4,5,6,7,8].map(i => `
+                  <div class="border rounded-xl overflow-hidden card-hover">
+                    <div class="h-32 bg-slate-200 flex items-center justify-center text-slate-400"><i class="fa-regular fa-image text-3xl"></i></div>
+                    <div class="p-2 text-xs"><p class="font-medium">Asset_${i}.jpg</p><p class="text-slate-400">${(Math.random()*2+0.5).toFixed(1)} MB</p></div>
+                  </div>
+                `).join('')}
+              </div>
+              <div class="mt-3 text-xs text-slate-400">${AppData.mediaAssets || 24} assets Â· ${AppData.mediaCategories || 5} categories</div>
+            </div>
+          `;
+        }
+
+        // ---------- INFLUENCERS ----------
+        function renderInfluencers(container) {
+            const influencers = AppData.influencers;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between flex-wrap gap-3">
+                <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-user-plus mr-2 text-emerald-500"></i>Influencers (${influencers.length})</h2>
+                <button onclick="openModal('influencer')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus mr-1"></i> Add</button>
+              </div>
+              <div class="mt-4 space-y-3">
+                ${influencers.length ? influencers.map(i => `
+                  <div class="flex items-center justify-between border-b pb-3"><div><p class="font-medium">${i.name}</p><p class="text-xs text-slate-400">${i.followers} followers</p></div><div><span class="status-badge ${i.status}">${i.status}</span><button onclick="deleteInfluencer(${i.id})" class="ml-2 text-xs text-rose-500 delete-btn"><i class="fa-regular fa-trash-can"></i></button></div></div>
+                `).join('') : '<div class="text-center text-slate-400 py-4">No influencers added yet</div>'}
+              </div>
+            </div>
+          `;
+        }
+
+        // ---------- OFFERS ----------
+        function renderOffers(container) {
+            const offers = AppData.offers;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between flex-wrap gap-3">
+                <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-ticket mr-2 text-amber-500"></i>Offers (${offers.length})</h2>
+                <button onclick="openModal('offer')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus mr-1"></i> Create</button>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                ${offers.length ? offers.map(o => `
+                  <div class="border rounded-xl p-4 card-hover"><h4 class="font-bold text-lg text-indigo-600">${o.code}</h4><div class="flex gap-4 text-sm mt-1"><span>${o.clicks} clicks</span><span>${o.redemptions} redemptions</span></div><span class="status-badge ${o.status}">${o.status}</span><button onclick="deleteOffer(${o.id})" class="ml-2 text-xs text-rose-500 delete-btn"><i class="fa-regular fa-trash-can"></i></button></div>
+                `).join('') : '<div class="col-span-2 text-center text-slate-400 py-8">No offers yet</div>'}
+              </div>
+            </div>
+          `;
+        }
+
+        // ---------- ANALYTICS ----------
+        function renderAnalytics(container) {
+            const a = AppData.analytics;
+            container.innerHTML = `
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              ${[['Total Reach', formatNum(a.reach), 'fa-eye', 'blue'], ['Total Impressions', formatNum(a.impressions), 'fa-chart-simple', 'violet'], ['Engagement Rate', a.engagement+'%', 'fa-heart', 'pink'], ['Followers Growth', '+12.4%', 'fa-arrow-up', 'emerald'], ['Video Views', '3.2k', 'fa-video', 'red'], ['Story Views', '5.8k', 'fa-circle', 'amber']].map(([label,value,icon,color]) => `
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4 card-hover"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-${color}-50 text-${color}-600 flex items-center justify-center"><i class="fa-regular ${icon}"></i></div><div><p class="text-[10px] text-slate-400">${label}</p><h4 class="font-bold text-sm">${value}</h4></div></div></div>
+              `).join('')}
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h3 class="font-bold text-sm text-slate-800"><i class="fa-regular fa-chart-line mr-2 text-indigo-500"></i>Performance Overview</h3>
+              <div class="h-48 bg-slate-50 rounded-lg mt-3 flex items-center justify-center border border-dashed border-slate-200 text-slate-400 text-sm">ðŸ“Š Chart: Follower Growth & Engagement Trend</div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3 text-xs">
+                <div class="bg-slate-50 p-2 rounded"><span class="text-slate-400">Revenue from Social</span><p class="font-bold">$${a.revenue}</p></div>
+                <div class="bg-slate-50 p-2 rounded"><span class="text-slate-400">Leads Generated</span><p class="font-bold">${a.leads}</p></div>
+                <div class="bg-slate-50 p-2 rounded"><span class="text-slate-400">Conversions</span><p class="font-bold">${a.conversions}</p></div>
+                <div class="bg-slate-50 p-2 rounded"><span class="text-slate-400">Engagement Rate</span><p class="font-bold">${a.engagement}%</p></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // ---------- LEADS ----------
+        function renderLeads(container) {
+            const leads = AppData.leads;
+            container.innerHTML = `
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4"><p class="text-[10px] text-slate-400">Total Leads</p><h3 class="text-2xl font-bold">${leads.length}</h3></div>
+              <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4"><p class="text-[10px] text-slate-400">New</p><h3 class="text-2xl font-bold text-emerald-600">${leads.filter(l=>l.status==='New').length}</h3></div>
+              <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4"><p class="text-[10px] text-slate-400">Converted</p><h3 class="text-2xl font-bold text-indigo-600">${leads.filter(l=>l.status==='Converted').length}</h3></div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between"><h3 class="font-bold text-sm text-slate-800">All Leads</h3><button onclick="openModal('lead')" class="text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg"><i class="fa-regular fa-plus"></i> Add Lead</button></div>
+              <div class="mt-3 space-y-2 text-sm">
+                ${leads.length ? leads.map(l => `
+                  <div class="flex items-center justify-between border-b pb-2"><div><p class="font-medium">${l.name}</p><p class="text-xs text-slate-400">${l.phone} Â· ${l.source}</p></div><div><span class="status-badge ${l.status.toLowerCase()}">${l.status}</span><button onclick="deleteLead(${l.id})" class="ml-2 text-xs text-rose-500 delete-btn"><i class="fa-regular fa-trash-can"></i></button></div></div>
+                `).join('') : '<div class="text-center text-slate-400 py-4">No leads yet</div>'}
+              </div>
+            </div>
+          `;
+        }
+
+        // ---------- AI ASSISTANT ----------
+        function renderAIAssistant(container) {
+            container.innerHTML = `
+            <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100 p-6">
+              <h2 class="font-bold text-xl text-indigo-800"><i class="fa-regular fa-wand-magic-sparkles mr-2"></i>AI Social Assistant</h2>
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-4">
+                ${['AI Caption Generator','AI Hashtag Suggestions','AI Post Ideas','AI Best Posting Time','AI Engagement Prediction','AI Trending Topics','AI Competitor Analysis','AI Sentiment Analysis','AI Auto Reply Suggestions'].map(tool => `
+                  <button onclick="quickAction('${tool}')" class="bg-white/70 backdrop-blur border border-indigo-200 rounded-xl p-3 text-sm hover:bg-white transition text-left"><i class="fa-regular fa-wand-magic-sparkles text-indigo-500 mr-2"></i>${tool}</button>
+                `).join('')}
+              </div>
+              <div class="mt-4 p-4 bg-white/60 rounded-xl border border-indigo-200"><p class="text-sm text-slate-600"><i class="fa-regular fa-lightbulb text-amber-500 mr-2"></i>AI Suggestion: Based on current trends, post Reels between 6-8 PM for maximum engagement. Hashtag #GalleryLife is trending.</p></div>
+            </div>
+          `;
+        }
+
+        // ---------- CALENDAR ----------
+        function renderCalendar(container) {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth();
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const days = [];
+            for (let i = 0; i < firstDay; i++) days.push('');
+            for (let i = 1; i <= daysInMonth; i++) days.push(i);
+
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between flex-wrap gap-3">
+                <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-calendar mr-2 text-indigo-500"></i>Content Calendar - ${today.toLocaleString('default', { month: 'long' })} ${year}</h2>
+                <div class="flex gap-2"><button class="text-xs border border-slate-200 px-3 py-1 rounded hover:bg-slate-50">Daily</button><button class="text-xs border border-slate-200 px-3 py-1 rounded hover:bg-slate-50">Weekly</button><button class="text-xs bg-indigo-600 text-white px-3 py-1 rounded">Monthly</button></div>
+              </div>
+              <div class="grid grid-cols-7 text-center text-xs font-semibold text-slate-400 mt-4"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+              <div class="grid grid-cols-7 text-center text-sm gap-y-2 mt-2">
+                ${days.map((d) => {
+                  const isToday = d === today.getDate();
+                  const dateStr = d ? `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}` : '';
+                  const hasPost = d ? AppData.posts.some(p => p.date === dateStr) : false;
+                  return `<div class="py-1 ${isToday ? 'bg-indigo-600 text-white font-bold rounded-full w-8 h-8 flex items-center justify-center mx-auto' : d ? 'hover:bg-slate-100 rounded-full w-8 h-8 flex items-center justify-center mx-auto cursor-pointer' : 'text-slate-300'} ${hasPost && !isToday ? 'ring-2 ring-indigo-300' : ''}">${d || ''}</div>`;
+                }).join('')}
+              </div>
+              <div class="mt-4 flex gap-4 text-xs"><span class="flex items-center gap-1"><span class="w-3 h-3 bg-indigo-600 rounded-full"></span> Scheduled</span><span class="flex items-center gap-1"><span class="w-3 h-3 bg-emerald-500 rounded-full"></span> Published</span><span class="flex items-center gap-1"><span class="w-3 h-3 bg-amber-500 rounded-full"></span> Draft</span></div>
+            </div>
+          `;
+        }
+
+        // ---------- PLANNER ----------
+        function renderPlanner(container) {
+            container.innerHTML =
+                `<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5"><h2 class="font-bold text-lg text-slate-800">Content Planner</h2><p class="text-sm text-slate-500 mt-2">Plan your content strategy here. Drag & drop, batch scheduling, and more coming soon.</p></div>`;
+        }
+
+        // ---------- SETTINGS ----------
+        function renderSettings(container) {
+            container.innerHTML =
+                `<div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5"><h2 class="font-bold text-lg text-slate-800">Settings</h2><p class="text-sm text-slate-500 mt-2">Configure social media integrations, notification preferences, and team access.</p></div>`;
+        }
+
+        // ================================================================
+        // CRUD OPERATIONS
+        // ================================================================
+        function addPost(data) {
+            AppData.posts.push({
+                id: Date.now(),
+                caption: data.caption || 'Untitled',
+                platform: data.platform || 'Instagram',
+                type: data.type || 'Image',
+                status: data.status || 'Draft',
+                engagement: 0,
+                date: data.date || new Date().toISOString().slice(0, 10),
+            });
+            saveData();
+            renderPage(currentPage);
+            showToast('âœ… Post created!');
+        }
+
+        function editPost(id) {
+            const post = AppData.posts.find(p => p.id === id);
+            if (!post) return;
+            openModal('editPost', post);
+        }
+
+        function saveEditPost(id, data) {
+            const post = AppData.posts.find(p => p.id === id);
+            if (!post) return;
+            Object.assign(post, data);
+            saveData();
+            renderPage(currentPage);
+            showToast('âœ… Post updated!');
+        }
+
+        function deletePost(id) {
+            if (!confirm('Delete this post?')) return;
+            AppData.posts = AppData.posts.filter(p => p.id !== id);
+            saveData();
+            renderPage(currentPage);
+            showToast('ðŸ—‘ï¸ Post deleted');
+        }
+
+        function addCampaign(data) {
+            AppData.campaigns.push({
+                id: Date.now(),
+                name: data.name || 'New Campaign',
+                reach: data.reach || '0',
+                roi: data.roi || '0x',
+                status: data.status || 'Draft',
+            });
+            saveData();
+            renderPage(currentPage);
+            showToast('âœ… Campaign created!');
+        }
+
+        function updateCampaignStatus(id, status) {
+            const c = AppData.campaigns.find(c => c.id === id);
+            if (c) { c.status = status;
+                saveData();
+                renderPage(currentPage);
+                showToast(`Campaign ${status}`); }
+        }
+
+        function deleteCampaign(id) {
+            if (!confirm('Delete campaign?')) return;
+            AppData.campaigns = AppData.campaigns.filter(c => c.id !== id);
+            saveData();
+            renderPage(currentPage);
+            showToast('ðŸ—‘ï¸ Campaign deleted');
+        }
+
+        function addInfluencer(data) {
+            AppData.influencers.push({
+                id: Date.now(),
+                name: data.name || '@new_influencer',
+                followers: data.followers || '0',
+                status: data.status || 'pending',
+            });
+            saveData();
+            renderPage(currentPage);
+            showToast('âœ… Influencer added!');
+        }
+
+        function deleteInfluencer(id) {
+            if (!confirm('Remove influencer?')) return;
+            AppData.influencers = AppData.influencers.filter(i => i.id !== id);
+            saveData();
+            renderPage(currentPage);
+            showToast('ðŸ—‘ï¸ Influencer removed');
+        }
+
+        function addOffer(data) {
+            AppData.offers.push({
+                id: Date.now(),
+                code: data.code || 'NEW' + Math.floor(Math.random() * 1000),
+                clicks: 0,
+                redemptions: 0,
+                status: data.status || 'active',
+            });
+            saveData();
+            renderPage(currentPage);
+            showToast('âœ… Offer created!');
+        }
+
+        function deleteOffer(id) {
+            if (!confirm('Delete offer?')) return;
+            AppData.offers = AppData.offers.filter(o => o.id !== id);
+            saveData();
+            renderPage(currentPage);
+            showToast('ðŸ—‘ï¸ Offer deleted');
+        }
+
+        function addLead(data) {
+            AppData.leads.push({
+                id: Date.now(),
+                name: data.name || 'New Lead',
+                phone: data.phone || '',
+                source: data.source || 'Social',
+                status: data.status || 'New',
+                followup: data.followup || '',
+            });
+            saveData();
+            renderPage(currentPage);
+            showToast('âœ… Lead added!');
+        }
+
+        function deleteLead(id) {
+            if (!confirm('Delete lead?')) return;
+            AppData.leads = AppData.leads.filter(l => l.id !== id);
+            saveData();
+            renderPage(currentPage);
+            showToast('ðŸ—‘ï¸ Lead deleted');
+        }
+
+        function connectPlatform(data) {
+            const existing = AppData.platforms.find(p => p.name === data.name);
+            if (existing) {
+                existing.status = 'connected';
+                existing.handle = data.handle || existing.handle;
+            } else {
+                AppData.platforms.push({
+                    id: 'p' + Date.now(),
+                    name: data.name,
+                    icon: 'fa-brands fa-' + data.name.toLowerCase().replace(' ', ''),
+                    color: 'text-blue-600',
+                    handle: data.handle || '@handle',
+                    followers: '',
+                    status: 'connected'
+                });
+            }
+            saveData();
+            renderPage(currentPage);
+            showToast('âœ… Platform connected!');
+        }
+
+        // ================================================================
+        // MODAL SYSTEM
+        // ================================================================
+        function openModal(action, data = null) {
+            const overlay = document.getElementById('modalOverlay');
+            const box = document.getElementById('modalBox');
+            let html = '';
+            const closeBtn = `<button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 text-xl">&times;</button>`;
+
+            if (action === 'post') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Create Post</h3>${closeBtn}</div>
+              <label>Caption</label><input id="modalCaption" placeholder="Enter caption..." value="New post" />
+              <div class="form-row"><div><label>Platform</label><select id="modalPlatform"><option>Instagram</option><option>Facebook</option><option>YouTube</option><option>LinkedIn</option></select></div><div><label>Type</label><select id="modalType"><option>Image</option><option>Video</option><option>Reel</option><option>Carousel</option><option>Story</option></select></div></div>
+              <label>Status</label><select id="modalStatus"><option>Draft</option><option>Scheduled</option><option>Published</option></select>
+              <label>Date</label><input type="date" id="modalDate" value="${new Date().toISOString().slice(0,10)}" />
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitPost()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Create</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'editPost') {
+                const p = data;
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Edit Post</h3>${closeBtn}</div>
+              <label>Caption</label><input id="modalCaption" value="${p.caption}" />
+              <div class="form-row"><div><label>Platform</label><select id="modalPlatform"><option ${p.platform==='Instagram'?'selected':''}>Instagram</option><option ${p.platform==='Facebook'?'selected':''}>Facebook</option><option ${p.platform==='YouTube'?'selected':''}>YouTube</option><option ${p.platform==='LinkedIn'?'selected':''}>LinkedIn</option></select></div><div><label>Type</label><select id="modalType"><option ${p.type==='Image'?'selected':''}>Image</option><option ${p.type==='Video'?'selected':''}>Video</option><option ${p.type==='Reel'?'selected':''}>Reel</option><option ${p.type==='Carousel'?'selected':''}>Carousel</option></select></div></div>
+              <label>Status</label><select id="modalStatus"><option ${p.status==='Draft'?'selected':''}>Draft</option><option ${p.status==='Scheduled'?'selected':''}>Scheduled</option><option ${p.status==='Published'?'selected':''}>Published</option></select>
+              <label>Date</label><input type="date" id="modalDate" value="${p.date || ''}" />
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitEditPost(${p.id})" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Save</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'campaign') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Create Campaign</h3>${closeBtn}</div>
+              <label>Campaign Name</label><input id="modalName" placeholder="Enter name..." value="New Campaign" />
+              <div class="form-row"><div><label>Reach</label><input id="modalReach" placeholder="e.g. 10k" value="0" /></div><div><label>ROI</label><input id="modalRoi" placeholder="e.g. 3x" value="0x" /></div></div>
+              <label>Status</label><select id="modalStatus"><option>Draft</option><option>Active</option><option>Paused</option></select>
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitCampaign()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Create</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'influencer') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Add Influencer</h3>${closeBtn}</div>
+              <label>Name</label><input id="modalName" placeholder="@handle" value="@new_influencer" />
+              <div class="form-row"><div><label>Followers</label><input id="modalFollowers" placeholder="e.g. 10k" value="0" /></div><div><label>Status</label><select id="modalStatus"><option>pending</option><option>active</option><option>inactive</option></select></div></div>
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitInfluencer()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Add</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'offer') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Create Offer</h3>${closeBtn}</div>
+              <label>Offer Code</label><input id="modalCode" placeholder="e.g. SUMMER25" value="NEW${Math.floor(Math.random()*1000)}" />
+              <label>Status</label><select id="modalStatus"><option>active</option><option>paused</option><option>expired</option></select>
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitOffer()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Create</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'lead') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Add Lead</h3>${closeBtn}</div>
+              <label>Name</label><input id="modalName" placeholder="Full name" value="New Lead" />
+              <div class="form-row"><div><label>Phone</label><input id="modalPhone" placeholder="Phone number" /></div><div><label>Source</label><input id="modalSource" placeholder="Platform" value="Social" /></div></div>
+              <label>Status</label><select id="modalStatus"><option>New</option><option>Follow-up</option><option>Converted</option></select>
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitLead()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Add</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'connect') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Connect Platform</h3>${closeBtn}</div>
+              <label>Platform</label><select id="modalPlatform"><option>Facebook</option><option>Instagram</option><option>WhatsApp Business</option><option>Google Business</option><option>X</option><option>YouTube</option><option>Pinterest</option><option>Threads</option><option>LinkedIn</option></select>
+              <label>Account Handle</label><input id="modalHandle" placeholder="e.g. @gallery" value="@gallery" />
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitConnect()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Connect</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'schedule') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Schedule Post</h3>${closeBtn}</div>
+              <label>Caption</label><input id="modalCaption" placeholder="Enter caption..." value="Scheduled post" />
+              <div class="form-row"><div><label>Platform</label><select id="modalPlatform"><option>Instagram</option><option>Facebook</option><option>YouTube</option></select></div><div><label>Type</label><select id="modalType"><option>Image</option><option>Video</option><option>Reel</option></select></div></div>
+              <label>Date & Time</label><input type="datetime-local" id="modalDateTime" value="${new Date(Date.now()+86400000).toISOString().slice(0,16)}" />
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitSchedule()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Schedule</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else {
+                closeModal();
+            }
+        }
+
+        // Submit handlers
+        function submitPost() {
+            const caption = document.getElementById('modalCaption')?.value || 'Untitled';
+            const platform = document.getElementById('modalPlatform')?.value || 'Instagram';
+            const type = document.getElementById('modalType')?.value || 'Image';
+            const status = document.getElementById('modalStatus')?.value || 'Draft';
+            const date = document.getElementById('modalDate')?.value || new Date().toISOString().slice(0, 10);
+            addPost({ caption, platform, type, status, date });
+            closeModal();
+        }
+
+        function submitEditPost(id) {
+            const caption = document.getElementById('modalCaption')?.value || '';
+            const platform = document.getElementById('modalPlatform')?.value || 'Instagram';
+            const type = document.getElementById('modalType')?.value || 'Image';
+            const status = document.getElementById('modalStatus')?.value || 'Draft';
+            const date = document.getElementById('modalDate')?.value || '';
+            saveEditPost(id, { caption, platform, type, status, date });
+            closeModal();
+        }
+
+        function submitCampaign() {
+            const name = document.getElementById('modalName')?.value || 'New Campaign';
+            const reach = document.getElementById('modalReach')?.value || '0';
+            const roi = document.getElementById('modalRoi')?.value || '0x';
+            const status = document.getElementById('modalStatus')?.value || 'Draft';
+            addCampaign({ name, reach, roi, status });
+            closeModal();
+        }
+
+        function submitInfluencer() {
+            const name = document.getElementById('modalName')?.value || '@new_influencer';
+            const followers = document.getElementById('modalFollowers')?.value || '0';
+            const status = document.getElementById('modalStatus')?.value || 'pending';
+            addInfluencer({ name, followers, status });
+            closeModal();
+        }
+
+        function submitOffer() {
+            const code = document.getElementById('modalCode')?.value || 'NEW' + Math.floor(Math.random() * 1000);
+            const status = document.getElementById('modalStatus')?.value || 'active';
+            addOffer({ code, status });
+            closeModal();
+        }
+
+        function submitLead() {
+            const name = document.getElementById('modalName')?.value || 'New Lead';
+            const phone = document.getElementById('modalPhone')?.value || '';
+            const source = document.getElementById('modalSource')?.value || 'Social';
+            const status = document.getElementById('modalStatus')?.value || 'New';
+            addLead({ name, phone, source, status });
+            closeModal();
+        }
+
+        function submitConnect() {
+            const name = document.getElementById('modalPlatform')?.value || 'Facebook';
+            const handle = document.getElementById('modalHandle')?.value || '@handle';
+            connectPlatform({ name, handle });
+            closeModal();
+        }
+
+        function submitSchedule() {
+            const caption = document.getElementById('modalCaption')?.value || 'Scheduled post';
+            const platform = document.getElementById('modalPlatform')?.value || 'Instagram';
+            const type = document.getElementById('modalType')?.value || 'Image';
+            const dateTime = document.getElementById('modalDateTime')?.value || '';
+            const date = dateTime ? dateTime.slice(0, 10) : new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+            addPost({ caption, platform, type, status: 'Scheduled', date });
+            closeModal();
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        // ================================================================
+        // UTILITY FUNCTIONS
+        // ================================================================
+        function formatNum(n) {
+            if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+            if (n >= 1000) return (n / 1000).toFixed(1) + 'k';
+            return n;
+        }
+
+        let toastTimer;
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            t.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+        }
+
+        function quickAction(action) {
+            showToast('âš¡ ' + action);
+            if (action === 'Upload media') {
+                AppData.mediaAssets = (AppData.mediaAssets || 24) + 1;
+                saveData();
+                renderPage(currentPage);
+            }
+            if (action === 'Launch campaign') {
+                openModal('campaign');
+            }
+            if (action === 'Create offer') {
+                openModal('offer');
+            }
+            if (action === 'Create post') {
+                openModal('post');
+            }
+            if (action === 'Schedule') {
+                openModal('schedule');
+            }
+        }
+
+        function refreshPlatforms() {
+            showToast('ðŸ”„ Syncing...');
+            setTimeout(() => showToast('âœ… Sync complete!'), 1000);
+        }
+
+        // ================================================================
+        // SEARCH
+        // ================================================================
+        document.getElementById('globalSearch').addEventListener('input', function(e) {
+            const q = e.target.value.toLowerCase().trim();
+            if (!q) { renderPage(currentPage); return; }
+            const posts = AppData.posts.filter(p => p.caption.toLowerCase().includes(q) || p.platform.toLowerCase()
+                .includes(q));
+            const campaigns = AppData.campaigns.filter(c => c.name.toLowerCase().includes(q));
+            const total = posts.length + campaigns.length;
+            if (total > 0) {
+                showToast(`ðŸ” Found ${posts.length} posts, ${campaigns.length} campaigns`);
+            } else {
+                showToast('No results found');
+            }
+        });
+
+        // ================================================================
+        // NOTIFICATIONS
+        // ================================================================
+        document.getElementById('notifBtn').addEventListener('click', function() {
+            const badge = document.getElementById('notifBadge');
+            if (badge.textContent !== '0') {
+                badge.textContent = '0';
+                showToast('ðŸ“¬ Notifications cleared');
+            } else {
+                showToast('ðŸ”” No new notifications');
+            }
+        });
+
+        // ================================================================
+        // SWITCH ROLE
+        // ================================================================
+        document.getElementById('switchRoleBtn').addEventListener('click', function() {
+            const name = document.getElementById('userNameDisplay');
+            if (name.textContent === 'Yashraj') {
+                name.textContent = 'Admin';
+                showToast('ðŸ”„ Switched to Admin');
+            } else {
+                name.textContent = 'Yashraj';
+                showToast('ðŸ”„ Switched to Gallery Manager');
+            }
+        });
+
+        // ================================================================
+        // INIT
+        // ================================================================
+        // Load data first
+        loadData();
+
+        // Render sidebar and dashboard
+        renderSidebar();
+        renderPage('dashboard');
+
+        // Modal background click
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        console.log('ðŸš€ ePay Gallery Social Manager v3 loaded');
+        console.log('ðŸ’¾ Data stored in localStorage key:', STORAGE_KEY);
+        console.log('ðŸ“Š Data:', AppData);
+    </script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,613 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise Gallery Manager — ROLE 9 Command Center</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+body{font-family:Inter,sans-serif}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
+.tab-content{display:none}.tab-content.active{display:block}
+.sidebar-item.active{background-color:#10b981;color:#fff}.sidebar-item.active i{color:#fff}
+.kpi-card{transition:all .2s;cursor:pointer}.kpi-card:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,.1)}
+.health-bar{height:8px;border-radius:4px;background:#e2e8f0;overflow:hidden}
+.health-fill{height:100%;border-radius:4px}
+.funnel-step{position:relative}.funnel-step::after{content:'↓';position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);color:#94a3b8;font-size:12px}
+.funnel-step:last-child::after{display:none}
+.report-detail-panel{display:none}.report-detail-panel.active{display:block}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body class="bg-slate-100 text-slate-800 h-screen flex overflow-hidden">
+
+<aside class="w-64 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 border-r border-slate-800 z-20">
+<div class="h-16 flex items-center px-5 bg-slate-950 font-bold text-white gap-3 flex-shrink-0">
+<i class="fas fa-store text-indigo-500 text-xl"></i>
+<div class="leading-tight"><p class="text-sm font-bold">GALLERY MANAGER</p><p class="text-[10px] text-indigo-400 uppercase tracking-wider">ROLE 9 · Own the Gallery</p></div>
+</div>
+<nav class="flex-1 overflow-y-auto p-2 space-y-0.5 text-xs">
+<div class="px-3 py-2 text-[10px] font-bold text-slate-500 uppercase">Command</div>
+<a href="#" onclick="switchTab(event,'dashboard')" class="sidebar-item active flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-gauge-high w-4 text-emerald-400"></i> Gallery Command Center</a>
+<a href="#" onclick="switchTab(event,'health')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-heart-pulse w-4 text-rose-400"></i> Gallery Health Score</a>
+<a href="#" onclick="switchTab(event,'exceptions')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-triangle-exclamation w-4 text-amber-400"></i> Exception Center</a>
+<a href="#" onclick="switchTab(event,'approvals')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-check-double w-4 text-sky-400"></i> Approval Center</a>
+<div class="px-3 py-2 mt-3 text-[10px] font-bold text-slate-500 uppercase">Sales & Revenue</div>
+<a href="#" onclick="switchTab(event,'sales')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-chart-line w-4 text-emerald-400"></i> Sales Command</a>
+<a href="#" onclick="switchTab(event,'targets')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-bullseye w-4 text-slate-400"></i> Targets & Forecast</a>
+<a href="#" onclick="switchTab(event,'orders')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-shopping-bag w-4 text-slate-400"></i> Orders & Exceptions</a>
+<a href="#" onclick="switchTab(event,'conversion')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-filter w-4 text-slate-400"></i> Conversion Funnel</a>
+<a href="#" onclick="switchTab(event,'lost-sales')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-user-slash w-4 text-slate-400"></i> Lost Sales</a>
+<div class="px-3 py-2 mt-3 text-[10px] font-bold text-slate-500 uppercase">Inventory</div>
+<a href="#" onclick="switchTab(event,'inventory')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-boxes-stacked w-4 text-blue-400"></i> Stock Command</a>
+<a href="#" onclick="switchTab(event,'stock-aging')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-clock-rotate-left w-4 text-slate-400"></i> Aging & Slow Moving</a>
+<a href="#" onclick="switchTab(event,'transfers')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-right-left w-4 text-slate-400"></i> Transfers & Damage</a>
+<a href="#" onclick="switchTab(event,'purchase')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-cart-plus w-4 text-slate-400"></i> Purchase Requests</a>
+<div class="px-3 py-2 mt-3 text-[10px] font-bold text-slate-500 uppercase">People</div>
+<a href="#" onclick="switchTab(event,'employees')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-users w-4 text-violet-400"></i> Employee Command</a>
+<a href="#" onclick="switchTab(event,'attendance')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-user-check w-4 text-slate-400"></i> Attendance & Shifts</a>
+<a href="#" onclick="switchTab(event,'tasks')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-list-check w-4 text-slate-400"></i> Tasks & Performance</a>
+<a href="#" onclick="switchTab(event,'salary')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-file-invoice-dollar w-4 text-slate-400"></i> Payroll Recommendations</a>
+<div class="px-3 py-2 mt-3 text-[10px] font-bold text-slate-500 uppercase">Customers</div>
+<a href="#" onclick="switchTab(event,'customers')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-user-tag w-4 text-pink-400"></i> Customer 360°</a>
+<a href="#" onclick="switchTab(event,'membership')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-id-card w-4 text-slate-400"></i> Memberships</a>
+<a href="#" onclick="switchTab(event,'complaints')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-headset w-4 text-slate-400"></i> Complaints & RCA</a>
+<a href="#" onclick="switchTab(event,'followups')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-phone-volume w-4 text-slate-400"></i> Follow-ups</a>
+<div class="px-3 py-2 mt-3 text-[10px] font-bold text-slate-500 uppercase">Money</div>
+<a href="#" onclick="switchTab(event,'expenses')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-receipt w-4 text-amber-400"></i> Expenses & Budget</a>
+<a href="#" onclick="switchTab(event,'pnl')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-chart-pie w-4 text-slate-400"></i> Gallery P&L</a>
+<a href="#" onclick="switchTab(event,'cash-counter')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-cash-register w-4 text-slate-400"></i> Cash & Reconciliation</a>
+<a href="#" onclick="switchTab(event,'petty')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-wallet w-4 text-slate-400"></i> Petty Cash</a>
+<div class="px-3 py-2 mt-3 text-[10px] font-bold text-slate-500 uppercase">Operations</div>
+<a href="#" onclick="switchTab(event,'store-ops')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-door-open w-4 text-slate-400"></i> Opening / Closing</a>
+<a href="#" onclick="switchTab(event,'daily-ops')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-clipboard-check w-4 text-slate-400"></i> Daily Checklists</a>
+<a href="#" onclick="switchTab(event,'assets')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-building w-4 text-slate-400"></i> Assets & Maintenance</a>
+<a href="#" onclick="switchTab(event,'compliance')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-shield-halved w-4 text-slate-400"></i> Compliance & Audits</a>
+<a href="#" onclick="switchTab(event,'incidents')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-fire-extinguisher w-4 text-slate-400"></i> Incidents</a>
+<div class="px-3 py-2 mt-3 text-[10px] font-bold text-slate-500 uppercase">Intelligence</div>
+<a href="#" onclick="switchTab(event,'ai-coach')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-brain w-4 text-indigo-400"></i> AI Business Coach</a>
+<a href="#" onclick="switchTab(event,'forecast')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-crystal-ball w-4 text-slate-400"></i> Forecasting</a>
+<a href="#" onclick="switchTab(event,'whatif')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-flask w-4 text-slate-400"></i> What-If Simulator</a>
+<a href="#" onclick="switchTab(event,'reports-center')" class="sidebar-item flex items-center justify-between px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium text-amber-400"><span class="flex items-center gap-3"><i class="fas fa-folder-open w-4 text-amber-400"></i> Reports Center</span><span class="bg-amber-500/20 text-amber-300 text-[9px] px-1.5 py-0.5 rounded font-bold">140+</span></a>
+<a href="#" onclick="switchTab(event,'settings')" class="sidebar-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white font-medium"><i class="fas fa-sliders w-4 text-slate-400"></i> Gallery Settings</a>
+</nav>
+<div class="p-3 bg-slate-950 border-t border-slate-800 flex items-center justify-between flex-shrink-0">
+<div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-white text-xs">GM</div>
+<div class="leading-tight"><p class="text-xs font-bold text-white">Suresh Manager</p><p class="text-[10px] text-slate-400">Pune Flagship · ROLE 9</p></div></div>
+<button class="text-slate-400 hover:text-white text-xs"><i class="fas fa-sign-out-alt"></i></button>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-full overflow-hidden">
+<header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
+<div class="flex items-center gap-4">
+<h1 class="text-lg font-bold text-slate-800" id="page-title">Gallery Command Center</h1>
+<span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Operational · Health 94%</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="relative p-2 text-slate-500 hover:text-indigo-600 rounded-lg hover:bg-slate-50"><i class="far fa-bell text-lg"></i><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500"></span></button>
+<div class="h-6 w-px bg-slate-200"></div>
+<button onclick="triggerAction('Emergency Alert Triggered!')" class="bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5"><i class="fas fa-triangle-exclamation"></i> Emergency</button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-6 pb-20">
+<!-- DASHBOARD COMMAND CENTER -->
+<div id="dashboard" class="tab-content active space-y-6">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+<div class="kpi-card bg-white p-4 rounded-xl border border-slate-200 shadow-sm" onclick="switchTab(null,'sales')"><p class="text-[10px] font-medium text-slate-500 uppercase">Today's Sales</p><h3 class="text-xl font-bold mt-1">₹1,85,000</h3><p class="text-[10px] text-amber-600 font-semibold mt-1">Target ₹2,00,000 · 92.5%</p></div>
+<div class="kpi-card bg-white p-4 rounded-xl border border-slate-200 shadow-sm" onclick="switchTab(null,'targets')"><p class="text-[10px] font-medium text-slate-500 uppercase">Monthly Sales</p><h3 class="text-xl font-bold mt-1">₹42,50,000</h3><p class="text-[10px] text-emerald-600 font-semibold mt-1">Target ₹45L · 94.4%</p></div>
+<div class="kpi-card bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-[10px] font-medium text-slate-500 uppercase">Today's Customers</p><h3 class="text-xl font-bold mt-1">185</h3><p class="text-[10px] text-slate-500 font-semibold mt-1">Orders 42 · Conv 22.7%</p></div>
+<div class="kpi-card bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-[10px] font-medium text-slate-500 uppercase">Avg Order Value</p><h3 class="text-xl font-bold mt-1">₹4,405</h3><p class="text-[10px] text-emerald-600 font-semibold mt-1">↑ 8% vs avg</p></div>
+<div class="kpi-card bg-white p-4 rounded-xl border border-slate-200 shadow-sm" onclick="switchTab(null,'expenses')"><p class="text-[10px] font-medium text-slate-500 uppercase">Today's Expenses</p><h3 class="text-xl font-bold mt-1">₹18,500</h3><p class="text-[10px] text-slate-500 font-semibold mt-1">Monthly ₹4,25,000</p></div>
+<div class="kpi-card bg-white p-4 rounded-xl border border-slate-200 shadow-sm" onclick="switchTab(null,'inventory')"><p class="text-[10px] font-medium text-slate-500 uppercase">Inventory Value</p><h3 class="text-xl font-bold mt-1">₹18,75,000</h3><p class="text-[10px] text-emerald-600 font-semibold mt-1">Accuracy 99.8%</p></div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+<div class="kpi-card bg-white p-3 rounded-xl border shadow-sm" onclick="switchTab(null,'employees')"><span class="text-[10px] text-slate-400 uppercase font-bold">Employees</span><p class="text-base font-bold">26 · Present 24</p></div>
+<div class="kpi-card bg-white p-3 rounded-xl border shadow-sm" onclick="switchTab(null,'membership')"><span class="text-[10px] text-slate-400 uppercase font-bold">Active Members</span><p class="text-base font-bold">1,840</p></div>
+<div class="kpi-card bg-white p-3 rounded-xl border shadow-sm" onclick="switchTab(null,'complaints')"><span class="text-[10px] text-slate-400 uppercase font-bold">Pending Complaints</span><p class="text-base font-bold text-amber-600">5 Open</p></div>
+<div class="kpi-card bg-white p-3 rounded-xl border shadow-sm" onclick="switchTab(null,'health')"><span class="text-[10px] text-slate-400 uppercase font-bold">Gallery Health</span><p class="text-base font-bold text-indigo-600">94 / 100</p></div>
+<div class="kpi-card bg-white p-3 rounded-xl border shadow-sm" onclick="switchTab(null,'approvals')"><span class="text-[10px] text-slate-400 uppercase font-bold">Pending Approvals</span><p class="text-base font-bold text-amber-600">21 Items</p></div>
+<div class="kpi-card bg-white p-3 rounded-xl border shadow-sm" onclick="switchTab(null,'cash-counter')"><span class="text-[10px] text-slate-400 uppercase font-bold">Cash in Hand</span><p class="text-base font-bold">₹18,450</p></div>
+</div>
+<div class="bg-white rounded-xl border shadow-sm p-5">
+<h3 class="text-sm font-bold mb-4 flex items-center gap-2"><i class="fas fa-bolt text-amber-500"></i> Today's Command Center — What Requires Action</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+<div class="p-3 bg-red-50 border border-red-200 rounded-lg cursor-pointer" onclick="switchTab(null,'exceptions')"><p class="text-[10px] font-bold text-red-700">🔴 Critical</p><p class="text-2xl font-bold text-red-800 mt-1">2</p><p class="text-[10px] text-red-600">Cash & Inventory mismatch</p></div>
+<div class="p-3 bg-orange-50 border border-orange-200 rounded-lg cursor-pointer" onclick="switchTab(null,'exceptions')"><p class="text-[10px] font-bold text-orange-700">🟠 High Priority</p><p class="text-2xl font-bold text-orange-800 mt-1">6</p><p class="text-[10px] text-orange-600">Sales gap, SLA breaches</p></div>
+<div class="p-3 bg-amber-50 border border-amber-200 rounded-lg"><p class="text-[10px] font-bold text-amber-700">🟡 Warnings</p><p class="text-2xl font-bold text-amber-800 mt-1">9</p><p class="text-[10px] text-amber-600">Late staff, slow stock</p></div>
+<div class="p-3 bg-rose-50 border border-rose-200 rounded-lg cursor-pointer" onclick="switchTab(null,'sales')"><p class="text-[10px] font-bold text-rose-700">🎯 Sales Gap</p><p class="text-2xl font-bold text-rose-800 mt-1">₹15,000</p></div>
+<div class="p-3 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer" onclick="switchTab(null,'inventory')"><p class="text-[10px] font-bold text-blue-700">📦 Inventory Alerts</p><p class="text-2xl font-bold text-blue-800 mt-1">4</p></div>
+<div class="p-3 bg-violet-50 border border-violet-200 rounded-lg cursor-pointer" onclick="switchTab(null,'employees')"><p class="text-[10px] font-bold text-violet-700">👨‍💼 Staff Issues</p><p class="text-2xl font-bold text-violet-800 mt-1">2</p></div>
+<div class="p-3 bg-pink-50 border border-pink-200 rounded-lg cursor-pointer" onclick="switchTab(null,'complaints')"><p class="text-[10px] font-bold text-pink-700">🎫 Complaints</p><p class="text-2xl font-bold text-pink-800 mt-1">5</p></div>
+<div class="p-3 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer" onclick="switchTab(null,'tasks')"><p class="text-[10px] font-bold text-slate-700">⏰ Overdue Tasks</p><p class="text-2xl font-bold mt-1">7</p></div>
+<div class="p-3 bg-indigo-50 border border-indigo-200 rounded-lg cursor-pointer" onclick="switchTab(null,'approvals')"><p class="text-[10px] font-bold text-indigo-700">✅ Approvals</p><p class="text-2xl font-bold text-indigo-800 mt-1">21</p></div>
+</div></div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="bg-white p-5 rounded-xl border shadow-sm lg:col-span-2">
+<div class="flex justify-between items-center mb-4"><h3 class="text-sm font-bold">Hourly Sales Tracking</h3><span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-semibold">Auto anomaly detection ON</span></div>
+<div class="h-56"><canvas id="hourlySalesChart"></canvas></div></div>
+<div class="bg-indigo-900 text-white p-5 rounded-xl border border-indigo-800 shadow-sm flex flex-col justify-between">
+<div><div class="flex items-center justify-between mb-3"><span class="text-xs font-bold text-indigo-300 uppercase flex items-center gap-1.5"><i class="fas fa-robot"></i> AI Business Coach</span><span class="text-[10px] bg-indigo-800 text-indigo-200 px-2 py-0.5 rounded">Live</span></div>
+<h4 class="font-semibold text-sm mb-2 text-indigo-100">Top Priority Today</h4>
+<p class="text-xs text-indigo-200 mb-4">Replenish <b>SKU-1082 (OLED 55")</b> before 4 PM. Weekend traffic model predicts high demand.</p>
+<div class="bg-indigo-950 p-3 rounded-lg border border-indigo-800/50 space-y-2 text-[11px]">
+<p class="text-indigo-300"><b>Biggest Risk:</b> 2 staff late → counter capacity −20%.</p>
+<p class="text-indigo-300"><b>Best Opportunity:</b> Cross-sell memberships to 14 eligible customers.</p>
+<p class="text-indigo-300"><b>Sales Gap Action:</b> Push Soundbar bundles (margin +8.4%).</p></div></div>
+<button onclick="triggerAction('AI Allocation Applied')" class="w-full mt-4 bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs py-2 rounded-lg">Apply AI Suggestions</button>
+</div></div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-white p-5 rounded-xl border shadow-sm">
+<h3 class="text-sm font-bold mb-3 flex items-center gap-2"><i class="fas fa-door-open text-emerald-500"></i> Opening Readiness</h3>
+<div class="grid grid-cols-3 gap-2 text-xs mb-3">
+<div class="p-2 bg-emerald-50 rounded text-center"><span class="text-emerald-700 font-bold">Staff</span><br>✅</div>
+<div class="p-2 bg-emerald-50 rounded text-center"><span class="text-emerald-700 font-bold">Cash</span><br>✅</div>
+<div class="p-2 bg-emerald-50 rounded text-center"><span class="text-emerald-700 font-bold">POS</span><br>✅</div>
+<div class="p-2 bg-emerald-50 rounded text-center"><span class="text-emerald-700 font-bold">Inventory</span><br>✅</div>
+<div class="p-2 bg-emerald-50 rounded text-center"><span class="text-emerald-700 font-bold">Cleanliness</span><br>✅</div>
+<div class="p-2 bg-amber-50 rounded text-center"><span class="text-amber-700 font-bold">Equipment</span><br>⚠️</div></div>
+<div class="flex justify-between items-center"><span class="text-xs text-slate-500">READINESS</span><span class="text-lg font-bold text-emerald-600">96%</span></div></div>
+<div class="bg-white p-5 rounded-xl border shadow-sm">
+<h3 class="text-sm font-bold mb-3 flex items-center gap-2"><i class="fas fa-door-closed text-slate-500"></i> Closing Status (Pending EOD)</h3>
+<div class="space-y-1.5 text-xs">
+<div class="flex justify-between"><span>Sales Reconciliation</span><span class="text-emerald-600 font-bold">✅</span></div>
+<div class="flex justify-between"><span>Cash / UPI / Card</span><span class="text-emerald-600 font-bold">✅</span></div>
+<div class="flex justify-between"><span>Inventory Updated</span><span class="text-emerald-600 font-bold">✅</span></div>
+<div class="flex justify-between"><span>Tasks Updated</span><span class="text-amber-600 font-bold">⚠️</span></div>
+<div class="flex justify-between"><span>Gallery Secured</span><span class="text-slate-400 font-bold">⏳</span></div></div>
+<p class="text-[10px] text-slate-500 mt-3">Gallery cannot be marked Closed until mandatory controls complete.</p></div></div>
+</div>
+<!-- HEALTH -->
+<div id="health" class="tab-content space-y-6">
+<div class="bg-white rounded-xl border shadow-sm p-6">
+<div class="flex items-center justify-between mb-6"><div><h3 class="text-lg font-bold">Gallery Health Score</h3><p class="text-xs text-slate-500">Calculated from live CRM / ERP data · Pune Flagship</p></div>
+<div class="text-right"><p class="text-4xl font-bold text-indigo-600">94%</p><p class="text-xs text-emerald-600 font-semibold">Excellent</p></div></div>
+<div class="space-y-4">
+<div><div class="flex justify-between text-xs mb-1"><span class="font-medium">Sales Performance</span><span class="font-bold">95%</span></div><div class="health-bar"><div class="health-fill bg-emerald-500" style="width:95%"></div></div></div>
+<div><div class="flex justify-between text-xs mb-1"><span class="font-medium">Profitability</span><span class="font-bold">92%</span></div><div class="health-bar"><div class="health-fill bg-emerald-500" style="width:92%"></div></div></div>
+<div><div class="flex justify-between text-xs mb-1"><span class="font-medium">Employee Performance</span><span class="font-bold">94%</span></div><div class="health-bar"><div class="health-fill bg-emerald-500" style="width:94%"></div></div></div>
+<div><div class="flex justify-between text-xs mb-1"><span class="font-medium">Attendance</span><span class="font-bold">96%</span></div><div class="health-bar"><div class="health-fill bg-emerald-500" style="width:96%"></div></div></div>
+<div><div class="flex justify-between text-xs mb-1"><span class="font-medium">Inventory</span><span class="font-bold">91%</span></div><div class="health-bar"><div class="health-fill bg-emerald-400" style="width:91%"></div></div></div>
+<div><div class="flex justify-between text-xs mb-1"><span class="font-medium">Customer Experience</span><span class="font-bold">95%</span></div><div class="health-bar"><div class="health-fill bg-emerald-500" style="width:95%"></div></div></div>
+<div><div class="flex justify-between text-xs mb-1"><span class="font-medium">Expense Control</span><span class="font-bold">89%</span></div><div class="health-bar"><div class="health-fill bg-amber-400" style="width:89%"></div></div></div>
+<div><div class="flex justify-between text-xs mb-1"><span class="font-medium">Compliance</span><span class="font-bold">98%</span></div><div class="health-bar"><div class="health-fill bg-emerald-500" style="width:98%"></div></div></div>
+<div><div class="flex justify-between text-xs mb-1"><span class="font-medium">Task Execution</span><span class="font-bold">93%</span></div><div class="health-bar"><div class="health-fill bg-emerald-500" style="width:93%"></div></div></div>
+</div>
+<div class="mt-6 pt-4 border-t flex justify-between items-center"><span class="text-sm font-bold">GALLERY HEALTH</span><span class="text-2xl font-bold text-indigo-600">94%</span></div>
+</div>
+<div class="bg-slate-900 text-white rounded-xl p-6">
+<h3 class="text-sm font-bold text-amber-400 mb-4 uppercase tracking-wider">Gallery Manager Business Scorecard</h3>
+<div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-xs">
+<div><p class="text-slate-400">Sales Achievement</p><p class="text-lg font-bold">95%</p></div>
+<div><p class="text-slate-400">Profitability</p><p class="text-lg font-bold">92%</p></div>
+<div><p class="text-slate-400">Inventory</p><p class="text-lg font-bold">91%</p></div>
+<div><p class="text-slate-400">Employees</p><p class="text-lg font-bold">94%</p></div>
+<div><p class="text-slate-400">Attendance</p><p class="text-lg font-bold">96%</p></div>
+<div><p class="text-slate-400">Customer Exp.</p><p class="text-lg font-bold">95%</p></div>
+<div><p class="text-slate-400">Expense Control</p><p class="text-lg font-bold">89%</p></div>
+<div><p class="text-slate-400">Task Execution</p><p class="text-lg font-bold">93%</p></div>
+<div><p class="text-slate-400">Compliance</p><p class="text-lg font-bold">98%</p></div>
+<div><p class="text-slate-400">Complaint Res.</p><p class="text-lg font-bold">94%</p></div>
+</div></div></div>
+<!-- EXCEPTIONS -->
+<div id="exceptions" class="tab-content space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-red-50 border border-red-200 rounded-xl p-5"><h4 class="text-sm font-bold text-red-800 mb-3">🔴 CRITICAL</h4>
+<ul class="text-xs space-y-2 text-red-700">
+<li class="flex justify-between items-center p-2 bg-white/60 rounded"><span>Cash mismatch</span><button onclick="triggerAction('Investigation opened')" class="text-red-600 font-bold">Investigate</button></li>
+<li class="flex justify-between items-center p-2 bg-white/60 rounded"><span>Inventory variance ₹3,500</span><button onclick="triggerAction('Variance audit')" class="text-red-600 font-bold">Investigate</button></li>
+</ul></div>
+<div class="bg-orange-50 border border-orange-200 rounded-xl p-5"><h4 class="text-sm font-bold text-orange-800 mb-3">🟠 HIGH</h4>
+<ul class="text-xs space-y-2 text-orange-700"><li>Sales below target by ₹15,000</li><li>Complaint SLA breach (CMP-1022)</li><li>Employee shortage (Afternoon)</li><li>3 Overdue high-priority tasks</li><li>Payment pending on 3 orders</li></ul></div>
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5"><h4 class="text-sm font-bold text-amber-800 mb-3">🟡 WARNING</h4>
+<ul class="text-xs space-y-2 text-amber-700"><li>Slow-moving stock: 12 SKUs</li><li>Late employees: 2</li><li>Pending tasks: 7</li><li>Expense variance +12% utilities</li><li>Memberships expiring: 42 in 15 days</li></ul></div>
+</div>
+<div class="bg-white rounded-xl border p-5"><h3 class="text-sm font-bold mb-3">Automatic Escalation Path</h3>
+<p class="text-xs text-slate-600">Critical Incident → Gallery Manager → GM → State Director → CGO → Super Admin</p>
+<p class="text-xs text-slate-600 mt-1">Task Overdue → Employee Reminder → Gallery Manager → Assistant Manager → General Manager</p></div>
+</div>
+<!-- APPROVALS -->
+<div id="approvals" class="tab-content space-y-6">
+<div class="bg-white rounded-xl border shadow-sm p-5">
+<h3 class="text-sm font-bold mb-4">Pending Approvals Inbox (21)</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 text-xs">
+<div class="p-3 bg-slate-50 rounded-lg border"><span class="text-slate-500">Employee Requests</span><p class="font-bold text-lg">3</p></div>
+<div class="p-3 bg-slate-50 rounded-lg border"><span class="text-slate-500">Expense Requests</span><p class="font-bold text-lg">4</p></div>
+<div class="p-3 bg-slate-50 rounded-lg border"><span class="text-slate-500">Purchase Requests</span><p class="font-bold text-lg">2</p></div>
+<div class="p-3 bg-slate-50 rounded-lg border"><span class="text-slate-500">Stock / Discount / Leave</span><p class="font-bold text-lg">12</p></div></div>
+<div class="space-y-3 text-xs">
+<div class="p-4 border rounded-lg flex flex-col md:flex-row justify-between gap-3">
+<div><p class="font-bold">EXP-5005 · Maintenance · ₹6,000</p><p class="text-slate-500">Requestor: Rohit Sharma · AC repair · Documents attached</p>
+<p class="text-[10px] text-slate-400 mt-1">Visible to: GM · State Director · CGO · MD · Super Admin (full audit trail)</p></div>
+<div class="flex gap-2 items-center">
+<button onclick="triggerAction('Approved · Audit logged')" class="bg-emerald-600 text-white px-3 py-1.5 rounded font-medium">Approve</button>
+<button onclick="triggerAction('Rejected')" class="bg-red-100 text-red-700 px-3 py-1.5 rounded font-medium">Reject</button>
+<button onclick="triggerAction('Returned')" class="bg-slate-100 text-slate-700 px-3 py-1.5 rounded font-medium">Return</button>
+</div></div></div></div></div>
+<!-- Remaining modules use similar compact patterns for Sales, Inventory, Employees, Customers, P&L, etc. -->
+<div id="sales" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-3">Sales Command Center</h3><p class="text-xs text-slate-500">Today ₹1,85,000 · Target ₹2,00,000 · Achievement 92.5% · Orders 42 · Conversion 22.7%</p>
+<div class="mt-4 overflow-x-auto text-xs"><table class="w-full text-left"><thead class="bg-slate-50"><tr><th class="p-2">Employee</th><th class="p-2">Target</th><th class="p-2">Actual</th><th class="p-2">Ach%</th><th class="p-2">Drill</th></tr></thead>
+<tbody class="divide-y"><tr><td class="p-2">Amit Verma</td><td class="p-2">₹5L</td><td class="p-2">₹5.8L</td><td class="p-2 text-emerald-600 font-bold">116%</td><td class="p-2"><button onclick="triggerAction('Drill-down')" class="text-indigo-600">View</button></td></tr>
+<tr><td class="p-2">Neha Deshmukh</td><td class="p-2">₹5L</td><td class="p-2">₹4.2L</td><td class="p-2 text-amber-600 font-bold">84%</td><td class="p-2"><button onclick="triggerAction('Drill-down')" class="text-indigo-600">View</button></td></tr></tbody></table></div></div></div>
+<div id="targets" class="tab-content space-y-6"><div class="bg-white p-6 rounded-xl border"><h3 class="text-sm font-bold mb-4">Sales Target Tracking</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs"><div class="p-4 bg-slate-50 rounded"><p class="text-slate-500">MONTHLY TARGET</p><p class="text-xl font-bold">₹45L</p></div>
+<div class="p-4 bg-slate-50 rounded"><p class="text-slate-500">CURRENT</p><p class="text-xl font-bold">₹42.5L</p></div>
+<div class="p-4 bg-emerald-50 rounded"><p class="text-emerald-700">ACHIEVEMENT</p><p class="text-xl font-bold text-emerald-700">94.4%</p></div>
+<div class="p-4 bg-slate-50 rounded"><p class="text-slate-500">FORECAST</p><p class="text-xl font-bold">₹46.8L · 104%</p></div></div></div></div>
+<div id="orders" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-3">Order Exception Center</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs"><div class="p-3 bg-amber-50 border border-amber-200 rounded">Delayed <b>4</b></div><div class="p-3 bg-amber-50 border border-amber-200 rounded">Payments pending <b>3</b></div><div class="p-3 bg-amber-50 border border-amber-200 rounded">Delivery issues <b>2</b></div><div class="p-3 bg-red-50 border border-red-200 rounded">Refund pending <b>1</b></div></div></div></div>
+<div id="conversion" class="tab-content space-y-6"><div class="bg-white p-6 rounded-xl border"><h3 class="text-sm font-bold mb-6">Conversion Funnel</h3>
+<div class="flex flex-col md:flex-row items-center justify-between gap-4 text-center">
+<div class="funnel-step p-4 bg-slate-50 rounded-xl border"><p class="text-[10px] text-slate-500">Visitors</p><p class="text-2xl font-bold">815</p></div>
+<div class="funnel-step p-4 bg-blue-50 rounded-xl border"><p class="text-[10px] text-blue-600">Engaged</p><p class="text-2xl font-bold">620</p></div>
+<div class="funnel-step p-4 bg-indigo-50 rounded-xl border"><p class="text-[10px] text-indigo-600">Qualified</p><p class="text-2xl font-bold">410</p></div>
+<div class="funnel-step p-4 bg-emerald-50 rounded-xl border"><p class="text-[10px] text-emerald-600">Orders</p><p class="text-2xl font-bold">186</p></div>
+</div><p class="text-center mt-6 text-sm font-bold">Conversion: <span class="text-emerald-600">22.8%</span></p></div></div>
+<div id="lost-sales" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><div class="flex justify-between mb-4"><h3 class="text-sm font-bold">Lost Sales Intelligence</h3><span class="text-lg font-bold text-red-600">Potential: ₹4,80,000</span></div>
+<table class="w-full text-xs text-left"><thead class="bg-slate-50"><tr><th class="p-2">Customer</th><th class="p-2">Product</th><th class="p-2">Reason</th><th class="p-2">Value</th><th class="p-2">Action</th></tr></thead>
+<tbody class="divide-y"><tr><td class="p-2">Vikram Mehta</td><td class="p-2">OLED 55"</td><td class="p-2">Price objection</td><td class="p-2">₹55,000</td><td class="p-2"><button onclick="triggerAction('Follow-up')" class="text-indigo-600">Assign</button></td></tr></tbody></table></div></div>
+<div id="inventory" class="tab-content space-y-6">
+<div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+<div class="bg-white p-4 rounded-xl border"><p class="text-[10px] text-slate-500">Stock Value</p><p class="text-xl font-bold">₹18,75,000</p></div>
+<div class="bg-white p-4 rounded-xl border"><p class="text-[10px] text-slate-500">Low Stock</p><p class="text-xl font-bold text-amber-600">58</p></div>
+<div class="bg-white p-4 rounded-xl border"><p class="text-[10px] text-slate-500">Out of Stock</p><p class="text-xl font-bold text-red-600">23</p></div>
+<div class="bg-white p-4 rounded-xl border"><p class="text-[10px] text-slate-500">Damaged</p><p class="text-xl font-bold">12</p></div>
+<div class="bg-white p-4 rounded-xl border"><p class="text-[10px] text-slate-500">Accuracy</p><p class="text-xl font-bold text-emerald-600">99.8%</p></div></div>
+<div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-3">Inventory Accuracy</h3>
+<div class="grid grid-cols-4 gap-3 text-xs"><div class="p-3 bg-slate-50 rounded"><p class="text-slate-500">System</p><p class="font-bold">₹18,75,000</p></div>
+<div class="p-3 bg-slate-50 rounded"><p class="text-slate-500">Physical</p><p class="font-bold">₹18,71,500</p></div>
+<div class="p-3 bg-amber-50 rounded border border-amber-200"><p class="text-amber-700">Variance</p><p class="font-bold">₹3,500</p></div>
+<div class="p-3 bg-emerald-50 rounded"><p class="text-emerald-700">Accuracy</p><p class="font-bold">99.8%</p></div></div>
+<p class="text-[10px] text-slate-500 mt-2">Any variance creates an investigation record.</p></div></div>
+<div id="stock-aging" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-4">Stock Aging</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+<div class="p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-center"><p class="text-emerald-700 font-bold">0–30 days</p><p class="text-xl font-bold mt-1">₹6L</p><p class="text-emerald-600">🟢</p></div>
+<div class="p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-center"><p class="text-emerald-700 font-bold">31–60 days</p><p class="text-xl font-bold mt-1">₹5L</p><p class="text-emerald-600">🟢</p></div>
+<div class="p-4 bg-amber-50 border border-amber-200 rounded-lg text-center"><p class="text-amber-700 font-bold">61–90 days</p><p class="text-xl font-bold mt-1">₹4L</p><p class="text-amber-600">🟡</p></div>
+<div class="p-4 bg-red-50 border border-red-200 rounded-lg text-center"><p class="text-red-700 font-bold">90+ days</p><p class="text-xl font-bold mt-1">₹3.75L</p><p class="text-red-600">🔴</p></div></div></div></div>
+<div id="transfers" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-3">Stock Transfer & Damage</h3>
+<p class="text-xs mb-2">Product XYZ · Stock 8 · Required 25 · Shortage 17 → Transfer Request to other Gallery</p>
+<button onclick="triggerAction('Transfer submitted')" class="bg-indigo-600 text-white text-xs px-3 py-1.5 rounded">Create Transfer Request</button></div></div>
+<div id="purchase" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><div class="flex justify-between mb-3"><h3 class="text-sm font-bold">Purchase Requests</h3><button onclick="triggerAction('New PR')" class="bg-indigo-600 text-white text-xs px-3 py-1.5 rounded">+ Create</button></div>
+<div class="p-4 border rounded text-xs flex justify-between"><div><p class="font-bold">REQ-2026-004 · Display Shelf</p><p class="text-slate-500">Vendor B ₹10,500 preferred</p></div><span class="bg-amber-100 text-amber-800 px-2 py-1 rounded font-semibold">Pending HQ</span></div></div></div>
+<div id="employees" class="tab-content space-y-6">
+<div class="grid grid-cols-2 md:grid-cols-6 gap-3">
+<div class="bg-white p-3 rounded-xl border text-center"><p class="text-[10px] text-slate-500">Total</p><p class="text-xl font-bold">26</p></div>
+<div class="bg-white p-3 rounded-xl border text-center"><p class="text-[10px] text-slate-500">Present</p><p class="text-xl font-bold text-emerald-600">24</p></div>
+<div class="bg-white p-3 rounded-xl border text-center"><p class="text-[10px] text-slate-500">Absent</p><p class="text-xl font-bold text-red-600">1</p></div>
+<div class="bg-white p-3 rounded-xl border text-center"><p class="text-[10px] text-slate-500">Leave</p><p class="text-xl font-bold">2</p></div>
+<div class="bg-white p-3 rounded-xl border text-center"><p class="text-[10px] text-slate-500">Late</p><p class="text-xl font-bold text-amber-600">1</p></div>
+<div class="bg-white p-3 rounded-xl border text-center"><p class="text-[10px] text-slate-500">OT</p><p class="text-xl font-bold">3</p></div></div>
+<div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-3">Employee Performance (Evidence-based)</h3>
+<p class="text-xs">Sales 94% · Attendance 97% · Tasks 91% · CS 95% · Productivity 93% · SOP 98% → Overall 95%</p>
+<p class="text-xs text-slate-500 mt-2">Improvement workflow: Decline → Review → Discussion → Coaching → Plan → Review → Escalate if needed</p></div></div>
+<div id="attendance" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-3">Attendance & Shifts</h3>
+<div class="grid grid-cols-3 gap-3 text-xs mb-3"><div class="p-3 border rounded text-center"><p class="font-bold">Morning</p><p class="text-emerald-600">10/10</p></div>
+<div class="p-3 border rounded text-center bg-amber-50"><p class="font-bold">Afternoon</p><p class="text-amber-600">8/9 Shortage</p></div>
+<div class="p-3 border rounded text-center"><p class="font-bold">Evening</p><p class="text-emerald-600">7/7</p></div></div>
+<button onclick="triggerAction('Punches approved')" class="bg-indigo-600 text-white text-xs px-4 py-2 rounded">Approve Pending Punches</button></div></div>
+<div id="tasks" class="tab-content space-y-6"><div class="grid grid-cols-5 gap-3"><div class="bg-white p-3 rounded-xl border text-center"><p class="text-[10px] text-slate-500">Assigned</p><p class="text-xl font-bold">126</p></div>
+<div class="bg-white p-3 rounded-xl border text-center"><p class="text-[10px] text-slate-500">Done</p><p class="text-xl font-bold text-emerald-600">108</p></div>
+<div class="bg-white p-3 rounded-xl border text-center"><p class="text-[10px] text-slate-500">Progress</p><p class="text-xl font-bold">11</p></div>
+<div class="bg-white p-3 rounded-xl border text-center"><p class="text-[10px] text-slate-500">Pending</p><p class="text-xl font-bold">4</p></div>
+<div class="bg-white p-3 rounded-xl border text-center"><p class="text-[10px] text-slate-500">Overdue</p><p class="text-xl font-bold text-red-600">3</p></div></div>
+<div class="bg-white p-5 rounded-xl border"><p class="text-sm font-bold">Completion Rate: <span class="text-emerald-600">85.7%</span></p></div></div>
+<div id="salary" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-3">Payroll Recommendations (Read-Only · Finance Final)</h3>
+<div class="p-4 border rounded text-xs flex justify-between"><div><p class="font-bold">Amit Verma · Target 115%</p></div>
+<div class="flex gap-2"><button onclick="triggerAction('Incentive recommended')" class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded">Recommend Incentive</button>
+<button onclick="triggerAction('Bonus recommended')" class="bg-indigo-50 text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded">Recommend Bonus</button></div></div>
+<div class="mt-4 flex justify-end"><button onclick="triggerAction('Submitted to HQ')" class="bg-slate-900 text-white px-4 py-2 rounded text-xs">Submit to HQ Finance</button></div></div></div>
+<div id="customers" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><div class="flex justify-between mb-3"><h3 class="text-sm font-bold">Customer 360°</h3><button onclick="triggerAction('Add Customer')" class="bg-indigo-600 text-white text-xs px-3 py-1.5 rounded">+ Add</button></div>
+<table class="w-full text-xs text-left"><thead class="bg-slate-50"><tr><th class="p-2">Customer</th><th class="p-2">Tag</th><th class="p-2">Spend</th><th class="p-2">Actions</th></tr></thead>
+<tbody><tr><td class="p-2 font-medium">Vikram Mehta</td><td class="p-2"><span class="bg-purple-100 text-purple-800 text-[10px] px-2 py-0.5 rounded">VIP</span></td><td class="p-2">₹2,10,000</td>
+<td class="p-2 flex gap-2"><button onclick="triggerAction('WhatsApp')" class="text-emerald-600"><i class="fab fa-whatsapp"></i></button>
+<button onclick="triggerAction('360 Profile')" class="text-indigo-600">360°</button></td></tr></tbody></table></div></div>
+<div id="membership" class="tab-content space-y-6">
+<div class="grid grid-cols-4 gap-3"><div class="bg-white p-4 rounded-xl border"><p class="text-[10px] text-slate-500">Active</p><p class="text-xl font-bold">1,840</p></div>
+<div class="bg-white p-4 rounded-xl border"><p class="text-[10px] text-slate-500">Expiring 15d</p><p class="text-xl font-bold text-amber-600">42</p></div>
+<div class="bg-white p-4 rounded-xl border"><p class="text-[10px] text-slate-500">New</p><p class="text-xl font-bold text-emerald-600">68</p></div>
+<div class="bg-white p-4 rounded-xl border"><p class="text-[10px] text-slate-500">Renewed</p><p class="text-xl font-bold">120</p></div></div>
+<div class="bg-white p-5 rounded-xl border"><p class="text-xs text-amber-700 bg-amber-50 border border-amber-200 p-3 rounded">42 memberships expire within 15 days. Auto follow-up tasks created.</p></div></div>
+<div id="complaints" class="tab-content space-y-6">
+<div class="grid grid-cols-6 gap-3 text-xs"><div class="bg-white p-3 rounded-xl border text-center"><p class="text-slate-500">Open</p><p class="text-xl font-bold text-amber-600">5</p></div>
+<div class="bg-white p-3 rounded-xl border text-center"><p class="text-slate-500">In Progress</p><p class="text-xl font-bold">3</p></div>
+<div class="bg-white p-3 rounded-xl border text-center"><p class="text-slate-500">Escalated</p><p class="text-xl font-bold text-red-600">1</p></div>
+<div class="bg-white p-3 rounded-xl border text-center"><p class="text-slate-500">SLA Breach</p><p class="text-xl font-bold text-red-600">1</p></div>
+<div class="bg-white p-3 rounded-xl border text-center"><p class="text-slate-500">Resolved</p><p class="text-xl font-bold text-emerald-600">21</p></div>
+<div class="bg-white p-3 rounded-xl border text-center"><p class="text-slate-500">Reopened</p><p class="text-xl font-bold">2</p></div></div>
+<div class="bg-white p-5 rounded-xl border"><div class="p-4 border border-amber-200 bg-amber-50/50 rounded text-xs flex justify-between">
+<div><span class="font-bold">#CMP-1022</span> <span class="bg-red-100 text-red-700 text-[10px] px-2 py-0.5 rounded font-bold ml-1">L2 · SLA 1h15m</span>
+<p class="text-slate-600 mt-1">Installation delayed · Afternoon shift bottleneck</p></div>
+<button onclick="triggerAction('Resolved')" class="bg-emerald-600 text-white px-3 py-1.5 rounded">Mark Resolved</button></div>
+<p class="text-xs text-slate-500 mt-2">RCA: Complaint → Cause → Employee/Process → Corrective Action → Result</p></div></div>
+<div id="followups" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-3">Follow-up Queue</h3>
+<table class="w-full text-xs text-left"><thead class="bg-slate-50"><tr><th class="p-2">Customer</th><th class="p-2">Stage</th><th class="p-2">Assigned</th><th class="p-2">Due</th><th class="p-2">₹</th><th class="p-2">Action</th></tr></thead>
+<tbody><tr><td class="p-2">Vikram Mehta</td><td class="p-2">Quotation</td><td class="p-2">Amit</td><td class="p-2">14 Aug</td><td class="p-2">₹55k</td><td class="p-2"><button onclick="triggerAction('Logged')" class="text-indigo-600">Log</button></td></tr></tbody></table></div></div>
+<div id="expenses" class="tab-content space-y-6">
+<div class="grid grid-cols-4 gap-3"><div class="bg-white p-4 rounded-xl border"><p class="text-[10px] text-slate-500">Budget</p><p class="text-xl font-bold">₹50,000</p></div>
+<div class="bg-white p-4 rounded-xl border"><p class="text-[10px] text-slate-500">Remaining</p><p class="text-xl font-bold text-emerald-600">₹22,450</p></div>
+<div class="bg-white p-4 rounded-xl border"><p class="text-[10px] text-slate-500">Top Category</p><p class="text-xl font-bold">Utilities 42%</p></div>
+<div class="bg-white p-4 rounded-xl border"><p class="text-[10px] text-slate-500">Pending</p><p class="text-xl font-bold text-amber-600">₹1,800</p></div></div></div>
+<div id="pnl" class="tab-content space-y-6"><div class="bg-white p-6 rounded-xl border"><h3 class="text-sm font-bold mb-4">Gallery P&L — Business Owner View</h3>
+<div class="space-y-2 text-sm">
+<div class="flex justify-between font-bold"><span>Revenue</span><span>₹42,50,000</span></div>
+<div class="flex justify-between text-slate-600"><span>COGS</span><span>₹24,80,000</span></div>
+<div class="flex justify-between font-bold text-emerald-700 border-t pt-2"><span>Gross Profit</span><span>₹17,70,000</span></div>
+<div class="flex justify-between text-slate-600 mt-3"><span>Employee Cost</span><span>₹4,20,000</span></div>
+<div class="flex justify-between text-slate-600"><span>Rent</span><span>₹2,00,000</span></div>
+<div class="flex justify-between text-slate-600"><span>Utilities + Marketing + Other</span><span>₹1,80,000</span></div>
+<div class="flex justify-between font-bold text-indigo-700 border-t pt-2 text-base"><span>Operating Profit</span><span>₹9,70,000</span></div>
+</div></div></div>
+<div id="cash-counter" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-4">Payment Reconciliation</h3>
+<div class="grid grid-cols-5 gap-3 text-xs mb-4">
+<div class="p-3 bg-slate-50 border rounded"><span class="text-slate-400 font-bold">POS</span><p class="text-base font-bold mt-1">₹1,85,000</p></div>
+<div class="p-3 bg-slate-50 border rounded"><span class="text-slate-400 font-bold">Cash</span><p class="text-base font-bold mt-1">₹42,000</p></div>
+<div class="p-3 bg-slate-50 border rounded"><span class="text-slate-400 font-bold">UPI</span><p class="text-base font-bold mt-1">₹71,000</p></div>
+<div class="p-3 bg-slate-50 border rounded"><span class="text-slate-400 font-bold">Card</span><p class="text-base font-bold mt-1">₹52,000</p></div>
+<div class="p-3 bg-emerald-50 border border-emerald-200 rounded"><span class="text-emerald-700 font-bold">RECONCILED</span><p class="text-base font-bold text-emerald-700 mt-1">✅</p></div></div>
+<button onclick="triggerAction('Deposited')" class="bg-indigo-600 text-white text-xs px-4 py-2 rounded">Deposit to Safe</button></div></div>
+<div id="petty" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-3">Petty Cash</h3>
+<div class="grid grid-cols-5 gap-3 text-xs"><div class="p-3 bg-slate-50 rounded"><p class="text-slate-500">Opening</p><p class="font-bold">₹5,000</p></div>
+<div class="p-3 bg-slate-50 rounded"><p class="text-slate-500">Additions</p><p class="font-bold">₹2,000</p></div>
+<div class="p-3 bg-slate-50 rounded"><p class="text-slate-500">Expenses</p><p class="font-bold">₹3,200</p></div>
+<div class="p-3 bg-slate-50 rounded"><p class="text-slate-500">Closing</p><p class="font-bold">₹3,800</p></div>
+<div class="p-3 bg-emerald-50 rounded"><p class="text-emerald-700">Variance</p><p class="font-bold">₹0</p></div></div></div></div>
+<div id="store-ops" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-3">Store Status · OPEN · 10AM–9PM · Shift A · 8 Staff</h3>
+<div class="grid grid-cols-3 gap-3 text-xs"><div class="p-3 border rounded text-center"><p class="text-slate-500">Inside</p><p class="text-2xl font-bold">24</p></div>
+<div class="p-3 border rounded text-center"><p class="text-slate-500">Queue</p><p class="text-2xl font-bold text-amber-600">3</p></div>
+<div class="p-3 border rounded text-center"><p class="text-slate-500">Counters</p><p class="text-2xl font-bold text-emerald-600">3/4</p></div></div>
+<button onclick="triggerAction('Handover signed')" class="mt-3 bg-slate-800 text-white text-xs px-4 py-2 rounded">Sign & Complete Handover</button></div></div>
+<div id="daily-ops" class="tab-content space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-white p-5 rounded-xl border"><div class="flex justify-between mb-3"><h3 class="text-sm font-bold">Opening Checklist</h3><span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">Done 09:55</span></div>
+<div class="space-y-1 text-xs"><label class="flex gap-2"><input type="checkbox" checked> Gallery · Security · Staff · Cash · POS · Internet · Inventory · Display · Clean · CCTV · Safety</label></div></div>
+<div class="bg-white p-5 rounded-xl border"><div class="flex justify-between mb-3"><h3 class="text-sm font-bold">Closing Checklist</h3><span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded">Pending EOD</span></div>
+<div class="space-y-1 text-xs"><label class="flex gap-2"><input type="checkbox"> Cash count · Reconcile · Inventory lock · Complaints · Expenses · Doors · Alarm</label></div>
+<button onclick="triggerAction('Closing executed')" class="w-full mt-3 bg-slate-900 text-white text-xs py-2 rounded">Execute Closing</button></div></div></div>
+<div id="assets" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-3">Assets & Maintenance</h3>
+<div class="grid grid-cols-2 gap-3 text-xs"><div class="p-3 border rounded flex justify-between"><div><p class="font-bold">AC Main</p><p class="text-emerald-600">Working · AMC Oct 2026</p></div><button onclick="triggerAction('Ticket')" class="text-indigo-600">Raise</button></div>
+<div class="p-3 border rounded flex justify-between"><div><p class="font-bold">Printer 2</p><p class="text-amber-600">Low toner</p></div><button onclick="triggerAction('Ticket')" class="text-indigo-600">Raise</button></div></div></div></div>
+<div id="compliance" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-4">Compliance Dashboard</h3>
+<div class="space-y-2 text-xs"><div class="flex justify-between"><span>SOP</span><span class="font-bold">98%</span></div><div class="health-bar"><div class="health-fill bg-emerald-500" style="width:98%"></div></div>
+<div class="flex justify-between"><span>Cash</span><span class="font-bold">99%</span></div><div class="health-bar"><div class="health-fill bg-emerald-500" style="width:99%"></div></div>
+<div class="flex justify-between"><span>Inventory</span><span class="font-bold">96%</span></div><div class="health-bar"><div class="health-fill bg-emerald-500" style="width:96%"></div></div>
+<div class="flex justify-between"><span>Attendance</span><span class="font-bold">97%</span></div><div class="health-bar"><div class="health-fill bg-emerald-500" style="width:97%"></div></div>
+<div class="flex justify-between"><span>Safety</span><span class="font-bold">100%</span></div><div class="health-bar"><div class="health-fill bg-emerald-500" style="width:100%"></div></div>
+<div class="mt-3 pt-2 border-t flex justify-between"><span class="font-bold">OVERALL</span><span class="text-xl font-bold text-indigo-600">97%</span></div></div>
+<p class="text-xs text-slate-500 mt-3">Daily / Weekly / Monthly audit cadence configured</p></div></div>
+<div id="incidents" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-3">Incident Management</h3>
+<p class="text-xs text-slate-500 mb-3">Incident · Time · Location · People · Category · Severity · Action · Evidence · Escalation · Resolution · Root cause · Preventive</p>
+<button onclick="triggerAction('Incident form')" class="bg-red-600 text-white text-xs px-4 py-2 rounded">+ Log Incident</button></div></div>
+<div id="ai-coach" class="tab-content space-y-6"><div class="bg-white p-6 rounded-xl border">
+<div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center"><i class="fas fa-brain"></i></div>
+<div><h3 class="text-sm font-bold">AI Business Coach</h3><p class="text-xs text-slate-500">Pune Flagship insights</p></div></div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+<div class="p-4 bg-indigo-50 border border-indigo-100 rounded"><p class="font-bold text-indigo-900">Promotions</p><p class="text-slate-600">Soundbar + OLED bundles → +8.4% margin weekend</p></div>
+<div class="p-4 bg-amber-50 border border-amber-100 rounded"><p class="font-bold text-amber-900">Expense Anomaly</p><p class="text-slate-600">Utilities +14% vs baseline — check AC runtime</p></div>
+<div class="p-4 bg-emerald-50 border border-emerald-100 rounded"><p class="font-bold text-emerald-900">Staffing</p><p class="text-slate-600">Afternoon shortage — suggest OT or swap</p></div>
+<div class="p-4 bg-rose-50 border border-rose-100 rounded"><p class="font-bold text-rose-900">Membership</p><p class="text-slate-600">14 customers eligible for Gold → +₹70k</p></div>
+</div></div></div>
+<div id="forecast" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-4">Forecasting</h3>
+<div class="grid grid-cols-4 gap-3 text-xs"><div class="p-3 border rounded"><p class="text-slate-500">Sales</p><p class="font-bold text-lg">₹46.8L</p></div>
+<div class="p-3 border rounded"><p class="text-slate-500">Profit</p><p class="font-bold text-lg">₹9.5L</p></div>
+<div class="p-3 border rounded"><p class="text-slate-500">Inventory Need</p><p class="font-bold text-lg">+₹2.1L</p></div>
+<div class="p-3 border rounded"><p class="text-slate-500">Staffing</p><p class="font-bold text-lg">+1 FTE</p></div></div></div></div>
+<div id="whatif" class="tab-content space-y-6"><div class="bg-white p-5 rounded-xl border"><h3 class="text-sm font-bold mb-4">What-If Simulator</h3>
+<div class="grid grid-cols-3 gap-4 text-xs">
+<div class="p-4 border rounded"><p class="font-bold mb-2">Sales +10%</p><p class="text-slate-600">Revenue ₹46.75L · Profit +₹1.1L</p><button onclick="triggerAction('Scenario')" class="mt-2 text-indigo-600">Run</button></div>
+<div class="p-4 border rounded"><p class="font-bold mb-2">Add 2 Employees</p><p class="text-slate-600">Salary +₹60k · Capacity +15% · BE 18d</p><button onclick="triggerAction('Scenario')" class="mt-2 text-indigo-600">Run</button></div>
+<div class="p-4 border rounded"><p class="font-bold mb-2">Transfer ₹5L Stock Out</p><p class="text-slate-600">Lost sales risk ₹1.2L · Turnover ↑</p><button onclick="triggerAction('Scenario')" class="mt-2 text-indigo-600">Run</button></div>
+</div></div></div>
+<div id="reports-center" class="tab-content space-y-6">
+<div class="bg-slate-900 text-white p-5 rounded-xl"><h3 class="text-base font-bold flex items-center gap-2"><i class="fas fa-file-invoice text-amber-400"></i> Reports Engine · 140+</h3>
+<p class="text-xs text-slate-400 mt-1">Daily Management Report · Weekly Business Review · Monthly Performance · Custom Builder</p>
+<div class="flex gap-2 mt-3 text-xs">
+<button onclick="triggerAction('PDF')" class="bg-red-600/20 text-red-300 border border-red-500/30 px-2.5 py-1.5 rounded">PDF</button>
+<button onclick="triggerAction('Excel')" class="bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1.5 rounded">Excel</button>
+<button onclick="triggerAction('CSV')" class="bg-blue-600/20 text-blue-300 border border-blue-500/30 px-2.5 py-1.5 rounded">CSV</button>
+</div></div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-white p-4 rounded-xl border text-xs space-y-1"><h4 class="font-bold text-sm mb-2">Employee / Attendance</h4>
+<p class="hover:text-indigo-600 cursor-pointer" onclick="triggerAction('Report')">• Employee Master</p>
+<p class="hover:text-indigo-600 cursor-pointer" onclick="triggerAction('Report')">• Daily Attendance</p>
+<p class="hover:text-indigo-600 cursor-pointer" onclick="triggerAction('Report')">• Salary & Incentive</p></div>
+<div class="bg-white p-4 rounded-xl border text-xs space-y-1"><h4 class="font-bold text-sm mb-2">Inventory / Sales</h4>
+<p class="hover:text-indigo-600 cursor-pointer" onclick="triggerAction('Report')">• Stock & Valuation</p>
+<p class="hover:text-indigo-600 cursor-pointer" onclick="triggerAction('Report')">• Aging & Slow Moving</p>
+<p class="hover:text-indigo-600 cursor-pointer" onclick="triggerAction('Report')">• Daily / Hourly Sales</p></div>
+<div class="bg-white p-4 rounded-xl border text-xs space-y-1"><h4 class="font-bold text-sm mb-2">AI / Management</h4>
+<p class="hover:text-indigo-600 cursor-pointer" onclick="triggerAction('Report')">• AI Forecast</p>
+<p class="hover:text-indigo-600 cursor-pointer" onclick="triggerAction('Report')">• Daily Management Report</p>
+<p class="hover:text-indigo-600 cursor-pointer" onclick="triggerAction('Report')">• Custom Report Builder</p></div>
+</div></div>
+<div id="settings" class="tab-content space-y-6"><div class="bg-white p-6 rounded-xl border"><h3 class="text-sm font-bold mb-4">Gallery Settings</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+<div><label class="block text-slate-600 mb-1 font-medium">Gallery Name</label><input type="text" value="Pune Flagship Gallery" class="w-full p-2 border rounded bg-slate-50" readonly></div>
+<div><label class="block text-slate-600 mb-1 font-medium">Expense Limit</label><input type="text" value="₹5,000 / transaction" class="w-full p-2 border rounded bg-slate-50" readonly></div>
+<div><label class="block text-slate-600 mb-1 font-medium">Hierarchy</label><input type="text" value="Super Admin → MD → CGO → State Dir → GM → AM → Gallery Manager → Employees" class="w-full p-2 border rounded bg-slate-50" readonly></div>
+<div><label class="block text-slate-600 mb-1 font-medium">Role Scope</label><input type="text" value="Complete owner of one gallery's business performance" class="w-full p-2 border rounded bg-slate-50" readonly></div>
+</div></div></div>
+</div>
+<div class="h-14 bg-white border-t flex items-center px-6 gap-3 overflow-x-auto flex-shrink-0 z-10 shadow-lg">
+<span class="text-xs font-bold text-slate-400 uppercase flex items-center gap-1"><i class="fas fa-bolt text-amber-500"></i> Quick:</span>
+<button onclick="triggerAction('Add Customer')" class="px-3 py-1.5 bg-slate-100 text-xs font-medium rounded-lg">+ Customer</button>
+<button onclick="triggerAction('Add Expense')" class="px-3 py-1.5 bg-slate-100 text-xs font-medium rounded-lg">+ Expense</button>
+<button onclick="triggerAction('Create PR')" class="px-3 py-1.5 bg-slate-100 text-xs font-medium rounded-lg">Purchase Request</button>
+<button onclick="triggerAction('Approve Attendance')" class="px-3 py-1.5 bg-slate-100 text-xs font-medium rounded-lg">Approve Attendance</button>
+<button onclick="triggerAction('Log Incident')" class="px-3 py-1.5 bg-red-50 text-red-600 text-xs font-medium rounded-lg">Log Incident</button>
+<button onclick="triggerAction('Broadcast')" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 text-xs font-medium rounded-lg">Announcement</button>
+</div>
+</main>
+<div id="toast" class="fixed bottom-16 right-6 bg-slate-900 text-white text-xs px-4 py-3 rounded-lg shadow-xl hidden flex items-center gap-2 z-50">
+<i class="fas fa-circle-check text-emerald-400"></i><span id="toast-message">OK</span></div>
+<script>
+function switchTab(e,id){if(e)e.preventDefault();document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));const t=document.getElementById(id);if(t)t.classList.add('active');if(e&&e.currentTarget){e.currentTarget.classList.add('active');document.getElementById('page-title').textContent=e.currentTarget.textContent.trim()}else{document.querySelectorAll('.sidebar-item').forEach(item=>{if(item.getAttribute('onclick')&&item.getAttribute('onclick').includes("'"+id+"'")){item.classList.add('active');document.getElementById('page-title').textContent=item.textContent.trim()}})}}
+function triggerAction(m){const t=document.getElementById('toast');document.getElementById('toast-message').textContent=m;t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),3000)}
+window.addEventListener('DOMContentLoaded',()=>{const c=document.getElementById('hourlySalesChart');if(c)new Chart(c.getContext('2d'),{type:'bar',data:{labels:['10AM','11AM','12PM','1PM','2PM','3PM','4PM','5PM','6PM','7PM','8PM'],datasets:[{label:'Sales',data:[18000,24000,31000,42000,29000,41000,58000,72000,65000,48000,22000],backgroundColor:'#10b981',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:10}}},x:{ticks:{font:{size:10}},grid:{display:false}}}}})});
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

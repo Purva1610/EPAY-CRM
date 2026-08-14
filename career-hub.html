@@ -1,0 +1,825 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ePay International Career Hub — Work Abroad with Complete Support</title>
+<meta name="description" content="From finding the right job abroad to visa, finance, flight, accommodation and workplace joining — ePay Gallery supports your complete international employment journey." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+
+
+
+:root {
+  --indigo: #4f46e5; --indigo-d: #3730a3; --indigo-l: #818cf8;
+  --violet: #7c3aed; --emerald: #10b981; --amber: #f59e0b;
+  --navy: #0f172a; --text: #0f172a; --muted: #64748b;
+  --bg: #f8fafc; --white: #fff; --radius: 18px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+.container{width:100%;max-width:1140px;margin:0 auto;padding:0 24px}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.88);backdrop-filter:blur(16px);border-bottom:1px solid transparent;transition:.3s}
+.nav.scrolled{border-bottom-color:#e2e8f0;box-shadow:0 4px 24px rgba(15,23,42,.06)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:70px}
+.logo{font-weight:800;font-size:1.15rem;display:flex;align-items:center;gap:8px}
+.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--indigo-l),var(--indigo-d));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.8rem}
+.logo span{background:linear-gradient(135deg,var(--indigo),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:20px;list-style:none;font-size:.86rem;font-weight:500;color:var(--muted)}
+.nav-links a:hover{color:var(--indigo)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;font-size:.9rem;font-weight:600;border-radius:100px;border:none;cursor:pointer;transition:.35s cubic-bezier(.34,1.56,.64,1);font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,var(--indigo-l),var(--indigo-d));color:#fff;box-shadow:0 4px 18px rgba(79,70,229,.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(79,70,229,.45)}
+.btn-ghost{background:transparent;border:1.5px solid #cbd5e1;color:var(--text)}
+.btn-ghost:hover{border-color:var(--indigo);color:var(--indigo);background:#eef2ff}
+.btn-dark{background:var(--navy);color:#fff}
+.btn-lg{padding:15px 28px;font-size:1rem}
+.btn-sm{padding:8px 16px;font-size:.82rem}
+.mobile-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.mobile-toggle span{display:block;width:22px;height:2.5px;background:var(--text);margin:5px 0;border-radius:2px}
+
+.hero{padding:130px 0 70px;background:linear-gradient(165deg,#eef2ff 0%,#f5f3ff 40%,#fff 75%);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-15%;right:-8%;width:480px;height:480px;background:radial-gradient(circle,rgba(79,70,229,.14),transparent 70%);border-radius:50%;pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:#e0e7ff;color:var(--indigo-d);font-size:.78rem;font-weight:600;padding:6px 14px;border-radius:100px;margin-bottom:18px;border:1px solid #c7d2fe}
+.hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(2.1rem,4.5vw,3.3rem);font-weight:800;line-height:1.12;letter-spacing:-.03em;margin-bottom:16px}
+.hero h1 .em{background:linear-gradient(135deg,var(--indigo),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:1.05rem;color:var(--muted);max-width:520px;margin-bottom:28px;line-height:1.7}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:28px}
+.trust-strip{display:flex;flex-wrap:wrap;gap:8px}
+.trust-pill{font-size:.78rem;font-weight:500;background:rgba(255,255,255,.95);border:1px solid #e2e8f0;padding:7px 12px;border-radius:100px}
+.hero-card{background:#fff;border-radius:20px;border:1px solid #e2e8f0;box-shadow:0 20px 50px rgba(79,70,229,.12);padding:22px}
+.hero-card img{border-radius:14px;height:170px;width:100%;object-fit:cover;margin-bottom:14px}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.metric{background:#eef2ff;border-radius:10px;padding:10px 12px}
+.metric .l{font-size:.7rem;color:var(--muted);text-transform:uppercase}
+.metric .v{font-size:1.15rem;font-weight:800;color:var(--indigo-d)}
+
+section{padding:80px 0}
+.section-label{display:inline-block;font-size:.72rem;font-weight:700;color:var(--indigo);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;background:#e0e7ff;padding:5px 12px;border-radius:100px}
+.section-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.55rem,3vw,2.25rem);font-weight:800;letter-spacing:-.02em;margin-bottom:10px;line-height:1.2}
+.section-sub{font-size:1.02rem;color:var(--muted);max-width:560px;margin-bottom:36px;line-height:1.65}
+.text-center{text-align:center}
+.text-center .section-sub{margin-left:auto;margin-right:auto}
+.bg-soft{background:#f8fafc}
+.bg-indigo{background:linear-gradient(180deg,#eef2ff,#fff)}
+
+.journey-flow{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;align-items:center;padding:12px 0}
+.jf-step{background:#eef2ff;border:1px solid #c7d2fe;border-radius:12px;padding:10px 14px;font-size:.8rem;font-weight:600;color:var(--indigo-d);text-align:center;min-width:95px}
+.jf-arrow{color:var(--indigo);font-size:.9rem}
+
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.role-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:var(--radius);padding:24px 20px;cursor:pointer;transition:.3s}
+.role-card:hover,.role-card.selected{border-color:var(--indigo);box-shadow:0 12px 32px rgba(79,70,229,.14);transform:translateY(-4px)}
+.role-card .icon{font-size:1.8rem;margin-bottom:10px}
+.role-card h3{font-size:1.05rem;font-weight:700;margin-bottom:6px}
+.role-card p{font-size:.88rem;color:var(--muted);margin-bottom:12px}
+.role-card .link{font-size:.85rem;font-weight:600;color:var(--indigo)}
+
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.svc-card{background:#fff;border:1px solid #e2e8f0;border-radius:var(--radius);padding:22px;transition:.3s}
+.svc-card:hover{border-color:var(--indigo-l);box-shadow:0 10px 28px rgba(79,70,229,.1);transform:translateY(-3px)}
+.svc-card .icon{font-size:1.5rem;margin-bottom:10px}
+.svc-card h3{font-size:1rem;font-weight:700;margin-bottom:6px}
+.svc-card p{font-size:.88rem;color:var(--muted)}
+
+.dest-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.dest-card{border-radius:16px;min-height:140px;padding:16px;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;background-size:cover;background-position:center;cursor:pointer;transition:.3s;position:relative;overflow:hidden}
+.dest-card::before{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,.78),rgba(15,23,42,.2))}
+.dest-card:hover{transform:scale(1.03)}
+.dest-card h4,.dest-card span{position:relative;z-index:1}
+.dest-card h4{font-size:1.05rem;font-weight:700}
+.dest-card span{font-size:.78rem;opacity:.9}
+
+.check-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 18px}
+.check-list li{font-size:.92rem;display:flex;align-items:center;gap:8px}
+.check-list li::before{content:'✓';color:var(--emerald);font-weight:800}
+
+.progress-wrap{background:#e2e8f0;border-radius:100px;height:12px;overflow:hidden;margin:12px 0}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--indigo-l),var(--indigo-d));border-radius:100px;transition:width .8s ease}
+
+.score-box{background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:20px;padding:28px;color:#fff}
+.score-box .score{font-size:3rem;font-weight:800;color:var(--indigo-l)}
+.score-table{width:100%;margin-top:14px;font-size:.88rem}
+.score-table td{padding:7px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.score-table td:last-child{text-align:right}
+
+.pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.pkg-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:20px;padding:28px 24px;position:relative;transition:.3s}
+.pkg-card.featured{border-color:var(--indigo);box-shadow:0 16px 40px rgba(79,70,229,.15)}
+.pkg-card .tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--indigo);color:#fff;font-size:.72rem;font-weight:700;padding:4px 14px;border-radius:100px}
+.pkg-card h3{font-size:1.15rem;font-weight:800;margin-bottom:6px}
+.pkg-card .tier{font-size:.85rem;color:var(--muted);margin-bottom:16px}
+.pkg-card ul{list-style:none;margin-bottom:20px}
+.pkg-card ul li{font-size:.88rem;padding:5px 0;display:flex;gap:8px}
+.pkg-card ul li::before{content:'✓';color:var(--emerald);font-weight:700}
+
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.why-card{background:#f8fafc;border-radius:14px;padding:20px;border:1px solid #e2e8f0}
+.why-card h4{font-size:.98rem;font-weight:700;margin:8px 0 4px}
+.why-card p{font-size:.85rem;color:var(--muted)}
+
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.rev-card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:22px}
+.rev-card .stars{color:var(--amber);margin-bottom:8px;letter-spacing:2px}
+.rev-card p{font-size:.92rem;color:var(--muted);margin-bottom:12px;font-style:italic}
+.rev-card .who{font-size:.85rem;font-weight:600}
+
+.faq-item{border-bottom:1px solid #e2e8f0}
+.faq-q{width:100%;text-align:left;background:none;border:none;padding:16px 0;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;gap:12px}
+.faq-q:hover{color:var(--indigo)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;font-size:.92rem;color:var(--muted)}
+.faq-item.open .faq-a{max-height:180px;padding-bottom:14px}
+.faq-item.open .chev{transform:rotate(180deg)}
+.chev{transition:.3s;color:var(--indigo)}
+
+.cta-band{background:linear-gradient(135deg,#312e81,#4f46e5);border-radius:24px;padding:48px 40px;text-align:center;color:#fff}
+.cta-band h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:10px}
+.cta-band p{opacity:.9;margin-bottom:22px;max-width:500px;margin-left:auto;margin-right:auto}
+
+.job-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:18px;transition:.25s;cursor:pointer}
+.job-card:hover{border-color:var(--indigo-l);box-shadow:0 8px 24px rgba(79,70,229,.1)}
+.job-card h4{font-size:1rem;font-weight:700;margin-bottom:4px}
+.job-card .meta{font-size:.8rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.job-card .tag{font-size:.72rem;background:#eef2ff;color:var(--indigo-d);padding:2px 8px;border-radius:100px;font-weight:600}
+
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:20px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;padding:28px;position:relative}
+.modal h2{font-size:1.3rem;margin-bottom:6px}
+.modal .sub{font-size:.9rem;color:var(--muted);margin-bottom:18px}
+.modal-x{position:absolute;top:14px;right:14px;border:none;background:#f1f5f9;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.1rem}
+.form-g{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-g .full{grid-column:1/-1}
+.form-g label{font-size:.78rem;font-weight:600;color:var(--muted);display:block;margin-bottom:4px}
+.form-g input,.form-g select,.form-g textarea{width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:.9rem;font-family:inherit;outline:none}
+.form-g input:focus,.form-g select:focus{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(79,70,229,.12)}
+
+footer{background:var(--navy);color:#94a3b8;padding:40px 0 24px;font-size:.85rem;text-align:center}
+footer .logo{justify-content:center;margin-bottom:12px;color:#fff}
+footer .logo span{-webkit-text-fill-color:unset;color:var(--indigo-l);background:none}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+
+@media(max-width:900px){
+  .hero-grid,.role-grid,.svc-grid,.pkg-grid,.why-grid,.rev-grid,.dest-grid{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:70px;left:0;right:0;background:#fff;padding:16px 24px;border-bottom:1px solid #e2e8f0}
+  .mobile-toggle{display:block}
+  .check-list{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .hero-grid,.role-grid,.svc-grid,.pkg-grid,.why-grid,.rev-grid,.dest-grid,.form-g{grid-template-columns:1fr}
+  .hero{padding:110px 0 50px}
+}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo"><div class="logo-mark">eP</div> ePay <span>Careers</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#journey">Journey</a></li>
+      <li><a href="#roles">Roles</a></li>
+      <li><a href="#countries">Countries</a></li>
+      <li><a href="#jobs">Jobs</a></li>
+      <li><a href="#packages">Packages</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="btn btn-ghost btn-sm" onclick="openModal('gallery')">Find Gallery</button>
+      <button class="btn btn-primary btn-sm" onclick="openModal('career')">Start Career Journey</button>
+      <button class="mobile-toggle" id="mobileToggle"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-badge">🌍 International Career Hub · Gallery-Assisted</div>
+      <h1>Not Just a Job.<br/><span class="em">A Complete Career Journey Abroad.</span></h1>
+      <p class="hero-sub">From finding the right role to work permit, visa, finance, flight, accommodation, airport pickup and workplace joining — ePay Gallery supports your full international employment path.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-primary btn-lg" onclick="openModal('career')">Start My Career Journey</button>
+        <button class="btn btn-ghost btn-lg" onclick="openModal('gallery')">Visit Nearest Gallery</button>
+      </div>
+      <div class="trust-strip">
+        <span class="trust-pill">🔎 Job Matching</span>
+        <span class="trust-pill">📄 Documentation</span>
+        <span class="trust-pill">🛂 Work Permit / Visa</span>
+        <span class="trust-pill">✈️ Relocation Support</span>
+        <span class="trust-pill">🏢 Gallery Guidance</span>
+      </div>
+    </div>
+    <div class="hero-card reveal">
+      <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80" alt="International career" />
+      <div class="metrics">
+        <div class="metric"><div class="l">Countries</div><div class="v">25+</div></div>
+        <div class="metric"><div class="l">Open Roles</div><div class="v">1,200+</div></div>
+        <div class="metric"><div class="l">Placed*</div><div class="v">4.8K+</div></div>
+        <div class="metric"><div class="l">Galleries</div><div class="v">120+</div></div>
+      </div>
+      <p style="font-size:.7rem;color:var(--muted);margin-top:10px">*Illustrative figures. Placement depends on employer decisions and eligibility.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CANDIDATE JOURNEY -->
+<section id="journey" class="bg-soft">
+  <div class="container text-center">
+    <span class="section-label">Candidate Journey</span>
+    <h2 class="section-title">One Path. From Offer to First Day at Work.</h2>
+    <p class="section-sub">Instead of selling only a job, ePay helps organise a complete international employment journey.</p>
+    <div class="journey-flow reveal">
+      <div class="jf-step">Find Job</div><span class="jf-arrow">↓</span>
+      <div class="jf-step">Eligibility</div><span class="jf-arrow">↓</span>
+      <div class="jf-step">Employer Matching</div><span class="jf-arrow">↓</span>
+      <div class="jf-step">Interview</div><span class="jf-arrow">↓</span>
+      <div class="jf-step">Offer Letter</div><span class="jf-arrow">↓</span>
+      <div class="jf-step">Work Permit / Visa</div><span class="jf-arrow">↓</span>
+      <div class="jf-step">Finance</div><span class="jf-arrow">↓</span>
+      <div class="jf-step">Flight</div><span class="jf-arrow">↓</span>
+      <div class="jf-step">Accommodation</div><span class="jf-arrow">↓</span>
+      <div class="jf-step">Airport Pickup</div><span class="jf-arrow">↓</span>
+      <div class="jf-step">Local Registration</div><span class="jf-arrow">↓</span>
+      <div class="jf-step">Workplace Joining</div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLE SELECTOR -->
+<section id="roles">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Your Path</span>
+      <h2 class="section-title">What Kind of Career Are You Seeking?</h2>
+      <p class="section-sub">Tell us your direction — we’ll align roles, countries and support steps.</p>
+    </div>
+    <div class="role-grid">
+      <div class="role-card" data-role="Skilled Trade" onclick="selectRole(this)"><div class="icon">🔧</div><h3>Skilled Trades</h3><p>Technicians, welders, electricians, drivers and certified trades.</p><span class="link">Explore roles →</span></div>
+      <div class="role-card" data-role="Healthcare" onclick="selectRole(this)"><div class="icon">🏥</div><h3>Healthcare</h3><p>Nurses, caregivers, lab staff and allied health roles.</p><span class="link">Explore roles →</span></div>
+      <div class="role-card" data-role="Hospitality" onclick="selectRole(this)"><div class="icon">🏨</div><h3>Hospitality</h3><p>Hotels, restaurants, kitchen and front-office careers.</p><span class="link">Explore roles →</span></div>
+      <div class="role-card" data-role="IT" onclick="selectRole(this)"><div class="icon">💻</div><h3>IT &amp; Digital</h3><p>Developers, support, QA and digital operations roles.</p><span class="link">Explore roles →</span></div>
+      <div class="role-card" data-role="Logistics" onclick="selectRole(this)"><div class="icon">📦</div><h3>Logistics &amp; Warehouse</h3><p>Warehouse, supply chain and logistics operations.</p><span class="link">Explore roles →</span></div>
+      <div class="role-card" data-role="Other" onclick="selectRole(this)"><div class="icon">🌐</div><h3>Other / Not Sure</h3><p>Talk to a Gallery consultant about your profile.</p><span class="link">Get guidance →</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE HELP WITH -->
+<section class="bg-indigo" id="support-steps">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Complete Support</span>
+      <h2 class="section-title">Employment Journey Support</h2>
+      <p class="section-sub">Assistance across the steps that usually stop candidates mid-way.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card reveal"><div class="icon">🔎</div><h3>Job Search &amp; Matching</h3><p>Profile review and alignment with suitable overseas opportunities.</p></div>
+      <div class="svc-card reveal"><div class="icon">✅</div><h3>Eligibility Assessment</h3><p>Understand requirements for role, country and permit type.</p></div>
+      <div class="svc-card reveal"><div class="icon">🤝</div><h3>Employer Matching</h3><p>Connect with openings through ePay’s partner network where available.</p></div>
+      <div class="svc-card reveal"><div class="icon">🎤</div><h3>Interview Preparation</h3><p>Guidance on interviews, documentation and employer expectations.</p></div>
+      <div class="svc-card reveal"><div class="icon">📨</div><h3>Offer Letter Support</h3><p>Help reviewing offer terms and next formal steps.</p></div>
+      <div class="svc-card reveal"><div class="icon">🛂</div><h3>Work Permit / Visa</h3><p>Document checklist, application coordination and tracking assistance.</p></div>
+      <div class="svc-card reveal"><div class="icon">💰</div><h3>Finance Guidance</h3><p>Understand typical costs and eligible finance partner options.</p></div>
+      <div class="svc-card reveal"><div class="icon">✈️</div><h3>Flight &amp; Relocation</h3><p>Travel booking assistance, stay and airport pickup coordination.</p></div>
+      <div class="svc-card reveal"><div class="icon">🏢</div><h3>Joining Support</h3><p>Local registration pointers and workplace joining checklist.</p></div>
+    </div>
+    <p style="font-size:.78rem;color:var(--muted);margin-top:20px;text-align:center;max-width:640px;margin-left:auto;margin-right:auto">Job offers, work permits and visas are decided by employers and government authorities. ePay provides assistance and coordination and does not guarantee employment or visa approval.</p>
+  </div>
+</section>
+
+<!-- COUNTRIES -->
+<section id="countries">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Destinations</span>
+      <h2 class="section-title">Where Do You Want to Work?</h2>
+      <p class="section-sub">Popular employment destinations candidates explore with ePay support.</p>
+    </div>
+    <div class="dest-grid reveal">
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80')" onclick="pickCountry('UAE')"><h4>🇦🇪 UAE</h4><span>Hospitality · Trade · Logistics</span></div>
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600&q=80')" onclick="pickCountry('UK')"><h4>🇬🇧 UK</h4><span>Healthcare · Care · Hospitality</span></div>
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=600&q=80')" onclick="pickCountry('Germany')"><h4>🇩🇪 Germany</h4><span>Skilled trades · Nursing · IT</span></div>
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1517935706615-2717063c2225?w=600&q=80')" onclick="pickCountry('Canada')"><h4>🇨🇦 Canada</h4><span>Healthcare · Trade · Logistics</span></div>
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1523482580745-af32f7f3f9ee?w=600&q=80')" onclick="pickCountry('Australia')"><h4>🇦🇺 Australia</h4><span>Trade · Healthcare · Hospitality</span></div>
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=600&q=80')" onclick="pickCountry('Singapore')"><h4>🇸🇬 Singapore</h4><span>Hospitality · Marine · Services</span></div>
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?w=600&q=80')" onclick="pickCountry('Poland')"><h4>🇵🇱 Poland</h4><span>Manufacturing · Logistics</span></div>
+      <div class="dest-card" style="background-image:url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&q=80')" onclick="pickCountry('Japan')"><h4>🇯🇵 Japan</h4><span>Care · Manufacturing · Hospitality</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SAMPLE JOBS -->
+<section id="jobs" class="bg-soft">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Opportunities</span>
+      <h2 class="section-title">Sample Open Roles</h2>
+      <p class="section-sub">Illustrative listings — real openings depend on partners and eligibility at the time of application.</p>
+    </div>
+    <div class="svc-grid" id="jobList">
+      <div class="job-card" onclick="openModal('career')"><span class="tag">UAE</span><h4>Hotel Front Office Executive</h4><div class="meta"><span>📍 Dubai</span><span>💼 Hospitality</span><span>🕐 Full-time</span></div><p style="font-size:.85rem;color:var(--muted)">Experience preferred · Employer interview · Visa process after offer</p></div>
+      <div class="job-card" onclick="openModal('career')"><span class="tag">Germany</span><h4>Certified Electrician</h4><div class="meta"><span>📍 Multiple cities</span><span>💼 Skilled Trade</span><span>🕐 Full-time</span></div><p style="font-size:.85rem;color:var(--muted)">Qualification recognition may apply · Language pathway guidance</p></div>
+      <div class="job-card" onclick="openModal('career')"><span class="tag">UK</span><h4>Healthcare Assistant</h4><div class="meta"><span>📍 England</span><span>💼 Healthcare</span><span>🕐 Full-time</span></div><p style="font-size:.85rem;color:var(--muted)">Care experience valued · Sponsor-linked roles where available</p></div>
+      <div class="job-card" onclick="openModal('career')"><span class="tag">Canada</span><h4>Warehouse Associate</h4><div class="meta"><span>📍 Ontario</span><span>💼 Logistics</span><span>🕐 Full-time</span></div><p style="font-size:.85rem;color:var(--muted)">Physical role · Employer screening · Permit pathway varies</p></div>
+      <div class="job-card" onclick="openModal('career')"><span class="tag">Singapore</span><h4>F&amp;B Service Crew</h4><div class="meta"><span>📍 Singapore</span><span>💼 Hospitality</span><span>🕐 Full-time</span></div><p style="font-size:.85rem;color:var(--muted)">Shift-based · Employer interview · Work pass process</p></div>
+      <div class="job-card" onclick="openModal('career')"><span class="tag">Australia</span><h4>Aged Care Worker</h4><div class="meta"><span>📍 Multiple</span><span>💼 Healthcare</span><span>🕐 Full-time</span></div><p style="font-size:.85rem;color:var(--muted)">Certification pathways · Employer assessment required</p></div>
+    </div>
+    <div style="text-align:center;margin-top:24px">
+      <button class="btn btn-primary" onclick="openModal('career')">Get Matched to Roles</button>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONALIZED PATH -->
+<section id="path">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center">
+      <div class="reveal">
+        <span class="section-label">Your Path</span>
+        <h2 class="section-title">A Journey Built Around You</h2>
+        <p class="section-sub">Example: Priya is exploring nursing roles in Germany. ePay helps structure the full path.</p>
+        <ul class="check-list">
+          <li>Profile &amp; eligibility review</li>
+          <li>Role shortlist</li>
+          <li>Employer matching</li>
+          <li>Interview prep</li>
+          <li>Offer understanding</li>
+          <li>Work permit / visa docs</li>
+          <li>Finance guidance</li>
+          <li>Flight &amp; stay</li>
+          <li>Airport pickup</li>
+          <li>Local registration tips</li>
+          <li>Joining checklist</li>
+          <li>Gallery follow-up</li>
+        </ul>
+        <div style="margin-top:18px">
+          <div style="display:flex;justify-content:space-between;font-size:.85rem;font-weight:600"><span>Journey Progress</span><span id="careerPct">45%</span></div>
+          <div class="progress-wrap"><div class="progress-fill" id="careerBar" style="width:45%"></div></div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:16px" onclick="openModal('career')">Build My Career Path</button>
+      </div>
+      <div class="score-box reveal">
+        <div style="font-size:.85rem;opacity:.8">Career Readiness</div>
+        <div class="score" id="careerScore">62<span style="font-size:1.2rem;opacity:.7"> / 100</span></div>
+        <table class="score-table">
+          <tr><td>Profile completeness</td><td>🟡 Partial</td></tr>
+          <tr><td>Target country chosen</td><td>⏳ Pending</td></tr>
+          <tr><td>Documents ready</td><td>🟡 Partial</td></tr>
+          <tr><td>Language / skills</td><td>⏳ Assess</td></tr>
+          <tr><td>Interview prep</td><td>⏳ Pending</td></tr>
+          <tr><td>Finance plan</td><td>⏳ Pending</td></tr>
+          <tr><td>Visa readiness</td><td>⏳ Pending</td></tr>
+        </table>
+        <button class="btn btn-primary" style="margin-top:16px;width:100%" onclick="checkCareerReady()">Check My Readiness</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" class="bg-indigo">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">ePay Gallery</span>
+      <h2 class="section-title">Get Guidance at Your Nearest Gallery</h2>
+      <p class="section-sub">Start online, then meet a consultant who can walk through eligibility, documents and next steps with you.</p>
+    </div>
+    <div class="why-grid reveal">
+      <div class="why-card"><div style="font-size:1.4rem">👤</div><h4>Career consultation</h4><p>Discuss your background and target countries.</p></div>
+      <div class="why-card"><div style="font-size:1.4rem">📄</div><h4>Document review</h4><p>Organise certificates, passport and forms.</p></div>
+      <div class="why-card"><div style="font-size:1.4rem">🎯</div><h4>Role shortlisting</h4><p>Align openings with your skills and goals.</p></div>
+      <div class="why-card"><div style="font-size:1.4rem">🛂</div><h4>Permit / visa path</h4><p>Understand typical steps after an offer.</p></div>
+      <div class="why-card"><div style="font-size:1.4rem">📱</div><h4>Digital tracking</h4><p>Follow progress from your ePay account where enabled.</p></div>
+      <div class="why-card"><div style="font-size:1.4rem">🤝</div><h4>Local follow-up</h4><p>Stay connected with your assigned Gallery team.</p></div>
+    </div>
+    <div style="text-align:center;margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-primary btn-lg" onclick="openModal('gallery')">Find Nearest Gallery</button>
+      <button class="btn btn-ghost btn-lg" onclick="openModal('appointment')">Book Consultation</button>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section id="packages">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Assistance Levels</span>
+      <h2 class="section-title">Choose How Much Support You Need</h2>
+      <p class="section-sub">Fees depend on destination, role type and services selected. Confirmed after profile review.</p>
+    </div>
+    <div class="pkg-grid">
+      <div class="pkg-card reveal">
+        <h3>🟢 Profile Start</h3>
+        <div class="tier">Orientation</div>
+        <ul>
+          <li>Career consultation</li>
+          <li>Eligibility overview</li>
+          <li>Document checklist</li>
+          <li>Country guidance</li>
+        </ul>
+        <button class="btn btn-ghost" style="width:100%" onclick="openModal('career')">Get Started</button>
+      </div>
+      <div class="pkg-card featured reveal">
+        <div class="tag">Recommended</div>
+        <h3>🔵 Career Path</h3>
+        <div class="tier">Matching + process support</div>
+        <ul>
+          <li>Profile &amp; matching support</li>
+          <li>Interview preparation</li>
+          <li>Offer letter guidance</li>
+          <li>Work permit / visa checklist</li>
+          <li>Application coordination</li>
+          <li>Gallery follow-ups</li>
+        </ul>
+        <button class="btn btn-primary" style="width:100%" onclick="openModal('career')">Start Career Path</button>
+      </div>
+      <div class="pkg-card reveal">
+        <h3>🟣 Relocation Pro</h3>
+        <div class="tier">End-to-end joining support</div>
+        <ul>
+          <li>Dedicated consultant</li>
+          <li>Full document coordination</li>
+          <li>Visa / permit assistance</li>
+          <li>Finance guidance</li>
+          <li>Flight &amp; stay assistance</li>
+          <li>Airport pickup &amp; joining checklist</li>
+        </ul>
+        <button class="btn btn-dark" style="width:100%" onclick="openModal('career')">Talk to Consultant</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="bg-soft" id="why">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Why ePay</span>
+      <h2 class="section-title">More Than a Job Board</h2>
+    </div>
+    <div class="why-grid reveal">
+      <div class="why-card"><div style="font-size:1.5rem">🧭</div><h4>Full journey</h4><p>From search to workplace joining — not only listings.</p></div>
+      <div class="why-card"><div style="font-size:1.5rem">🏢</div><h4>Gallery support</h4><p>Real people at ePay Galleries to guide you.</p></div>
+      <div class="why-card"><div style="font-size:1.5rem">📄</div><h4>Document help</h4><p>Checklists and coordination for key paperwork.</p></div>
+      <div class="why-card"><div style="font-size:1.5rem">🛂</div><h4>Permit awareness</h4><p>Clearer view of typical visa / permit steps.</p></div>
+      <div class="why-card"><div style="font-size:1.5rem">✈️</div><h4>Relocation aid</h4><p>Flight, stay and arrival support options.</p></div>
+      <div class="why-card"><div style="font-size:1.5rem">📱</div><h4>Track progress</h4><p>Stay updated through your ePay account where enabled.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Stories</span>
+      <h2 class="section-title">Candidates Who Started With ePay</h2>
+    </div>
+    <div class="rev-grid reveal">
+      <div class="rev-card"><div class="stars">★★★★★</div><p>“I only knew I wanted to work abroad. The Gallery team helped me understand documents and the steps after an offer.”</p><div class="who">Sanjay — Pune</div></div>
+      <div class="rev-card"><div class="stars">★★★★★</div><p>“Interview prep and checklist support made the process less confusing than doing everything alone.”</p><div class="who">Neha — Mumbai</div></div>
+      <div class="rev-card"><div class="stars">★★★★★</div><p>“I started online and continued at my local Gallery. Having one place for guidance helped.”</p><div class="who">Arjun — Hyderabad</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="bg-soft">
+  <div class="container" style="max-width:720px">
+    <div class="text-center reveal">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+    <div class="reveal">
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Does ePay guarantee a job abroad? <span class="chev">▾</span></button><div class="faq-a">No. Employment decisions are made by employers. ePay assists with guidance, matching support where available, documentation and journey coordination.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Does ePay guarantee a work visa or permit? <span class="chev">▾</span></button><div class="faq-a">No. Visas and work permits are decided by the relevant authorities. ePay provides assistance and coordination only.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I start without visiting a Gallery? <span class="chev">▾</span></button><div class="faq-a">Yes. You can submit an enquiry online and later visit a Gallery for assisted steps if needed.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What documents will I need? <span class="chev">▾</span></button><div class="faq-a">Typically passport, education/experience certificates, photos and role-specific papers. Your Gallery provides a checklist based on country and role.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Are the job listings always available? <span class="chev">▾</span></button><div class="faq-a">Openings change frequently based on employer demand. Listings on this page are illustrative; your consultant will share current options for your profile.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is finance support a loan from ePay? <span class="chev">▾</span></button><div class="faq-a">ePay may guide you on typical costs and introduce eligible partner options. Any credit product is subject to the partner’s policies and approval.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section>
+  <div class="container">
+    <div class="cta-band reveal">
+      <h2>Ready to Build Your International Career Path?</h2>
+      <p>Tell ePay your skills and target country. We’ll help you understand the journey — with a real Gallery team available to assist.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary btn-lg" style="background:#fff;color:#3730a3" onclick="openModal('career')">Start Career Journey</button>
+        <button class="btn btn-ghost btn-lg" style="border-color:rgba(255,255,255,.5);color:#fff" onclick="openModal('gallery')">Find Gallery</button>
+        <button class="btn btn-ghost btn-lg" style="border-color:rgba(255,255,255,.5);color:#fff" onclick="openModal('appointment')">Book Consultation</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo" style="margin-bottom:12px"><div class="logo-mark">eP</div> ePay <span>Careers</span></div>
+    <p>© 2026 ePay Digital Gallery · International Career Hub. Employment and visa decisions rest with employers and authorities.</p>
+  </div>
+</footer>
+
+<!-- CAREER MODAL -->
+<div class="modal-bg" id="modal-career">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('career')">×</button>
+    <h2>Start My Career Journey</h2>
+    <p class="sub">Share your profile — an ePay Gallery will follow up.</p>
+    <form onsubmit="return submitCareer(event)">
+      <div class="form-g">
+        <div class="full"><label>Full Name *</label><input name="name" required /></div>
+        <div><label>Mobile *</label><input name="mobile" required type="tel" placeholder="10-digit" /></div>
+        <div><label>Email</label><input name="email" type="email" /></div>
+        <div><label>Role interest *</label>
+          <select name="role" id="formRole" required>
+            <option value="">Select</option>
+            <option>Skilled Trade</option><option>Healthcare</option><option>Hospitality</option>
+            <option>IT</option><option>Logistics</option><option>Other</option>
+          </select>
+        </div>
+        <div><label>Preferred country</label><input name="country" id="formCountry" placeholder="e.g. Germany" /></div>
+        <div class="full"><label>Experience / notes</label><textarea name="notes" rows="2" placeholder="Years of experience, certifications..."></textarea></div>
+        <div class="full"><button type="submit" class="btn btn-primary" style="width:100%">Submit Enquiry</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-gallery">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('gallery')">×</button>
+    <h2>Find Nearest ePay Gallery</h2>
+    <p class="sub">Locate a Gallery for career consultation.</p>
+    <form onsubmit="return findGallery(event)">
+      <div class="form-g">
+        <div class="full"><label>City / PIN *</label><input name="city" required placeholder="Pune / 411001" /></div>
+        <div class="full"><button type="submit" class="btn btn-primary" style="width:100%">Search</button></div>
+      </div>
+    </form>
+    <div id="galleryResults" style="margin-top:14px;display:none"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-appointment">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal('appointment')">×</button>
+    <h2>Book Career Consultation</h2>
+    <form onsubmit="return bookAppt(event)">
+      <div class="form-g">
+        <div class="full"><label>Name *</label><input name="name" required /></div>
+        <div><label>Mobile *</label><input name="mobile" required type="tel" /></div>
+        <div><label>Preferred date</label><input name="date" type="date" /></div>
+        <div class="full"><label>City</label><input name="city" placeholder="Pune" /></div>
+        <div class="full"><button type="submit" class="btn btn-primary" style="width:100%">Request Appointment</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openModal(id){document.getElementById('modal-'+id).classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(id){document.getElementById('modal-'+id).classList.remove('open');document.body.style.overflow='';}
+document.querySelectorAll('.modal-bg').forEach(function(m){
+  m.addEventListener('click',function(e){if(e.target===m){m.classList.remove('open');document.body.style.overflow='';}});
+});
+
+function selectRole(el){
+  document.querySelectorAll('.role-card').forEach(function(c){c.classList.remove('selected');});
+  el.classList.add('selected');
+  var r=el.getAttribute('data-role');
+  var sel=document.getElementById('formRole');
+  if(sel){for(var i=0;i<sel.options.length;i++) if(sel.options[i].value===r) sel.selectedIndex=i;}
+  openModal('career');
+}
+function pickCountry(name){
+  var c=document.getElementById('formCountry'); if(c) c.value=name;
+  openModal('career');
+}
+function toggleFaq(btn){
+  var item=btn.parentElement; var open=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(function(i){i.classList.remove('open');});
+  if(!open) item.classList.add('open');
+}
+function checkCareerReady(){
+  var score=55+Math.floor(Math.random()*35);
+  document.getElementById('careerScore').innerHTML=score+'<span style="font-size:1.2rem;opacity:.7"> / 100</span>';
+  var pct=Math.min(90, score-10);
+  document.getElementById('careerPct').textContent=pct+'%';
+  document.getElementById('careerBar').style.width=pct+'%';
+  alert('Career Readiness: '+score+'/100\\n\\nComplete profile, documents and country preference to improve your score. Submit an enquiry for Gallery guidance.');
+}
+function saveLead(data){
+  try{var a=JSON.parse(localStorage.getItem('epay-career-leads')||'[]');a.push(Object.assign({ts:new Date().toISOString()},data));localStorage.setItem('epay-career-leads',JSON.stringify(a));}catch(e){}
+}
+function submitCareer(e){
+  e.preventDefault();
+  var fd=new FormData(e.target);
+  saveLead({type:'career-journey',name:fd.get('name'),mobile:fd.get('mobile'),email:fd.get('email'),role:fd.get('role'),country:fd.get('country'),notes:fd.get('notes')});
+  closeModal('career');
+  alert('Career enquiry submitted!\\n\\nRef: CRR-'+Date.now().toString().slice(-6)+'\\nAn ePay Gallery will contact you.');
+  e.target.reset(); return false;
+}
+function findGallery(e){
+  e.preventDefault();
+  var city=(e.target.city.value||'').trim();
+  var box=document.getElementById('galleryResults');
+  box.style.display='block';
+  box.innerHTML='<div style="padding:12px;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:8px"><b>ePay Gallery — '+(city||'Pune')+' </b><br/><span style="font-size:.85rem;color:#64748b">★ 4.8 · Career consultation available</span><br/><button type="button" class="btn btn-primary btn-sm" style="margin-top:8px" onclick="closeModal(\'gallery\');openModal(\'appointment\')">Book Consultation</button></div>';
+  saveLead({type:'gallery-search',city:city}); return false;
+}
+function bookAppt(e){
+  e.preventDefault();
+  var fd=new FormData(e.target);
+  saveLead({type:'career-appointment',name:fd.get('name'),mobile:fd.get('mobile'),date:fd.get('date'),city:fd.get('city')});
+  closeModal('appointment');
+  alert('Consultation request sent. Gallery will confirm on your mobile.');
+  e.target.reset(); return false;
+}
+
+window.addEventListener('scroll',function(){document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40);});
+document.getElementById('mobileToggle').addEventListener('click',function(){document.getElementById('navLinks').classList.toggle('open');});
+var obs=new IntersectionObserver(function(entries){entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('visible');obs.unobserve(en.target);}});},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')['career','gallery','appointment'].forEach(closeModal);});
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
+

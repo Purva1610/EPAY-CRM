@@ -1,0 +1,1863 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ePay · BDO Dashboard</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+
+
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #f1f5f9;
+        }
+        .sidebar-link {
+            transition: all 0.15s;
+            cursor: pointer;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.75rem !important;
+            padding: 0.5rem 0.75rem !important;
+            border-radius: 0.5rem !important;
+        }
+        .sidebar-link:hover {
+            background: #1e293b;
+        }
+        .sidebar-link.active {
+            background: #1e3a5f;
+            color: white;
+        }
+        .sidebar-link.active i {
+            color: #818cf8;
+        }
+        .sidebar-nav::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 20px;
+        }
+        .card-hover {
+            transition: all 0.2s;
+        }
+        .card-hover:hover {
+            box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+        .fade-in {
+            animation: fadeIn 0.25s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #0b0f19;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 13px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(120px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .toast i {
+            color: #34d399;
+            font-size: 18px;
+        }
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 660px;
+            width: 92%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+        .modal-box input,
+        .modal-box select,
+        .modal-box textarea {
+            width: 100%;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 14px;
+            margin-top: 6px;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .modal-box input:focus,
+        .modal-box select:focus,
+        .modal-box textarea:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        .modal-box label {
+            font-weight: 500;
+            font-size: 13px;
+            color: #334155;
+            margin-top: 14px;
+            display: block;
+        }
+        .modal-box .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        @media (max-width: 480px) {
+            .modal-box .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        .status-badge {
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .status-badge.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.completed {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.in-progress {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+        .status-badge.critical {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.positive {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.error {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.new {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+        .status-badge.contacted {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.qualified {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.interested {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.meeting {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+        .status-badge.proposal {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.negotiation {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.won {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.lost {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.overdue {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .status-badge.submitted {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.verified {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.high {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        .status-badge.medium {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-badge.low {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .delete-btn {
+            color: #ef4444;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .delete-btn:hover {
+            color: #dc2626;
+            transform: scale(1.1);
+        }
+        .edit-btn {
+            color: #4f46e5;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .edit-btn:hover {
+            color: #4338ca;
+        }
+        .scrollable-table {
+            overflow-x: auto;
+        }
+        .scrollable-table table {
+            min-width: 600px;
+        }
+        .drill-card {
+            cursor: pointer;
+        }
+        .drill-card:hover {
+            box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.15);
+        }
+        .chart-bar {
+            height: 8px;
+            border-radius: 999px;
+            background: #e2e8f0;
+            overflow: hidden;
+        }
+        .chart-bar .fill {
+            height: 100%;
+            border-radius: 999px;
+        }
+        .progress-ring {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            position: relative;
+        }
+        .progress-ring .bg {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: conic-gradient(var(--color) var(--pct), #e2e8f0 var(--pct));
+        }
+        .progress-ring .inner {
+            position: relative;
+            z-index: 2;
+            background: white;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: #0b0f19;
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .pipeline-stage {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-[#0b0f19] text-white/80 flex flex-col shrink-0 h-full border-r border-slate-800/60 fixed inset-y-0 left-0 z-50">
+        <div class="px-5 py-5 border-b border-slate-800/50 flex items-center gap-3 shrink-0">
+            <i class="fa-solid fa-route text-indigo-400 text-xl"></i>
+            <span class="text-white font-bold tracking-tight">ePay <span class="text-indigo-300">·</span> BDO</span>
+            <span class="ml-auto text-[10px] bg-indigo-600/30 text-indigo-200 px-2 py-0.5 rounded-full">v1</span>
+        </div>
+        <nav class="flex-1 px-3 py-4 space-y-5 text-sm overflow-y-auto sidebar-nav" id="sidebarNav">
+            <!-- rendered by JS -->
+        </nav>
+        <div class="p-4 border-t border-slate-800/50 text-xs text-slate-400 flex items-center gap-3 shrink-0">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=40&auto=format&fit=crop&q=80" class="w-7 h-7 rounded-full" alt="profile" />
+            <div>
+                <p class="text-white text-sm font-medium" id="userNameDisplay">Meena</p>
+                <p class="text-[10px] text-slate-400">BDO</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="ml-64 flex flex-col h-screen overflow-hidden">
+        <!-- TOP NAV -->
+        <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
+            <div class="relative w-80">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input id="globalSearch" type="text" placeholder="Search visits, prospects, customers..." class="w-full bg-slate-50 border border-slate-200 rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-indigo-500 transition" />
+            </div>
+            <div class="flex items-center gap-4">
+                <button id="switchRoleBtn" class="flex items-center gap-2 border border-slate-200 hover:bg-slate-50 text-xs font-semibold px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-arrow-right-arrow-left text-indigo-600"></i> Switch</button>
+                <div class="relative">
+                    <button id="notifBtn" class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition relative">
+                        <i class="fa-regular fa-bell text-lg"></i>
+                        <span id="notifBadge" class="absolute -top-0.5 -right-0.5 bg-rose-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">6</span>
+                    </button>
+                </div>
+                <div class="h-6 w-px bg-slate-200"></div>
+                <div class="flex items-center gap-2">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80" class="w-8 h-8 rounded-full object-cover ring-2 ring-indigo-300" alt="" />
+                </div>
+            </div>
+        </header>
+
+        <!-- SCROLLABLE MAIN -->
+        <main class="flex-1 overflow-y-auto p-5 space-y-6 bg-slate-50/80" id="mainContent">
+            <!-- dynamic content -->
+        </main>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast"><i class="fa-regular fa-circle-check"></i><span id="toastMsg">Done!</span></div>
+
+    <!-- MODAL -->
+    <div id="modalOverlay" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+        <div class="modal-box" id="modalBox">
+            <!-- filled by JS -->
+        </div>
+    </div>
+
+    <script>
+        // ================================================================
+        // DATA STORE
+        // ================================================================
+        const STORAGE_KEY = 'bdoData_v1';
+        let AppData = {};
+
+        function initDefaultData() {
+            AppData = {
+                user: { name: 'Meena', role: 'BDO', territory: 'North Zone' },
+                visits: [
+                    { id: 1, customer: 'ABC Corp', businessName: 'ABC Industries', contact: 'Ravi', mobile: '9876543210',
+                        date: '2025-05-16', startTime: '10:00', endTime: '11:00', location: 'Mumbai',
+                        gps: '19.0760,72.8777', distance: 5, livePhoto: 'photo1.jpg', purpose: 'Introductory meeting',
+                        discussion: 'Discussed business needs', outcome: 'Positive', nextAction: 'Send proposal',
+                        followupDate: '2025-05-20', remarks: '', status: 'Completed', verified: true },
+                    { id: 2, customer: 'XYZ Ltd', businessName: 'XYZ Enterprises', contact: 'Sita', mobile: '9876543211',
+                        date: '2025-05-17', startTime: '15:00', endTime: '16:00', location: 'Delhi',
+                        gps: '28.6139,77.2090', distance: 10, livePhoto: 'photo2.jpg', purpose: 'Demo',
+                        discussion: 'Demo of gallery solutions', outcome: 'Interested', nextAction: 'Follow-up call',
+                        followupDate: '2025-05-21', remarks: '', status: 'Completed', verified: true },
+                    { id: 3, customer: 'PQR Inc', businessName: 'PQR Solutions', contact: 'Priya', mobile: '9876543212',
+                        date: '2025-05-18', startTime: '09:00', endTime: '10:00', location: 'Chennai',
+                        gps: '13.0827,80.2707', distance: 8, livePhoto: '', purpose: 'Market survey',
+                        discussion: 'Identified potential', outcome: 'Follow-up', nextAction: 'Schedule meeting',
+                        followupDate: '2025-05-22', remarks: '', status: 'Pending', verified: false },
+                    { id: 4, customer: 'LMN Enterprises', businessName: 'LMN Group', contact: 'Amit', mobile: '9876543213',
+                        date: '2025-05-19', startTime: '14:00', endTime: '15:00', location: 'Bangalore',
+                        gps: '12.9716,77.5946', distance: 12, livePhoto: 'photo4.jpg', purpose: 'Business development',
+                        discussion: 'Discussed partnership', outcome: 'Positive', nextAction: 'Share proposal',
+                        followupDate: '2025-05-24', remarks: '', status: 'Scheduled', verified: true },
+                ],
+                prospects: [
+                    { id: 1, businessName: 'New Art Gallery', contact: 'Rahul', mobile: '9876543215',
+                        email: 'rahul@newart.com', location: 'Mumbai', gps: '19.0760,72.8777', industry: 'Art',
+                        businessType: 'Gallery', estimatedValue: 50000, requirement: 'Framing solutions',
+                        currentProvider: 'Competitor A', competitor: 'Competitor A', opportunityLevel: 'High',
+                        assignedBDO: 'Meena', assignedBDE: '', status: 'New', nextFollowup: '2025-05-22' },
+                    { id: 2, businessName: 'Craft World', contact: 'Sneha', mobile: '9876543216',
+                        email: 'sneha@craft.com', location: 'Delhi', gps: '28.6139,77.2090', industry: 'Crafts',
+                        businessType: 'Retail', estimatedValue: 30000, requirement: 'Display units',
+                        currentProvider: 'Competitor B', competitor: 'Competitor B', opportunityLevel: 'Medium',
+                        assignedBDO: 'Meena', assignedBDE: '', status: 'Contacted', nextFollowup: '2025-05-20' },
+                ],
+                leads: [
+                    { id: 1, customer: 'ABC Corp', source: 'Field Visit', status: 'Qualified', assignedBDO: 'Meena',
+                        assignedBDE: 'Suresh', value: 50000, created: '2025-05-16', nextFollowup: '2025-05-20' },
+                    { id: 2, customer: 'XYZ Ltd', source: 'Referral', status: 'Meeting', assignedBDO: 'Meena',
+                        assignedBDE: 'Suresh', value: 30000, created: '2025-05-17', nextFollowup: '2025-05-21' },
+                    { id: 3, customer: 'PQR Inc', source: 'Market Survey', status: 'New', assignedBDO: 'Meena',
+                        assignedBDE: '', value: 20000, created: '2025-05-18', nextFollowup: '2025-05-22' },
+                ],
+                opportunities: [
+                    { id: 1, customer: 'ABC Corp', value: 50000, probability: 70, expectedClosing: '2025-06-10',
+                        product: 'Custom Frames', decisionMaker: 'Ravi', competitor: 'None', stage: 'Negotiation',
+                        nextAction: 'Finalize pricing', owner: 'Meena', status: 'Active' },
+                    { id: 2, customer: 'XYZ Ltd', value: 30000, probability: 50, expectedClosing: '2025-06-05',
+                        product: 'Display Solutions', decisionMaker: 'Sita', competitor: 'Competitor B',
+                        stage: 'Proposal', nextAction: 'Follow-up call', owner: 'Meena', status: 'Active' },
+                ],
+                customers: [
+                    { id: 1, name: 'Art Gallery', contact: 'Raj', mobile: '9876543217', email: 'raj@art.com',
+                        location: 'Mumbai', industry: 'Art', status: 'Active', revenue: 25000, lastVisit: '2025-05-16',
+                        nextFollowup: '2025-05-25', opportunities: 1, complaints: 0, relationship: 'Good' },
+                ],
+                meetings: [
+                    { id: 1, customer: 'ABC Corp', date: '2025-05-22', time: '14:00', location: 'Mumbai',
+                        participants: 'Meena, Ravi', purpose: 'Proposal presentation', discussion: '',
+                        opportunityValue: 50000, outcome: 'Scheduled', nextAction: 'Send proposal',
+                        followupDate: '2025-05-25', gps: '19.0760,72.8777', livePhoto: '' },
+                ],
+                followups: [
+                    { id: 1, lead: 'ABC Corp', customer: 'ABC Corp', contact: 'Ravi', date: '2025-05-20',
+                        time: '10:00', method: 'Call', discussion: 'Follow-up on proposal',
+                        response: 'Interested, need revision', nextAction: 'Send revised quote',
+                        nextFollowup: '2025-05-25', status: 'Pending' },
+                    { id: 2, lead: 'XYZ Ltd', customer: 'XYZ Ltd', contact: 'Sita', date: '2025-05-18',
+                        time: '11:00', method: 'Email', discussion: 'Sent price list', response: 'Will review',
+                        nextAction: 'Follow-up call', nextFollowup: '2025-05-21', status: 'Completed' },
+                ],
+                dailyReports: [
+                    { date: '2025-05-16', employee: 'Meena', territory: 'North Zone', areasCovered: 'Mumbai',
+                        plannedVisits: 4, completedVisits: 3, customerVisits: 2, prospectVisits: 1, newProspects: 2,
+                        newLeads: 3, meetings: 1, followups: 4, businessOpportunities: 2, expectedRevenue: 80000,
+                        competitorFindings: 'Competitor A offering discounts', marketFindings: 'High demand',
+                        problems: 'None', supportRequired: 'None', tomorrowPlan: 'Visit XYZ Ltd again',
+                        remarks: '', status: 'Submitted' },
+                ],
+                surveys: [
+                    { id: 1, area: 'Mumbai', location: 'Andheri', businessName: 'Creative Hub',
+                        businessCategory: 'Art Gallery', contactPerson: 'Anil', mobile: '9876543218',
+                        estimatedBusinessSize: 'Medium', customerPotential: 'High', currentProvider: 'Competitor A',
+                        competitor: 'Competitor A', competitorPricing: '₹40k-50k', customerRequirement: 'Framing',
+                        opportunityPotential: 'High', photo: 'survey1.jpg', gps: '19.0760,72.8777',
+                        surveyDate: '2025-05-16', remarks: '', status: 'Completed' },
+                ],
+                intelligence: [
+                    { id: 1, competitor: 'Competitor A', location: 'Mumbai', product: 'Framing Services',
+                        priceInfo: '₹40k-50k', offer: '10% discount', customerFeedback: 'Good quality',
+                        strengths: 'Established brand', weaknesses: 'Higher pricing', marketPosition: 'Leader',
+                        photos: '', dateCollected: '2025-05-16', remarks: '' },
+                ],
+                tasks: [
+                    { id: 1, title: 'Visit XYZ Ltd for follow-up', assignedTo: 'Meena', due: '2025-05-18',
+                        priority: 'High', status: 'Completed', category: 'Visit' },
+                    { id: 2, title: 'Market survey in Andheri area', assignedTo: 'Meena', due: '2025-05-20',
+                        priority: 'Medium', status: 'Pending', category: 'Survey' },
+                    { id: 3, title: 'Follow-up with ABC Corp', assignedTo: 'Meena', due: '2025-05-17',
+                        priority: 'High', status: 'In Progress', category: 'Follow-up' },
+                ],
+                travelExpenses: [
+                    { id: 1, employee: 'Meena', date: '2025-05-16', expenseType: 'Transport', amount: 500,
+                        visitId: 1, customer: 'ABC Corp', location: 'Mumbai', gps: '19.0760,72.8777',
+                        receipt: 'receipt1.jpg', livePhoto: 'photo1.jpg', remarks: 'Taxi', status: 'Pending' },
+                    { id: 2, employee: 'Meena', date: '2025-05-17', expenseType: 'Meals', amount: 200,
+                        visitId: 2, customer: 'XYZ Ltd', location: 'Delhi', gps: '28.6139,77.2090',
+                        receipt: 'receipt2.jpg', livePhoto: '', remarks: 'Lunch meeting', status: 'Approved' },
+                ],
+                stats: {}
+            };
+            updateStats();
+            saveData();
+        }
+
+        function loadData() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    AppData = JSON.parse(stored);
+                    // Ensure arrays
+                    if (!AppData.visits) AppData.visits = [];
+                    if (!AppData.prospects) AppData.prospects = [];
+                    if (!AppData.leads) AppData.leads = [];
+                    if (!AppData.opportunities) AppData.opportunities = [];
+                    if (!AppData.customers) AppData.customers = [];
+                    if (!AppData.meetings) AppData.meetings = [];
+                    if (!AppData.followups) AppData.followups = [];
+                    if (!AppData.dailyReports) AppData.dailyReports = [];
+                    if (!AppData.surveys) AppData.surveys = [];
+                    if (!AppData.intelligence) AppData.intelligence = [];
+                    if (!AppData.tasks) AppData.tasks = [];
+                    if (!AppData.travelExpenses) AppData.travelExpenses = [];
+                    if (!AppData.stats) AppData.stats = {};
+                    if (!AppData.user) AppData.user = { name: 'Meena', role: 'BDO', territory: 'North Zone' };
+                    updateStats();
+                    saveData();
+                } else {
+                    initDefaultData();
+                    saveData();
+                }
+            } catch (e) {
+                console.warn('Data load error, resetting', e);
+                initDefaultData();
+                saveData();
+            }
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(AppData));
+            } catch (e) {}
+        }
+
+        function updateStats() {
+            const visits = AppData.visits || [];
+            const prospects = AppData.prospects || [];
+            const leads = AppData.leads || [];
+            const opportunities = AppData.opportunities || [];
+            const customers = AppData.customers || [];
+            const followups = AppData.followups || [];
+            const tasks = AppData.tasks || [];
+            const surveys = AppData.surveys || [];
+            const today = new Date().toISOString().slice(0, 10);
+
+            const plannedVisits = visits.length;
+            const completedVisits = visits.filter(v => v.status === 'Completed').length;
+            const missedVisits = visits.filter(v => v.status === 'Missed').length;
+            const verifiedVisits = visits.filter(v => v.verified).length;
+            const pendingVisits = visits.filter(v => v.status === 'Pending' || v.status === 'Scheduled').length;
+            const prospectsVisited = prospects.filter(p => p.status === 'Contacted' || p.status === 'Qualified').length;
+            const newLeads = leads.filter(l => l.status === 'New').length;
+            const meetingsCount = AppData.meetings ? AppData.meetings.length : 0;
+            const totalRevenue = customers.reduce((s, c) => s + (c.revenue || 0), 0);
+            const monthlyTarget = 80000;
+            const achievement = monthlyTarget ? Math.round((totalRevenue / monthlyTarget) * 100) : 0;
+            const pendingFollowups = followups.filter(f => f.status === 'Pending').length;
+            const pendingTasks = tasks.filter(t => t.status === 'Pending').length;
+            const territoryCoverage = 65; // sample
+            const todayVisits = visits.filter(v => v.date === today).length;
+            const todayCompleted = visits.filter(v => v.date === today && v.status === 'Completed').length;
+
+            AppData.stats = {
+                todayVisits: todayVisits,
+                plannedVisits: plannedVisits,
+                completedVisits: completedVisits,
+                missedVisits: missedVisits,
+                verifiedVisits: verifiedVisits,
+                territoryCoverage: territoryCoverage,
+                prospectsVisited: prospectsVisited,
+                newLeads: newLeads,
+                meetings: meetingsCount,
+                businessGenerated: totalRevenue,
+                targetAchievement: achievement,
+                followups: pendingFollowups,
+                pendingTasks: pendingTasks,
+                dailyReportStatus: AppData.dailyReports && AppData.dailyReports.length > 0 &&
+                    AppData.dailyReports[0].date === today ? 'Submitted' : 'Pending',
+                bdoPerformance: 82, // sample
+                todayCompleted: todayCompleted,
+                pendingVisits: pendingVisits,
+                surveysCount: surveys.length,
+                opportunitiesCount: opportunities.filter(o => o.status === 'Active').length,
+            };
+            saveData();
+        }
+
+        // ================================================================
+        // SIDEBAR
+        // ================================================================
+        const menuStructure = [
+            { section: 'Overview', items: [{ id: 'dashboard', label: 'Dashboard', icon: 'fa-house' }] },
+            { section: 'Field', items: [
+                    { id: 'visits', label: 'Field Visits', icon: 'fa-regular fa-location-dot' },
+                    { id: 'territory', label: 'Territory', icon: 'fa-regular fa-map' },
+                    { id: 'surveys', label: 'Market Surveys', icon: 'fa-regular fa-clipboard' },
+                ] },
+            { section: 'Pipeline', items: [
+                    { id: 'prospects', label: 'Prospects', icon: 'fa-regular fa-user-plus' },
+                    { id: 'leads', label: 'Leads', icon: 'fa-regular fa-user-plus' },
+                    { id: 'opportunities', label: 'Opportunities', icon: 'fa-regular fa-chart-line' },
+                    { id: 'customers', label: 'Customers', icon: 'fa-regular fa-user' },
+                ] },
+            { section: 'Activities', items: [
+                    { id: 'meetings', label: 'Meetings', icon: 'fa-regular fa-calendar-check' },
+                    { id: 'followups', label: 'Follow-ups', icon: 'fa-regular fa-clock' },
+                    { id: 'intelligence', label: 'Market Intelligence', icon: 'fa-regular fa-binoculars' },
+                ] },
+            { section: 'Tasks & Reports', items: [
+                    { id: 'tasks', label: 'Daily Tasks', icon: 'fa-regular fa-list-check' },
+                    { id: 'daily-report', label: 'Daily Report', icon: 'fa-regular fa-file-lines' },
+                    { id: 'travel', label: 'Travel/Expense', icon: 'fa-regular fa-receipt' },
+                ] },
+            { section: 'Performance', items: [
+                    { id: 'performance', label: 'Performance', icon: 'fa-regular fa-star' },
+                    { id: 'alerts', label: 'Alerts', icon: 'fa-regular fa-triangle-exclamation' },
+                ] },
+            { section: 'Settings', items: [
+                    { id: 'settings', label: 'Settings', icon: 'fa-regular fa-gear' },
+                ] },
+        ];
+
+        let currentPage = 'dashboard';
+
+        function renderSidebar() {
+            const nav = document.getElementById('sidebarNav');
+            if (!nav) return;
+            nav.innerHTML = '';
+            menuStructure.forEach(group => {
+                const div = document.createElement('div');
+                const label = document.createElement('span');
+                label.className = 'text-[10px] uppercase tracking-wider text-slate-500 font-semibold';
+                label.textContent = group.section;
+                div.appendChild(label);
+                const ul = document.createElement('ul');
+                ul.className = 'mt-2 space-y-1';
+                group.items.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className =
+                        `sidebar-link ${currentPage === item.id ? 'active' : ''}`;
+                    li.dataset.page = item.id;
+                    li.innerHTML = `<i class="${item.icon} w-4"></i>${item.label}`;
+                    li.addEventListener('click', () => navigateTo(item.id));
+                    ul.appendChild(li);
+                });
+                div.appendChild(ul);
+                nav.appendChild(div);
+            });
+        }
+
+        function navigateTo(pageId) {
+            currentPage = pageId;
+            renderSidebar();
+            renderPage(pageId);
+        }
+
+        // ================================================================
+        // PAGE RENDERER
+        // ================================================================
+        function renderPage(pageId) {
+            const main = document.getElementById('mainContent');
+            if (!main) return;
+            main.className = 'flex-1 overflow-y-auto p-5 space-y-6 bg-slate-50/80 fade-in';
+            updateStats();
+            switch (pageId) {
+                case 'dashboard':
+                    renderDashboard(main);
+                    break;
+                case 'visits':
+                    renderVisits(main);
+                    break;
+                case 'territory':
+                    renderTerritory(main);
+                    break;
+                case 'surveys':
+                    renderSurveys(main);
+                    break;
+                case 'prospects':
+                    renderProspects(main);
+                    break;
+                case 'leads':
+                    renderLeads(main);
+                    break;
+                case 'opportunities':
+                    renderOpportunities(main);
+                    break;
+                case 'customers':
+                    renderCustomers(main);
+                    break;
+                case 'meetings':
+                    renderMeetings(main);
+                    break;
+                case 'followups':
+                    renderFollowups(main);
+                    break;
+                case 'intelligence':
+                    renderIntelligence(main);
+                    break;
+                case 'tasks':
+                    renderTasks(main);
+                    break;
+                case 'daily-report':
+                    renderDailyReport(main);
+                    break;
+                case 'travel':
+                    renderTravel(main);
+                    break;
+                case 'performance':
+                    renderPerformance(main);
+                    break;
+                case 'alerts':
+                    renderAlerts(main);
+                    break;
+                default:
+                    renderDashboard(main);
+            }
+        }
+
+        // ---------- DASHBOARD ----------
+        function renderDashboard(container) {
+            const s = AppData.stats;
+            container.innerHTML = `
+            <!-- Top KPI Cards -->
+            <section class="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-8 gap-3">
+              ${[
+                ["Today's Visits", s.todayVisits, 'fa-location-dot', 'indigo'],
+                ['Planned Visits', s.plannedVisits, 'fa-calendar', 'blue'],
+                ['Completed', s.completedVisits, 'fa-check-circle', 'emerald'],
+                ['Missed', s.missedVisits, 'fa-circle-xmark', 'rose'],
+                ['Verified Visits', s.verifiedVisits, 'fa-badge-check', 'teal'],
+                ['Territory Coverage', s.territoryCoverage+'%', 'fa-map', 'cyan'],
+                ['Prospects Visited', s.prospectsVisited, 'fa-user-plus', 'purple'],
+                ['New Leads', s.newLeads, 'fa-user-plus', 'sky'],
+                ['Meetings', s.meetings, 'fa-calendar-check', 'green'],
+                ['Business Generated', '₹'+formatNum(s.businessGenerated), 'fa-arrow-trend-up', 'amber'],
+                ['Target Achievement', s.targetAchievement+'%', 'fa-percent', 'violet'],
+                ['Follow-ups', s.followups, 'fa-clock', 'orange'],
+                ['Pending Tasks', s.pendingTasks, 'fa-list-check', 'pink'],
+                ['Daily Report', s.dailyReportStatus, 'fa-file-lines', s.dailyReportStatus === 'Submitted' ? 'emerald' : 'rose'],
+                ['BDO Performance', s.bdoPerformance+'%', 'fa-star', 'indigo'],
+                ['Opportunities', s.opportunitiesCount, 'fa-chart-line', 'purple'],
+              ].map(([label, value, icon, color]) => `
+                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm card-hover drill-card" onclick="drill('${label}')">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-${color}-50 text-${color}-600 flex items-center justify-center"><i class="fa-regular ${icon}"></i></div>
+                    <div><p class="text-[10px] text-slate-400">${label}</p><h4 class="font-bold text-sm">${value}</h4></div>
+                  </div>
+                </div>
+              `).join('')}
+            </section>
+
+            <!-- Today's Field Activity -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <h4 class="font-bold text-sm text-slate-800">Today's Field Activity</h4>
+                <div class="grid grid-cols-2 gap-2 mt-2 text-sm">
+                  <div><span class="text-slate-400">Planned:</span> <span class="font-semibold">${s.plannedVisits}</span></div>
+                  <div><span class="text-slate-400">Started:</span> <span class="font-semibold">${s.todayVisits}</span></div>
+                  <div><span class="text-slate-400">Completed:</span> <span class="font-semibold text-emerald-600">${s.todayCompleted}</span></div>
+                  <div><span class="text-slate-400">Pending:</span> <span class="font-semibold text-amber-500">${s.pendingVisits}</span></div>
+                  <div><span class="text-slate-400">Verified:</span> <span class="font-semibold text-teal-600">${s.verifiedVisits}</span></div>
+                  <div><span class="text-slate-400">Missed:</span> <span class="font-semibold text-rose-500">${s.missedVisits}</span></div>
+                </div>
+              </div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <h4 class="font-bold text-sm text-slate-800">Business Pipeline</h4>
+                <div class="flex flex-wrap gap-2 mt-2">
+                  ${['New','Contacted','Qualified','Meeting','Proposal','Negotiation','Won','Lost'].map(stage => {
+                    const count = AppData.leads.filter(l => l.status === stage).length;
+                    return `<span class="pipeline-stage status-badge ${stage.toLowerCase().replace(' ', '-')}">${stage}: ${count}</span>`;
+                  }).join('')}
+                </div>
+                <div class="mt-3">
+                  <div class="flex justify-between text-xs"><span>Territory Coverage</span><span>${s.territoryCoverage}%</span></div>
+                  <div class="chart-bar"><div class="fill bg-indigo-600" style="width:${s.territoryCoverage}%"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+              <h4 class="font-bold text-sm text-slate-800"><i class="fa-regular fa-bolt mr-2 text-amber-500"></i>Quick Actions</h4>
+              <div class="flex flex-wrap gap-2 mt-2">
+                ${['Record Visit','New Prospect','New Lead','Schedule Meeting','Add Follow-up','Market Survey','Submit Daily Report','Add Expense'].map(label => `
+                  <button onclick="quickAction('${label}')" class="border border-slate-200 rounded-lg px-3 py-1.5 text-xs hover:bg-indigo-50 transition"><i class="fa-regular ${label.includes('Visit') ? 'fa-location-dot' : label.includes('Prospect') ? 'fa-user-plus' : label.includes('Lead') ? 'fa-user-plus' : label.includes('Meeting') ? 'fa-calendar-check' : label.includes('Follow-up') ? 'fa-clock' : label.includes('Survey') ? 'fa-clipboard' : label.includes('Report') ? 'fa-file-lines' : 'fa-receipt'} text-indigo-500 mr-1"></i>${label}</button>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Alerts -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+              <h4 class="font-bold text-sm text-slate-800"><i class="fa-regular fa-triangle-exclamation mr-2 text-amber-500"></i>Alerts</h4>
+              <div class="space-y-2 mt-2 text-sm">
+                <div class="flex items-center gap-3 border-b pb-2"><span class="status-badge critical">Critical</span><span>2 visits pending verification</span></div>
+                <div class="flex items-center gap-3 border-b pb-2"><span class="status-badge warning">Warning</span><span>Territory coverage at ${s.territoryCoverage}%</span></div>
+                <div class="flex items-center gap-3"><span class="status-badge positive">Positive</span><span>${s.completedVisits} visits completed this week</span></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // ---------- VISITS ----------
+        function renderVisits(container) {
+            const visits = AppData.visits;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between"><h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-location-dot mr-2 text-green-500"></i>Field Visits (${visits.length})</h2><button onclick="openModal('visit')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus"></i> Record Visit</button></div>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Customer</th><th class="pb-3 text-left">Date</th><th class="pb-3 text-left">Purpose</th><th class="pb-3 text-left">GPS</th><th class="pb-3 text-left">Photo</th><th class="pb-3 text-left">Status</th><th class="pb-3 text-left">Actions</th></tr></thead>
+                <tbody>${visits.map(v => `
+                  <tr><td>${v.customer}</td><td>${v.date}</td><td>${v.purpose}</td><td>${v.gps ? '✅' : '❌'}</td><td>${v.livePhoto ? '✅' : '❌'}</td><td><span class="status-badge ${v.status.toLowerCase().replace(' ', '-')}">${v.status}</span></td><td><button onclick="editVisit(${v.id})" class="edit-btn mr-2"><i class="fa-regular fa-pen-to-square"></i></button><button onclick="deleteVisit(${v.id})" class="delete-btn"><i class="fa-regular fa-trash-can"></i></button></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- TERRITORY ----------
+        function renderTerritory(container) {
+            const s = AppData.stats;
+            container.innerHTML = `
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Assigned Territory</p><h3 class="text-2xl font-bold">${AppData.user.territory}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Coverage</p><h3 class="text-2xl font-bold text-emerald-600">${s.territoryCoverage}%</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Prospects</p><h3 class="text-2xl font-bold">${AppData.prospects.length}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Customers</p><h3 class="text-2xl font-bold">${AppData.customers.length}</h3></div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h3 class="font-bold text-sm text-slate-800">Territory Coverage Map</h3>
+              <div class="h-48 bg-slate-100 rounded-lg mt-2 flex items-center justify-center text-slate-400 border border-dashed border-slate-300"><i class="fa-regular fa-map text-2xl mr-2"></i> Territory Map (${AppData.user.territory})</div>
+              <div class="grid grid-cols-2 gap-2 mt-3 text-xs">
+                <div class="bg-slate-50 p-2 rounded"><span class="text-slate-400">Total Areas:</span> 8</div>
+                <div class="bg-slate-50 p-2 rounded"><span class="text-slate-400">Covered:</span> 5</div>
+                <div class="bg-slate-50 p-2 rounded"><span class="text-slate-400">Uncovered:</span> 3</div>
+                <div class="bg-slate-50 p-2 rounded"><span class="text-slate-400">Visits This Month:</span> ${AppData.visits.length}</div>
+              </div>
+            </div>
+          `;
+        }
+
+        // ---------- SURVEYS ----------
+        function renderSurveys(container) {
+            const surveys = AppData.surveys;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between"><h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-clipboard mr-2 text-blue-500"></i>Market Surveys (${surveys.length})</h2><button onclick="openModal('survey')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus"></i> New Survey</button></div>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Business</th><th class="pb-3 text-left">Area</th><th class="pb-3 text-left">Category</th><th class="pb-3 text-left">Potential</th><th class="pb-3 text-left">Status</th><th class="pb-3 text-left">Actions</th></tr></thead>
+                <tbody>${surveys.map(s => `
+                  <tr><td>${s.businessName}</td><td>${s.area}</td><td>${s.businessCategory}</td><td><span class="status-badge ${s.opportunityPotential.toLowerCase()}">${s.opportunityPotential}</span></td><td><span class="status-badge ${s.status.toLowerCase()}">${s.status}</span></td><td><button onclick="editSurvey(${s.id})" class="edit-btn mr-2"><i class="fa-regular fa-pen-to-square"></i></button><button onclick="deleteSurvey(${s.id})" class="delete-btn"><i class="fa-regular fa-trash-can"></i></button></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- PROSPECTS ----------
+        function renderProspects(container) {
+            const prospects = AppData.prospects;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between"><h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-user-plus mr-2 text-blue-500"></i>Prospects (${prospects.length})</h2><button onclick="openModal('prospect')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus"></i> New Prospect</button></div>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Business</th><th class="pb-3 text-left">Contact</th><th class="pb-3 text-left">Location</th><th class="pb-3 text-left">Value</th><th class="pb-3 text-left">Status</th><th class="pb-3 text-left">Actions</th></tr></thead>
+                <tbody>${prospects.map(p => `
+                  <tr><td>${p.businessName}</td><td>${p.contact}</td><td>${p.location}</td><td>₹${formatNum(p.estimatedValue)}</td><td><span class="status-badge ${p.status.toLowerCase().replace(' ', '-')}">${p.status}</span></td><td><button onclick="editProspect(${p.id})" class="edit-btn mr-2"><i class="fa-regular fa-pen-to-square"></i></button><button onclick="deleteProspect(${p.id})" class="delete-btn"><i class="fa-regular fa-trash-can"></i></button></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- LEADS ----------
+        function renderLeads(container) {
+            const leads = AppData.leads;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between"><h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-user-plus mr-2 text-blue-500"></i>Leads (${leads.length})</h2><button onclick="openModal('lead')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus"></i> New Lead</button></div>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Customer</th><th class="pb-3 text-left">Source</th><th class="pb-3 text-left">Status</th><th class="pb-3 text-left">BDE</th><th class="pb-3 text-left">Value</th><th class="pb-3 text-left">Actions</th></tr></thead>
+                <tbody>${leads.map(l => `
+                  <tr><td>${l.customer}</td><td>${l.source}</td><td><span class="status-badge ${l.status.toLowerCase().replace(' ', '-')}">${l.status}</span></td><td>${l.assignedBDE || '—'}</td><td>₹${formatNum(l.value)}</td><td><button onclick="editLead(${l.id})" class="edit-btn mr-2"><i class="fa-regular fa-pen-to-square"></i></button><button onclick="deleteLead(${l.id})" class="delete-btn"><i class="fa-regular fa-trash-can"></i></button></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- OPPORTUNITIES ----------
+        function renderOpportunities(container) {
+            const opps = AppData.opportunities;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between"><h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-chart-line mr-2 text-purple-500"></i>Opportunities (${opps.length})</h2><button onclick="openModal('opportunity')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus"></i> New Opportunity</button></div>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Customer</th><th class="pb-3 text-left">Product</th><th class="pb-3 text-left">Value</th><th class="pb-3 text-left">Probability</th><th class="pb-3 text-left">Stage</th><th class="pb-3 text-left">Actions</th></tr></thead>
+                <tbody>${opps.map(o => `
+                  <tr><td>${o.customer}</td><td>${o.product}</td><td>₹${formatNum(o.value)}</td><td>${o.probability}%</td><td><span class="status-badge ${o.stage.toLowerCase().replace(' ', '-')}">${o.stage}</span></td><td><button onclick="editOpportunity(${o.id})" class="edit-btn mr-2"><i class="fa-regular fa-pen-to-square"></i></button><button onclick="deleteOpportunity(${o.id})" class="delete-btn"><i class="fa-regular fa-trash-can"></i></button></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- CUSTOMERS ----------
+        function renderCustomers(container) {
+            const customers = AppData.customers;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between"><h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-user mr-2 text-blue-500"></i>Customers (${customers.length})</h2><button onclick="openModal('customer')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus"></i> Add Customer</button></div>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Name</th><th class="pb-3 text-left">Contact</th><th class="pb-3 text-left">Revenue</th><th class="pb-3 text-left">Status</th><th class="pb-3 text-left">Next Visit</th><th class="pb-3 text-left">Actions</th></tr></thead>
+                <tbody>${customers.map(c => `
+                  <tr><td>${c.name}</td><td>${c.contact}</td><td>₹${formatNum(c.revenue)}</td><td><span class="status-badge ${c.status === 'Active' ? 'positive' : 'inactive'}">${c.status}</span></td><td>${c.nextFollowup || '—'}</td><td><button onclick="editCustomer(${c.id})" class="edit-btn mr-2"><i class="fa-regular fa-pen-to-square"></i></button><button onclick="deleteCustomer(${c.id})" class="delete-btn"><i class="fa-regular fa-trash-can"></i></button></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- MEETINGS ----------
+        function renderMeetings(container) {
+            const meetings = AppData.meetings;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between"><h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-calendar-check mr-2 text-purple-500"></i>Meetings (${meetings.length})</h2><button onclick="openModal('meeting')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus"></i> Schedule Meeting</button></div>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Customer</th><th class="pb-3 text-left">Date</th><th class="pb-3 text-left">Location</th><th class="pb-3 text-left">Value</th><th class="pb-3 text-left">Outcome</th><th class="pb-3 text-left">Actions</th></tr></thead>
+                <tbody>${meetings.map(m => `
+                  <tr><td>${m.customer}</td><td>${m.date}</td><td>${m.location}</td><td>₹${formatNum(m.opportunityValue)}</td><td><span class="status-badge ${m.outcome ? m.outcome.toLowerCase().replace(' ', '-') : 'pending'}">${m.outcome || 'Scheduled'}</span></td><td><button onclick="editMeeting(${m.id})" class="edit-btn mr-2"><i class="fa-regular fa-pen-to-square"></i></button><button onclick="deleteMeeting(${m.id})" class="delete-btn"><i class="fa-regular fa-trash-can"></i></button></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- FOLLOW-UPS ----------
+        function renderFollowups(container) {
+            const followups = AppData.followups;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between"><h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-clock mr-2 text-amber-500"></i>Follow-ups (${followups.length})</h2><button onclick="openModal('followup')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus"></i> Add Follow-up</button></div>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Customer</th><th class="pb-3 text-left">Date</th><th class="pb-3 text-left">Method</th><th class="pb-3 text-left">Status</th><th class="pb-3 text-left">Next</th><th class="pb-3 text-left">Actions</th></tr></thead>
+                <tbody>${followups.map(f => `
+                  <tr><td>${f.customer}</td><td>${f.date}</td><td>${f.method}</td><td><span class="status-badge ${f.status.toLowerCase()}">${f.status}</span></td><td>${f.nextFollowup || '—'}</td><td><button onclick="editFollowup(${f.id})" class="edit-btn mr-2"><i class="fa-regular fa-pen-to-square"></i></button><button onclick="deleteFollowup(${f.id})" class="delete-btn"><i class="fa-regular fa-trash-can"></i></button></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- INTELLIGENCE ----------
+        function renderIntelligence(container) {
+            const intel = AppData.intelligence;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between"><h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-binoculars mr-2 text-blue-500"></i>Market Intelligence (${intel.length})</h2><button onclick="openModal('intelligence')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus"></i> Add Intel</button></div>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Competitor</th><th class="pb-3 text-left">Location</th><th class="pb-3 text-left">Product</th><th class="pb-3 text-left">Price</th><th class="pb-3 text-left">Date</th><th class="pb-3 text-left">Actions</th></tr></thead>
+                <tbody>${intel.map(i => `
+                  <tr><td>${i.competitor}</td><td>${i.location}</td><td>${i.product}</td><td>${i.priceInfo}</td><td>${i.dateCollected}</td><td><button onclick="editIntel(${i.id})" class="edit-btn mr-2"><i class="fa-regular fa-pen-to-square"></i></button><button onclick="deleteIntel(${i.id})" class="delete-btn"><i class="fa-regular fa-trash-can"></i></button></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- TASKS ----------
+        function renderTasks(container) {
+            const tasks = AppData.tasks;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between"><h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-list-check mr-2 text-indigo-500"></i>Daily Tasks (${tasks.length})</h2><button onclick="openModal('task')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus"></i> Create Task</button></div>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Title</th><th class="pb-3 text-left">Due</th><th class="pb-3 text-left">Priority</th><th class="pb-3 text-left">Status</th><th class="pb-3 text-left">Actions</th></tr></thead>
+                <tbody>${tasks.map(t => `
+                  <tr><td>${t.title}</td><td>${t.due}</td><td><span class="status-badge ${t.priority.toLowerCase()}">${t.priority}</span></td><td><span class="status-badge ${t.status.toLowerCase().replace(' ', '-')}">${t.status}</span></td><td><button onclick="editTask(${t.id})" class="edit-btn mr-2"><i class="fa-regular fa-pen-to-square"></i></button><button onclick="deleteTask(${t.id})" class="delete-btn"><i class="fa-regular fa-trash-can"></i></button></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- DAILY REPORT ----------
+        function renderDailyReport(container) {
+            const reports = AppData.dailyReports;
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between"><h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-file-lines mr-2 text-amber-500"></i>Daily Reports</h2><button onclick="openModal('dailyReport')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus"></i> Submit Report</button></div>
+              <div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-3 text-left">Date</th><th class="pb-3 text-left">Visits</th><th class="pb-3 text-left">Customers</th><th class="pb-3 text-left">Prospects</th><th class="pb-3 text-left">Leads</th><th class="pb-3 text-left">Revenue</th><th class="pb-3 text-left">Status</th></tr></thead>
+                <tbody>${reports.map(r => `
+                  <tr><td>${r.date}</td><td>${r.completedVisits}</td><td>${r.customerVisits}</td><td>${r.prospectVisits}</td><td>${r.newLeads}</td><td>₹${formatNum(r.expectedRevenue)}</td><td><span class="status-badge ${r.status === 'Submitted' ? 'positive' : 'pending'}">${r.status}</span></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- TRAVEL ----------
+        function renderTravel(container) {
+            const expenses = AppData.travelExpenses;
+            const total = expenses.reduce((s, e) => s + e.amount, 0);
+            const pending = expenses.filter(e => e.status === 'Pending').length;
+            container.innerHTML = `
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Monthly Allowance</p><h3 class="text-2xl font-bold">₹15,000</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Spent</p><h3 class="text-2xl font-bold">₹${formatNum(total)}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Pending Claims</p><h3 class="text-2xl font-bold text-amber-500">${pending}</h3></div>
+              <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs text-slate-400">Remaining</p><h3 class="text-2xl font-bold text-emerald-600">₹${formatNum(15000 - total)}</h3></div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <div class="flex items-center justify-between"><h3 class="font-bold text-sm text-slate-800">Expense Entries</h3><button onclick="openModal('travelExpense')" class="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"><i class="fa-regular fa-plus"></i> Add Expense</button></div>
+              <div class="overflow-x-auto mt-2"><table class="w-full text-sm"><thead><tr class="text-slate-400 border-b"><th class="pb-2 text-left">Date</th><th class="pb-2 text-left">Type</th><th class="pb-2 text-left">Amount</th><th class="pb-2 text-left">Customer</th><th class="pb-2 text-left">GPS</th><th class="pb-2 text-left">Status</th></tr></thead>
+                <tbody>${expenses.map(e => `
+                  <tr><td>${e.date}</td><td>${e.expenseType}</td><td>₹${formatNum(e.amount)}</td><td>${e.customer}</td><td>${e.gps ? '✅' : '❌'}</td><td><span class="status-badge ${e.status.toLowerCase()}">${e.status}</span></td></tr>
+                `).join('')}</tbody></table></div>
+            </div>
+          `;
+        }
+
+        // ---------- PERFORMANCE ----------
+        function renderPerformance(container) {
+            const s = AppData.stats;
+            container.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="font-bold text-sm text-slate-800">BDO Performance Score</h3>
+                <div class="flex items-center justify-center mt-4">
+                  <div class="progress-ring" style="--color:#4f46e5;--pct:${s.bdoPerformance}%;"><div class="bg"></div><div class="inner">${s.bdoPerformance}%</div></div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 mt-4 text-sm">
+                  <div><span class="text-slate-400">Verified Visits:</span> <span class="font-semibold">${s.verifiedVisits}</span></div>
+                  <div><span class="text-slate-400">Territory Coverage:</span> <span class="font-semibold">${s.territoryCoverage}%</span></div>
+                  <div><span class="text-slate-400">Lead Generation:</span> <span class="font-semibold">${s.newLeads}</span></div>
+                  <div><span class="text-slate-400">Revenue Contribution:</span> <span class="font-semibold">₹${formatNum(s.businessGenerated)}</span></div>
+                </div>
+              </div>
+              <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="font-bold text-sm text-slate-800">Visit Quality</h3>
+                <div class="space-y-2 mt-2 text-sm">
+                  <div class="flex justify-between border-b pb-1"><span>Total Visits</span><span>${s.plannedVisits}</span></div>
+                  <div class="flex justify-between border-b pb-1"><span>Verified</span><span class="text-emerald-600">${s.verifiedVisits}</span></div>
+                  <div class="flex justify-between border-b pb-1"><span>With GPS</span><span>${AppData.visits.filter(v=>v.gps).length}</span></div>
+                  <div class="flex justify-between border-b pb-1"><span>With Photo</span><span>${AppData.visits.filter(v=>v.livePhoto).length}</span></div>
+                  <div class="flex justify-between"><span>Quality Score</span><span class="font-bold">${s.bdoPerformance}%</span></div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        // ---------- ALERTS ----------
+        function renderAlerts(container) {
+            const s = AppData.stats;
+            const overdueFollowups = AppData.followups.filter(f => f.status === 'Pending' && f.date < new Date().toISOString()
+                .slice(0, 10));
+            container.innerHTML = `
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+              <h2 class="font-bold text-lg text-slate-800"><i class="fa-regular fa-triangle-exclamation mr-2 text-amber-500"></i>Alerts</h2>
+              <div class="space-y-3 mt-4">
+                <div class="flex items-start gap-3 border-b pb-3"><span class="status-badge critical">Critical</span><div><p class="font-medium">${AppData.visits.filter(v=>!v.verified).length} visits pending verification</p><p class="text-xs text-slate-400">GPS or photo evidence missing</p></div></div>
+                <div class="flex items-start gap-3 border-b pb-3"><span class="status-badge warning">Warning</span><div><p class="font-medium">Territory coverage at ${s.territoryCoverage}%</p><p class="text-xs text-slate-400">3 areas still uncovered</p></div></div>
+                <div class="flex items-start gap-3 border-b pb-3"><span class="status-badge warning">Warning</span><div><p class="font-medium">${overdueFollowups.length} overdue follow-ups</p><p class="text-xs text-slate-400">Follow-up for ${overdueFollowups.map(f=>f.customer).join(', ')}</p></div></div>
+                <div class="flex items-start gap-3"><span class="status-badge positive">Positive</span><div><p class="font-medium">${s.completedVisits} visits completed this week</p><p class="text-xs text-slate-400">Keep up the momentum</p></div></div>
+              </div>
+            </div>
+          `;
+        }
+
+        // ================================================================
+        // MODAL SYSTEM
+        // ================================================================
+        function openModal(action, data = null) {
+            const overlay = document.getElementById('modalOverlay');
+            const box = document.getElementById('modalBox');
+            let html = '';
+            const closeBtn = `<button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 text-xl">&times;</button>`;
+
+            if (action === 'visit') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Record Visit</h3>${closeBtn}</div>
+              <div class="form-row"><div><label>Customer</label><input id="visitCustomer" placeholder="Customer name" /></div><div><label>Business Name</label><input id="visitBusiness" placeholder="Business name" /></div></div>
+              <div class="form-row"><div><label>Contact</label><input id="visitContact" placeholder="Contact person" /></div><div><label>Mobile</label><input id="visitMobile" placeholder="Mobile" /></div></div>
+              <div class="form-row"><div><label>Date</label><input type="date" id="visitDate" value="${new Date().toISOString().slice(0,10)}" /></div><div><label>Start Time</label><input type="time" id="visitStart" value="10:00" /></div></div>
+              <div class="form-row"><div><label>End Time</label><input type="time" id="visitEnd" value="11:00" /></div><div><label>Location</label><input id="visitLocation" placeholder="Location" /></div></div>
+              <div class="form-row"><div><label>GPS (lat,lng)</label><input id="visitGps" placeholder="e.g. 19.0760,72.8777" /></div><div><label>Distance (km)</label><input type="number" id="visitDistance" value="5" /></div></div>
+              <label>Purpose</label><input id="visitPurpose" placeholder="Visit purpose" />
+              <label>Discussion</label><textarea id="visitDiscussion" rows="2"></textarea>
+              <div class="form-row"><div><label>Outcome</label><select id="visitOutcome"><option>Positive</option><option>Interested</option><option>Follow-up</option><option>Not Interested</option></select></div><div><label>Status</label><select id="visitStatus"><option>Completed</option><option>Pending</option><option>Scheduled</option><option>Missed</option></select></div></div>
+              <div class="form-row"><div><label>Next Action</label><input id="visitNextAction" placeholder="Next action" /></div><div><label>Follow-up Date</label><input type="date" id="visitFollowup" value="${new Date(Date.now()+86400000).toISOString().slice(0,10)}" /></div></div>
+              <label>Remarks</label><textarea id="visitRemarks" rows="2"></textarea>
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitVisit()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Record</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'prospect') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">New Prospect</h3>${closeBtn}</div>
+              <div class="form-row"><div><label>Business Name</label><input id="prospectBusiness" placeholder="Business name" /></div><div><label>Contact</label><input id="prospectContact" placeholder="Contact person" /></div></div>
+              <div class="form-row"><div><label>Mobile</label><input id="prospectMobile" placeholder="Mobile" /></div><div><label>Email</label><input id="prospectEmail" placeholder="Email" /></div></div>
+              <div class="form-row"><div><label>Location</label><input id="prospectLocation" placeholder="Location" /></div><div><label>Industry</label><input id="prospectIndustry" placeholder="Industry" /></div></div>
+              <div class="form-row"><div><label>Business Type</label><input id="prospectType" placeholder="e.g. Gallery, Retail" /></div><div><label>Estimated Value</label><input type="number" id="prospectValue" placeholder="0" /></div></div>
+              <label>Requirement</label><textarea id="prospectRequirement" rows="2"></textarea>
+              <div class="form-row"><div><label>Opportunity Level</label><select id="prospectLevel"><option>High</option><option>Medium</option><option>Low</option></select></div><div><label>Status</label><select id="prospectStatus"><option>New</option><option>Contacted</option><option>Qualified</option><option>Lost</option></select></div></div>
+              <label>Next Follow-up</label><input type="date" id="prospectFollowup" value="${new Date(Date.now()+86400000).toISOString().slice(0,10)}" />
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitProspect()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Create</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'lead') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">New Lead</h3>${closeBtn}</div>
+              <div class="form-row"><div><label>Customer</label><input id="leadCustomer" placeholder="Customer name" /></div><div><label>Source</label><select id="leadSource"><option>Field Visit</option><option>Market Survey</option><option>Referral</option><option>Existing Customer</option><option>Business Directory</option><option>Other</option></select></div></div>
+              <div class="form-row"><div><label>BDE Assignment</label><input id="leadBDE" placeholder="BDE name (optional)" /></div><div><label>Value</label><input type="number" id="leadValue" placeholder="0" /></div></div>
+              <label>Status</label><select id="leadStatus"><option>New</option><option>Contacted</option><option>Qualified</option><option>Meeting</option><option>Proposal</option><option>Negotiation</option><option>Won</option><option>Lost</option></select>
+              <label>Next Follow-up</label><input type="date" id="leadFollowup" value="${new Date(Date.now()+86400000).toISOString().slice(0,10)}" />
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitLead()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Create</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'opportunity') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">New Opportunity</h3>${closeBtn}</div>
+              <div class="form-row"><div><label>Customer</label><input id="oppCustomer" placeholder="Customer name" /></div><div><label>Product/Service</label><input id="oppProduct" placeholder="Product" /></div></div>
+              <div class="form-row"><div><label>Value</label><input type="number" id="oppValue" placeholder="0" /></div><div><label>Probability %</label><input type="number" id="oppProbability" value="50" /></div></div>
+              <div class="form-row"><div><label>Expected Closing</label><input type="date" id="oppClosing" value="${new Date(Date.now()+30*86400000).toISOString().slice(0,10)}" /></div><div><label>Stage</label><select id="oppStage"><option>New</option><option>Proposal</option><option>Negotiation</option><option>Won</option><option>Lost</option></select></div></div>
+              <label>Decision Maker</label><input id="oppDecision" placeholder="Decision maker" />
+              <label>Next Action</label><input id="oppNext" placeholder="Next action" />
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitOpportunity()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Create</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'followup') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Add Follow-up</h3>${closeBtn}</div>
+              <div class="form-row"><div><label>Customer</label><input id="fupCustomer" placeholder="Customer name" /></div><div><label>Lead</label><input id="fupLead" placeholder="Lead name (optional)" /></div></div>
+              <div class="form-row"><div><label>Date</label><input type="date" id="fupDate" value="${new Date().toISOString().slice(0,10)}" /></div><div><label>Time</label><input type="time" id="fupTime" value="10:00" /></div></div>
+              <label>Method</label><select id="fupMethod"><option>Call</option><option>Email</option><option>WhatsApp</option><option>In-person</option><option>Other</option></select>
+              <label>Discussion</label><textarea id="fupDiscussion" rows="2"></textarea>
+              <label>Response</label><textarea id="fupResponse" rows="2"></textarea>
+              <div class="form-row"><div><label>Next Action</label><input id="fupNextAction" placeholder="Next action" /></div><div><label>Next Follow-up</label><input type="date" id="fupNextDate" value="${new Date(Date.now()+86400000).toISOString().slice(0,10)}" /></div></div>
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitFollowup()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Add</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'survey') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Market Survey</h3>${closeBtn}</div>
+              <div class="form-row"><div><label>Area</label><input id="surveyArea" placeholder="Area" /></div><div><label>Location</label><input id="surveyLocation" placeholder="Location" /></div></div>
+              <label>Business Name</label><input id="surveyBusiness" placeholder="Business name" />
+              <div class="form-row"><div><label>Category</label><input id="surveyCategory" placeholder="e.g. Art Gallery" /></div><div><label>Contact</label><input id="surveyContact" placeholder="Contact person" /></div></div>
+              <div class="form-row"><div><label>Mobile</label><input id="surveyMobile" placeholder="Mobile" /></div><div><label>Estimated Size</label><select id="surveySize"><option>Small</option><option>Medium</option><option>Large</option></select></div></div>
+              <div class="form-row"><div><label>Customer Potential</label><select id="surveyPotential"><option>High</option><option>Medium</option><option>Low</option></select></div><div><label>Opportunity Potential</label><select id="surveyOpportunity"><option>High</option><option>Medium</option><option>Low</option></select></div></div>
+              <label>GPS</label><input id="surveyGps" placeholder="lat,lng" />
+              <label>Remarks</label><textarea id="surveyRemarks" rows="2"></textarea>
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitSurvey()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Submit</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'dailyReport') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Submit Daily Report</h3>${closeBtn}</div>
+              <div class="form-row"><div><label>Date</label><input type="date" id="reportDate" value="${new Date().toISOString().slice(0,10)}" /></div><div><label>Territory</label><input id="reportTerritory" value="${AppData.user.territory}" /></div></div>
+              <div class="form-row"><div><label>Areas Covered</label><input id="reportAreas" placeholder="Areas" /></div><div><label>Planned Visits</label><input type="number" id="reportPlanned" value="0" /></div></div>
+              <div class="form-row"><div><label>Completed Visits</label><input type="number" id="reportCompleted" value="0" /></div><div><label>Customer Visits</label><input type="number" id="reportCustomerVisits" value="0" /></div></div>
+              <div class="form-row"><div><label>Prospect Visits</label><input type="number" id="reportProspectVisits" value="0" /></div><div><label>New Prospects</label><input type="number" id="reportNewProspects" value="0" /></div></div>
+              <div class="form-row"><div><label>New Leads</label><input type="number" id="reportNewLeads" value="0" /></div><div><label>Meetings</label><input type="number" id="reportMeetings" value="0" /></div></div>
+              <div class="form-row"><div><label>Follow-ups</label><input type="number" id="reportFollowups" value="0" /></div><div><label>Business Opportunities</label><input type="number" id="reportOpportunities" value="0" /></div></div>
+              <div class="form-row"><div><label>Expected Revenue</label><input type="number" id="reportRevenue" value="0" /></div><div><label>Status</label><select id="reportStatus"><option>Submitted</option><option>Pending</option></select></div></div>
+              <label>Competitor Findings</label><textarea id="reportCompetitor" rows="2"></textarea>
+              <label>Market Findings</label><textarea id="reportMarket" rows="2"></textarea>
+              <label>Problems/Challenges</label><textarea id="reportProblems" rows="2"></textarea>
+              <label>Tomorrow's Plan</label><textarea id="reportPlan" rows="2"></textarea>
+              <label>Remarks</label><textarea id="reportRemarks" rows="2"></textarea>
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitDailyReport()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Submit</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'travelExpense') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Add Expense</h3>${closeBtn}</div>
+              <div class="form-row"><div><label>Date</label><input type="date" id="expDate" value="${new Date().toISOString().slice(0,10)}" /></div><div><label>Type</label><select id="expType"><option>Transport</option><option>Meals</option><option>Accommodation</option><option>Other</option></select></div></div>
+              <label>Amount</label><input type="number" id="expAmount" value="0" />
+              <label>Customer/Prospect</label><input id="expCustomer" placeholder="Customer name" />
+              <label>Location</label><input id="expLocation" placeholder="Location" />
+              <label>GPS</label><input id="expGps" placeholder="lat,lng" />
+              <label>Remarks</label><textarea id="expRemarks" rows="2"></textarea>
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitExpense()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Add</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'task') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Create Task</h3>${closeBtn}</div>
+              <label>Title</label><input id="taskTitle" placeholder="Task title" />
+              <div class="form-row"><div><label>Assigned To</label><input id="taskAssigned" value="${AppData.user.name}" /></div><div><label>Due Date</label><input type="date" id="taskDue" value="${new Date().toISOString().slice(0,10)}" /></div></div>
+              <div class="form-row"><div><label>Priority</label><select id="taskPriority"><option>High</option><option>Medium</option><option>Low</option></select></div><div><label>Category</label><input id="taskCategory" placeholder="e.g. Visit, Survey" /></div></div>
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitTask()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Create</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'intelligence') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Add Market Intelligence</h3>${closeBtn}</div>
+              <div class="form-row"><div><label>Competitor</label><input id="intelCompetitor" placeholder="Competitor name" /></div><div><label>Location</label><input id="intelLocation" placeholder="Location" /></div></div>
+              <div class="form-row"><div><label>Product/Service</label><input id="intelProduct" placeholder="Product" /></div><div><label>Price Info</label><input id="intelPrice" placeholder="Price" /></div></div>
+              <label>Offer</label><input id="intelOffer" placeholder="Offer details" />
+              <label>Customer Feedback</label><textarea id="intelFeedback" rows="2"></textarea>
+              <label>Strengths</label><input id="intelStrengths" placeholder="Strengths" />
+              <label>Weaknesses</label><input id="intelWeaknesses" placeholder="Weaknesses" />
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitIntel()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Add</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else if (action === 'meeting') {
+                html = `
+              <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg text-slate-800">Schedule Meeting</h3>${closeBtn}</div>
+              <label>Customer</label><input id="meetingCustomer" placeholder="Customer name" />
+              <div class="form-row"><div><label>Date</label><input type="date" id="meetingDate" value="${new Date(Date.now()+86400000).toISOString().slice(0,10)}" /></div><div><label>Time</label><input type="time" id="meetingTime" value="14:00" /></div></div>
+              <label>Location</label><input id="meetingLocation" placeholder="Location" />
+              <label>Participants</label><input id="meetingParticipants" placeholder="Participants" />
+              <label>Purpose</label><textarea id="meetingPurpose" rows="2"></textarea>
+              <label>Opportunity Value</label><input type="number" id="meetingValue" placeholder="0" />
+              <label>GPS</label><input id="meetingGps" placeholder="lat,lng" />
+              <div class="mt-6 flex gap-3 justify-end"><button onclick="closeModal()" class="px-4 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">Cancel</button><button onclick="submitMeeting()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Schedule</button></div>
+            `;
+                box.innerHTML = html;
+                overlay.classList.add('active');
+            } else {
+                closeModal();
+            }
+        }
+
+        // ---------- SUBMIT FUNCTIONS ----------
+        function submitVisit() {
+            const visit = {
+                id: Date.now(),
+                customer: document.getElementById('visitCustomer').value || 'Customer',
+                businessName: document.getElementById('visitBusiness').value || '',
+                contact: document.getElementById('visitContact').value || '',
+                mobile: document.getElementById('visitMobile').value || '',
+                date: document.getElementById('visitDate').value || new Date().toISOString().slice(0, 10),
+                startTime: document.getElementById('visitStart').value || '10:00',
+                endTime: document.getElementById('visitEnd').value || '11:00',
+                location: document.getElementById('visitLocation').value || '',
+                gps: document.getElementById('visitGps').value || '',
+                distance: parseFloat(document.getElementById('visitDistance').value) || 0,
+                livePhoto: '',
+                purpose: document.getElementById('visitPurpose').value || '',
+                discussion: document.getElementById('visitDiscussion').value || '',
+                outcome: document.getElementById('visitOutcome').value || 'Positive',
+                nextAction: document.getElementById('visitNextAction').value || '',
+                followupDate: document.getElementById('visitFollowup').value || '',
+                remarks: document.getElementById('visitRemarks').value || '',
+                status: document.getElementById('visitStatus').value || 'Completed',
+                verified: !!document.getElementById('visitGps').value
+            };
+            AppData.visits.push(visit);
+            saveData();
+            renderPage(currentPage);
+            showToast('✅ Visit recorded');
+            closeModal();
+        }
+
+        function submitProspect() {
+            const prospect = {
+                id: Date.now(),
+                businessName: document.getElementById('prospectBusiness').value || 'New Business',
+                contact: document.getElementById('prospectContact').value || '',
+                mobile: document.getElementById('prospectMobile').value || '',
+                email: document.getElementById('prospectEmail').value || '',
+                location: document.getElementById('prospectLocation').value || '',
+                gps: '',
+                industry: document.getElementById('prospectIndustry').value || '',
+                businessType: document.getElementById('prospectType').value || '',
+                estimatedValue: parseFloat(document.getElementById('prospectValue').value) || 0,
+                requirement: document.getElementById('prospectRequirement').value || '',
+                currentProvider: '',
+                competitor: '',
+                opportunityLevel: document.getElementById('prospectLevel').value || 'Medium',
+                assignedBDO: AppData.user.name,
+                assignedBDE: '',
+                status: document.getElementById('prospectStatus').value || 'New',
+                nextFollowup: document.getElementById('prospectFollowup').value || '',
+            };
+            AppData.prospects.push(prospect);
+            saveData();
+            renderPage(currentPage);
+            showToast('✅ Prospect created');
+            closeModal();
+        }
+
+        function submitLead() {
+            const lead = {
+                id: Date.now(),
+                customer: document.getElementById('leadCustomer').value || 'New Lead',
+                source: document.getElementById('leadSource').value || 'Other',
+                status: document.getElementById('leadStatus').value || 'New',
+                assignedBDO: AppData.user.name,
+                assignedBDE: document.getElementById('leadBDE').value || '',
+                value: parseFloat(document.getElementById('leadValue').value) || 0,
+                created: new Date().toISOString().slice(0, 10),
+                nextFollowup: document.getElementById('leadFollowup').value || '',
+            };
+            AppData.leads.push(lead);
+            saveData();
+            renderPage(currentPage);
+            showToast('✅ Lead created');
+            closeModal();
+        }
+
+        function submitOpportunity() {
+            const opp = {
+                id: Date.now(),
+                customer: document.getElementById('oppCustomer').value || 'Customer',
+                product: document.getElementById('oppProduct').value || '',
+                value: parseFloat(document.getElementById('oppValue').value) || 0,
+                probability: parseFloat(document.getElementById('oppProbability').value) || 50,
+                expectedClosing: document.getElementById('oppClosing').value || '',
+                decisionMaker: document.getElementById('oppDecision').value || '',
+                competitor: '',
+                stage: document.getElementById('oppStage').value || 'New',
+                nextAction: document.getElementById('oppNext').value || '',
+                owner: AppData.user.name,
+                status: 'Active'
+            };
+            AppData.opportunities.push(opp);
+            saveData();
+            renderPage(currentPage);
+            showToast('✅ Opportunity created');
+            closeModal();
+        }
+
+        function submitFollowup() {
+            const fup = {
+                id: Date.now(),
+                lead: document.getElementById('fupLead').value || '',
+                customer: document.getElementById('fupCustomer').value || 'Customer',
+                contact: '',
+                date: document.getElementById('fupDate').value || new Date().toISOString().slice(0, 10),
+                time: document.getElementById('fupTime').value || '10:00',
+                method: document.getElementById('fupMethod').value || 'Call',
+                discussion: document.getElementById('fupDiscussion').value || '',
+                response: document.getElementById('fupResponse').value || '',
+                nextAction: document.getElementById('fupNextAction').value || '',
+                nextFollowup: document.getElementById('fupNextDate').value || '',
+                status: 'Pending'
+            };
+            AppData.followups.push(fup);
+            saveData();
+            renderPage(currentPage);
+            showToast('✅ Follow-up added');
+            closeModal();
+        }
+
+        function submitSurvey() {
+            const survey = {
+                id: Date.now(),
+                area: document.getElementById('surveyArea').value || '',
+                location: document.getElementById('surveyLocation').value || '',
+                businessName: document.getElementById('surveyBusiness').value || 'New Business',
+                businessCategory: document.getElementById('surveyCategory').value || '',
+                contactPerson: document.getElementById('surveyContact').value || '',
+                mobile: document.getElementById('surveyMobile').value || '',
+                estimatedBusinessSize: document.getElementById('surveySize').value || 'Medium',
+                customerPotential: document.getElementById('surveyPotential').value || 'Medium',
+                currentProvider: '',
+                competitor: '',
+                competitorPricing: '',
+                customerRequirement: '',
+                opportunityPotential: document.getElementById('surveyOpportunity').value || 'Medium',
+                photo: '',
+                gps: document.getElementById('surveyGps').value || '',
+                surveyDate: new Date().toISOString().slice(0, 10),
+                remarks: document.getElementById('surveyRemarks').value || '',
+                status: 'Completed'
+            };
+            AppData.surveys.push(survey);
+            saveData();
+            renderPage(currentPage);
+            showToast('✅ Survey submitted');
+            closeModal();
+        }
+
+        function submitDailyReport() {
+            const report = {
+                date: document.getElementById('reportDate').value || new Date().toISOString().slice(0, 10),
+                employee: AppData.user.name,
+                territory: document.getElementById('reportTerritory').value || AppData.user.territory,
+                areasCovered: document.getElementById('reportAreas').value || '',
+                plannedVisits: parseInt(document.getElementById('reportPlanned').value) || 0,
+                completedVisits: parseInt(document.getElementById('reportCompleted').value) || 0,
+                customerVisits: parseInt(document.getElementById('reportCustomerVisits').value) || 0,
+                prospectVisits: parseInt(document.getElementById('reportProspectVisits').value) || 0,
+                newProspects: parseInt(document.getElementById('reportNewProspects').value) || 0,
+                newLeads: parseInt(document.getElementById('reportNewLeads').value) || 0,
+                meetings: parseInt(document.getElementById('reportMeetings').value) || 0,
+                followups: parseInt(document.getElementById('reportFollowups').value) || 0,
+                businessOpportunities: parseInt(document.getElementById('reportOpportunities').value) || 0,
+                expectedRevenue: parseFloat(document.getElementById('reportRevenue').value) || 0,
+                competitorFindings: document.getElementById('reportCompetitor').value || '',
+                marketFindings: document.getElementById('reportMarket').value || '',
+                problems: document.getElementById('reportProblems').value || '',
+                supportRequired: '',
+                tomorrowPlan: document.getElementById('reportPlan').value || '',
+                remarks: document.getElementById('reportRemarks').value || '',
+                status: document.getElementById('reportStatus').value || 'Submitted'
+            };
+            AppData.dailyReports.push(report);
+            saveData();
+            renderPage(currentPage);
+            showToast('✅ Daily report submitted');
+            closeModal();
+        }
+
+        function submitExpense() {
+            const exp = {
+                id: Date.now(),
+                employee: AppData.user.name,
+                date: document.getElementById('expDate').value || new Date().toISOString().slice(0, 10),
+                expenseType: document.getElementById('expType').value || 'Other',
+                amount: parseFloat(document.getElementById('expAmount').value) || 0,
+                visitId: 0,
+                customer: document.getElementById('expCustomer').value || '',
+                location: document.getElementById('expLocation').value || '',
+                gps: document.getElementById('expGps').value || '',
+                receipt: '',
+                livePhoto: '',
+                remarks: document.getElementById('expRemarks').value || '',
+                status: 'Pending'
+            };
+            AppData.travelExpenses.push(exp);
+            saveData();
+            renderPage(currentPage);
+            showToast('✅ Expense added');
+            closeModal();
+        }
+
+        function submitTask() {
+            const task = {
+                id: Date.now(),
+                title: document.getElementById('taskTitle').value || 'New Task',
+                assignedTo: document.getElementById('taskAssigned').value || AppData.user.name,
+                due: document.getElementById('taskDue').value || new Date().toISOString().slice(0, 10),
+                priority: document.getElementById('taskPriority').value || 'Medium',
+                status: 'Pending',
+                category: document.getElementById('taskCategory').value || 'General'
+            };
+            AppData.tasks.push(task);
+            saveData();
+            renderPage(currentPage);
+            showToast('✅ Task created');
+            closeModal();
+        }
+
+        function submitIntel() {
+            const intel = {
+                id: Date.now(),
+                competitor: document.getElementById('intelCompetitor').value || 'Competitor',
+                location: document.getElementById('intelLocation').value || '',
+                product: document.getElementById('intelProduct').value || '',
+                priceInfo: document.getElementById('intelPrice').value || '',
+                offer: document.getElementById('intelOffer').value || '',
+                customerFeedback: document.getElementById('intelFeedback').value || '',
+                strengths: document.getElementById('intelStrengths').value || '',
+                weaknesses: document.getElementById('intelWeaknesses').value || '',
+                marketPosition: '',
+                photos: '',
+                dateCollected: new Date().toISOString().slice(0, 10),
+                remarks: ''
+            };
+            AppData.intelligence.push(intel);
+            saveData();
+            renderPage(currentPage);
+            showToast('✅ Market intelligence added');
+            closeModal();
+        }
+
+        function submitMeeting() {
+            const meeting = {
+                id: Date.now(),
+                customer: document.getElementById('meetingCustomer').value || 'Customer',
+                date: document.getElementById('meetingDate').value || new Date().toISOString().slice(0, 10),
+                time: document.getElementById('meetingTime').value || '14:00',
+                location: document.getElementById('meetingLocation').value || '',
+                participants: document.getElementById('meetingParticipants').value || '',
+                purpose: document.getElementById('meetingPurpose').value || '',
+                discussion: '',
+                opportunityValue: parseFloat(document.getElementById('meetingValue').value) || 0,
+                outcome: 'Scheduled',
+                nextAction: '',
+                followupDate: '',
+                gps: document.getElementById('meetingGps').value || '',
+                livePhoto: ''
+            };
+            AppData.meetings.push(meeting);
+            saveData();
+            renderPage(currentPage);
+            showToast('✅ Meeting scheduled');
+            closeModal();
+        }
+
+        // ---------- DELETE FUNCTIONS ----------
+        function deleteVisit(id) { if (!confirm('Delete visit?')) return;
+            AppData.visits = AppData.visits.filter(v => v.id !== id);
+            saveData();
+            renderPage(currentPage);
+            showToast('🗑️ Deleted'); }
+
+        function deleteProspect(id) { if (!confirm('Delete prospect?')) return;
+            AppData.prospects = AppData.prospects.filter(p => p.id !== id);
+            saveData();
+            renderPage(currentPage);
+            showToast('🗑️ Deleted'); }
+
+        function deleteLead(id) { if (!confirm('Delete lead?')) return;
+            AppData.leads = AppData.leads.filter(l => l.id !== id);
+            saveData();
+            renderPage(currentPage);
+            showToast('🗑️ Deleted'); }
+
+        function deleteOpportunity(id) { if (!confirm('Delete opportunity?')) return;
+            AppData.opportunities = AppData.opportunities.filter(o => o.id !== id);
+            saveData();
+            renderPage(currentPage);
+            showToast('🗑️ Deleted'); }
+
+        function deleteCustomer(id) { if (!confirm('Delete customer?')) return;
+            AppData.customers = AppData.customers.filter(c => c.id !== id);
+            saveData();
+            renderPage(currentPage);
+            showToast('🗑️ Deleted'); }
+
+        function deleteMeeting(id) { if (!confirm('Delete meeting?')) return;
+            AppData.meetings = AppData.meetings.filter(m => m.id !== id);
+            saveData();
+            renderPage(currentPage);
+            showToast('🗑️ Deleted'); }
+
+        function deleteFollowup(id) { if (!confirm('Delete follow-up?')) return;
+            AppData.followups = AppData.followups.filter(f => f.id !== id);
+            saveData();
+            renderPage(currentPage);
+            showToast('🗑️ Deleted'); }
+
+        function deleteSurvey(id) { if (!confirm('Delete survey?')) return;
+            AppData.surveys = AppData.surveys.filter(s => s.id !== id);
+            saveData();
+            renderPage(currentPage);
+            showToast('🗑️ Deleted'); }
+
+        function deleteIntel(id) { if (!confirm('Delete intel?')) return;
+            AppData.intelligence = AppData.intelligence.filter(i => i.id !== id);
+            saveData();
+            renderPage(currentPage);
+            showToast('🗑️ Deleted'); }
+
+        function deleteTask(id) { if (!confirm('Delete task?')) return;
+            AppData.tasks = AppData.tasks.filter(t => t.id !== id);
+            saveData();
+            renderPage(currentPage);
+            showToast('🗑️ Deleted'); }
+
+        // Edit stubs
+        function editVisit(id) { showToast('✏️ Edit visit (stub)'); }
+
+        function editProspect(id) { showToast('✏️ Edit prospect (stub)'); }
+
+        function editLead(id) { showToast('✏️ Edit lead (stub)'); }
+
+        function editOpportunity(id) { showToast('✏️ Edit opportunity (stub)'); }
+
+        function editCustomer(id) { showToast('✏️ Edit customer (stub)'); }
+
+        function editMeeting(id) { showToast('✏️ Edit meeting (stub)'); }
+
+        function editFollowup(id) { showToast('✏️ Edit follow-up (stub)'); }
+
+        function editSurvey(id) { showToast('✏️ Edit survey (stub)'); }
+
+        function editIntel(id) { showToast('✏️ Edit intel (stub)'); }
+
+        function editTask(id) { showToast('✏️ Edit task (stub)'); }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        // ================================================================
+        // UTILITY
+        // ================================================================
+        function formatNum(n) {
+            if (n >= 10000000) return (n / 10000000).toFixed(1) + 'Cr';
+            if (n >= 100000) return (n / 100000).toFixed(1) + 'L';
+            if (n >= 1000) return (n / 1000).toFixed(1) + 'k';
+            return n;
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            t.classList.add('show');
+            clearTimeout(t._timer);
+            t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+        }
+
+        function quickAction(action) {
+            if (action === 'Record Visit') openModal('visit');
+            else if (action === 'New Prospect') openModal('prospect');
+            else if (action === 'New Lead') openModal('lead');
+            else if (action === 'Schedule Meeting') openModal('meeting');
+            else if (action === 'Add Follow-up') openModal('followup');
+            else if (action === 'Market Survey') openModal('survey');
+            else if (action === 'Submit Daily Report') openModal('dailyReport');
+            else if (action === 'Add Expense') openModal('travelExpense');
+            else showToast('⚡ ' + action);
+        }
+
+        function drill(label) {
+            showToast('🔍 Drilling into: ' + label);
+            if (label.includes('Visit')) navigateTo('visits');
+            else if (label.includes('Territory')) navigateTo('territory');
+            else if (label.includes('Prospect')) navigateTo('prospects');
+            else if (label.includes('Lead')) navigateTo('leads');
+            else if (label.includes('Opportunity')) navigateTo('opportunities');
+            else if (label.includes('Customer')) navigateTo('customers');
+            else if (label.includes('Meeting')) navigateTo('meetings');
+            else if (label.includes('Follow-up')) navigateTo('followups');
+            else if (label.includes('Survey')) navigateTo('surveys');
+            else if (label.includes('Task')) navigateTo('tasks');
+            else if (label.includes('Performance')) navigateTo('performance');
+            else if (label.includes('Revenue') || label.includes('Target') || label.includes('Business')) navigateTo(
+            'performance');
+        }
+
+        // ================================================================
+        // SEARCH
+        // ================================================================
+        document.getElementById('globalSearch').addEventListener('input', function(e) {
+            const q = e.target.value.toLowerCase().trim();
+            if (!q) { renderPage(currentPage); return; }
+            const all = [...AppData.visits, ...AppData.prospects, ...AppData.leads, ...AppData.customers];
+            const results = all.filter(item => JSON.stringify(item).toLowerCase().includes(q));
+            showToast(`🔍 Found ${results.length} matches`);
+        });
+
+        // ================================================================
+        // NOTIFICATIONS
+        // ================================================================
+        document.getElementById('notifBtn').addEventListener('click', function() {
+            const badge = document.getElementById('notifBadge');
+            if (badge.textContent !== '0') {
+                badge.textContent = '0';
+                showToast('📬 Notifications cleared');
+            } else {
+                showToast('🔔 No new notifications');
+            }
+        });
+
+        // ================================================================
+        // SWITCH ROLE
+        // ================================================================
+        document.getElementById('switchRoleBtn').addEventListener('click', function() {
+            const name = document.getElementById('userNameDisplay');
+            if (name.textContent === 'Meena') {
+                name.textContent = 'Admin';
+                showToast('🔄 Switched to Admin');
+            } else {
+                name.textContent = 'Meena';
+                showToast('🔄 Switched to BDO');
+            }
+        });
+
+        // ================================================================
+        // INIT
+        // ================================================================
+        loadData();
+        renderSidebar();
+        renderPage('dashboard');
+
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        console.log('🚀 BDO Dashboard loaded');
+        console.log('💾 Data:', AppData);
+    </script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>

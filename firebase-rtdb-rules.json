@@ -1,0 +1,61 @@
+{
+  "rules": {
+    // Presence data path for real-time user tracking
+    "presence": {
+      // Allow all authenticated users to read the entire presence list
+      ".read": "auth != null",
+      
+      // Prevent direct writes at the parent level
+      ".write": false,
+      
+      // Each presence record is identified by userId
+      "{userId}": {
+        // Only the user owning this presence record can write to it
+        ".write": "auth.uid === $userId",
+        
+        // All authenticated users can read individual presence records
+        ".read": "auth != null",
+        
+        // Validate the presence record structure and field types
+        ".validate": "newData.hasChildren(['displayName', 'role', 'loginTime', 'lastActivityTime', 'online', 'status'])",
+        
+        // Field: displayName (string, required, non-empty)
+        "displayName": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 255"
+        },
+        
+        // Field: role (string, required, one of the valid roles)
+        "role": {
+          ".validate": "newData.isString() && (newData.val() === 'admin' || newData.val() === 'accountant' || newData.val() === 'affiliate' || newData.val() === 'BDE' || newData.val() === 'BDO' || newData.val() === 'CFO' || newData.val() === 'CGO' || newData.val() === 'CMO' || newData.val() === 'arrival_manager' || newData.val() === 'assistant_manager')"
+        },
+        
+        // Field: loginTime (timestamp in milliseconds, required, non-negative integer)
+        "loginTime": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() === Math.floor(newData.val())"
+        },
+        
+        // Field: lastActivityTime (timestamp in milliseconds, required, non-negative integer, must be >= loginTime)
+        "lastActivityTime": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() === Math.floor(newData.val()) && newData.val() >= root.child('presence').child($userId).child('loginTime').val()"
+        },
+        
+        // Field: online (boolean, required)
+        "online": {
+          ".validate": "newData.isBoolean()"
+        },
+        
+        // Field: status (string, required, one of: 'active', 'away', 'idle', 'offline')
+        "status": {
+          ".validate": "newData.isString() && (newData.val() === 'active' || newData.val() === 'away' || newData.val() === 'idle' || newData.val() === 'offline')"
+        },
+        
+        // Prevent adding any extra fields not in the presence record schema
+        ".validate": "!newData.hasChildren() || (newData.hasChild('displayName') && newData.hasChild('role') && newData.hasChild('loginTime') && newData.hasChild('lastActivityTime') && newData.hasChild('online') && newData.hasChild('status') && newData.numChildren() === 6)"
+      }
+    },
+    
+    // Root level protection
+    ".read": false,
+    ".write": false
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "epay-crm",
+  "version": "1.0.0",
+  "description": "ePay CRM with Firebase Backend",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server -p 8080 -o",
+    "start:dev": "NODE_ENV=development http-server -p 8080 -o",
+    "start:staging": "NODE_ENV=staging http-server -p 8080 -o",
+    "start:prod": "NODE_ENV=production http-server -p 8080 -o",
+    "env:setup": "cp .env.example .env && echo 'Created .env file. Please fill in your Firebase credentials.'",
+    "firebase:rules:deploy": "firebase deploy --only firestore:rules,database:rules",
+    "firebase:deploy": "firebase deploy",
+    "build": "node scripts/build.js",
+    "build:dev": "NODE_ENV=development node scripts/build.js",
+    "build:staging": "NODE_ENV=staging node scripts/build.js",
+    "build:prod": "NODE_ENV=production node scripts/build.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:error-handler": "jest services/error-handler-service.test.js",
+    "test:firebase-config": "node scripts/test-firebase-config.js"
+  },
+  "keywords": [
+    "crm",
+    "firebase",
+    "realtime",
+    "authentication",
+    "rbac"
+  ],
+  "author": "ePay",
+  "license": "MIT",
+  "dependencies": {
+    "firebase": "^10.7.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.0",
+    "@babel/preset-env": "^7.22.0",
+    "babel-jest": "^29.5.0",
+    "dotenv": "^16.3.1",
+    "http-server": "^14.1.1",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
+    "jest-watch-typeahead": "^2.2.2",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "database": {
+    "rules": "firebase-rtdb-rules.json"
+  },
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      ".env*",
+      "*.md",
+      "*.tmp"
+    ],
+    "redirects": [
+      {
+        "source": "/",
+        "destination": "/login.html",
+        "type": 301
+      }
+    ]
+  },
+  "emulators": {
+    "firestore": {
+      "host": "localhost",
+      "port": 8080
+    },
+    "database": {
+      "host": "localhost",
+      "port": 9000
+    },
+    "auth": {
+      "host": "localhost",
+      "port": 9099
+    },
+    "ui": {
+      "enabled": true,
+      "host": "localhost",
+      "port": 4000
+    }
+  }
+}

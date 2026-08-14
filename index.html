@@ -1,0 +1,3217 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ePay Digital Gallery 🤖 Start Your Own Digital Business | Franchise Opportunity</title>
+    <meta name="description" content="Launch your digital business with ePay Digital Gallery. Multi-service platform, AI CRM, franchise model, PAN India expansion. Calculate ROI, explore services & become a Gallery Partner." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+
+
+
+        :root {
+            --green-50: #ecfdf5; --green-100: #d1fae5; --green-200: #a7f3d0; --green-300: #6ee7b7;
+            --green-400: #34d399; --green-500: #10b981; --green-600: #059669; --green-700: #047857;
+            --green-800: #065f46; --green-900: #064e3b;
+            --white: #ffffff; --off-white: #f9fafb; --surface: #f3faf7;
+            --text: #111827; --text-secondary: #4b5563; --text-muted: #6b7280;
+            --border: #e5e7eb; --border-light: #f0fdf4;
+            --radius-sm: 10px; --radius: 14px; --radius-lg: 20px; --radius-xl: 28px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+            --shadow: 0 4px 20px rgba(0,0,0,0.05), 0 1px 4px rgba(0,0,0,0.04);
+            --shadow-md: 0 8px 30px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-lg: 0 20px 50px rgba(0,0,0,0.08), 0 6px 16px rgba(0,0,0,0.04);
+            --shadow-green: 0 8px 30px rgba(5,150,105,0.18), 0 2px 8px rgba(5,150,105,0.08);
+            --shadow-green-lg: 0 20px 50px rgba(5,150,105,0.2), 0 6px 16px rgba(5,150,105,0.1);
+            --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+            --transition-smooth: 0.5s cubic-bezier(0.22,1,0.36,1);
+            --transition-bounce: 0.5s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+        body {
+            font-family: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            color: var(--text); background: var(--white); line-height: 1.6;
+            -webkit-font-smoothing: antialiased; overflow-x: hidden;
+            background-image:
+                radial-gradient(ellipse at 20% 0%, rgba(5,150,105,0.07) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(16,185,129,0.06) 0%, transparent 45%),
+                radial-gradient(ellipse at 50% 100%, rgba(4,120,87,0.04) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; display: block; }
+        .container { width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+
+        /* Animations */
+        @keyframes float { 0%,100%{transform:translateY(0) rotate(0)} 25%{transform:translateY(-18px) rotate(2deg)} 50%{transform:translateY(-8px) rotate(-1deg)} 75%{transform:translateY(-22px) rotate(1deg)} }
+        @keyframes pulseSubtle { 0%,100%{box-shadow:0 0 0 0 rgba(5,150,105,0.25)} 50%{box-shadow:0 0 0 10px rgba(5,150,105,0)} }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes scaleIn { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
+        @keyframes gradientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+        @keyframes shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
+        @keyframes floatOrb { 0%,100%{transform:translate(0,0) scale(1);opacity:0.5} 33%{transform:translate(30px,-40px) scale(1.15);opacity:0.8} 66%{transform:translate(-20px,20px) scale(0.9);opacity:0.4} }
+        @keyframes spinSlow { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+        @keyframes cardShine { 0%{left:-100%} 100%{left:150%} }
+        @keyframes borderBeam { 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
+        @keyframes countPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+
+        .reveal { opacity:0; transform:translateY(48px) scale(0.97); transition:opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1); }
+        .reveal.visible { opacity:1; transform:translateY(0) scale(1); }
+        .reveal-delay-1 { transition-delay:0.12s; }
+        .reveal-delay-2 { transition-delay:0.24s; }
+        .reveal-delay-3 { transition-delay:0.36s; }
+        .reveal-delay-4 { transition-delay:0.48s; }
+
+        /* NAV */
+        .nav { position:fixed; top:0; left:0; right:0; z-index:1000; background:rgba(255,255,255,0.72); backdrop-filter:blur(24px) saturate(180%); -webkit-backdrop-filter:blur(24px) saturate(180%); border-bottom:1px solid transparent; transition:all 0.5s cubic-bezier(0.22,1,0.36,1); }
+        .nav.scrolled { border-bottom-color:rgba(5,150,105,0.15); box-shadow:0 4px 30px rgba(5,150,105,0.08); background:rgba(255,255,255,0.9); }
+        .nav-inner { display:flex; align-items:center; justify-content:space-between; height:74px; }
+        .logo { font-weight:800; font-size:1.3rem; letter-spacing:-0.03em; color:var(--text); display:flex; align-items:center; gap:8px; transition:transform 0.3s; }
+        .logo:hover { transform:scale(1.03); }
+        .logo-icon { width:36px; height:36px; background:linear-gradient(135deg,var(--green-400),var(--green-600),var(--green-700)); background-size:200% 200%; animation:gradientShift 4s ease infinite; border-radius:11px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:900; font-size:0.85rem; box-shadow:0 4px 16px rgba(5,150,105,0.4); overflow:hidden; }
+        .logo span { background:linear-gradient(135deg,var(--green-500),var(--green-700)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+        .nav-links { display:flex; align-items:center; gap:28px; list-style:none; }
+        .nav-links a { font-size:0.88rem; font-weight:500; color:var(--text-secondary); transition:color 0.3s; position:relative; padding:6px 0; }
+        .nav-links a::after { content:''; position:absolute; bottom:0; left:50%; width:0; height:2.5px; background:linear-gradient(90deg,var(--green-400),var(--green-600)); border-radius:2px; transition:all 0.4s; transform:translateX(-50%); }
+        .nav-links a:hover { color:var(--green-600); }
+        .nav-links a:hover::after { width:100%; }
+        .nav-cta { display:flex; gap:10px; align-items:center; }
+        .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 22px; font-size:0.9rem; font-weight:600; border-radius:50px; border:none; cursor:pointer; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); white-space:nowrap; letter-spacing:-0.01em; position:relative; overflow:hidden; isolation:isolate; }
+        .btn:active { transform:scale(0.95); }
+        .btn-primary { background:linear-gradient(135deg,var(--green-400),var(--green-600),var(--green-700)); background-size:200% 200%; animation:gradientShift 5s ease infinite; color:#fff; box-shadow:0 4px 20px rgba(5,150,105,0.35); }
+        .btn-primary:hover { box-shadow:0 8px 35px rgba(5,150,105,0.5); transform:translateY(-3px) scale(1.02); }
+        .btn-primary::before { content:''; position:absolute; top:0; left:-100%; width:60%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.35),transparent); transition:left 0.7s; z-index:1; }
+        .btn-primary:hover::before { left:120%; }
+        .btn-secondary { background:rgba(255,255,255,0.7); backdrop-filter:blur(8px); color:var(--text); border:1.5px solid rgba(5,150,105,0.2); }
+        .btn-secondary:hover { border-color:var(--green-400); background:var(--green-50); color:var(--green-700); transform:translateY(-2px); }
+        .btn-lg { padding:15px 32px; font-size:1rem; }
+        .btn-orange { background:linear-gradient(135deg,#f97316,#ea580c); color:#fff; border:none; box-shadow:0 4px 14px rgba(249,115,22,0.35); }
+        .btn-orange:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(249,115,22,0.5); }
+        .mobile-toggle { display:none; background:none; border:none; cursor:pointer; padding:8px; z-index:1001; }
+        .mobile-toggle span { display:block; width:24px; height:2.5px; background:var(--text); margin:5px 0; border-radius:2px; transition:0.3s; }
+
+        /* HERO */
+        .hero { padding:150px 0 100px; position:relative; overflow:hidden; background:linear-gradient(175deg,#ecfdf5 0%,#f0fdf7 20%,#f9fdfb 45%,#ffffff 70%,#f5fdf9 100%); }
+        .hero::before { content:''; position:absolute; top:-20%; right:-10%; width:600px; height:600px; background:radial-gradient(circle,rgba(16,185,129,0.12) 0%,transparent 70%); border-radius:50%; animation:floatOrb 12s ease-in-out infinite; pointer-events:none; }
+        .ambient-orb { position:absolute; border-radius:50%; filter:blur(60px); pointer-events:none; z-index:0; animation:floatOrb 14s ease-in-out infinite; }
+        .ambient-orb.o1 { width:320px; height:320px; background:rgba(16,185,129,0.15); top:10%; left:-5%; }
+        .ambient-orb.o2 { width:220px; height:220px; background:rgba(5,150,105,0.12); bottom:15%; right:5%; animation-delay:-4s; }
+        .ambient-orb.o3 { width:180px; height:180px; background:rgba(52,211,153,0.1); top:50%; left:40%; animation-delay:-8s; }
+        .hero-grid { display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:center; position:relative; z-index:1; }
+        .hero-badge { display:inline-flex; align-items:center; gap:8px; background:var(--green-50); color:var(--green-700); font-size:0.8rem; font-weight:600; padding:7px 16px; border-radius:100px; margin-bottom:22px; border:1px solid var(--green-100); }
+        .hero-badge .badge-dot { width:7px; height:7px; background:var(--green-500); border-radius:50%; animation:pulseSubtle 2s infinite; }
+        .hero h1 { font-size:clamp(2.3rem,4.5vw,3.5rem); font-weight:900; line-height:1.12; letter-spacing:-0.04em; margin-bottom:20px; color:var(--text); }
+        .hero h1 .gradient-text { background:linear-gradient(135deg,#059669 0%,#10b981 30%,#047857 70%,#065f46 100%); background-size:200% auto; -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:shimmer 3s linear infinite; }
+        .hero-sub { font-size:1.12rem; color:var(--text-secondary); max-width:520px; margin-bottom:32px; line-height:1.7; }
+        .hero-ctas { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:28px; }
+        .hero-highlights { display:flex; flex-wrap:wrap; gap:8px; }
+        .highlight-pill { display:inline-flex; align-items:center; gap:6px; font-size:0.82rem; font-weight:500; color:var(--text); background:rgba(255,255,255,0.85); backdrop-filter:blur(8px); border:1px solid rgba(5,150,105,0.12); padding:8px 14px; border-radius:100px; box-shadow:0 2px 10px rgba(0,0,0,0.04); transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+        .highlight-pill:hover { border-color:var(--green-400); box-shadow:0 8px 24px rgba(5,150,105,0.2); transform:translateY(-3px) scale(1.03); background:#fff; color:var(--green-700); }
+        .highlight-pill svg { color:var(--green-500); flex-shrink:0; }
+
+        /* Live Dashboard Card */
+        .hero-visual { position:relative; }
+        .live-dashboard { background:rgba(255,255,255,0.94); backdrop-filter:blur(20px) saturate(160%); border-radius:var(--radius-lg); border:1px solid rgba(255,255,255,0.8); box-shadow:0 25px 60px rgba(5,150,105,0.15),0 8px 24px rgba(0,0,0,0.06); padding:26px; position:relative; overflow:hidden; transition:all 0.5s; }
+        .live-dashboard::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:conic-gradient(from 0deg,transparent,rgba(16,185,129,0.07),transparent 30%); animation:spinSlow 14s linear infinite; pointer-events:none; }
+        .live-dashboard:hover { box-shadow:0 30px 70px rgba(5,150,105,0.22); transform:translateY(-4px); }
+        .dash-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; position:relative; z-index:1; }
+        .dash-title { font-weight:700; font-size:0.98rem; }
+        .status-badge { font-size:0.75rem; color:var(--green-600); font-weight:600; display:flex; align-items:center; gap:6px; background:var(--green-50); padding:5px 12px; border-radius:100px; }
+        .status-dot { width:7px; height:7px; background:var(--green-500); border-radius:50%; animation:pulseSubtle 2s infinite; }
+        .metric-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px; position:relative; z-index:1; }
+        .metric { background:linear-gradient(145deg,var(--surface),#fff); border-radius:var(--radius-sm); padding:14px 14px; border:1px solid transparent; transition:all 0.35s; }
+        .metric:hover { border-color:var(--green-200); background:#fff; box-shadow:0 6px 20px rgba(5,150,105,0.1); transform:translateY(-2px); }
+        .metric-label { font-size:0.7rem; color:var(--text-muted); margin-bottom:4px; text-transform:uppercase; letter-spacing:0.04em; font-weight:500; }
+        .metric-value { font-size:1.35rem; font-weight:800; letter-spacing:-0.02em; background:linear-gradient(135deg,var(--text),var(--green-700)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+        .metric-value.live { animation:countPulse 2.5s ease-in-out infinite; }
+        .service-list { list-style:none; position:relative; z-index:1; }
+        .service-list li { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--border-light); font-size:0.88rem; font-weight:500; transition:all 0.25s; }
+        .service-list li:hover { padding-left:5px; color:var(--green-700); }
+        .service-list li:last-child { border-bottom:none; }
+        .service-icon { width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:0.85rem; background:var(--green-50); color:var(--green-600); flex-shrink:0; }
+
+        /* SECTION COMMON */
+        section { padding:90px 0; position:relative; }
+        .section-label { display:inline-block; font-size:0.76rem; font-weight:700; color:var(--green-600); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:12px; background:var(--green-50); padding:6px 15px; border-radius:100px; border:1px solid var(--green-100); }
+        .section-title { font-size:clamp(1.7rem,3vw,2.4rem); font-weight:800; letter-spacing:-0.03em; line-height:1.2; margin-bottom:14px; color:var(--text); }
+        .section-sub { font-size:1.05rem; color:var(--text-secondary); max-width:620px; margin-bottom:44px; line-height:1.65; }
+        .text-center { text-align:center; }
+        .text-center .section-sub { margin-left:auto; margin-right:auto; }
+
+        /* TRUST / SUCCESS BAR */
+        .trust-bar { padding:48px 0; background:#fff; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+        .trust-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:16px; text-align:center; }
+        .trust-item { padding:22px 12px; border-radius:var(--radius); transition:all 0.4s; border:1px solid transparent; background:rgba(255,255,255,0.6); }
+        .trust-item:hover { border-color:var(--green-200); background:var(--green-50); box-shadow:0 10px 28px rgba(5,150,105,0.12); transform:translateY(-4px); }
+        .trust-item strong { display:block; font-size:1.85rem; font-weight:900; background:linear-gradient(135deg,var(--green-500),var(--green-700)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:4px; letter-spacing:-0.03em; }
+        .trust-item span { font-size:0.82rem; color:var(--text-muted); font-weight:500; }
+
+        /* ROI CALCULATOR */
+        .roi-section { background:var(--surface); }
+        .roi-box { background:#fff; border-radius:var(--radius-xl); border:1px solid rgba(5,150,105,0.12); box-shadow:var(--shadow-lg); padding:40px; display:grid; grid-template-columns:1.1fr 0.9fr; gap:40px; align-items:start; }
+        .roi-sliders label { display:block; font-size:0.85rem; font-weight:600; color:var(--text); margin-bottom:8px; }
+        .roi-sliders .slider-row { margin-bottom:22px; }
+        .roi-sliders input[type=range] { width:100%; height:6px; border-radius:6px; background:var(--green-100); outline:none; -webkit-appearance:none; }
+        .roi-sliders input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:22px; height:22px; border-radius:50%; background:linear-gradient(135deg,var(--green-400),var(--green-600)); cursor:pointer; box-shadow:0 2px 8px rgba(5,150,105,0.4); }
+        .slider-value { font-size:0.9rem; font-weight:700; color:var(--green-700); float:right; }
+        .roi-results { background:linear-gradient(160deg,#064e3b 0%,#047857 50%,#059669 100%); border-radius:var(--radius-lg); padding:28px; color:#fff; }
+        .roi-results h3 { font-size:1.1rem; font-weight:700; margin-bottom:18px; opacity:0.95; }
+        .roi-result-item { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.12); }
+        .roi-result-item:last-child { border-bottom:none; }
+        .roi-result-item span { font-size:0.88rem; opacity:0.85; }
+        .roi-result-item strong { font-size:1.25rem; font-weight:800; }
+        .roi-note { font-size:0.78rem; opacity:0.7; margin-top:16px; line-height:1.5; }
+
+        /* BEFORE / AFTER */
+        .ba-grid { display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+        .ba-card { border-radius:var(--radius-lg); padding:32px; border:1px solid var(--border); transition:all 0.4s; }
+        .ba-card.before { background:#fef2f2; border-color:#fecaca; }
+        .ba-card.after { background:var(--green-50); border-color:var(--green-200); }
+        .ba-card h3 { font-size:1.15rem; font-weight:700; margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+        .ba-card ul { list-style:none; }
+        .ba-card li { display:flex; align-items:flex-start; gap:10px; padding:8px 0; font-size:0.95rem; font-weight:500; }
+        .ba-card.before li { color:#991b1b; }
+        .ba-card.after li { color:var(--green-800); }
+
+        /* FEATURES */
+        .features-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+        .feature-card { background:rgba(255,255,255,0.9); backdrop-filter:blur(12px); border:1px solid rgba(229,231,235,0.8); border-radius:var(--radius-lg); padding:30px 24px; transition:all 0.5s cubic-bezier(0.22,1,0.36,1); position:relative; overflow:hidden; }
+        .feature-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--green-400),var(--green-600)); opacity:0; transition:opacity 0.3s; }
+        .feature-card:hover { border-color:rgba(52,211,153,0.5); box-shadow:0 18px 45px rgba(5,150,105,0.16); transform:translateY(-8px); background:#fff; }
+        .feature-card:hover::before { opacity:1; }
+        .feature-icon { width:50px; height:50px; border-radius:14px; background:linear-gradient(145deg,var(--green-50),var(--green-100)); color:var(--green-600); display:flex; align-items:center; justify-content:center; margin-bottom:16px; font-size:1.3rem; transition:all 0.45s cubic-bezier(0.34,1.56,0.64,1); }
+        .feature-card:hover .feature-icon { transform:scale(1.12) rotate(-6deg); box-shadow:0 8px 22px rgba(5,150,105,0.25); }
+        .feature-card h3 { font-size:1.08rem; font-weight:700; margin-bottom:8px; }
+        .feature-card p { font-size:0.92rem; color:var(--text-muted); line-height:1.55; }
+
+        /* ECOSYSTEM */
+        .ecosystem { background:var(--surface); }
+        .eco-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; }
+        .eco-card { background:rgba(255,255,255,0.95); border:1px solid var(--border); border-radius:var(--radius); padding:22px 12px; text-align:center; transition:all 0.4s; cursor:default; }
+        .eco-card:hover { border-color:var(--green-400); box-shadow:0 12px 32px rgba(5,150,105,0.18); transform:translateY(-6px) scale(1.03); }
+        .eco-icon { font-size:1.9rem; margin-bottom:10px; display:inline-block; transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+        .eco-card:hover .eco-icon { transform:scale(1.25) rotate(-5deg); }
+        .eco-card h4 { font-size:0.84rem; font-weight:600; }
+
+        /* SERVICE EXPLORER */
+        .service-search-wrap { max-width:480px; margin:0 auto 32px; position:relative; }
+        .service-search-wrap input { width:100%; padding:14px 18px 14px 48px; border:1.5px solid var(--border); border-radius:50px; font-size:0.95rem; outline:none; transition:all 0.25s; background:#fff; }
+        .service-search-wrap input:focus { border-color:var(--green-500); box-shadow:0 0 0 4px rgba(5,150,105,0.1); }
+        .service-search-wrap svg { position:absolute; left:18px; top:50%; transform:translateY(-50%); color:var(--text-muted); }
+        .service-tags { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+        .service-tag { padding:10px 18px; background:#fff; border:1px solid var(--border); border-radius:50px; font-size:0.88rem; font-weight:500; cursor:pointer; transition:all 0.3s; }
+        .service-tag:hover, .service-tag.active { background:var(--green-50); border-color:var(--green-400); color:var(--green-700); transform:translateY(-2px); box-shadow:0 4px 14px rgba(5,150,105,0.12); }
+
+        /* COMPARISON */
+        .compare-table-wrap { overflow-x:auto; border-radius:var(--radius-lg); border:1px solid var(--border); box-shadow:var(--shadow); }
+        .compare-table { width:100%; border-collapse:collapse; background:#fff; min-width:640px; }
+        .compare-table th, .compare-table td { padding:16px 20px; text-align:left; border-bottom:1px solid var(--border); font-size:0.92rem; }
+        .compare-table th { background:var(--surface); font-weight:700; color:var(--text); }
+        .compare-table th:first-child { border-radius:var(--radius-lg) 0 0 0; }
+        .compare-table .check { color:var(--green-600); font-weight:700; }
+        .compare-table .cross { color:#ef4444; }
+        .compare-table tr:last-child td { border-bottom:none; }
+        .compare-table .highlight-col { background:rgba(16,185,129,0.06); }
+
+        /* STEPS / TIMELINE */
+        .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; position:relative; }
+        .steps::before { content:''; position:absolute; top:36px; left:12%; right:12%; height:3px; background:linear-gradient(90deg,transparent,var(--green-300),var(--green-500),var(--green-300),transparent); background-size:200% 100%; animation:borderBeam 3s linear infinite; z-index:0; opacity:0.7; }
+        .step { text-align:center; position:relative; z-index:1; transition:all 0.4s; }
+        .step:hover { transform:translateY(-8px); }
+        .step-num { width:58px; height:58px; border-radius:50%; background:linear-gradient(135deg,var(--green-400),var(--green-600),var(--green-700)); background-size:200% 200%; animation:gradientShift 4s ease infinite; color:#fff; font-weight:900; font-size:1.25rem; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; box-shadow:0 8px 24px rgba(5,150,105,0.4); }
+        .step h3 { font-size:1.02rem; font-weight:700; margin-bottom:6px; }
+        .step p { font-size:0.88rem; color:var(--text-muted); }
+
+        /* FAQ */
+        .faq-list { max-width:780px; margin:0 auto; }
+        .faq-item { background:#fff; border:1px solid var(--border); border-radius:var(--radius); margin-bottom:12px; overflow:hidden; transition:all 0.3s; }
+        .faq-item:hover { border-color:var(--green-200); }
+        .faq-q { width:100%; text-align:left; padding:18px 22px; background:none; border:none; font-size:0.98rem; font-weight:600; color:var(--text); cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; font-family:inherit; }
+        .faq-q span { font-size:1.2rem; color:var(--green-600); transition:transform 0.3s; }
+        .faq-item.open .faq-q span { transform:rotate(45deg); }
+        .faq-a { max-height:0; overflow:hidden; transition:max-height 0.4s ease, padding 0.3s; padding:0 22px; font-size:0.93rem; color:var(--text-secondary); line-height:1.65; }
+        .faq-item.open .faq-a { max-height:300px; padding:0 22px 18px; }
+
+        /* COMMITMENT */
+        .commitment { background:linear-gradient(160deg,#064e3b 0%,#065f46 25%,#047857 55%,#059669 100%); background-size:200% 200%; animation:gradientShift 12s ease infinite; color:#fff; text-align:center; position:relative; overflow:hidden; }
+        .commitment .section-title { color:#fff; }
+        .commitment .section-sub { color:rgba(255,255,255,0.8); max-width:700px; }
+
+        /* FINAL CTA */
+        .final-cta { background:var(--surface); }
+        .cta-box { background:rgba(255,255,255,0.95); backdrop-filter:blur(16px); border:1px solid rgba(5,150,105,0.15); border-radius:var(--radius-xl); padding:56px 48px; text-align:center; box-shadow:0 25px 60px rgba(5,150,105,0.12); position:relative; overflow:hidden; }
+        .cta-box:hover { box-shadow:0 30px 70px rgba(5,150,105,0.18); transform:translateY(-3px); }
+        .cta-buttons { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; }
+
+        /* FOOTER */
+        footer { background:#0a1920; color:rgba(255,255,255,0.8); padding:60px 0 30px; position:relative; overflow:hidden; }
+        .footer-grid { display:grid; grid-template-columns:1.5fr 1fr 1fr 1.2fr; gap:40px; margin-bottom:40px; }
+        .footer-brand .logo { color:#fff; margin-bottom:14px; font-size:1.15rem; }
+        .footer-brand .logo span { color:#34d399; }
+        .footer-brand p { font-size:0.88rem; line-height:1.65; max-width:280px; color:rgba(255,255,255,0.55); }
+        .footer-col h4 { color:#fff; font-size:0.82rem; font-weight:700; margin-bottom:16px; text-transform:uppercase; letter-spacing:0.05em; }
+        .footer-col ul { list-style:none; }
+        .footer-col li { margin-bottom:9px; }
+        .footer-col a { font-size:0.86rem; color:rgba(255,255,255,0.55); transition:all 0.25s; }
+        .footer-col a:hover { color:#34d399; padding-left:4px; }
+        .footer-contact p { font-size:0.86rem; margin-bottom:6px; line-height:1.55; color:rgba(255,255,255,0.55); }
+        .footer-bottom { border-top:1px solid rgba(255,255,255,0.08); padding-top:22px; display:flex; justify-content:space-between; align-items:center; font-size:0.82rem; color:rgba(255,255,255,0.4); flex-wrap:wrap; gap:12px; }
+
+        /* STICKY BOTTOM CTA */
+        .sticky-cta { position:fixed; bottom:0; left:0; right:0; z-index:900; background:rgba(255,255,255,0.95); backdrop-filter:blur(16px); border-top:1px solid rgba(5,150,105,0.15); box-shadow:0 -8px 30px rgba(0,0,0,0.08); padding:12px 20px; transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.22,1,0.36,1); }
+        .sticky-cta.show { transform:translateY(0); }
+        .sticky-cta-inner { max-width:1240px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+        .sticky-cta-text { font-size:0.92rem; font-weight:600; color:var(--text); }
+        .sticky-cta-text span { color:var(--green-600); }
+        .sticky-cta-actions { display:flex; gap:10px; flex-wrap:wrap; }
+
+        /* FLOATING WIDGETS */
+        .float-widgets { position:fixed; right:18px; bottom:90px; z-index:950; display:flex; flex-direction:column; gap:10px; }
+        .float-btn { width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.2rem; box-shadow:0 6px 20px rgba(0,0,0,0.18); transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1); border:none; cursor:pointer; text-decoration:none; }
+        .float-btn:hover { transform:scale(1.12) translateY(-3px); }
+        .float-btn.wa { background:linear-gradient(135deg,#25d366,#128c7e); }
+        .float-btn.call { background:linear-gradient(135deg,#3b82f6,#1d4ed8); }
+        .float-btn.roi { background:linear-gradient(135deg,var(--green-400),var(--green-600)); }
+        .float-btn.ai { background:linear-gradient(135deg,#8b5cf6,#6d28d9); }
+
+        /* MODALS */
+        .epay-modal-overlay { position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.55); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity 0.3s; }
+        .epay-modal-overlay.open { opacity:1; pointer-events:all; }
+        .epay-modal { background:#fff; border-radius:22px; width:100%; max-width:460px; max-height:90vh; overflow-y:auto; box-shadow:0 30px 80px rgba(0,0,0,0.25); transform:scale(0.94) translateY(20px); transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s; opacity:0; position:relative; }
+        .epay-modal-overlay.open .epay-modal { transform:scale(1) translateY(0); opacity:1; }
+        .epay-modal-header { padding:24px 24px 0; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+        .epay-modal-logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.1rem; }
+        .epay-modal-logo .logo-icon { width:32px; height:32px; border-radius:9px; background:linear-gradient(135deg,var(--green-400),var(--green-600)); display:flex; align-items:center; justify-content:center; color:#fff; font-size:0.8rem; font-weight:900; }
+        .epay-modal-logo span { color:var(--green-600); }
+        .epay-modal-close { background:none; border:none; color:var(--text-muted); font-size:22px; cursor:pointer; padding:4px; border-radius:8px; line-height:1; }
+        .epay-modal-close:hover { background:#f1f5f9; color:var(--text); }
+        .epay-modal-body { padding:18px 24px 26px; }
+        .epay-modal-title { font-size:1.25rem; font-weight:800; margin-bottom:4px; }
+        .epay-modal-sub { font-size:0.86rem; color:var(--text-muted); margin-bottom:20px; }
+        .epay-form-group { margin-bottom:14px; }
+        .epay-form-group label { display:block; font-size:0.8rem; font-weight:600; margin-bottom:5px; }
+        .epay-form-group input, .epay-form-group select, .epay-form-group textarea { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:0.9rem; font-family:inherit; color:var(--text); outline:none; transition:all 0.25s; box-sizing:border-box; }
+        .epay-form-group input:focus, .epay-form-group select:focus, .epay-form-group textarea:focus { border-color:var(--green-500); box-shadow:0 0 0 3px rgba(5,150,105,0.1); }
+        .epay-form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+        .epay-form-submit { width:100%; padding:13px; border:none; border-radius:12px; background:linear-gradient(135deg,var(--green-400),var(--green-600)); color:#fff; font-size:0.95rem; font-weight:700; cursor:pointer; transition:all 0.3s; margin-top:6px; }
+        .epay-form-submit:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(5,150,105,0.4); }
+        .epay-form-error { color:#ef4444; font-size:0.8rem; text-align:center; min-height:18px; margin-top:8px; }
+        .epay-success-screen { text-align:center; padding:16px 0; }
+        .epay-success-icon { width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,var(--green-100),var(--green-200)); display:flex; align-items:center; justify-content:center; margin:0 auto 14px; font-size:1.6rem; }
+        .epay-success-title { font-size:1.15rem; font-weight:800; color:var(--green-700); margin-bottom:6px; }
+        .epay-success-sub { font-size:0.88rem; color:var(--text-muted); }
+
+        /* Staff role cards */
+        .epay-role-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:16px; }
+        .epay-role-card { border:2px solid var(--border); border-radius:12px; padding:12px 6px; text-align:center; cursor:pointer; transition:all 0.25s; background:#fff; }
+        .epay-role-card:hover { border-color:var(--green-300); background:var(--green-50); }
+        .epay-role-card.selected { border-color:var(--green-500); background:var(--green-50); box-shadow:0 0 0 3px rgba(5,150,105,0.12); }
+        .epay-role-card .role-icon { font-size:1.3rem; display:block; margin-bottom:4px; }
+        .epay-role-card .role-label { font-size:0.7rem; font-weight:700; }
+        .epay-staff-hint { background:var(--surface); border:1px solid var(--border-light); border-radius:10px; padding:10px 14px; font-size:0.78rem; color:var(--text-muted); margin-bottom:14px; }
+        .secret-staff-trigger { width:16px; height:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .secret-icon-shape { width:11px; height:11px; border:1.5px solid rgba(52,211,153,0.25); border-radius:3px; transform:rotate(45deg); transition:all 0.3s; }
+        .secret-staff-trigger:hover .secret-icon-shape { border-color:rgba(52,211,153,0.7); background:rgba(52,211,153,0.1); transform:rotate(45deg) scale(1.25); }
+
+        /* RESPONSIVE */
+        @media (max-width:1100px) {
+            .hero-grid, .ba-grid, .roi-box { grid-template-columns:1fr; gap:36px; }
+            .hero-visual { max-width:460px; margin:0 auto; }
+            .features-grid { grid-template-columns:repeat(2,1fr); }
+            .eco-grid { grid-template-columns:repeat(3,1fr); }
+            .steps { grid-template-columns:repeat(2,1fr); gap:28px; }
+            .steps::before { display:none; }
+            .trust-grid { grid-template-columns:repeat(3,1fr); }
+            .footer-grid { grid-template-columns:1fr 1fr; }
+        }
+        @media (max-width:768px) {
+            .nav-links, .nav-cta { display:none; }
+            .mobile-toggle { display:block; }
+            .nav-links.active { display:flex; flex-direction:column; position:absolute; top:74px; left:0; right:0; background:#fff; padding:20px; border-bottom:1px solid var(--border); gap:14px; box-shadow:var(--shadow-md); }
+            .nav-cta.active { display:flex; flex-direction:column; position:absolute; top:300px; left:0; right:0; background:#fff; padding:0 20px 20px; gap:10px; }
+            .hero { padding:120px 0 50px; }
+            .hero-ctas { flex-direction:column; }
+            .hero-ctas .btn { width:100%; }
+            .trust-grid { grid-template-columns:repeat(2,1fr); }
+            .features-grid, .eco-grid, .steps { grid-template-columns:1fr; }
+            .footer-grid { grid-template-columns:1fr; gap:28px; }
+            .footer-bottom { flex-direction:column; text-align:center; }
+            .cta-box { padding:36px 20px; }
+            .float-widgets { right:12px; bottom:80px; }
+            .sticky-cta-inner { justify-content:center; text-align:center; }
+            .sticky-cta-text { width:100%; }
+        }
+        @media (max-width:480px) {
+            .trust-grid { grid-template-columns:1fr 1fr; }
+            .hero h1 { font-size:1.9rem; }
+            .epay-role-grid { grid-template-columns:repeat(2,1fr); }
+            .epay-form-row { grid-template-columns:1fr; }
+        }
+
+        /* ========== FRANCHISE MAP ========== */
+        .map-section { background: linear-gradient(180deg, #f0fdf7 0%, #fff 40%, #f3faf7 100%); }
+        .map-layout {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 36px;
+            align-items: start;
+        }
+        .map-frame {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(5,150,105,0.15);
+            box-shadow: var(--shadow-lg);
+            padding: 24px 20px 18px;
+            position: relative;
+            overflow: hidden;
+        }
+        .map-frame::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--green-400), var(--green-600), var(--green-400));
+            background-size: 200% 100%;
+            animation: borderBeam 4s linear infinite;
+        }
+        .map-canvas {
+            position: relative;
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
+            aspect-ratio: 612 / 696;
+        }
+        #map-host { width: 100%; height: 100%; }
+        #map-host svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 6px 18px rgba(5,150,105,0.12)); }
+        #map-host path {
+            cursor: pointer;
+            transform-origin: center;
+            transform-box: fill-box;
+            transition: fill 0.25s ease, stroke 0.25s ease, filter 0.25s ease;
+        }
+        .map-tooltip {
+            position: absolute;
+            pointer-events: none;
+            z-index: 50;
+            background: #fff;
+            border: 1.5px solid var(--green-400);
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            opacity: 0;
+            transform: translate(-50%, -120%) scale(0.92);
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 12px 28px rgba(5,150,105,0.2);
+            white-space: nowrap;
+        }
+        .map-tooltip.visible { opacity: 1; transform: translate(-50%, -130%) scale(1); }
+        .map-tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 7px solid transparent;
+            border-top-color: var(--green-400);
+        }
+        .map-tooltip small {
+            display: block;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .map-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            justify-content: center;
+            margin-top: 14px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .map-legend span {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .map-legend i {
+            width: 12px; height: 12px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+        .leg-live { background: #059669; }
+        .leg-available { background: #34d399; }
+        .leg-filling { background: #fbbf24; }
+        .leg-soon { background: #d1d5db; }
+
+        .map-panel {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(5,150,105,0.12);
+            box-shadow: var(--shadow);
+            padding: 28px 24px;
+            position: sticky;
+            top: 100px;
+        }
+        .map-panel-empty {
+            text-align: center;
+            padding: 28px 12px;
+            color: var(--text-muted);
+        }
+        .map-panel-empty .icon { font-size: 2.4rem; margin-bottom: 10px; }
+        .map-panel-empty h3 { font-size: 1.1rem; color: var(--text); margin-bottom: 6px; }
+        .map-state-name {
+            font-size: 1.45rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        .map-state-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 100px;
+            margin-bottom: 18px;
+        }
+        .status-live { background: var(--green-50); color: var(--green-700); }
+        .status-available { background: #ecfdf5; color: #047857; border: 1px solid var(--green-200); }
+        .status-filling { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+        .status-soon { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
+        .map-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .map-stat {
+            background: var(--surface);
+            border-radius: var(--radius-sm);
+            padding: 14px 12px;
+            text-align: center;
+            border: 1px solid transparent;
+            transition: all 0.25s;
+        }
+        .map-stat:hover { border-color: var(--green-200); background: #fff; }
+        .map-stat strong {
+            display: block;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--green-700);
+            letter-spacing: -0.02em;
+        }
+        .map-stat span {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: 500;
+        }
+        .map-cities {
+            margin-bottom: 18px;
+        }
+        .map-cities h4 {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        .map-city-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .map-city-tag {
+            font-size: 0.78rem;
+            font-weight: 500;
+            padding: 5px 10px;
+            background: var(--green-50);
+            color: var(--green-800);
+            border-radius: 6px;
+            border: 1px solid var(--green-100);
+        }
+        .map-panel .btn { width: 100%; margin-top: 4px; }
+        .map-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-top: 28px;
+        }
+        .map-strip-item {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px 14px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .map-strip-item:hover {
+            border-color: var(--green-300);
+            box-shadow: 0 8px 24px rgba(5,150,105,0.12);
+            transform: translateY(-3px);
+        }
+        .map-strip-item .num {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--green-500), var(--green-700));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .map-strip-item .label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .map-loader {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--green-600);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            background: rgba(255,255,255,0.85);
+            border-radius: inherit;
+            z-index: 5;
+        }
+        @media (max-width: 900px) {
+            .map-layout { grid-template-columns: 1fr; }
+            .map-panel { position: static; }
+            .map-strip { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ===== SOLUTIONS / SERVICES ECOSYSTEM — PREMIUM ===== */
+        #solutions {
+            background:
+                radial-gradient(ellipse 80% 50% at 10% 0%, rgba(16,185,129,0.08) 0%, transparent 55%),
+                radial-gradient(ellipse 60% 40% at 90% 20%, rgba(5,150,105,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 30% at 50% 100%, rgba(4,120,87,0.05) 0%, transparent 45%),
+                linear-gradient(180deg, #fafffe 0%, #f0fdf7 25%, #ffffff 55%, #f7fdf9 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        #solutions::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(5,150,105,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(5,150,105,0.03) 1px, transparent 1px);
+            background-size: 48px 48px;
+            mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 20%, transparent 75%);
+            -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 20%, transparent 75%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        #solutions > .container { position: relative; z-index: 1; }
+
+        .sol-hero { text-align: center; margin-bottom: 56px; position: relative; }
+        .sol-hero .section-label {
+            background: linear-gradient(135deg, rgba(236,253,245,0.9), rgba(209,250,229,0.85));
+            border: 1px solid rgba(16,185,129,0.25);
+            box-shadow: 0 2px 12px rgba(5,150,105,0.08);
+        }
+        .sol-hero h2 {
+            font-size: clamp(2rem, 4vw, 2.85rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1.15;
+            margin-bottom: 18px;
+            color: var(--text);
+        }
+        .sol-hero h2 .gradient-text {
+            background: linear-gradient(135deg, #047857 0%, #10b981 40%, #059669 70%, #065f46 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 4s linear infinite;
+        }
+        .sol-hero p {
+            max-width: 640px;
+            margin: 0 auto 28px;
+            color: var(--text-secondary);
+            font-size: 1.08rem;
+            line-height: 1.75;
+            font-weight: 400;
+        }
+        .sol-hero .btn { box-shadow: 0 8px 28px rgba(5,150,105,0.28); }
+
+        /* Premium feature cards — glass + depth */
+        .premium-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 64px;
+        }
+        .premium-card {
+            background: rgba(255,255,255,0.82);
+            backdrop-filter: blur(16px) saturate(160%);
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
+            border: 1px solid rgba(229,231,235,0.9);
+            border-radius: 20px;
+            padding: 28px 24px 24px;
+            transition: all 0.5s cubic-bezier(0.22,1,0.36,1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 220px;
+            isolation: isolate;
+        }
+        .premium-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--green-400), var(--green-600), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .premium-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 0%, rgba(16,185,129,0.08) 0%, transparent 55%);
+            opacity: 0;
+            transition: opacity 0.45s;
+            z-index: -1;
+        }
+        .premium-card:hover {
+            border-color: rgba(52,211,153,0.55);
+            box-shadow:
+                0 24px 48px rgba(5,150,105,0.14),
+                0 8px 20px rgba(0,0,0,0.04);
+            transform: translateY(-8px) scale(1.01);
+            background: #fff;
+        }
+        .premium-card:hover::before { opacity: 1; }
+        .premium-card:hover::after { opacity: 1; }
+        .premium-card .pc-icon-wrap {
+            width: 52px; height: 52px;
+            border-radius: 16px;
+            background: linear-gradient(145deg, #ecfdf5, #d1fae5);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.55rem;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 14px rgba(5,150,105,0.12);
+            transition: all 0.45s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .premium-card:hover .pc-icon-wrap {
+            transform: scale(1.1) rotate(-4deg);
+            box-shadow: 0 8px 22px rgba(5,150,105,0.22);
+            background: linear-gradient(145deg, #d1fae5, #a7f3d0);
+        }
+        .premium-card h3 {
+            font-size: 1.08rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
+            color: var(--text);
+        }
+        .premium-card p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+            flex: 1;
+        }
+        .premium-card .pc-link {
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: var(--green-600);
+            margin-top: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+            letter-spacing: -0.01em;
+        }
+        .premium-card .pc-link span {
+            transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            display: inline-block;
+        }
+        .premium-card:hover .pc-link { color: var(--green-700); }
+        .premium-card:hover .pc-link span { transform: translateX(4px); }
+
+        /* Next move — refined chips */
+        .next-move { margin-bottom: 64px; }
+        .next-move h3 {
+            text-align: center;
+            font-size: 1.45rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 6px;
+        }
+        .next-move .nm-sub {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 26px;
+        }
+        .nm-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        .nm-card {
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(229,231,235,0.85);
+            border-radius: 16px;
+            padding: 20px 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+        .nm-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(145deg, rgba(236,253,245,0.6), transparent);
+            opacity: 0;
+            transition: opacity 0.35s;
+        }
+        .nm-card:hover {
+            border-color: var(--green-400);
+            background: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 14px 32px rgba(5,150,105,0.14);
+        }
+        .nm-card:hover::before { opacity: 1; }
+        .nm-card .nm-icon {
+            font-size: 1.65rem;
+            margin-bottom: 8px;
+            display: block;
+            transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            position: relative;
+        }
+        .nm-card:hover .nm-icon { transform: scale(1.15); }
+        .nm-card strong {
+            display: block;
+            font-size: 0.94rem;
+            font-weight: 700;
+            margin-bottom: 3px;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+        .nm-card span {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            position: relative;
+            line-height: 1.35;
+        }
+
+        /* Category blocks */
+        .sol-cat {
+            margin-bottom: 48px;
+            padding: 28px 24px;
+            background: rgba(255,255,255,0.55);
+            border: 1px solid rgba(229,231,235,0.6);
+            border-radius: 22px;
+            transition: all 0.4s;
+        }
+        .sol-cat:hover {
+            background: rgba(255,255,255,0.9);
+            border-color: rgba(16,185,129,0.2);
+            box-shadow: 0 12px 36px rgba(5,150,105,0.08);
+        }
+        .sol-cat-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(229,231,235,0.7);
+        }
+        .sol-cat-icon {
+            width: 54px; height: 54px;
+            border-radius: 16px;
+            background: linear-gradient(145deg, #ecfdf5, #d1fae5);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 16px rgba(5,150,105,0.12);
+            transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .sol-cat:hover .sol-cat-icon { transform: scale(1.08) rotate(-3deg); }
+        .sol-cat-header h3 {
+            font-size: 1.28rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 4px;
+            color: var(--text);
+        }
+        .sol-cat-header p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            max-width: 520px;
+        }
+        .sol-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 12px;
+        }
+        .sol-card {
+            background: #fff;
+            border: 1px solid rgba(229,231,235,0.9);
+            border-radius: 14px;
+            padding: 18px 16px;
+            transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+            position: relative;
+        }
+        .sol-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 12px; bottom: 12px;
+            width: 3px;
+            border-radius: 0 3px 3px 0;
+            background: linear-gradient(180deg, var(--green-400), var(--green-600));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .sol-card:hover {
+            border-color: rgba(52,211,153,0.45);
+            box-shadow: 0 10px 28px rgba(5,150,105,0.1);
+            transform: translateY(-3px);
+            padding-left: 20px;
+        }
+        .sol-card:hover::before { opacity: 1; }
+        .sol-card h4 {
+            font-size: 0.94rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text);
+            letter-spacing: -0.015em;
+        }
+        .sol-card p {
+            font-size: 0.81rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Journey flow — cinematic */
+        .journey-flow {
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(16,185,129,0.25) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 30%, rgba(4,120,87,0.2) 0%, transparent 45%),
+                linear-gradient(160deg, #022c22 0%, #064e3b 35%, #047857 70%, #059669 100%);
+            border-radius: 28px;
+            padding: 48px 32px 44px;
+            color: #fff;
+            text-align: center;
+            margin: 56px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 28px 60px rgba(4,120,87,0.28);
+        }
+        .journey-flow::before {
+            content: '';
+            position: absolute;
+            top: -40%; right: -20%;
+            width: 420px; height: 420px;
+            background: radial-gradient(circle, rgba(52,211,153,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatOrb 16s ease-in-out infinite;
+        }
+        .journey-flow h3 {
+            font-size: clamp(1.35rem, 2.5vw, 1.65rem);
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.03em;
+            position: relative;
+        }
+        .journey-flow .jf-sub {
+            opacity: 0.88;
+            font-size: 0.98rem;
+            margin-bottom: 32px;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+            position: relative;
+        }
+        .jf-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 8px 6px;
+            position: relative;
+        }
+        .jf-step {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.22);
+            padding: 11px 16px;
+            border-radius: 100px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s;
+        }
+        .jf-step:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
+            transform: translateY(-2px);
+        }
+        .jf-arrow {
+            opacity: 0.45;
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+        .jf-note {
+            margin-top: 28px;
+            font-size: 0.92rem;
+            opacity: 0.75;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            position: relative;
+        }
+
+        /* Gallery meaning — editorial card */
+        .gallery-meaning {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(5,150,105,0.14);
+            border-radius: 24px;
+            padding: 40px 36px;
+            margin: 48px 0;
+            box-shadow:
+                0 4px 6px rgba(0,0,0,0.02),
+                0 20px 50px rgba(5,150,105,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        .gallery-meaning::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 5px; height: 100%;
+            background: linear-gradient(180deg, var(--green-400), var(--green-600), var(--green-700));
+        }
+        .gallery-meaning h3 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--text);
+            letter-spacing: -0.025em;
+        }
+        .gallery-meaning > p {
+            color: var(--text-secondary);
+            line-height: 1.75;
+            margin-bottom: 20px;
+            font-size: 1.02rem;
+        }
+        .gm-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 22px;
+        }
+        .gm-pill {
+            background: linear-gradient(145deg, #ecfdf5, #d1fae5);
+            color: var(--green-800);
+            border: 1px solid rgba(16,185,129,0.25);
+            padding: 8px 15px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            transition: all 0.3s;
+        }
+        .gm-pill:hover {
+            background: linear-gradient(145deg, #d1fae5, #a7f3d0);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(5,150,105,0.15);
+        }
+        .gm-example {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            border-radius: 16px;
+            padding: 22px 24px;
+            border: 1px solid rgba(16,185,129,0.2);
+            position: relative;
+        }
+        .gm-example strong {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--green-800);
+            font-size: 0.98rem;
+            letter-spacing: -0.01em;
+        }
+        .gm-example span {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            display: block;
+        }
+
+        /* Vendor block — elevated */
+        .vendor-block {
+            background:
+                radial-gradient(ellipse at 0% 50%, rgba(16,185,129,0.1) 0%, transparent 50%),
+                linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #f7fef9 100%);
+            border: 1px solid rgba(16,185,129,0.28);
+            border-radius: 24px;
+            padding: 40px 36px;
+            margin: 48px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 16px 40px rgba(5,150,105,0.08);
+        }
+        .vendor-block::after {
+            content: '🏪';
+            position: absolute;
+            top: 20px; right: 28px;
+            font-size: 4rem;
+            opacity: 0.08;
+            pointer-events: none;
+        }
+        .vendor-block h3 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.03em;
+        }
+        .vendor-block .vb-sub {
+            color: var(--text-secondary);
+            margin-bottom: 22px;
+            font-size: 1rem;
+            line-height: 1.65;
+            max-width: 640px;
+        }
+        .vendor-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 10px 18px;
+            margin-bottom: 26px;
+            list-style: none;
+            padding: 0;
+        }
+        .vendor-list li {
+            font-size: 0.9rem;
+            font-weight: 550;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--green-900);
+            list-style: none;
+            padding: 6px 0;
+        }
+        .vendor-list li::before {
+            content: '';
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-400), var(--green-600));
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(5,150,105,0.3);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+            background-size: 11px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        /* All services index */
+        .all-services {
+            margin-top: 56px;
+            padding: 40px 28px;
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(229,231,235,0.7);
+            border-radius: 24px;
+        }
+        .all-services h3 {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            letter-spacing: -0.03em;
+        }
+        .all-services .as-sub {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            font-size: 0.95rem;
+        }
+        .as-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px 20px;
+        }
+        .as-col h4 {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--green-700);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, var(--green-300), transparent) 1;
+        }
+        .as-col ul { list-style: none; padding: 0; }
+        .as-col li {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            padding: 5px 0;
+            font-weight: 500;
+            transition: color 0.2s, padding-left 0.25s;
+            cursor: default;
+        }
+        .as-col li:hover {
+            color: var(--green-700);
+            padding-left: 4px;
+        }
+
+        /* Final CTA — magnetic */
+        .sol-cta-box {
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(16,185,129,0.08) 0%, transparent 60%),
+                #fff;
+            border: 1px solid rgba(5,150,105,0.18);
+            border-radius: 28px;
+            padding: 52px 40px;
+            text-align: center;
+            margin-top: 56px;
+            box-shadow:
+                0 4px 6px rgba(0,0,0,0.02),
+                0 28px 60px rgba(5,150,105,0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.45s;
+        }
+        .sol-cta-box:hover {
+            box-shadow: 0 32px 70px rgba(5,150,105,0.16);
+            transform: translateY(-3px);
+        }
+        .sol-cta-box h3 {
+            font-size: clamp(1.35rem, 2.5vw, 1.6rem);
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.03em;
+        }
+        .sol-cta-box p {
+            color: var(--text-secondary);
+            max-width: 540px;
+            margin: 0 auto 26px;
+            line-height: 1.7;
+            font-size: 1.02rem;
+        }
+
+        @media (max-width: 1100px) {
+            .premium-grid { grid-template-columns: repeat(2, 1fr); }
+            .nm-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .premium-grid, .nm-grid { grid-template-columns: repeat(2, 1fr); }
+            .jf-steps { gap: 8px; }
+            .jf-arrow { display: none; }
+            .gallery-meaning, .vendor-block, .sol-cta-box { padding: 28px 20px; }
+            .sol-cat { padding: 20px 16px; }
+        }
+        @media (max-width: 480px) {
+            .premium-grid, .nm-grid { grid-template-columns: 1fr; }
+        }
+    
+        /* ===== ePay Travel Vertical ===== */
+        #travel { background: linear-gradient(180deg, #f0f9ff 0%, #fff 40%, #ecfdf5 100%); padding: 90px 0; }
+        .travel-hero { text-align: center; margin-bottom: 36px; }
+        .travel-hero h2 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 12px; }
+        .travel-search-box { background: #fff; border-radius: 20px; border: 1px solid rgba(14,165,233,0.2); box-shadow: 0 12px 40px rgba(14,165,233,0.12); padding: 22px 24px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr auto; gap: 12px; align-items: end; margin-bottom: 20px; }
+        .travel-search-box label { display: block; font-size: 0.72rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 5px; }
+        .travel-search-box input, .travel-search-box select { width: 100%; padding: 11px 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.9rem; outline: none; font-family: inherit; }
+        .travel-search-box input:focus, .travel-search-box select:focus { border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14,165,233,0.12); }
+        .travel-tabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 28px; }
+        .travel-tabs button { padding: 9px 18px; border-radius: 100px; border: 1.5px solid #e2e8f0; background: #fff; font-size: 0.85rem; font-weight: 600; cursor: pointer; color: #475569; transition: 0.25s; }
+        .travel-tabs button.active, .travel-tabs button:hover { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: #fff; border-color: transparent; }
+        .travel-panel { display: none; }
+        .travel-panel.active { display: block; animation: fadeInUp 0.4s ease; }
+        .pkg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+        .pkg-card { background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; cursor: pointer; transition: 0.3s; }
+        .pkg-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(14,165,233,0.15); border-color: #7dd3fc; }
+        .pkg-img { height: 150px; background: linear-gradient(135deg, #0ea5e9, #0369a1); background-size: cover; background-position: center; position: relative; }
+        .pkg-badge { position: absolute; top: 10px; left: 10px; background: #f59e0b; color: #fff; font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
+        .pkg-body { padding: 14px 16px; }
+        .pkg-body h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+        .pkg-meta { font-size: 0.78rem; color: #64748b; margin-bottom: 8px; }
+        .pkg-includes { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+        .pkg-includes span { font-size: 0.7rem; background: #f0f9ff; color: #0369a1; padding: 2px 8px; border-radius: 100px; }
+        .pkg-price { display: flex; justify-content: space-between; align-items: center; }
+        .pkg-price strong { font-size: 1.15rem; color: #0f172a; }
+        .dest-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+        .dest-card { border-radius: 14px; min-height: 110px; display: flex; flex-direction: column; justify-content: flex-end; padding: 12px; color: #fff; cursor: pointer; transition: 0.3s; background-size: cover; background-position: center; }
+        .dest-card:hover { transform: scale(1.03); }
+        .dest-card h4 { font-size: 0.95rem; font-weight: 700; }
+        .dest-card span { font-size: 0.75rem; opacity: 0.9; }
+        .ai-box { background: linear-gradient(135deg, #0f172a, #1e3a5f); border-radius: 18px; padding: 28px; color: #fff; margin-bottom: 28px; }
+        .ai-box h3 { font-size: 1.2rem; margin-bottom: 8px; }
+        .ai-box p { font-size: 0.9rem; opacity: 0.85; margin-bottom: 14px; }
+        .ai-box textarea { width: 100%; border-radius: 12px; border: none; padding: 12px; font-family: inherit; font-size: 0.9rem; min-height: 70px; resize: vertical; }
+        .ai-results { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-top: 16px; }
+        .ai-rec { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 14px; border: 1px solid rgba(255,255,255,0.15); }
+        .ai-rec .tier { font-size: 0.75rem; font-weight: 700; opacity: 0.8; }
+        .ai-rec .price { font-size: 1.2rem; font-weight: 800; margin: 4px 0; }
+        .quote-form { background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .quote-form .full { grid-column: 1 / -1; }
+        .quote-form label { font-size: 0.78rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px; }
+        .quote-form input, .quote-form select, .quote-form textarea { width: 100%; padding: 10px 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 0.88rem; font-family: inherit; }
+        @media (max-width: 900px) {
+            .travel-search-box { grid-template-columns: 1fr 1fr; }
+            .quote-form { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .travel-search-box { grid-template-columns: 1fr; }
+        }
+
+</style>
+</head>
+<body>
+
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+    <div class="container nav-inner">
+        <a href="#" class="logo">
+            <div class="logo-icon">eP</div>
+            ePay <span>Digital Gallery</span>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#about">About</a></li>
+            <li><a href="#solutions">Solutions</a></li>
+            <li><a href="#travel">✈️ Travel</a></li>
+            <li><a href="#why">Why Us</a></li>
+            <li><a href="#ecosystem">Services</a></li>
+            <li><a href="#map">Franchise Map</a></li>
+            <li><a href="#roi">ROI</a></li>
+            <li><a href="#how">How It Works</a></li>
+            <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <div class="nav-cta" id="navCta">
+            <a href="#" class="btn btn-orange" onclick="openLeadModal(); return false;">Become Partner</a>
+<a href="login.html" class="btn btn-secondary" style="padding:10px 16px; font-size:0.85rem;">Gallery Login</a>
+        </div>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+    <div class="ambient-orb o1"></div>
+    <div class="ambient-orb o2"></div>
+    <div class="ambient-orb o3"></div>
+    <div class="container hero-grid">
+        <div>
+            <div class="hero-badge reveal">
+                <span class="badge-dot"></span>
+                Empowering Entrepreneurs Across India · 1200+ Live Galleries
+            </div>
+            <h1 class="reveal reveal-delay-1">Start Your Own <span class="gradient-text">Digital Business</span> with ePay Digital Gallery</h1>
+            <p class="hero-sub reveal reveal-delay-2">
+                Join India's multi-service digital franchise network. Deliver utilities, commerce, insurance, travel, AEPS & 150+ services from one AI-powered platform — with full training, CRM and nationwide support.
+            </p>
+            <div class="hero-ctas reveal reveal-delay-3">
+                <a href="#" class="btn btn-primary btn-lg" onclick="openLeadModal(); return false;">Become a Gallery Partner</a>
+                <a href="#roi" class="btn btn-secondary btn-lg">Calculate Your ROI</a>
+                <a href="#" class="btn btn-secondary btn-lg" onclick="openLeadModal('demo'); return false;">Book Free Consultation</a>
+            </div>
+            <div class="hero-highlights reveal reveal-delay-4">
+                <div class="highlight-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> PAN India Expansion</div>
+                <div class="highlight-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 150+ Digital Services</div>
+                <div class="highlight-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> AI Powered CRM</div>
+                <div class="highlight-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Franchise Model</div>
+                <div class="highlight-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Full Training & Support</div>
+            </div>
+        </div>
+
+        <div class="hero-visual reveal reveal-delay-2">
+            <div class="live-dashboard">
+                <div class="dash-header">
+                    <div class="dash-title">Live Gallery Dashboard</div>
+                    <div class="status-badge"><span class="status-dot"></span> Live</div>
+                </div>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <div class="metric-label">Today's Revenue</div>
+                        <div class="metric-value live" id="liveRevenue">₹32,450</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Transactions</div>
+                        <div class="metric-value live" id="liveTx">1,458</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Commission</div>
+                        <div class="metric-value live" id="liveComm">₹8,520</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">New Members</div>
+                        <div class="metric-value live" id="liveMembers">15</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Wallet Balance</div>
+                        <div class="metric-value" id="liveWallet">₹85,440</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Support Tickets</div>
+                        <div class="metric-value">2</div>
+                    </div>
+                </div>
+                <ul class="service-list">
+                    <li><span class="service-icon">⚡</span> Utility Payments · Bill Pay · AEPS</li>
+                    <li><span class="service-icon">🛒</span> Digital Commerce · Gift Vouchers</li>
+                    <li><span class="service-icon">✈️</span> ePay Travel · Insurance · Loans</li>
+                    <li><span class="service-icon">📊</span> AI CRM · Leads · Commissions</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SUCCESS COUNTERS -->
+<div class="trust-bar">
+    <div class="container trust-grid">
+        <div class="trust-item reveal"><strong data-count="1200">0</strong><span>Live Galleries</span></div>
+        <div class="trust-item reveal reveal-delay-1"><strong data-count="18">0</strong><span>Cr+ Monthly Txns</span></div>
+        <div class="trust-item reveal reveal-delay-2"><strong data-count="28">0</strong><span>States Covered</span></div>
+        <div class="trust-item reveal reveal-delay-3"><strong data-count="150">0</strong><span>Digital Services</span></div>
+        <div class="trust-item reveal"><strong data-count="97">0</strong><span>% Satisfaction</span></div>
+        <div class="trust-item reveal reveal-delay-1"><strong>AI</strong><span>Powered CRM</span></div>
+    </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+    <div class="container" style="display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;">
+        <div class="reveal">
+            <div class="section-label">About Us</div>
+            <h2 class="section-title">India's Next-Gen Digital Business Platform</h2>
+            <p style="color:var(--text-secondary); margin-bottom:16px; font-size:1.02rem; line-height:1.7;">
+                ePay Digital Gallery is built by <strong style="color:var(--green-700);">ePay Digital India Pvt. Ltd.</strong> to empower entrepreneurs, retailers and franchise partners with a complete multi-service digital ecosystem.
+            </p>
+            <p style="color:var(--text-secondary); margin-bottom:16px; font-size:1.02rem; line-height:1.7;">
+                Customers get utilities, shopping, insurance, travel, AEPS, government services and more under one trusted brand. Partners get recurring revenue, AI CRM, automated operations and nationwide expansion support.
+            </p>
+            <p style="color:var(--text-secondary); font-size:1.02rem; line-height:1.7;">
+                Cloud infrastructure, real-time dashboards, commission tracking and full training — designed for scale across India.
+            </p>
+        </div>
+        <div class="reveal reveal-delay-2">
+            <div class="feature-card" style="margin-bottom:14px;">
+                <div class="feature-icon">☁️</div>
+                <h3>Cloud Infrastructure</h3>
+                <p>Scalable, secure platform built for high-volume digital transactions across India.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>AI CRM & Analytics</h3>
+                <p>Real-time dashboards, lead management, commission tracking and automated business ops.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- WHY CHOOSE -->
+<section id="why" style="background:var(--surface);">
+    <div class="container">
+        <div class="text-center reveal">
+            <div class="section-label">Why Choose Us</div>
+            <h2 class="section-title">Everything You Need to Build a Successful Digital Business</h2>
+            <p class="section-sub">A complete technology + support stack built for Indian entrepreneurs.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card reveal"><div class="feature-icon">🔗</div><h3>Multi-Service Platform</h3><p>Utilities, shopping, insurance, travel, AEPS, PAN, GST and 150+ services from one integrated system.</p></div>
+            <div class="feature-card reveal reveal-delay-1"><div class="feature-icon">⚙️</div><h3>Smart Automation</h3><p>AI CRM, business analytics, commission engine, wallet system and fully automated operations.</p></div>
+            <div class="feature-card reveal reveal-delay-2"><div class="feature-icon">🛡️</div><h3>Trusted Brand</h3><p>Operate under ePay Digital India with continuous business, marketing and technical support.</p></div>
+            <div class="feature-card reveal"><div class="feature-icon">🇮🇳</div><h3>PAN India Growth</h3><p>Join one of India's fastest-growing digital business networks with territory protection.</p></div>
+            <div class="feature-card reveal reveal-delay-1"><div class="feature-icon">💻</div><h3>Technology First</h3><p>Cloud platform, secure payments, mobile-ready, APIs and real-time reporting.</p></div>
+            <div class="feature-card reveal reveal-delay-2"><div class="feature-icon">🤝</div><h3>Complete Support</h3><p>Training, marketing kits, onboarding, operational guidance and dedicated tech support.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- ROI CALCULATOR -->
+<section id="roi" class="roi-section">
+    <div class="container">
+        <div class="text-center reveal">
+            <div class="section-label">Franchise ROI Calculator</div>
+            <h2 class="section-title">See Your Potential Earnings</h2>
+            <p class="section-sub">Adjust the sliders. Instantly estimate monthly revenue, commission and ROI.</p>
+        </div>
+        <div class="roi-box reveal">
+            <div class="roi-sliders">
+                <div class="slider-row">
+                    <label>Investment Amount <span class="slider-value" id="invVal">₹75,000</span></label>
+                    <input type="range" id="invSlider" min="50000" max="300000" step="5000" value="75000" />
+                </div>
+                <div class="slider-row">
+                    <label>Customers Per Day <span class="slider-value" id="custVal">45</span></label>
+                    <input type="range" id="custSlider" min="10" max="120" step="5" value="45" />
+                </div>
+                <div class="slider-row">
+                    <label>Average Bill Value <span class="slider-value" id="billVal">₹420</span></label>
+                    <input type="range" id="billSlider" min="150" max="1200" step="10" value="420" />
+                </div>
+                <div class="slider-row">
+                    <label>Commission Rate <span class="slider-value" id="commVal">2.8%</span></label>
+                    <input type="range" id="commSlider" min="1.5" max="5" step="0.1" value="2.8" />
+                </div>
+                <p style="font-size:0.82rem; color:var(--text-muted); margin-top:8px;">Estimates are illustrative. Actual earnings depend on location, footfall and service mix.</p>
+            </div>
+            <div class="roi-results">
+                <h3>Projected Results</h3>
+                <div class="roi-result-item"><span>Daily Transactions Value</span><strong id="resDaily">₹18,900</strong></div>
+                <div class="roi-result-item"><span>Monthly Revenue (GMV)</span><strong id="resMonthly">₹5.67 L</strong></div>
+                <div class="roi-result-item"><span>Your Commission / Month</span><strong id="resComm">₹15,876</strong></div>
+                <div class="roi-result-item"><span>Estimated Yearly Income</span><strong id="resYearly">₹1.91 L</strong></div>
+                <div class="roi-result-item"><span>Break-even (approx)</span><strong id="resBreakeven">5 months</strong></div>
+                <p class="roi-note">Figures assume 30 operating days/month. Higher footfall locations and additional services (insurance, travel, loans) typically increase income significantly.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- BEFORE / AFTER -->
+<section>
+    <div class="container">
+        <div class="text-center reveal">
+            <div class="section-label">Transformation</div>
+            <h2 class="section-title">Before vs After Joining ePay</h2>
+            <p class="section-sub">See how partners move from scattered efforts to a structured, multi-income digital business.</p>
+        </div>
+        <div class="ba-grid">
+            <div class="ba-card before reveal">
+                <h3>❌ Before</h3>
+                <ul>
+                    <li>No structured digital business</li>
+                    <li>Limited or no CRM</li>
+                    <li>Single or no service income</li>
+                    <li>Manual operations & records</li>
+                    <li>No brand support or training</li>
+                    <li>Uncertain daily earnings</li>
+                </ul>
+            </div>
+            <div class="ba-card after reveal reveal-delay-1">
+                <h3>✅ After ePay Gallery</h3>
+                <ul>
+                    <li>150+ services under one brand</li>
+                    <li>AI-powered CRM & dashboards</li>
+                    <li>Multiple recurring income streams</li>
+                    <li>Automated commissions & reports</li>
+                    <li>Full training + marketing support</li>
+                    <li>Clear daily revenue visibility</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<section id="ecosystem" class="ecosystem">
+    <div class="container">
+        <div class="text-center reveal">
+            <div class="section-label">Our Ecosystem</div>
+            <h2 class="section-title">One Platform. Multiple Business Opportunities.</h2>
+            <p class="section-sub">Offer the digital services your customers already need every day.</p>
+        </div>
+        <div class="eco-grid">
+            <div class="eco-card reveal"><div class="eco-icon">🛒</div><h4>Digital Commerce</h4></div>
+            <div class="eco-card reveal reveal-delay-1"><div class="eco-icon">⚡</div><h4>Utility / Bill Pay</h4></div>
+            <div class="eco-card reveal reveal-delay-2"><div class="eco-icon">🎁</div><h4>Gift Vouchers</h4></div>
+            <div class="eco-card reveal reveal-delay-3"><div class="eco-icon">🛡️</div><h4>Insurance</h4></div>
+            <div class="eco-card reveal"><div class="eco-icon">⛽</div><h4>Petro Card</h4></div>
+            <div class="eco-card reveal reveal-delay-1"><div class="eco-icon">✈️</div><h4>ePay Travel — Holidays</h4></div>
+            <div class="eco-card reveal reveal-delay-2"><div class="eco-icon">🏦</div><h4>AEPS / Banking</h4></div>
+            <div class="eco-card reveal reveal-delay-3"><div class="eco-icon">📄</div><h4>PAN / GST</h4></div>
+            <div class="eco-card reveal"><div class="eco-icon">🍔</div><h4>Food Ordering</h4></div>
+            <div class="eco-card reveal reveal-delay-1"><div class="eco-icon">📊</div><h4>AI Business CRM</h4></div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SOLUTIONS / SERVICES ECOSYSTEM ========== -->
+<section id="solutions">
+    <div class="container">
+        <div class="sol-hero reveal">
+            <div class="section-label">✦ EPAY DIGITAL — SERVICES &amp; SOLUTIONS</div>
+            <h2>One Digital Ecosystem.<br><span class="gradient-text">Solutions for Every Stage of Life &amp; Business.</span></h2>
+            <p>From AI and commerce to travel, property, finance, careers, relocation and business growth — platforms built to simplify real-world journeys, not just list services.</p>
+            <a href="#all-services" class="btn btn-primary btn-lg">Explore All Solutions</a>
+        </div>
+
+        <!-- Premium highlight cards -->
+        <div class="premium-grid reveal">
+            <div class="premium-card">
+                <div class="pc-icon-wrap">🤖</div>
+                <h3>AI Business</h3>
+                <p>Build smarter. Operate better. AI-powered digital solutions for modern businesses.</p>
+                <a href="#cat-ai" class="pc-link">Explore <span>→</span></a>
+            </div>
+            <div class="premium-card">
+                <div class="pc-icon-wrap">🛒</div>
+                <h3>ePay Commerce</h3>
+                <p>Products. Businesses. Customers. A connected commerce ecosystem for digital buying and selling.</p>
+                <a href="#cat-commerce" class="pc-link">Explore <span>→</span></a>
+            </div>
+            <div class="premium-card">
+                <div class="pc-icon-wrap">🏪</div>
+                <h3>Vendor Partnership</h3>
+                <p>Your products. More opportunities. Connect with the ePay business and gallery ecosystem.</p>
+                <a href="#vendor-partnership" class="pc-link">Become a Vendor <span>→</span></a>
+            </div>
+            <div class="premium-card">
+                <div class="pc-icon-wrap">✈️</div>
+                <h3>Travel Promotion</h3>
+                <p>Put destinations on the map. Digital solutions for travel promotion and tourism growth.</p>
+                <a href="#travel" class="pc-link">Explore <span>→</span></a>
+            </div>
+            <div class="premium-card">
+                <div class="pc-icon-wrap">🏠</div>
+                <h3>Property</h3>
+                <p>Find your next place. Digital property discovery and relocation solutions.</p>
+                <a href="#cat-property" class="pc-link">Explore <span>→</span></a>
+            </div>
+            <div class="premium-card">
+                <div class="pc-icon-wrap">💼</div>
+                <h3>Career Hub</h3>
+                <p>Your next opportunity starts here. Connect skills, careers, jobs and talent.</p>
+                <a href="#cat-career" class="pc-link">Explore <span>→</span></a>
+            </div>
+            <div class="premium-card">
+                <div class="pc-icon-wrap">🌍</div>
+                <h3>Relocation</h3>
+                <p>Moving made more connected. Property, accommodation, moving and arrival in one ecosystem.</p>
+                <a href="#cat-relocation" class="pc-link">Explore <span>→</span></a>
+            </div>
+            <div class="premium-card">
+                <div class="pc-icon-wrap">💰</div>
+                <h3>Finance</h3>
+                <p>Manage your financial journey. Digital financial tools designed around everyday needs.</p>
+                <a href="#cat-finance" class="pc-link">Explore <span>→</span></a>
+            </div>
+        </div>
+
+        <!-- What's Your Next Move -->
+        <div class="next-move reveal">
+            <h3>What's Your Next Move?</h3>
+            <p class="nm-sub">Looking for a solution? Jump to the category that matches your need.</p>
+            <div class="nm-grid">
+                <a href="#cat-property" class="nm-card"><div class="nm-icon">🏠</div><strong>Property</strong><span>Find property opportunities</span></a>
+                <a href="#travel" class="nm-card"><div class="nm-icon">✈️</div><strong>Travel</strong><span>Discover travel solutions</span></a>
+                <a href="#cat-career" class="nm-card"><div class="nm-icon">💼</div><strong>Career</strong><span>Build your career</span></a>
+                <a href="#cat-ai" class="nm-card"><div class="nm-icon">🤖</div><strong>AI</strong><span>Work smarter with AI</span></a>
+                <a href="#cat-commerce" class="nm-card"><div class="nm-icon">🛒</div><strong>Commerce</strong><span>Products &amp; services</span></a>
+                <a href="#cat-business" class="nm-card"><div class="nm-icon">🏢</div><strong>Business</strong><span>Build &amp; grow</span></a>
+                <a href="#cat-relocation" class="nm-card"><div class="nm-icon">🌍</div><strong>Relocation</strong><span>Make moving easier</span></a>
+                <a href="#cat-finance" class="nm-card"><div class="nm-icon">💰</div><strong>Finance</strong><span>Financial journey</span></a>
+            </div>
+        </div>
+
+        <!-- Gallery meaning + journey -->
+        <div class="gallery-meaning reveal">
+            <h3>What is an ePay Digital Gallery?</h3>
+            <p>A Gallery is more than a counter. It is a local ePay hub — service delivery, consultation, processing, support, customer acquisition and a partner ecosystem — all under one roof.</p>
+            <div class="gm-pills">
+                <span class="gm-pill">Service Center</span>
+                <span class="gm-pill">Consultation Center</span>
+                <span class="gm-pill">Processing Center</span>
+                <span class="gm-pill">Support Center</span>
+                <span class="gm-pill">Customer Acquisition</span>
+                <span class="gm-pill">Partner Ecosystem Hub</span>
+            </div>
+            <div class="gm-example">
+                <strong>Example journey — “I want to work in Germany.”</strong>
+                <span>ePay does not sell only a job listing. A full path can include: Career Assessment → Skill Training → Job Matching → Interview → Offer → Documentation → Visa Assistance → Finance Assistance → Insurance → Flight → Accommodation → Airport Transfer → Arrival Assistance → Joining. Website &amp; app handle discovery, application, document upload, payment, communication, tracking and journey management — one connected ecosystem.</span>
+            </div>
+        </div>
+
+        <div class="journey-flow reveal">
+            <h3>More Than Services.<br>A Connected Digital Ecosystem.</h3>
+            <p class="jf-sub">Platforms designed around real-world journeys — not isolated checkboxes.</p>
+            <div class="jf-steps">
+                <span class="jf-step">Discover</span><span class="jf-arrow">→</span>
+                <span class="jf-step">Book / Buy</span><span class="jf-arrow">→</span>
+                <span class="jf-step">Travel</span><span class="jf-arrow">→</span>
+                <span class="jf-step">Arrive</span><span class="jf-arrow">→</span>
+                <span class="jf-step">Relocate</span><span class="jf-arrow">→</span>
+                <span class="jf-step">Settle</span><span class="jf-arrow">→</span>
+                <span class="jf-step">Work / Learn</span><span class="jf-arrow">→</span>
+                <span class="jf-step">Grow</span>
+            </div>
+            <p class="jf-note">One ecosystem · Multiple possibilities</p>
+        </div>
+
+        <!-- Category blocks -->
+        <div class="sol-cat reveal" id="cat-business">
+            <div class="sol-cat-header">
+                <div class="sol-cat-icon">🏢</div>
+                <div>
+                    <h3>Business &amp; Enterprise</h3>
+                    <p>Build. Manage. Grow. Digital solutions for businesses, entrepreneurs and organizations.</p>
+                </div>
+            </div>
+            <div class="sol-cards">
+                <div class="sol-card"><h4>AI Business</h4><p>Smart digital solutions to automate operations and improve productivity.</p></div>
+                <div class="sol-card"><h4>Business Startup</h4><p>Digital support and tools for entrepreneurs starting and building new businesses.</p></div>
+                <div class="sol-card"><h4>MSME Digital</h4><p>Solutions designed for small and medium businesses looking to modernize and grow.</p></div>
+                <div class="sol-card"><h4>Franchise SaaS</h4><p>Technology infrastructure for managing and scaling franchise operations.</p></div>
+                <div class="sol-card"><h4>Franchise Discovery</h4><p>Connect businesses and franchise opportunities through a structured platform.</p></div>
+                <div class="sol-card"><h4>Commerce</h4><p>Digital commerce infrastructure connecting businesses, products and customers.</p></div>
+                <div class="sol-card"><h4>Service Marketplace</h4><p>A marketplace ecosystem connecting customers with service providers.</p></div>
+            </div>
+        </div>
+
+        <div class="sol-cat reveal" id="cat-ai">
+            <div class="sol-cat-header">
+                <div class="sol-cat-icon">🤖</div>
+                <div>
+                    <h3>AI &amp; Smart Technology</h3>
+                    <p>Intelligence that works for you. AI-powered platforms for real-world use cases.</p>
+                </div>
+            </div>
+            <div class="sol-cards">
+                <div class="sol-card"><h4>AI Assistant</h4><p>A digital assistant to help users access information, services and everyday support.</p></div>
+                <div class="sol-card"><h4>AI Business</h4><p>AI-enabled tools designed around productivity and operational efficiency.</p></div>
+                <div class="sol-card"><h4>AI Assistant — Advanced</h4><p>Personalized digital assistance for managing tasks, information and services.</p></div>
+            </div>
+        </div>
+
+        <div class="sol-cat reveal" id="cat-commerce">
+            <div class="sol-cat-header">
+                <div class="sol-cat-icon">🛒</div>
+                <div>
+                    <h3>Marketplace &amp; Commerce</h3>
+                    <p>Connecting people, products and opportunities across businesses and institutions.</p>
+                </div>
+            </div>
+            <div class="sol-cards">
+                <div class="sol-card"><h4>Commerce</h4><p>Digital commerce infrastructure for products, customers and transactions.</p></div>
+                <div class="sol-card"><h4>Service Marketplace</h4><p>Connect customers with service providers in one ecosystem.</p></div>
+                <div class="sol-card"><h4>Institution Marketplace</h4><p>Connect institutions with relevant products, services and opportunities.</p></div>
+                <div class="sol-card"><h4>Institution Marketplace — Advanced</h4><p>Broader institutional ecosystem for marketplace interactions and services.</p></div>
+                <div class="sol-card"><h4>Vendor Partnership</h4><p>Showcase products, build partnerships and expand reach with ePay galleries.</p></div>
+                <div class="sol-card"><h4>Booking</h4><p>Digital booking solutions for services and experiences.</p></div>
+            </div>
+        </div>
+
+        <div class="sol-cat reveal" id="cat-property">
+            <div class="sol-cat-header">
+                <div class="sol-cat-icon">🏠</div>
+                <div>
+                    <h3>Property &amp; Real Estate</h3>
+                    <p>Find. Move. Manage. Platforms for property discovery, rentals and relocation.</p>
+                </div>
+            </div>
+            <div class="sol-cards">
+                <div class="sol-card"><h4>Property</h4><p>Discover property opportunities through a structured digital platform.</p></div>
+                <div class="sol-card"><h4>Property — Advanced</h4><p>Enhanced property discovery and management capabilities.</p></div>
+                <div class="sol-card"><h4>Rental</h4><p>Connect people with rental opportunities and simplify the rental journey.</p></div>
+                <div class="sol-card"><h4>Relocation</h4><p>Digital support for people moving from one location to another.</p></div>
+                <div class="sol-card"><h4>Relocation — Advanced</h4><p>A broader ecosystem for managing requirements involved in relocation.</p></div>
+                <div class="sol-card"><h4>Accommodation</h4><p>Discover and manage accommodation options based on your requirements.</p></div>
+            </div>
+        </div>
+
+        <div class="sol-cat reveal" id="cat-travel-sol">
+            <div class="sol-cat-header">
+                <div class="sol-cat-icon">✈️</div>
+                <div>
+                    <h3>Travel &amp; Journey</h3>
+                    <p>Your journey, digitally connected. Solutions that simplify travel and destinations.</p>
+                </div>
+            </div>
+            <div class="sol-cards">
+                <div class="sol-card"><h4>Travel Promotion</h4><p>Promote destinations, travel experiences and tourism opportunities.</p></div>
+                <div class="sol-card"><h4>Travel Promotion — Advanced</h4><p>Expanded digital travel promotion capabilities.</p></div>
+                <div class="sol-card"><h4>Journey Score</h4><p>Evaluate and improve the journey experience with a digital concept.</p></div>
+                <div class="sol-card"><h4>Arrival Manager</h4><p>Tools designed around arrival coordination and destination support.</p></div>
+                <div class="sol-card"><h4>Booking</h4><p>Digital booking solutions for services and experiences.</p></div>
+            </div>
+        </div>
+
+        <div class="sol-cat reveal" id="cat-relocation">
+            <div class="sol-cat-header">
+                <div class="sol-cat-icon">🌍</div>
+                <div>
+                    <h3>Relocation &amp; Diaspora</h3>
+                    <p>Making moving to a new place easier — cities, countries and communities.</p>
+                </div>
+            </div>
+            <div class="sol-cards">
+                <div class="sol-card"><h4>Relocation</h4><p>Support for people planning and managing a move.</p></div>
+                <div class="sol-card"><h4>Diaspora</h4><p>Digital solutions for diaspora communities, connections and opportunities.</p></div>
+                <div class="sol-card"><h4>Accommodation</h4><p>Find suitable accommodation during relocation or travel.</p></div>
+                <div class="sol-card"><h4>Arrival Manager</h4><p>Support for managing arrival-related requirements.</p></div>
+            </div>
+        </div>
+
+        <div class="sol-cat reveal" id="cat-career">
+            <div class="sol-cat-header">
+                <div class="sol-cat-icon">💼</div>
+                <div>
+                    <h3>Career &amp; Talent</h3>
+                    <p>Skills. Careers. Opportunities. Platforms connecting people with learning and employment.</p>
+                </div>
+            </div>
+            <div class="sol-cards">
+                <div class="sol-card"><h4>Career Hub</h4><p>Centralized platform for career opportunities and professional resources.</p></div>
+                <div class="sol-card"><h4>Job Portal</h4><p>Connect job seekers and employers through a digital recruitment ecosystem.</p></div>
+                <div class="sol-card"><h4>TalentFlow</h4><p>Manage talent, recruitment and workforce opportunities.</p></div>
+                <div class="sol-card"><h4>Skill Academy</h4><p>Learn new skills and improve professional capabilities.</p></div>
+                <div class="sol-card"><h4>Language</h4><p>Language learning and communication-focused digital solutions.</p></div>
+            </div>
+        </div>
+
+        <div class="sol-cat reveal" id="cat-finance">
+            <div class="sol-cat-header">
+                <div class="sol-cat-icon">💰</div>
+                <div>
+                    <h3>Finance &amp; Protection</h3>
+                    <p>Smarter financial and safety solutions for everyday and emergency needs.</p>
+                </div>
+            </div>
+            <div class="sol-cards">
+                <div class="sol-card"><h4>Finance</h4><p>Digital financial services and management solutions.</p></div>
+                <div class="sol-card"><h4>Insurance</h4><p>Discover and manage insurance-related services digitally.</p></div>
+                <div class="sol-card"><h4>Wallet</h4><p>A digital wallet ecosystem for payments and transactions.</p></div>
+                <div class="sol-card"><h4>Emergency</h4><p>Access emergency-focused services and support.</p></div>
+                <div class="sol-card"><h4>Emergency Assistant</h4><p>Digital assistance designed to help users during urgent situations.</p></div>
+            </div>
+        </div>
+
+        <div class="sol-cat reveal" id="cat-institutions">
+            <div class="sol-cat-header">
+                <div class="sol-cat-icon">🏫</div>
+                <div>
+                    <h3>Institutions &amp; Communities</h3>
+                    <p>Digitize your institution — education, organizations and communities.</p>
+                </div>
+            </div>
+            <div class="sol-cards">
+                <div class="sol-card"><h4>Institution Marketplace</h4><p>Connect institutions with products, services and opportunities.</p></div>
+                <div class="sol-card"><h4>Institution Marketplace — Advanced</h4><p>Broader ecosystem for managing institutional marketplace interactions.</p></div>
+                <div class="sol-card"><h4>Language</h4><p>Language-focused learning and communication solutions.</p></div>
+                <div class="sol-card"><h4>Skill Academy</h4><p>Structured digital learning and skill development.</p></div>
+            </div>
+        </div>
+
+        <div class="sol-cat reveal" id="cat-moving">
+            <div class="sol-cat-header">
+                <div class="sol-cat-icon">🚚</div>
+                <div>
+                    <h3>Moving &amp; Logistics</h3>
+                    <p>Moving made simpler — for people and businesses managing relocation requirements.</p>
+                </div>
+            </div>
+            <div class="sol-cards">
+                <div class="sol-card"><h4>Moving</h4><p>Connect users with moving-related services.</p></div>
+                <div class="sol-card"><h4>Moving — Advanced</h4><p>Expanded moving management and service coordination.</p></div>
+                <div class="sol-card"><h4>Rental</h4><p>Support users in finding rental solutions during the moving process.</p></div>
+                <div class="sol-card"><h4>Property</h4><p>Discover property opportunities around relocation requirements.</p></div>
+            </div>
+        </div>
+
+        <!-- Vendor Partnership block -->
+        <div class="vendor-block reveal" id="vendor-partnership">
+            <h3>🏪 Vendor &amp; Business Partnerships</h3>
+            <p class="vb-sub">Turn business connections into growth. A dedicated ecosystem for businesses to connect with ePay’s network, showcase products and explore new opportunities.</p>
+            <p style="font-weight:700; margin-bottom:10px; color:var(--green-800);">Vendors can:</p>
+            <ul class="vendor-list">
+                <li>Showcase products</li>
+                <li>Connect with galleries</li>
+                <li>Manage inventory</li>
+                <li>Track orders</li>
+                <li>Monitor sales</li>
+                <li>Track revenue</li>
+                <li>View payments</li>
+                <li>Manage settlements</li>
+                <li>Explore new gallery opportunities</li>
+                <li>Access business reports</li>
+            </ul>
+            <a href="#" class="btn btn-primary" onclick="openLeadModal(); return false;">Become a Partner</a>
+        </div>
+
+        <!-- All services grid -->
+        <div class="all-services reveal" id="all-services">
+            <h3>Explore Everything</h3>
+            <p class="as-sub">Full list of solutions grouped by category — one ecosystem, many entry points.</p>
+            <div class="as-grid">
+                <div class="as-col">
+                    <h4>Business</h4>
+                    <ul>
+                        <li>AI Business</li>
+                        <li>Business Startup</li>
+                        <li>MSME Digital</li>
+                        <li>Franchise SaaS</li>
+                        <li>Franchise Discovery</li>
+                        <li>Commerce</li>
+                        <li>Service Marketplace</li>
+                    </ul>
+                </div>
+                <div class="as-col">
+                    <h4>AI &amp; Technology</h4>
+                    <ul>
+                        <li>AI Assistant</li>
+                        <li>AI Assistant Advanced</li>
+                        <li>AI Business</li>
+                    </ul>
+                </div>
+                <div class="as-col">
+                    <h4>Commerce</h4>
+                    <ul>
+                        <li>Commerce</li>
+                        <li>Vendor Partnership</li>
+                        <li>Booking</li>
+                        <li>Service Marketplace</li>
+                    </ul>
+                </div>
+                <div class="as-col">
+                    <h4>Property</h4>
+                    <ul>
+                        <li>Property</li>
+                        <li>Property Advanced</li>
+                        <li>Rental</li>
+                        <li>Accommodation</li>
+                    </ul>
+                </div>
+                <div class="as-col">
+                    <h4>Travel</h4>
+                    <ul>
+                        <li>Travel Promotion</li>
+                        <li>Travel Promotion Advanced</li>
+                        <li>Journey Score</li>
+                        <li>Arrival Manager</li>
+                        <li>Booking</li>
+                    </ul>
+                </div>
+                <div class="as-col">
+                    <h4>Relocation</h4>
+                    <ul>
+                        <li>Relocation</li>
+                        <li>Relocation Advanced</li>
+                        <li>Moving</li>
+                        <li>Moving Advanced</li>
+                        <li>Accommodation</li>
+                        <li>Diaspora</li>
+                    </ul>
+                </div>
+                <div class="as-col">
+                    <h4>Career</h4>
+                    <ul>
+                        <li>Career Hub</li>
+                        <li>Job Portal</li>
+                        <li>TalentFlow</li>
+                        <li>Skill Academy</li>
+                        <li>Language</li>
+                    </ul>
+                </div>
+                <div class="as-col">
+                    <h4>Finance &amp; Safety</h4>
+                    <ul>
+                        <li>Finance</li>
+                        <li>Insurance</li>
+                        <li>Wallet</li>
+                        <li>Emergency</li>
+                        <li>Emergency Assistant</li>
+                    </ul>
+                </div>
+                <div class="as-col">
+                    <h4>Institutions</h4>
+                    <ul>
+                        <li>Institution Marketplace</li>
+                        <li>Institution Marketplace Advanced</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="sol-cta-box reveal">
+            <h3>Have a Need? We May Have a Solution.</h3>
+            <p>Whether you're a business, institution, vendor, traveler, professional, entrepreneur or organization — explore the ePay ecosystem and discover the platform designed around your needs.</p>
+            <div class="cta-buttons">
+                <a href="#all-services" class="btn btn-primary btn-lg">Explore Solutions</a>
+                <a href="#" class="btn btn-secondary btn-lg" onclick="openLeadModal(); return false;">Partner With ePay</a>
+                <a href="#" class="btn btn-secondary btn-lg" onclick="openLeadModal('demo'); return false;">Contact Our Team</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICE EXPLORER -->
+<section>
+    <div class="container">
+        <div class="text-center reveal">
+            <div class="section-label">Service Explorer</div>
+            <h2 class="section-title">150+ Services Your Customers Need</h2>
+            <p class="section-sub">Search or browse. Every service runs through the same CRM and commission system.</p>
+        </div>
+        <div class="service-search-wrap reveal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" id="serviceSearch" placeholder="Search services: Aadhaar, PAN, Insurance, Recharge..." oninput="filterServices()" />
+        </div>
+        <div class="service-tags reveal" id="serviceTags">
+            <span class="service-tag" data-s="aadhaar pan e-kyc">Aadhaar / e-KYC</span>
+            <span class="service-tag" data-s="pan card">PAN Card</span>
+            <span class="service-tag" data-s="gst registration">GST</span>
+            <span class="service-tag" data-s="electricity water gas bill">Bill Payments</span>
+            <span class="service-tag" data-s="mobile dth recharge">Recharge</span>
+            <span class="service-tag" data-s="aeps banking cash">AEPS / Banking</span>
+            <span class="service-tag" data-s="insurance health life">Insurance</span>
+            <span class="service-tag" data-s="travel flight hotel bus">Travel</span>
+            <span class="service-tag" data-s="loan personal business">Loans</span>
+            <span class="service-tag" data-s="gift voucher">Gift Vouchers</span>
+            <span class="service-tag" data-s="petro fuel">Petro Card</span>
+            <span class="service-tag" data-s="food entertainment">Food & Entertainment</span>
+            <span class="service-tag" data-s="education">Education Services</span>
+            <span class="service-tag" data-s="courier logistics">Courier</span>
+            <span class="service-tag" data-s="digital marketing">Digital Marketing</span>
+            <span class="service-tag" data-s="crm software">Business CRM</span>
+        </div>
+    </div>
+</section>
+
+<!-- FRANCHISE MAP -->
+<section id="map" class="map-section">
+    <div class="container">
+        <div class="text-center reveal">
+            <div class="section-label">Franchise Locator</div>
+            <h2 class="section-title">Where Our Galleries Are Live</h2>
+            <p class="section-sub">Click any state to see live galleries, open positions and availability. Green = strong presence · Lighter = opportunity open.</p>
+        </div>
+        <div class="map-layout reveal">
+            <div class="map-frame">
+                <div class="map-canvas">
+                    <div class="map-loader" id="mapLoader">Loading India map…</div>
+                    <div id="map-host"></div>
+                    <div class="map-tooltip" id="mapTooltip"></div>
+                </div>
+                <div class="map-legend">
+                    <span><i class="leg-live"></i> Strong presence</span>
+                    <span><i class="leg-available"></i> Slots available</span>
+                    <span><i class="leg-filling"></i> Filling fast</span>
+                    <span><i class="leg-soon"></i> Coming soon</span>
+                </div>
+            </div>
+            <div class="map-panel" id="mapPanel">
+                <div class="map-panel-empty" id="mapPanelEmpty">
+                    <div class="icon">🗺️</div>
+                    <h3>Explore the map</h3>
+                    <p>Hover or click any state to see galleries, revenue snapshot and open franchise slots.</p>
+                </div>
+                <div id="mapPanelDetail" style="display:none;">
+                    <div class="map-state-name" id="mapStateName">Maharashtra</div>
+                    <div class="map-state-status status-available" id="mapStateStatus">● Slots Available</div>
+                    <div class="map-stats">
+                        <div class="map-stat"><strong id="mapGalleries">52</strong><span>Live Galleries</span></div>
+                        <div class="map-stat"><strong id="mapSlots">12</strong><span>Open Positions</span></div>
+                        <div class="map-stat"><strong id="mapRevenue">₹2.1 Cr</strong><span>Monthly GMV</span></div>
+                        <div class="map-stat"><strong id="mapPartners">48</strong><span>Active Partners</span></div>
+                    </div>
+                    <div class="map-cities">
+                        <h4>Key cities</h4>
+                        <div class="map-city-tags" id="mapCities"></div>
+                    </div>
+                    <button class="btn btn-primary" id="mapApplyBtn" onclick="openLeadModal(); return false;">Apply Franchise in this State →</button>
+                </div>
+            </div>
+        </div>
+        <div class="map-strip reveal">
+            <div class="map-strip-item"><div class="num">28</div><div class="label">States Covered</div></div>
+            <div class="map-strip-item"><div class="num">1200+</div><div class="label">Live Galleries</div></div>
+            <div class="map-strip-item"><div class="num">180+</div><div class="label">Open Slots</div></div>
+            <div class="map-strip-item"><div class="num">PAN</div><div class="label">India Expansion</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- COMPARISON -->
+<section id="compare" style="background:var(--surface);">
+    <div class="container">
+        <div class="text-center reveal">
+            <div class="section-label">Why ePay Wins</div>
+            <h2 class="section-title">ePay vs Typical Alternatives</h2>
+            <p class="section-sub">See how a full multi-service + AI CRM franchise compares with limited models.</p>
+        </div>
+        <div class="compare-table-wrap reveal">
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th class="highlight-col">ePay Digital Gallery</th>
+                        <th>Typical CSC / Local</th>
+                        <th>Basic Franchise</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>AI-Powered CRM</td><td class="highlight-col check">✅ Full</td><td class="cross">❌</td><td class="cross">❌ / Limited</td></tr>
+                    <tr><td>Multi-Service (150+)</td><td class="highlight-col check">✅</td><td>Limited</td><td>Limited</td></tr>
+                    <tr><td>Real-time Commission Dashboard</td><td class="highlight-col check">✅</td><td class="cross">❌</td><td>Basic</td></tr>
+                    <tr><td>Marketing Support & Kits</td><td class="highlight-col check">✅</td><td>Limited</td><td class="cross">❌</td></tr>
+                    <tr><td>Structured Training</td><td class="highlight-col check">✅</td><td>Limited</td><td>Variable</td></tr>
+                    <tr><td>PAN India Expansion Support</td><td class="highlight-col check">✅</td><td>Local</td><td>Regional</td></tr>
+                    <tr><td>Dedicated Tech Support</td><td class="highlight-col check">✅</td><td>Medium</td><td>Low</td></tr>
+                    <tr><td>Wallet + Automated Ops</td><td class="highlight-col check">✅</td><td class="cross">❌</td><td>Partial</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+    <div class="container">
+        <div class="text-center reveal">
+            <div class="section-label">Getting Started</div>
+            <h2 class="section-title">Start Your Business in Four Simple Steps</h2>
+            <p class="section-sub">From registration to revenue — we make onboarding clear and fast.</p>
+        </div>
+        <div class="steps">
+            <div class="step reveal"><div class="step-num">1</div><h3>Register</h3><p>Sign up as Gallery Partner. Share basic details & preferred location.</p></div>
+            <div class="step reveal reveal-delay-1"><div class="step-num">2</div><h3>Onboard</h3><p>Document verification, agreement & business setup with our team.</p></div>
+            <div class="step reveal reveal-delay-2"><div class="step-num">3</div><h3>Launch</h3><p>Training, software access, marketing materials and go-live support.</p></div>
+            <div class="step reveal reveal-delay-3"><div class="step-num">4</div><h3>Grow</h3><p>Serve customers, earn commissions and scale with multiple services.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+
+    <!-- ========== ePay Travel Vertical ========== -->
+    <section id="travel">
+        <div class="container">
+            <div class="travel-hero reveal">
+                <span class="section-label">✈️ ePay Travel</span>
+                <h2>Your Next Journey Starts at <span class="gradient-text" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">ePay Travel</span></h2>
+                <p class="section-sub" style="margin-left:auto;margin-right:auto;">Domestic & International Holidays — Book online or through your nearest ePay Gallery Travel Expert.</p>
+            </div>
+
+            <div class="travel-search-box reveal">
+                <div>
+                    <label>Where do you want to go?</label>
+                    <select id="tvDest">
+                        <option>Dubai</option><option>Bali</option><option>Thailand</option><option>Singapore</option>
+                        <option>Maldives</option><option>Goa</option><option>Kashmir</option><option>Kerala</option>
+                        <option>Europe</option><option>Mauritius</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Travel Dates</label>
+                    <input type="date" id="tvDate" value="2026-10-15" />
+                </div>
+                <div>
+                    <label>Travellers</label>
+                    <select id="tvPax"><option>2 Adults</option><option>2 Adults + 1 Child</option><option>Family of 4</option><option>Solo</option><option>Group 6+</option></select>
+                </div>
+                <div>
+                    <label>Budget</label>
+                    <select id="tvBudget"><option>Any</option><option>Under ₹50,000</option><option>₹50k 🤖 ₹1L</option><option>₹1L 🤖 ₹1.5L</option><option>₹1.5L+</option></select>
+                </div>
+                <button class="btn btn-primary" onclick="travelSearch()" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);">Search Holidays</button>
+            </div>
+
+            <div class="travel-tabs reveal">
+                <button class="active" data-tpanel="packages" onclick="showTravelPanel('packages')">Holiday Packages</button>
+                <button data-tpanel="destinations" onclick="showTravelPanel('destinations')">Destinations</button>
+                <button data-tpanel="ai" onclick="showTravelPanel('ai')">🤖 AI Travel Advisor</button>
+                <button data-tpanel="honeymoon" onclick="showTravelPanel('honeymoon')">Honeymoon</button>
+                <button data-tpanel="family" onclick="showTravelPanel('family')">Family</button>
+                <button data-tpanel="deals" onclick="showTravelPanel('deals')">Deals</button>
+                <button data-tpanel="quote" onclick="showTravelPanel('quote')">Get Quote</button>
+                <button data-tpanel="expert" onclick="showTravelPanel('expert')">Travel Expert</button>
+            </div>
+
+            <!-- Packages -->
+            <div class="travel-panel active" id="tpanel-packages">
+                <div class="pkg-grid" id="pkgGrid"></div>
+            </div>
+
+            <!-- Destinations -->
+            <div class="travel-panel" id="tpanel-destinations">
+                <h3 style="margin-bottom:12px;font-size:1.1rem;">🇮🇳 Domestic</h3>
+                <div class="dest-grid" id="destDomestic" style="margin-bottom:24px;"></div>
+                <h3 style="margin-bottom:12px;font-size:1.1rem;">🌍 International</h3>
+                <div class="dest-grid" id="destIntl"></div>
+            </div>
+
+            <!-- AI Advisor -->
+            <div class="travel-panel" id="tpanel-ai">
+                <div class="ai-box">
+                    <h3>✨ Plan My Trip with AI</h3>
+                    <p>Describe your trip — destination, dates, budget, travellers. AI will match ePay & partner inventory.</p>
+                    <textarea id="aiTripPrompt" placeholder='e.g. "Family of 4, Dubai, 5 nights in October under ₹1.5 lakh"'></textarea>
+                    <button class="btn btn-primary" style="margin-top:12px;background:linear-gradient(135deg,#38bdf8,#0ea5e9);" onclick="runTravelAI()">Get Recommendations</button>
+                    <div class="ai-results" id="aiTripResults"></div>
+                </div>
+            </div>
+
+            <!-- Honeymoon -->
+            <div class="travel-panel" id="tpanel-honeymoon">
+                <div class="pkg-grid" id="honeymoonGrid"></div>
+            </div>
+
+            <!-- Family -->
+            <div class="travel-panel" id="tpanel-family">
+                <div class="pkg-grid" id="familyGrid"></div>
+            </div>
+
+            <!-- Deals -->
+            <div class="travel-panel" id="tpanel-deals">
+                <div class="pkg-grid" id="dealsGrid"></div>
+            </div>
+
+            <!-- Quote -->
+            <div class="travel-panel" id="tpanel-quote">
+                <div class="quote-form" id="quoteForm">
+                    <div><label>Name *</label><input id="qName" required placeholder="Your name" /></div>
+                    <div><label>Mobile *</label><input id="qMobile" required placeholder="10-digit mobile" /></div>
+                    <div><label>Email</label><input id="qEmail" type="email" placeholder="you@email.com" /></div>
+                    <div><label>Destination</label><select id="qDest"><option>Dubai</option><option>Bali</option><option>Thailand</option><option>Goa</option><option>Kashmir</option><option>Other</option></select></div>
+                    <div><label>Travel date</label><input id="qDate" type="date" /></div>
+                    <div><label>Return date</label><input id="qReturn" type="date" /></div>
+                    <div><label>Adults</label><input id="qAdults" type="number" value="2" min="1" /></div>
+                    <div><label>Children</label><input id="qChildren" type="number" value="0" min="0" /></div>
+                    <div><label>Budget</label><input id="qBudget" placeholder="₹1,50,000" /></div>
+                    <div><label>Hotel preference</label><select id="qHotel"><option>Any</option><option>3★</option><option>4★</option><option>5★</option></select></div>
+                    <div class="full"><label>Special requirements</label><textarea id="qNotes" rows="2" placeholder="Activities, dietary, accessibility..."></textarea></div>
+                    <div class="full"><button class="btn btn-primary" onclick="submitTravelQuote()" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);">Get My Free Quote</button></div>
+                </div>
+            </div>
+
+            <!-- Expert -->
+            <div class="travel-panel" id="tpanel-expert">
+                <div class="quote-form">
+                    <div class="full"><p style="font-size:0.95rem;color:#475569;margin-bottom:8px;">Talk to a Travel Expert at your nearest ePay Gallery — or request a callback.</p></div>
+                    <div><label>Name *</label><input id="exName" placeholder="Your name" /></div>
+                    <div><label>Mobile *</label><input id="exMobile" placeholder="10-digit mobile" /></div>
+                    <div><label>Interest</label><select id="exInterest"><option>Dubai</option><option>Maldives</option><option>Thailand</option><option>Domestic</option><option>Other</option></select></div>
+                    <div><label>Preferred contact</label><select id="exContact"><option>Call</option><option>WhatsApp</option><option>Visit Gallery</option></select></div>
+                    <div class="full"><button class="btn btn-primary" onclick="requestTravelExpert()" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);">Request Travel Expert</button></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<section id="faq" style="background:var(--surface);">
+    <div class="container">
+        <div class="text-center reveal">
+            <div class="section-label">FAQ</div>
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="section-sub">Clear answers for serious franchise aspirants.</p>
+        </div>
+        <div class="faq-list reveal">
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">What is the minimum investment? <span>+</span></button>
+                <div class="faq-a">Investment typically starts from ₹50,000🤖₹1,00,000 depending on location and package. Exact figures and inclusions are shared during consultation.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Do I need prior experience? <span>+</span></button>
+                <div class="faq-a">No. We provide training on services, CRM, operations and customer handling. Basic comfort with a smartphone/computer is helpful.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">How long does it take to go live? <span>+</span></button>
+                <div class="faq-a">Most partners complete onboarding and training within 7🤖15 days after document verification and agreement.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Is territory protection available? <span>+</span></button>
+                <div class="faq-a">Yes. Territory guidelines are part of the franchise discussion so partners have clarity on coverage area.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">What support do I get after launch? <span>+</span></button>
+                <div class="faq-a">Ongoing tech support, marketing materials, product updates, commission tracking and a dedicated relationship manager where applicable.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Can I run this from home or an existing shop? <span>+</span></button>
+                <div class="faq-a">Many partners start from existing retail points or dedicated counters. Requirements depend on the service mix and local regulations.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- COMMITMENT -->
+<section class="commitment">
+    <div class="container reveal">
+        <div class="section-label" style="color:#6ee7b7; background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.15);">Our Commitment</div>
+        <h2 class="section-title">Empowering Every Entrepreneur</h2>
+        <p class="section-sub">
+            We believe technology should simplify business, create opportunities and enable long-term growth. Every partner gets innovative digital solutions, transparent operations and continuous support to succeed in today's digital economy.
+        </p>
+    </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="cta" class="final-cta">
+    <div class="container">
+        <div class="cta-box reveal">
+            <div class="section-label">Ready to Start?</div>
+            <h2 class="section-title">Build Your Digital Business Today</h2>
+            <p class="section-sub">Join entrepreneurs across India who are building multi-service digital galleries with ePay.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary btn-lg" onclick="openLeadModal(); return false;">Become a Gallery Partner</a>
+                <a href="#roi" class="btn btn-secondary btn-lg">Calculate ROI</a>
+                <a href="#" class="btn btn-secondary btn-lg" onclick="openLeadModal('demo'); return false;">Request a Demo</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand reveal">
+                <div class="logo" style="color:#fff; margin-bottom:14px;">
+                    <div class="logo-icon" style="width:32px;height:32px;font-size:0.75rem;">eP</div>
+                    ePay <span>Digital Gallery</span>
+                </div>
+                <p>Empowering entrepreneurs across India with a modern multi-service digital business platform and AI CRM.</p>
+            </div>
+            <div class="footer-col reveal reveal-delay-1">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#solutions">Solutions</a></li>
+                    <li><a href="#ecosystem">Services</a></li>
+                    <li><a href="#map">Franchise Map</a></li>
+                    <li><a href="#roi">ROI Calculator</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#cta">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col reveal reveal-delay-2">
+                <h4>Business Services</h4>
+                <ul>
+                    <li><a href="#ecosystem">E-Commerce</a></li>
+                    <li><a href="#ecosystem">Utility & Bill Pay</a></li>
+                    <li><a href="#ecosystem">Insurance</a></li>
+                    <li><a href="#ecosystem">AEPS / Banking</a></li>
+                    <li><a href="#ecosystem">Travel</a></li>
+                    <li><a href="#ecosystem">Gift Vouchers</a></li>
+                </ul>
+            </div>
+            <div class="footer-col footer-contact reveal reveal-delay-3">
+                <h4>Contact</h4>
+                <p><strong style="color:#fff;">ePay Digital India Pvt. Ltd.</strong></p>
+                <p>Office No. 516, 5th Floor,<br>The Pavillion Mall,<br>Senapati Bapat Road,<br>Pune 🤖 411016</p>
+                <p style="margin-top:10px;">Support: Mon 🤖 Sat | 90:00 AM 🤖 6:00 PM</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="secret-staff-trigger" id="secretStaffTrigger" onclick="openStaffLogin()" title="Staff Portal">
+                <div class="secret-icon-shape"></div>
+            </div>
+            <span>© 2026 ePay Digital India Pvt. Ltd. All rights reserved.</span>
+            <span>Built for scale · Designed for entrepreneurs</span>
+        </div>
+    </div>
+</footer>
+
+<!-- STICKY CTA -->
+<div class="sticky-cta" id="stickyCta">
+    <div class="sticky-cta-inner">
+        <div class="sticky-cta-text">🚀 Become an ePay Digital Gallery Partner · <span>Investment from ₹50K+</span></div>
+        <div class="sticky-cta-actions">
+            <a href="#" class="btn btn-primary" style="padding:10px 20px; font-size:0.88rem;" onclick="openLeadModal(); return false;">Book Free Consultation</a>
+            <a href="#roi" class="btn btn-secondary" style="padding:10px 18px; font-size:0.88rem;">Calculate ROI</a>
+        </div>
+    </div>
+</div>
+
+<!-- FLOATING WIDGETS -->
+<div class="float-widgets">
+    <a href="https://wa.me/919999999999?text=Hi%2C%20I%20want%20to%20know%20about%20ePay%20Digital%20Gallery%20franchise" class="float-btn wa" target="_blank" rel="noopener" title="WhatsApp">💬</a>
+    <a href="tel:+919999999999" class="float-btn call" title="Call Us">📞</a>
+    <a href="#roi" class="float-btn roi" title="ROI Calculator">📈</a>
+    <button class="float-btn ai" onclick="openLeadModal('ai')" title="Ask / Book Callback">🤖</button>
+</div>
+
+<!-- LEAD / PARTNER MODAL -->
+<div class="epay-modal-overlay" id="leadOverlay" onclick="handleOverlayClick(event,'leadOverlay')">
+    <div class="epay-modal">
+        <div class="epay-modal-header">
+            <div class="epay-modal-logo"><div class="logo-icon">eP</div> ePay <span>Partner</span></div>
+            <button class="epay-modal-close" onclick="closeModal('leadOverlay')">×</button>
+        </div>
+        <div class="epay-modal-body">
+            <div id="leadFormView">
+                <div class="epay-modal-title" id="leadTitle">Become a Gallery Partner</div>
+                <div class="epay-modal-sub" id="leadSub">Share your details. Our team will call you within 24 hours.</div>
+                <div class="epay-form-row">
+                    <div class="epay-form-group"><label>First Name *</label><input type="text" id="leadFirst" placeholder="Rahul" /></div>
+                    <div class="epay-form-group"><label>Last Name</label><input type="text" id="leadLast" placeholder="Sharma" /></div>
+                </div>
+                <div class="epay-form-group"><label>Mobile *</label><input type="tel" id="leadPhone" placeholder="98XXXXXXXX" /></div>
+                <div class="epay-form-group"><label>Email</label><input type="email" id="leadEmail" placeholder="you@email.com" /></div>
+                <div class="epay-form-group"><label>City / Preferred Location *</label><input type="text" id="leadCity" placeholder="Pune" /></div>
+                <div class="epay-form-group"><label>Interest</label>
+                    <select id="leadInterest">
+                        <option value="franchise">Gallery Franchise</option>
+                        <option value="demo">Product Demo</option>
+                        <option value="roi">ROI Discussion</option>
+                        <option value="callback">Callback Only</option>
+                    </select>
+                </div>
+                <button class="epay-form-submit" onclick="submitLead()">Submit & Get Callback →</button>
+                <div class="epay-form-error" id="leadError"></div>
+            </div>
+            <div id="leadSuccessView" style="display:none;" class="epay-success-screen">
+                <div class="epay-success-icon">✅</div>
+                <div class="epay-success-title">Thank You!</div>
+                <div class="epay-success-sub">Our business team will contact you shortly. Meanwhile, explore the ROI calculator.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- STAFF LOGIN MODAL -->
+<div class="epay-modal-overlay" id="staffLoginOverlay" onclick="handleOverlayClick(event,'staffLoginOverlay')">
+    <div class="epay-modal">
+        <div class="epay-modal-header">
+            <div class="epay-modal-logo"><div class="logo-icon" style="background:linear-gradient(135deg,#10b981,#059669);">eP</div> ePay <span style="color:#10b981;">Staff Portal</span></div>
+            <button class="epay-modal-close" onclick="closeModal('staffLoginOverlay')">×</button>
+        </div>
+        <div class="epay-modal-body">
+            <div class="epay-modal-title" style="color:#064e3b;">Internal Staff Login</div>
+            <div class="epay-modal-sub">Restricted access — authorised personnel only</div>
+            <div class="epay-staff-hint">Select your role, then enter credentials. Demo password: <strong>epay@2024</strong></div>
+            <div class="epay-role-grid" id="staffRoleGrid">
+                <div class="epay-role-card" data-role="super-admin" data-email="superadmin@epay.in" onclick="selectStaffRole(this)"><span class="role-icon">👑</span><span class="role-label">Super Admin</span></div>
+                <div class="epay-role-card" data-role="admin" data-email="admin@epay.in" onclick="selectStaffRole(this)"><span class="role-icon">🛡</span><span class="role-label">Admin</span></div>
+                <div class="epay-role-card" data-role="hr" data-email="hr@epay.in" onclick="selectStaffRole(this)"><span class="role-icon">👥</span><span class="role-label">HR</span></div>
+                <div class="epay-role-card" data-role="telecaller" data-email="telecall@epay.in" onclick="selectStaffRole(this)"><span class="role-icon">📞</span><span class="role-label">Telecalling</span></div>
+                <div class="epay-role-card" data-role="social" data-email="social@epay.in" onclick="selectStaffRole(this)"><span class="role-icon">📱</span><span class="role-label">Social Media</span></div>
+                <div class="epay-role-card" data-role="marketing" data-email="marketing@epay.in" onclick="selectStaffRole(this)"><span class="role-icon">📢</span><span class="role-label">Marketing</span></div>
+                <div class="epay-role-card" data-role="finance" data-email="finance@epay.in" onclick="selectStaffRole(this)"><span class="role-icon">💰</span><span class="role-label">Finance</span></div>
+                <div class="epay-role-card" data-role="support" data-email="support@epay.in" onclick="selectStaffRole(this)"><span class="role-icon">🍔§</span><span class="role-label">Tech Support</span></div>
+                <div class="epay-role-card" data-role="developer" data-email="dev@epay.in" onclick="selectStaffRole(this)"><span class="role-icon">💻</span><span class="role-label">Developer</span></div>
+            </div>
+            <div id="staffCredFields" style="display:none;">
+                <div class="epay-form-group"><label>Email</label><input type="email" id="staffEmail" /></div>
+                <div class="epay-form-group"><label>Password</label><input type="password" id="staffPassword" placeholder="••••••••" /></div>
+                <button class="epay-form-submit" style="background:linear-gradient(135deg,#10b981,#059669);" onclick="handleStaffLogin()">Access Portal →</button>
+                <div class="epay-form-error" id="staffLoginError"></div>
+            </div>
+            <div id="staffSuccessScreen" style="display:none;" class="epay-success-screen">
+                <div class="epay-success-icon" style="background:linear-gradient(135deg,#d1fae5,#a7f3d0);">✅</div>
+                <div class="epay-success-title" style="color:#059669;" id="staffSuccessTitle">Access Granted</div>
+                <div class="epay-success-sub" id="staffSuccessSub">Redirecting…</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ========== RBAC & MOCK USERS ==========
+var RBAC = {
+    'super-admin': { page: 'superadmin.html', label: 'Super Admin Dashboard' },
+    'admin': { page: 'admin.html', label: 'Admin Dashboard' },
+    'hr': { page: 'hr.html', label: 'HR Portal' },
+    'telecaller': { page: 'telecalling.html', label: 'Telecaller CRM' },
+    'social': { page: 'socialmediamanager.html', label: 'Social Media Manager' },
+    'marketing': { page: 'digital marketing.html', label: 'Digital Marketing Portal' },
+    'finance': { page: 'index.html', label: 'Finance Dashboard' },
+    'support': { page: 'technical support.html', label: 'Technical Support Portal' },
+    'developer': { page: 'developerhub.html', label: 'Developer Hub' }
+};
+var MOCK_USERS = {
+    'superadmin@epay.in': { password: 'epay@2024', role: 'super-admin' },
+    'admin@epay.in': { password: 'epay@2024', role: 'admin' },
+    'hr@epay.in': { password: 'epay@2024', role: 'hr' },
+    'telecall@epay.in': { password: 'epay@2024', role: 'telecaller' },
+    'social@epay.in': { password: 'epay@2024', role: 'social' },
+    'marketing@epay.in': { password: 'epay@2024', role: 'marketing' },
+    'finance@epay.in': { password: 'epay@2024', role: 'finance' },
+    'support@epay.in': { password: 'epay@2024', role: 'support' },
+    'dev@epay.in': { password: 'epay@2024', role: 'developer' }
+};
+var _activeStaffRole = null;
+
+// ========== MODAL HELPERS ==========
+function openModal(id) {
+    var o = document.getElementById(id);
+    if (!o) return;
+    o.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+    var o = document.getElementById(id);
+    if (!o) return;
+    o.classList.remove('open');
+    document.body.style.overflow = '';
+}
+function handleOverlayClick(e, id) {
+    if (e.target === e.currentTarget) closeModal(id);
+}
+
+// ========== LEAD MODAL ==========
+function openLeadModal(type) {
+    document.getElementById('leadFormView').style.display = 'block';
+    document.getElementById('leadSuccessView').style.display = 'none';
+    document.getElementById('leadError').textContent = '';
+    var title = 'Become a Gallery Partner';
+    var sub = 'Share your details. Our team will call you within 24 hours.';
+    var interest = 'franchise';
+    if (type === 'demo') { title = 'Book a Free Demo'; interest = 'demo'; }
+    if (type === 'ai') { title = 'Ask / Book Callback'; interest = 'callback'; sub = 'Tell us what you need. We will get back quickly.'; }
+    document.getElementById('leadTitle').textContent = title;
+    document.getElementById('leadSub').textContent = sub;
+    document.getElementById('leadInterest').value = interest;
+    openModal('leadOverlay');
+}
+function submitLead() {
+    var first = document.getElementById('leadFirst').value.trim();
+    var phone = document.getElementById('leadPhone').value.trim();
+    var city = document.getElementById('leadCity').value.trim();
+    var err = document.getElementById('leadError');
+    if (!first || !phone || !city) {
+        err.textContent = 'Please fill First Name, Mobile and City.';
+        return;
+    }
+    if (phone.replace(/\D/g,'').length < 10) {
+        err.textContent = 'Please enter a valid 10-digit mobile number.';
+        return;
+    }
+    err.textContent = '';
+    // Demo: store locally
+    try {
+        var leads = JSON.parse(localStorage.getItem('epay-leads') || '[]');
+        leads.push({
+            first: first,
+            last: document.getElementById('leadLast').value.trim(),
+            phone: phone,
+            email: document.getElementById('leadEmail').value.trim(),
+            city: city,
+            interest: document.getElementById('leadInterest').value,
+            ts: new Date().toISOString()
+        });
+        localStorage.setItem('epay-leads', JSON.stringify(leads));
+    } catch(e) {}
+    document.getElementById('leadFormView').style.display = 'none';
+    document.getElementById('leadSuccessView').style.display = 'block';
+}
+
+// ========== STAFF LOGIN ==========
+function openStaffLogin() {
+    _activeStaffRole = null;
+    document.querySelectorAll('.epay-role-card').forEach(function(c){ c.classList.remove('selected'); });
+    document.getElementById('staffCredFields').style.display = 'none';
+    document.getElementById('staffSuccessScreen').style.display = 'none';
+    document.getElementById('staffLoginError').textContent = '';
+    document.getElementById('staffRoleGrid').style.display = 'grid';
+    var hint = document.querySelector('#staffLoginOverlay .epay-staff-hint');
+    if (hint) hint.style.display = 'block';
+    openModal('staffLoginOverlay');
+}
+function selectStaffRole(card) {
+    document.querySelectorAll('.epay-role-card').forEach(function(c){ c.classList.remove('selected'); });
+    card.classList.add('selected');
+    _activeStaffRole = card.getAttribute('data-role');
+    document.getElementById('staffCredFields').style.display = 'block';
+    document.getElementById('staffEmail').value = card.getAttribute('data-email');
+    document.getElementById('staffPassword').value = '';
+    document.getElementById('staffLoginError').textContent = '';
+    setTimeout(function(){ document.getElementById('staffPassword').focus(); }, 50);
+}
+function handleStaffLogin() {
+    var email = document.getElementById('staffEmail').value.trim().toLowerCase();
+    var password = document.getElementById('staffPassword').value;
+    var err = document.getElementById('staffLoginError');
+    if (!_activeStaffRole) { err.textContent = 'Please select your role first.'; return; }
+    if (!email || !password) { err.textContent = 'Please enter credentials.'; return; }
+    var user = MOCK_USERS[email];
+    if (!user || user.password !== password || user.role !== _activeStaffRole) {
+        err.textContent = 'Invalid credentials. Use role email + password epay@2024';
+        return;
+    }
+    try { localStorage.setItem('crm-role', _activeStaffRole); } catch(e) {}
+    err.textContent = '';
+    var rbac = RBAC[_activeStaffRole] || { page: 'index.html', label: 'Dashboard' };
+    document.getElementById('staffCredFields').style.display = 'none';
+    document.getElementById('staffRoleGrid').style.display = 'none';
+    var hint = document.querySelector('#staffLoginOverlay .epay-staff-hint');
+    if (hint) hint.style.display = 'none';
+    document.getElementById('staffSuccessScreen').style.display = 'block';
+    document.getElementById('staffSuccessTitle').textContent = 'Access Granted';
+    document.getElementById('staffSuccessSub').textContent = 'Opening ' + rbac.label + '…';
+    setTimeout(function(){ window.location.href = rbac.page; }, 1800);
+}
+
+// ========== ROI CALCULATOR ==========
+function formatINR(n) {
+    if (n >= 100000) return '₹' + (n/100000).toFixed(2) + ' L';
+    return '₹' + Math.round(n).toLocaleString('en-IN');
+}
+function updateROI() {
+    var inv = +document.getElementById('invSlider').value;
+    var cust = +document.getElementById('custSlider').value;
+    var bill = +document.getElementById('billSlider').value;
+    var comm = +document.getElementById('commSlider').value;
+    document.getElementById('invVal').textContent = '₹' + inv.toLocaleString('en-IN');
+    document.getElementById('custVal').textContent = cust;
+    document.getElementById('billVal').textContent = '₹' + bill;
+    document.getElementById('commVal').textContent = comm + '%';
+    var daily = cust * bill;
+    var monthly = daily * 30;
+    var commission = monthly * (comm / 100);
+    var yearly = commission * 12;
+    var months = commission > 0 ? Math.ceil(inv / commission) : '—';
+    document.getElementById('resDaily').textContent = formatINR(daily);
+    document.getElementById('resMonthly').textContent = formatINR(monthly);
+    document.getElementById('resComm').textContent = formatINR(commission);
+    document.getElementById('resYearly').textContent = formatINR(yearly);
+    document.getElementById('resBreakeven').textContent = (typeof months === 'number' ? months + ' months' : months);
+}
+['invSlider','custSlider','billSlider','commSlider'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('input', updateROI);
+});
+updateROI();
+
+// ========== LIVE METRICS (gentle simulation) ==========
+function jitter(base, pct) {
+    return Math.round(base * (1 + (Math.random() * 2 - 1) * pct));
+}
+setInterval(function(){
+    var rev = document.getElementById('liveRevenue');
+    var tx = document.getElementById('liveTx');
+    var comm = document.getElementById('liveComm');
+    var mem = document.getElementById('liveMembers');
+    if (rev) rev.textContent = '₹' + jitter(32450, 0.04).toLocaleString('en-IN');
+    if (tx) tx.textContent = jitter(1458, 0.03).toLocaleString('en-IN');
+    if (comm) comm.textContent = '₹' + jitter(8520, 0.05).toLocaleString('en-IN');
+    if (mem) mem.textContent = jitter(15, 0.2);
+}, 4500);
+
+// ========== SERVICE SEARCH ==========
+function filterServices() {
+    var q = (document.getElementById('serviceSearch').value || '').toLowerCase().trim();
+    document.querySelectorAll('#serviceTags .service-tag').forEach(function(tag){
+        var data = (tag.getAttribute('data-s') || '') + ' ' + tag.textContent;
+        tag.style.display = (!q || data.toLowerCase().indexOf(q) !== -1) ? '' : 'none';
+    });
+}
+
+// ========== FAQ ==========
+function toggleFaq(btn) {
+    var item = btn.parentElement;
+    var wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(i){ i.classList.remove('open'); });
+    if (!wasOpen) item.classList.add('open');
+}
+
+// ========== NAV / SCROLL / REVEAL ==========
+var nav = document.getElementById('nav');
+var stickyCta = document.getElementById('stickyCta');
+window.addEventListener('scroll', function(){
+    nav.classList.toggle('scrolled', window.scrollY > 30);
+    if (stickyCta) stickyCta.classList.toggle('show', window.scrollY > 600);
+});
+var toggle = document.getElementById('mobileToggle');
+var links = document.getElementById('navLinks');
+var cta = document.getElementById('navCta');
+if (toggle) {
+    toggle.addEventListener('click', function(){
+        links.classList.toggle('active');
+        cta.classList.toggle('active');
+    });
+}
+document.querySelectorAll('.nav-links a, .nav-cta a').forEach(function(a){
+    a.addEventListener('click', function(){ links.classList.remove('active'); cta.classList.remove('active'); });
+});
+
+var revealElements = document.querySelectorAll('.reveal');
+var revealObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+revealElements.forEach(function(el){ revealObserver.observe(el); });
+
+// Counters
+var counters = document.querySelectorAll('[data-count]');
+var counterObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        var target = +el.getAttribute('data-count');
+        var start = performance.now();
+        var duration = 1600;
+        function tick(t) {
+            var p = Math.min((t - start) / duration, 1);
+            var eased = 1 - Math.pow(1 - p, 3);
+            var val = Math.floor(eased * target);
+            el.textContent = val + (target >= 100 ? '+' : '');
+            if (p < 1) requestAnimationFrame(tick);
+            else el.textContent = target + (target >= 100 ? '+' : '');
+        }
+        requestAnimationFrame(tick);
+        counterObserver.unobserve(el);
+    });
+}, { threshold: 0.5 });
+counters.forEach(function(c){ counterObserver.observe(c); });
+
+// Keyboard
+document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') {
+        closeModal('leadOverlay');
+        closeModal('staffLoginOverlay');
+    }
+});
+
+// ========== FRANCHISE INDIA MAP ==========
+var stateNames = {
+    an: 'Andaman & Nicobar Islands', ap: 'Andhra Pradesh', ar: 'Arunachal Pradesh', as: 'Assam',
+    br: 'Bihar', ch: 'Chandigarh', ct: 'Chhattisgarh', dn: 'Dadra & Nagar Haveli', dd: 'Daman & Diu',
+    dl: 'Delhi', ga: 'Goa', gj: 'Gujarat', hr: 'Haryana', hp: 'Himachal Pradesh', jk: 'Jammu & Kashmir',
+    jh: 'Jharkhand', ka: 'Karnataka', kl: 'Kerala', ld: 'Lakshadweep', mp: 'Madhya Pradesh',
+    mh: 'Maharashtra', mn: 'Manipur', ml: 'Meghalaya', mz: 'Mizoram', nl: 'Nagaland', or: 'Odisha',
+    py: 'Puducherry', pb: 'Punjab', rj: 'Rajasthan', sk: 'Sikkim', tn: 'Tamil Nadu', tg: 'Telangana',
+    tr: 'Tripura', up: 'Uttar Pradesh', ut: 'Uttarakhand', wb: 'West Bengal'
+};
+
+// Mock franchise data per state (id → stats)
+// status: live | available | filling | soon
+var franchiseData = {
+    mh: { status: 'live', galleries: 52, slots: 8, revenue: '₹2.1 Cr', partners: 48, cities: ['Pune', 'Mumbai', 'Nagpur', 'Nashik', 'Aurangabad'] },
+    gj: { status: 'live', galleries: 38, slots: 6, revenue: '₹1.4 Cr', partners: 34, cities: ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot'] },
+    ka: { status: 'live', galleries: 41, slots: 10, revenue: '₹1.6 Cr', partners: 37, cities: ['Bengaluru', 'Mysuru', 'Mangaluru', 'Hubli'] },
+    tn: { status: 'live', galleries: 35, slots: 9, revenue: '₹1.3 Cr', partners: 31, cities: ['Chennai', 'Coimbatore', 'Madurai', 'Salem'] },
+    tg: { status: 'available', galleries: 22, slots: 14, revenue: '₹78 L', partners: 19, cities: ['Hyderabad', 'Warangal', 'Nizamabad'] },
+    ap: { status: 'available', galleries: 18, slots: 12, revenue: '₹62 L', partners: 16, cities: ['Visakhapatnam', 'Vijayawada', 'Guntur'] },
+    dl: { status: 'filling', galleries: 28, slots: 3, revenue: '₹1.1 Cr', partners: 25, cities: ['New Delhi', 'Dwarka', 'Rohini', 'Saket'] },
+    up: { status: 'live', galleries: 48, slots: 15, revenue: '₹1.8 Cr', partners: 44, cities: ['Lucknow', 'Noida', 'Kanpur', 'Varanasi', 'Agra'] },
+    rj: { status: 'available', galleries: 26, slots: 11, revenue: '₹95 L', partners: 23, cities: ['Jaipur', 'Udaipur', 'Jodhpur', 'Kota'] },
+    mp: { status: 'available', galleries: 24, slots: 13, revenue: '₹88 L', partners: 21, cities: ['Indore', 'Bhopal', 'Jabalpur', 'Gwalior'] },
+    wb: { status: 'live', galleries: 31, slots: 7, revenue: '₹1.05 Cr', partners: 28, cities: ['Kolkata', 'Howrah', 'Durgapur', 'Siliguri'] },
+    kl: { status: 'filling', galleries: 19, slots: 4, revenue: '₹72 L', partners: 17, cities: ['Kochi', 'Thiruvananthapuram', 'Kozhikode'] },
+    pb: { status: 'available', galleries: 16, slots: 9, revenue: '₹58 L', partners: 14, cities: ['Chandigarh', 'Ludhiana', 'Amritsar'] },
+    hr: { status: 'available', galleries: 20, slots: 8, revenue: '₹70 L', partners: 18, cities: ['Gurugram', 'Faridabad', 'Panipat'] },
+    br: { status: 'available', galleries: 14, slots: 16, revenue: '₹42 L', partners: 12, cities: ['Patna', 'Gaya', 'Muzaffarpur'] },
+    or: { status: 'available', galleries: 12, slots: 11, revenue: '₹38 L', partners: 10, cities: ['Bhubaneswar', 'Cuttack', 'Rourkela'] },
+    ct: { status: 'available', galleries: 11, slots: 10, revenue: '₹35 L', partners: 9, cities: ['Raipur', 'Bhilai', 'Bilaspur'] },
+    jh: { status: 'soon', galleries: 6, slots: 14, revenue: '₹18 L', partners: 5, cities: ['Ranchi', 'Jamshedpur'] },
+    as: { status: 'soon', galleries: 5, slots: 12, revenue: '₹15 L', partners: 4, cities: ['Guwahati', 'Dibrugarh'] },
+    ut: { status: 'available', galleries: 9, slots: 7, revenue: '₹28 L', partners: 8, cities: ['Dehradun', 'Haridwar'] },
+    hp: { status: 'soon', galleries: 4, slots: 8, revenue: '₹12 L', partners: 3, cities: ['Shimla', 'Dharamshala'] },
+    ga: { status: 'filling', galleries: 8, slots: 2, revenue: '₹32 L', partners: 7, cities: ['Panaji', 'Margao'] },
+    jk: { status: 'soon', galleries: 3, slots: 10, revenue: '₹9 L', partners: 2, cities: ['Srinagar', 'Jammu'] },
+    ch: { status: 'filling', galleries: 7, slots: 1, revenue: '₹28 L', partners: 6, cities: ['Chandigarh'] },
+    py: { status: 'available', galleries: 5, slots: 4, revenue: '₹14 L', partners: 4, cities: ['Puducherry'] },
+    sk: { status: 'soon', galleries: 1, slots: 5, revenue: '₹3 L', partners: 1, cities: ['Gangtok'] },
+    mn: { status: 'soon', galleries: 2, slots: 6, revenue: '₹5 L', partners: 2, cities: ['Imphal'] },
+    ml: { status: 'soon', galleries: 1, slots: 5, revenue: '₹3 L', partners: 1, cities: ['Shillong'] },
+    mz: { status: 'soon', galleries: 1, slots: 4, revenue: '₹2 L', partners: 1, cities: ['Aizawl'] },
+    nl: { status: 'soon', galleries: 1, slots: 5, revenue: '₹3 L', partners: 1, cities: ['Kohima'] },
+    tr: { status: 'soon', galleries: 2, slots: 5, revenue: '₹4 L', partners: 2, cities: ['Agartala'] },
+    ar: { status: 'soon', galleries: 1, slots: 6, revenue: '₹2 L', partners: 1, cities: ['Itanagar'] },
+    an: { status: 'soon', galleries: 1, slots: 3, revenue: '₹2 L', partners: 1, cities: ['Port Blair'] },
+    ld: { status: 'soon', galleries: 0, slots: 2, revenue: '—', partners: 0, cities: ['Kavaratti'] },
+    dn: { status: 'soon', galleries: 1, slots: 2, revenue: '₹2 L', partners: 1, cities: ['Silvassa'] },
+    dd: { status: 'soon', galleries: 1, slots: 2, revenue: '₹2 L', partners: 1, cities: ['Daman'] }
+};
+
+var statusColors = {
+    live:      { fill: '#059669', hover: '#047857', stroke: '#10b981', label: '● Strong presence', cls: 'status-live' },
+    available: { fill: '#34d399', hover: '#10b981', stroke: '#6ee7b7', label: '● Slots Available', cls: 'status-available' },
+    filling:   { fill: '#fbbf24', hover: '#f59e0b', stroke: '#fcd34d', label: '● Filling Fast', cls: 'status-filling' },
+    soon:      { fill: '#d1d5db', hover: '#9ca3af', stroke: '#e5e7eb', label: '● Coming Soon', cls: 'status-soon' }
+};
+var defaultFill = '#e5e7eb';
+
+function showMapState(id) {
+    var name = stateNames[id] || id;
+    var data = franchiseData[id] || { status: 'soon', galleries: 0, slots: 5, revenue: '—', partners: 0, cities: [] };
+    var st = statusColors[data.status] || statusColors.soon;
+
+    document.getElementById('mapPanelEmpty').style.display = 'none';
+    document.getElementById('mapPanelDetail').style.display = 'block';
+    document.getElementById('mapStateName').textContent = name;
+    var statusEl = document.getElementById('mapStateStatus');
+    statusEl.textContent = st.label;
+    statusEl.className = 'map-state-status ' + st.cls;
+    document.getElementById('mapGalleries').textContent = data.galleries;
+    document.getElementById('mapSlots').textContent = data.slots;
+    document.getElementById('mapRevenue').textContent = data.revenue;
+    document.getElementById('mapPartners').textContent = data.partners;
+    var citiesEl = document.getElementById('mapCities');
+    citiesEl.innerHTML = (data.cities || []).map(function(c) {
+        return '<span class="map-city-tag">' + c + '</span>';
+    }).join('') || '<span class="map-city-tag">Expanding soon</span>';
+    var btn = document.getElementById('mapApplyBtn');
+    if (data.status === 'soon' && data.galleries === 0) {
+        btn.textContent = 'Register Interest for this State →';
+    } else if (data.slots === 0) {
+        btn.textContent = 'Join Waitlist for this State →';
+    } else {
+        btn.textContent = 'Apply Franchise in ' + name.split(' ')[0] + ' →';
+    }
+}
+
+async function loadFranchiseMap() {
+    var mapHost = document.getElementById('map-host');
+    var tooltip = document.getElementById('mapTooltip');
+    var loader = document.getElementById('mapLoader');
+    if (!mapHost) return;
+
+    try {
+        var res = await fetch('https://cdn.jsdelivr.net/npm/@svg-maps/india@2.0.0/india.svg');
+        var svgText = await res.text();
+        mapHost.innerHTML = svgText;
+        var svg = mapHost.querySelector('svg');
+        if (!svg) throw new Error('No SVG');
+        svg.removeAttribute('width');
+        svg.removeAttribute('height');
+        svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+
+        var paths = svg.querySelectorAll('path');
+        var selectedId = null;
+
+        paths.forEach(function(path) {
+            var id = path.getAttribute('id');
+            var data = franchiseData[id];
+            var status = data ? data.status : 'soon';
+            var colors = statusColors[status] || statusColors.soon;
+            var baseFill = colors.fill;
+
+            path.style.fill = baseFill;
+            path.style.stroke = 'rgba(255,255,255,0.7)';
+            path.style.strokeWidth = '0.9';
+
+            var name = stateNames[id] || path.getAttribute('aria-label') || id;
+
+            path.addEventListener('mouseenter', function(e) {
+                path.style.fill = colors.hover;
+                path.style.stroke = colors.stroke;
+                path.style.strokeWidth = '1.6';
+                path.style.filter = 'drop-shadow(0 0 8px rgba(5,150,105,0.35))';
+                var slotText = data ? (data.slots + ' open · ' + data.galleries + ' live') : 'Coming soon';
+                tooltip.innerHTML = name + '<small>' + slotText + '</small>';
+                tooltip.classList.add('visible');
+            });
+            path.addEventListener('mousemove', function(e) {
+                var rect = mapHost.getBoundingClientRect();
+                tooltip.style.left = (e.clientX - rect.left) + 'px';
+                tooltip.style.top = (e.clientY - rect.top) + 'px';
+            });
+            path.addEventListener('mouseleave', function() {
+                if (selectedId !== id) {
+                    path.style.fill = baseFill;
+                    path.style.stroke = 'rgba(255,255,255,0.7)';
+                    path.style.strokeWidth = '0.9';
+                    path.style.filter = 'none';
+                }
+                tooltip.classList.remove('visible');
+            });
+            path.addEventListener('click', function() {
+                paths.forEach(function(p) {
+                    var pid = p.getAttribute('id');
+                    var pd = franchiseData[pid];
+                    var ps = pd ? pd.status : 'soon';
+                    var pc = statusColors[ps] || statusColors.soon;
+                    p.style.fill = pc.fill;
+                    p.style.stroke = 'rgba(255,255,255,0.7)';
+                    p.style.strokeWidth = '0.9';
+                    p.style.filter = 'none';
+                });
+                selectedId = id;
+                path.style.fill = colors.hover;
+                path.style.stroke = '#047857';
+                path.style.strokeWidth = '2';
+                path.style.filter = 'drop-shadow(0 0 12px rgba(5,150,105,0.45))';
+                showMapState(id);
+            });
+        });
+
+        if (loader) loader.style.display = 'none';
+        // Pre-select Maharashtra as demo
+        showMapState('mh');
+        var mhPath = svg.querySelector('path#mh');
+        if (mhPath) {
+            mhPath.style.fill = statusColors.live.hover;
+            mhPath.style.stroke = '#047857';
+            mhPath.style.strokeWidth = '2';
+        }
+    } catch (err) {
+        if (loader) loader.innerHTML = 'Unable to load map. Check connection.';
+        console.error('Map load error:', err);
+    }
+}
+
+// Load map when section is near viewport
+(function() {
+    var mapSection = document.getElementById('map');
+    if (!mapSection) return;
+    var loaded = false;
+    var obs = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting && !loaded) {
+            loaded = true;
+            loadFranchiseMap();
+            obs.disconnect();
+        }
+    }, { rootMargin: '200px' });
+    obs.observe(mapSection);
+})();
+
+console.log('%c🌿 ePay Digital Gallery %c— Franchise Acquisition Platform Loaded', 'color:#059669;font-weight:bold;font-size:14px;', 'color:#6b7280;');
+
+// ========== ePay Travel Vertical (dynamic) ==========
+var TRAVEL_PACKAGES = [
+  { id:1, title:'ePay Dubai Premium 5N/6D', dest:'Dubai', nights:5, price:149999, rating:4.9, tags:['5★ Hotel','Breakfast','Desert Safari','Burj Khalifa'], badge:'ePay Exclusive', cat:['international','deals'], img:'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80' },
+  { id:2, title:'Dubai Best Value 4N/5D', dest:'Dubai', nights:4, price:99999, rating:4.6, tags:['3★ Hotel','Breakfast','City Tour'], badge:'Best Value', cat:['international'], img:'https://images.unsplash.com/photo-1518684079-3c830dcef090?w=600&q=80' },
+  { id:3, title:'Dubai Luxury 6N/7D', dest:'Dubai', nights:6, price:185000, rating:4.95, tags:['5★','Private Transfer','Safari','Marina'], badge:'Luxury', cat:['international','honeymoon'], img:'https://images.unsplash.com/photo-1580674684081-7617fbf3d745?w=600&q=80' },
+  { id:4, title:'Thailand Explorer 5N', dest:'Thailand', nights:5, price:78999, rating:4.7, tags:['4★','Island Hopping','Breakfast'], badge:'Popular', cat:['international','family','deals'], img:'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=600&q=80' },
+  { id:5, title:'Bali Honeymoon 6N', dest:'Bali', nights:6, price:112000, rating:4.85, tags:['Villa','Couple Spa','Sunset Cruise'], badge:'Honeymoon', cat:['international','honeymoon'], img:'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80' },
+  { id:6, title:'Maldives Romance 4N', dest:'Maldives', nights:4, price:165000, rating:4.9, tags:['Water Villa','All Meals','Snorkel'], badge:'Honeymoon', cat:['international','honeymoon'], img:'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&q=80' },
+  { id:7, title:'Singapore Family 4N', dest:'Singapore', nights:4, price:89999, rating:4.75, tags:['Universal Studios','Sentosa'], badge:'Family', cat:['international','family'], img:'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=600&q=80' },
+  { id:8, title:'Goa Beach Escape 3N', dest:'Goa', nights:3, price:24999, rating:4.5, tags:['Resort','Water Sports'], badge:'Domestic', cat:['domestic','family','deals'], img:'https://images.unsplash.com/photo-1512343879784-a9601113816b?w=600&q=80' },
+  { id:9, title:'Kashmir Paradise 5N', dest:'Kashmir', nights:5, price:42999, rating:4.8, tags:['Houseboat','Gulmarg','Pahalgam'], badge:'Domestic Hit', cat:['domestic','honeymoon','family'], img:'https://images.unsplash.com/photo-1595815771614-ade9d652a65d?w=600&q=80' },
+  { id:10, title:'Kerala Backwaters 4N', dest:'Kerala', nights:4, price:35999, rating:4.7, tags:['Houseboat','Ayurveda'], badge:'Monsoon', cat:['domestic','honeymoon','deals'], img:'https://images.unsplash.com/photo-1602216056337-9bdedfdc26c3?w=600&q=80' },
+  { id:11, title:'Rajasthan Royal 6N', dest:'Rajasthan', nights:6, price:54999, rating:4.65, tags:['Heritage','Camel Safari'], badge:'Heritage', cat:['domestic','family'], img:'https://images.unsplash.com/photo-1477587458883-47145ed94245?w=600&q=80' },
+  { id:12, title:'Himachal Hills 5N', dest:'Himachal', nights:5, price:38999, rating:4.6, tags:['Manali','Solang'], badge:'Summer', cat:['domestic','family'], img:'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=600&q=80' }
+];
+
+var DESTINATIONS = {
+  domestic: [
+    {name:'Kashmir',flag:'🇮🇳',from:38999,img:'https://images.unsplash.com/photo-1595815771614-ade9d652a65d?w=600&q=80'},
+    {name:'Goa',flag:'🇮🇳',from:19999,img:'https://images.unsplash.com/photo-1512343879784-a9601113816b?w=600&q=80'},
+    {name:'Kerala',flag:'🇮🇳',from:29999,img:'https://images.unsplash.com/photo-1602216056337-9bdedfdc26c3?w=600&q=80'},
+    {name:'Rajasthan',flag:'🇮🇳',from:44999,img:'https://images.unsplash.com/photo-1477587458883-47145ed94245?w=600&q=80'},
+    {name:'Himachal',flag:'🇮🇳',from:32999,img:'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=600&q=80'},
+    {name:'Andaman',flag:'🇮🇳',from:42999,img:'https://images.unsplash.com/photo-1589553416260-f586c8f1514f?w=600&q=80'}
+  ],
+  international: [
+    {name:'Dubai',flag:'🇦🇪',from:99999,img:'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80'},
+    {name:'Thailand',flag:'🇹🇭',from:78999,img:'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=600&q=80'},
+    {name:'Bali',flag:'🇮🇩',from:95000,img:'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80'},
+    {name:'Singapore',flag:'🇸🇬',from:89999,img:'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=600&q=80'},
+    {name:'Maldives',flag:'🇲🇻',from:145000,img:'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&q=80'},
+    {name:'Europe',flag:'🇪🇺',from:175000,img:'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600&q=80'}
+  ]
+};
+
+function formatPkgPrice(n) {
+  return '₹' + Math.round(n).toLocaleString('en-IN');
+}
+
+function pkgCardHTML(p) {
+  var img = p.img || '';
+  return '<div class="pkg-card" onclick="viewPackage('+p.id+')">' +
+    '<div class="pkg-img" style="background-image:url(\''+img+'\')">' +
+    (p.badge ? '<span class="pkg-badge">'+p.badge+'</span>' : '') + '</div>' +
+    '<div class="pkg-body"><h3>'+p.title+'</h3>' +
+    '<div class="pkg-meta">'+p.dest+' · '+p.nights+'N · ★ '+p.rating+'</div>' +
+    '<div class="pkg-includes">'+(p.tags||[]).slice(0,4).map(function(t){return '<span>'+t+'</span>';}).join('')+'</div>' +
+    '<div class="pkg-price"><strong>'+formatPkgPrice(p.price)+'</strong>' +
+    '<button class="btn btn-primary" style="padding:7px 12px;font-size:0.78rem;" onclick="event.stopPropagation();viewPackage('+p.id+')">View</button></div></div></div>';
+}
+
+function renderPkgGrid(elId, filterFn) {
+  var el = document.getElementById(elId);
+  if (!el) return;
+  var list = TRAVEL_PACKAGES.filter(filterFn || function(){return true;});
+  el.innerHTML = list.map(pkgCardHTML).join('') || '<p style="color:#64748b">No packages match.</p>';
+}
+
+function renderDestGrid(id, arr) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = arr.map(function(d) {
+    return '<div class="dest-card" onclick="filterByDest(\''+d.name+'\')" style="background-image:linear-gradient(to top,rgba(0,0,0,0.65),rgba(0,0,0,0.1)),url(\''+d.img+'\')">' +
+      '<h4>'+d.flag+' '+d.name+'</h4><span>From '+formatPkgPrice(d.from)+'/person</span></div>';
+  }).join('');
+}
+
+function showTravelPanel(name) {
+  document.querySelectorAll('.travel-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.travel-tabs button').forEach(function(b){ b.classList.remove('active'); });
+  var panel = document.getElementById('tpanel-'+name);
+  if (panel) panel.classList.add('active');
+  var btn = document.querySelector('.travel-tabs button[data-tpanel="'+name+'"]');
+  if (btn) btn.classList.add('active');
+  if (name === 'packages') renderPkgGrid('pkgGrid');
+  if (name === 'honeymoon') renderPkgGrid('honeymoonGrid', function(p){ return (p.cat||[]).indexOf('honeymoon')>=0; });
+  if (name === 'family') renderPkgGrid('familyGrid', function(p){ return (p.cat||[]).indexOf('family')>=0; });
+  if (name === 'deals') renderPkgGrid('dealsGrid', function(p){ return (p.cat||[]).indexOf('deals')>=0; });
+  if (name === 'destinations') {
+    renderDestGrid('destDomestic', DESTINATIONS.domestic);
+    renderDestGrid('destIntl', DESTINATIONS.international);
+  }
+}
+
+function travelSearch() {
+  var dest = (document.getElementById('tvDest')||{}).value || '';
+  showTravelPanel('packages');
+  renderPkgGrid('pkgGrid', function(p) {
+    return !dest || p.dest === dest || (p.title||'').indexOf(dest)>=0;
+  });
+  if (typeof showToast === 'function') showToast('Showing packages for '+dest);
+  else console.log('Search:', dest);
+}
+
+function filterByDest(name) {
+  var sel = document.getElementById('tvDest');
+  if (sel) {
+    for (var i=0;i<sel.options.length;i++) if (sel.options[i].text === name) { sel.selectedIndex=i; break; }
+  }
+  travelSearch();
+}
+
+function viewPackage(id) {
+  var p = TRAVEL_PACKAGES.find(function(x){ return x.id === id; });
+  if (!p) return;
+  showTravelPanel('quote');
+  var qd = document.getElementById('qDest');
+  if (qd) {
+    for (var i=0;i<qd.options.length;i++) if (qd.options[i].text === p.dest) { qd.selectedIndex=i; break; }
+  }
+  var notes = document.getElementById('qNotes');
+  if (notes) notes.value = 'Interested in: '+p.title+' ('+formatPkgPrice(p.price)+')';
+  if (typeof showToast === 'function') showToast('Quote prefilled for '+p.title);
+}
+
+function runTravelAI() {
+  var prompt = ((document.getElementById('aiTripPrompt')||{}).value || '').trim();
+  var box = document.getElementById('aiTripResults');
+  if (!box) return;
+  if (!prompt) { box.innerHTML = '<p style="opacity:0.8">Enter your trip idea first.</p>'; return; }
+  box.innerHTML = '<p style="opacity:0.8">Matching inventory…</p>';
+  setTimeout(function() {
+    var q = prompt.toLowerCase();
+    var matched = TRAVEL_PACKAGES.filter(function(p) {
+      return q.indexOf(p.dest.toLowerCase())>=0 || (p.cat||[]).some(function(c){ return q.indexOf(c)>=0; });
+    });
+    if (!matched.length) matched = TRAVEL_PACKAGES.slice(0,3);
+    matched = matched.slice(0,3);
+    var tiers = ['🥇 Best Value','⭐ Premium','💎 Luxury'];
+    box.innerHTML = matched.map(function(p,i) {
+      return '<div class="ai-rec"><div class="tier">'+(tiers[i]||'Option')+'</div><div style="font-weight:600;margin-top:4px">'+p.title+'</div>' +
+        '<div class="price">'+formatPkgPrice(p.price)+'</div>' +
+        '<button class="btn btn-primary" style="padding:6px 12px;font-size:0.78rem;margin-top:6px" onclick="viewPackage('+p.id+')">Get Quotation</button></div>';
+    }).join('');
+  }, 700);
+}
+
+function submitTravelQuote() {
+  var name = (document.getElementById('qName')||{}).value || '';
+  var mobile = (document.getElementById('qMobile')||{}).value || '';
+  if (!name || !mobile) { alert('Please enter name and mobile'); return; }
+  var lead = {
+    type: 'travel-quote',
+    name: name,
+    mobile: mobile,
+    email: (document.getElementById('qEmail')||{}).value,
+    dest: (document.getElementById('qDest')||{}).value,
+    date: (document.getElementById('qDate')||{}).value,
+    adults: (document.getElementById('qAdults')||{}).value,
+    budget: (document.getElementById('qBudget')||{}).value,
+    notes: (document.getElementById('qNotes')||{}).value,
+    ts: new Date().toISOString()
+  };
+  try {
+    var arr = JSON.parse(localStorage.getItem('epay-travel-leads') || '[]');
+    arr.push(lead);
+    localStorage.setItem('epay-travel-leads', JSON.stringify(arr));
+    var all = JSON.parse(localStorage.getItem('epay-leads') || '[]');
+    all.push(lead);
+    localStorage.setItem('epay-leads', JSON.stringify(all));
+  } catch(e) {}
+  alert('Quote request submitted! A Travel Expert will contact you shortly.\\n\\nRef: TVQ-'+Date.now().toString().slice(-6));
+}
+
+function requestTravelExpert() {
+  var name = (document.getElementById('exName')||{}).value || '';
+  var mobile = (document.getElementById('exMobile')||{}).value || '';
+  if (!name || !mobile) { alert('Please enter name and mobile'); return; }
+  var lead = {
+    type: 'travel-expert',
+    name: name,
+    mobile: mobile,
+    interest: (document.getElementById('exInterest')||{}).value,
+    contact: (document.getElementById('exContact')||{}).value,
+    ts: new Date().toISOString()
+  };
+  try {
+    var arr = JSON.parse(localStorage.getItem('epay-travel-leads') || '[]');
+    arr.push(lead);
+    localStorage.setItem('epay-travel-leads', JSON.stringify(arr));
+  } catch(e) {}
+  alert('Travel Expert request sent! We will reach you via '+(lead.contact||'Call')+'.');
+}
+
+// Init travel grids when DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+  if (document.getElementById('pkgGrid')) {
+    renderPkgGrid('pkgGrid');
+    renderDestGrid('destDomestic', DESTINATIONS.domestic);
+    renderDestGrid('destIntl', DESTINATIONS.international);
+  }
+});
+
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
+

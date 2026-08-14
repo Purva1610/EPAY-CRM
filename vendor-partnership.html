@@ -1,0 +1,981 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Become an Epay Vendor — Grow With Epay Gallery</title>
+<meta name="description" content="Partner with Epay Gallery. Showcase products across galleries and the digital marketplace. Apply to become an Epay Vendor." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+
+
+
+:root {
+  --ink: #0a0b10;
+  --ink-2: #12141c;
+  --ink-3: #1a1d2a;
+  --gold: #d4af37;
+  --gold-light: #f0d78c;
+  --gold-dim: rgba(212,175,55,0.15);
+  --emerald: #10b981;
+  --emerald-dim: rgba(16,185,129,0.12);
+  --cyan: #22d3ee;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --glass: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --radius: 20px;
+  --radius-sm: 12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--ink);
+  color:var(--text);
+  line-height:1.65;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+.container{width:100%;max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* Ambient */
+.ambient{
+  position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+}
+.ambient .orb{
+  position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;
+  animation:floatOrb 18s ease-in-out infinite;
+}
+.orb.o1{width:480px;height:480px;background:radial-gradient(circle,#d4af37,transparent 70%);top:-10%;right:-5%}
+.orb.o2{width:360px;height:360px;background:radial-gradient(circle,#10b981,transparent 70%);bottom:10%;left:-8%;animation-delay:-6s}
+.orb.o3{width:280px;height:280px;background:radial-gradient(circle,#22d3ee,transparent 70%);top:45%;left:40%;animation-delay:-12s;opacity:.2}
+@keyframes floatOrb{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(40px,-50px) scale(1.1)}
+  66%{transform:translate(-30px,30px) scale(.95)}
+}
+
+/* Nav */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(10,11,16,.7);backdrop-filter:blur(20px) saturate(160%);
+  border-bottom:1px solid transparent;transition:.4s;
+}
+.nav.scrolled{border-bottom-color:var(--border);box-shadow:0 8px 40px rgba(0,0,0,.4)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem;letter-spacing:-.02em}
+.logo-mark{
+  width:36px;height:36px;border-radius:11px;
+  background:linear-gradient(135deg,var(--gold),#b8860b);
+  display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#0a0b10;font-weight:900;
+  box-shadow:0 4px 16px rgba(212,175,55,.4);
+}
+.logo span{background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:26px;list-style:none}
+.nav-links a{font-size:.88rem;font-weight:500;color:var(--muted);transition:.25s}
+.nav-links a:hover{color:var(--gold-light)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 24px;font-size:.9rem;font-weight:600;border-radius:100px;border:none;cursor:pointer;
+  transition:.4s cubic-bezier(.34,1.56,.64,1);font-family:inherit;position:relative;overflow:hidden;
+}
+.btn-gold{
+  background:linear-gradient(135deg,var(--gold-light),var(--gold),#b8860b);
+  color:#0a0b10;box-shadow:0 4px 24px rgba(212,175,55,.35);
+}
+.btn-gold:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 36px rgba(212,175,55,.5)}
+.btn-ghost{
+  background:transparent;color:var(--text);border:1.5px solid var(--border);
+}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold-light);background:var(--gold-dim)}
+.btn-lg{padding:16px 32px;font-size:1rem}
+.mobile-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px}
+.mobile-toggle span{display:block;width:22px;height:2px;background:var(--text);margin:5px 0;border-radius:2px}
+
+/* Hero */
+.hero{
+  min-height:100vh;display:flex;align-items:center;padding:120px 0 80px;position:relative;z-index:1;
+}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--gold-dim);border:1px solid rgba(212,175,55,.3);
+  color:var(--gold-light);font-size:.78rem;font-weight:600;padding:7px 16px;border-radius:100px;margin-bottom:22px;
+}
+.hero-badge .dot{width:7px;height:7px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,.5)}50%{box-shadow:0 0 0 8px transparent}}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.4rem,5vw,3.6rem);font-weight:700;line-height:1.12;letter-spacing:-.03em;margin-bottom:18px;
+}
+.hero h1 .gold{
+  background:linear-gradient(135deg,var(--gold-light),var(--gold),#c9a227);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{font-size:1.08rem;color:var(--muted);max-width:520px;margin-bottom:28px;line-height:1.7}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:32px}
+.hero-tagline{
+  font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--gold-light);
+  border-left:3px solid var(--gold);padding-left:16px;opacity:.9;
+}
+
+/* Hero visual */
+.hero-visual{position:relative}
+.hero-card{
+  background:linear-gradient(160deg,rgba(26,29,42,.9),rgba(18,20,28,.95));
+  border:1px solid var(--border);border-radius:24px;padding:24px;backdrop-filter:blur(20px);
+  box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 1px rgba(212,175,55,.08);
+  position:relative;overflow:hidden;
+}
+.hero-card::before{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:conic-gradient(from 0deg,transparent,rgba(212,175,55,.06),transparent 40%);
+  animation:spin 20s linear infinite;pointer-events:none;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-card-img{
+  height:200px;border-radius:16px;background-size:cover;background-position:center;
+  margin-bottom:18px;position:relative;overflow:hidden;
+}
+.hero-card-img .overlay{
+  position:absolute;inset:0;background:linear-gradient(to top,rgba(10,11,16,.8),transparent 50%);
+}
+.metric-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative;z-index:1}
+.metric{
+  background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:12px 14px;
+  transition:.3s;
+}
+.metric:hover{border-color:rgba(212,175,55,.3);background:rgba(212,175,55,.06)}
+.metric .label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.metric .val{font-size:1.25rem;font-weight:800;color:var(--gold-light);margin-top:2px}
+
+/* Trust strip */
+.trust{
+  padding:40px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  position:relative;z-index:1;background:rgba(18,20,28,.5);
+}
+.trust h3{text-align:center;font-size:.85rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:24px}
+.trust-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;text-align:center}
+.trust-item{
+  padding:18px 12px;border-radius:var(--radius-sm);border:1px solid transparent;
+  transition:.35s;background:var(--glass);
+}
+.trust-item:hover{border-color:rgba(212,175,55,.25);transform:translateY(-4px);background:var(--gold-dim)}
+.trust-item .icon{font-size:1.6rem;margin-bottom:8px}
+.trust-item span{font-size:.82rem;font-weight:600;color:var(--text)}
+
+/* Sections */
+section{padding:90px 0;position:relative;z-index:1}
+.section-label{
+  display:inline-block;font-size:.72rem;font-weight:700;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;
+  background:var(--gold-dim);padding:6px 14px;border-radius:100px;border:1px solid rgba(212,175,55,.2);
+}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin-bottom:12px;
+}
+.section-sub{font-size:1.02rem;color:var(--muted);max-width:560px;margin-bottom:40px;line-height:1.7}
+.text-center{text-align:center}
+.text-center .section-sub{margin-left:auto;margin-right:auto}
+
+/* Cards grid */
+.cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.cards-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{
+  background:linear-gradient(160deg,rgba(26,29,42,.85),rgba(18,20,28,.9));
+  border:1px solid var(--border);border-radius:var(--radius);padding:26px 24px;
+  transition:.4s;position:relative;overflow:hidden;
+}
+.card:hover{border-color:rgba(212,175,55,.3);transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.card .icon{font-size:1.8rem;margin-bottom:14px}
+.card h3{font-size:1.05rem;font-weight:700;margin-bottom:8px}
+.card p{font-size:.9rem;color:var(--muted);line-height:1.6}
+
+/* Journey flow */
+.journey{
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;padding:30px 0;
+}
+.journey-node{
+  background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:14px 20px;
+  text-align:center;min-width:120px;transition:.3s;
+}
+.journey-node:hover{border-color:var(--gold);background:var(--gold-dim)}
+.journey-node .step{font-size:.7rem;color:var(--gold);font-weight:700;text-transform:uppercase}
+.journey-node .name{font-size:.88rem;font-weight:600;margin-top:4px}
+.journey-arrow{color:var(--gold);font-size:1.1rem;opacity:.6}
+
+/* Categories slider */
+.cat-slider{display:flex;gap:14px;overflow-x:auto;padding:10px 0 20px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.cat-slider::-webkit-scrollbar{height:4px}
+.cat-slider::-webkit-scrollbar-thumb{background:var(--gold);border-radius:4px}
+.cat-card{
+  flex:0 0 200px;scroll-snap-align:start;
+  background:var(--ink-3);border:1px solid var(--border);border-radius:16px;overflow:hidden;
+  transition:.35s;cursor:pointer;
+}
+.cat-card:hover{border-color:var(--gold);transform:translateY(-4px)}
+.cat-card .img{height:120px;background-size:cover;background-position:center}
+.cat-card .body{padding:14px}
+.cat-card h4{font-size:.92rem;font-weight:700}
+.cat-card p{font-size:.78rem;color:var(--muted);margin-top:4px}
+
+/* Dashboard preview */
+.dash-preview{
+  background:linear-gradient(160deg,#12141c,#1a1d2a);
+  border:1px solid var(--border);border-radius:24px;padding:28px;
+  box-shadow:0 30px 80px rgba(0,0,0,.4);
+}
+.dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.dash-tile{
+  background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:18px;
+  transition:.3s;
+}
+.dash-tile:hover{border-color:rgba(212,175,55,.3);background:rgba(212,175,55,.05)}
+.dash-tile .icon{font-size:1.4rem;margin-bottom:8px}
+.dash-tile h4{font-size:.9rem;font-weight:700}
+.dash-tile p{font-size:.78rem;color:var(--muted);margin-top:4px}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.step-card{
+  background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);padding:24px;
+  position:relative;transition:.35s;
+}
+.step-card:hover{border-color:rgba(212,175,55,.3);transform:translateY(-4px)}
+.step-num{
+  font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;
+}
+.step-card h3{font-size:1rem;font-weight:700;margin-bottom:6px}
+.step-card p{font-size:.88rem;color:var(--muted)}
+
+/* Expect grid */
+.expect-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.expect-item{
+  display:flex;gap:14px;align-items:flex-start;
+  background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:18px;
+  transition:.3s;
+}
+.expect-item:hover{border-color:rgba(212,175,55,.25)}
+.expect-item .ei{font-size:1.5rem;flex-shrink:0}
+.expect-item h4{font-size:.92rem;font-weight:700;margin-bottom:4px}
+.expect-item p{font-size:.82rem;color:var(--muted)}
+
+/* CTA band */
+.cta-band{
+  background:linear-gradient(135deg,rgba(212,175,55,.12),rgba(16,185,129,.08));
+  border:1px solid rgba(212,175,55,.25);border-radius:28px;padding:48px 40px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-band::before{
+  content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);
+  animation:shimmer 4s infinite;
+}
+@keyframes shimmer{100%{left:150%}}
+.cta-band h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:12px}
+.cta-band p{color:var(--muted);max-width:480px;margin:0 auto 24px}
+
+/* Form modal */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
+  z-index:200;display:none;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--ink-2);border:1px solid var(--border);border-radius:24px;
+  max-width:520px;width:100%;max-height:90vh;overflow-y:auto;padding:32px;
+  box-shadow:0 40px 100px rgba(0,0,0,.6);animation:modalIn .4s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+.modal h2{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:6px}
+.modal .sub{color:var(--muted);font-size:.9rem;margin-bottom:22px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid .full{grid-column:1/-1}
+.form-group label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:5px}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--glass);color:var(--text);font-family:inherit;font-size:.9rem;outline:none;transition:.25s;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,.15);
+}
+.form-group select option{background:var(--ink-2)}
+.modal-close{
+  position:absolute;top:16px;right:16px;background:var(--glass);border:1px solid var(--border);
+  width:36px;height:36px;border-radius:50%;color:var(--muted);cursor:pointer;font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.modal{position:relative}
+
+/* FAQ */
+.faq-list{max-width:720px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{
+  width:100%;text-align:left;background:none;border:none;color:var(--text);
+  padding:18px 0;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+}
+.faq-q:hover{color:var(--gold-light)}
+.faq-q .chev{transition:.3s;color:var(--gold)}
+.faq-item.open .chev{transform:rotate(180deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease;color:var(--muted);font-size:.92rem}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:16px}
+
+/* Footer */
+footer{
+  border-top:1px solid var(--border);padding:40px 0 28px;position:relative;z-index:1;
+  text-align:center;color:var(--muted);font-size:.85rem;
+}
+footer .logo{justify-content:center;margin-bottom:12px}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:none}
+.reveal-d1{transition-delay:.1s}
+.reveal-d2{transition-delay:.2s}
+.reveal-d3{transition-delay:.3s}
+
+/* Toast */
+.toast-box{position:fixed;bottom:24px;right:24px;z-index:300}
+.toast{
+  background:var(--ink-3);border:1px solid rgba(212,175,55,.3);border-left:3px solid var(--gold);
+  border-radius:12px;padding:14px 18px;min-width:240px;font-size:.9rem;
+  box-shadow:0 12px 40px rgba(0,0,0,.4);animation:slideIn .35s ease;margin-top:8px;
+}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:none;opacity:1}}
+
+@media(max-width:900px){
+  .hero-grid,.cards-3,.cards-2,.steps,.expect-grid,.dash-grid,.trust-grid{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:var(--ink-2);padding:20px;border-bottom:1px solid var(--border)}
+}
+@media(max-width:600px){
+  .hero-grid,.cards-3,.cards-2,.steps,.expect-grid,.dash-grid,.trust-grid,.form-grid{grid-template-columns:1fr}
+  .hero{padding:100px 0 60px;min-height:auto}
+}
+</style>
+</head>
+    <!-- Global Navigation Component -->
+    <div id="nav-container"></div>
+    <script>
+        (function() {
+            var navContainer = document.getElementById('nav-container');
+            if (navContainer) {
+                fetch('navigation-component.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error('Navigation load error:', err));
+            }
+        })();
+    </script>
+<body>
+
+
+<div class="ambient">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+</div>
+
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo"><div class="logo-mark">eP</div> <span>Epay Vendor</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#why">Why Partner</a></li>
+      <li><a href="#opportunities">Opportunities</a></li>
+      <li><a href="#categories">Categories</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="btn btn-ghost" onclick="openModal('login')">Vendor Login</button>
+      <button class="btn btn-gold" onclick="openModal('apply')">Become a Vendor</button>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-badge"><span class="dot"></span> Vendor Partnership Program</div>
+      <h1>Grow Your Business With <span class="gold">Epay Gallery</span></h1>
+      <p class="hero-sub">Take your products beyond your current market. Connect with Epay Gallery and unlock opportunities to showcase, sell and grow — from local gallery sales to the wider Epay marketplace.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-gold btn-lg" onclick="openModal('apply')">🚀 Become an Epay Vendor</button>
+        <button class="btn btn-ghost btn-lg" onclick="openModal('talk')">📞 Talk to Our Team</button>
+      </div>
+      <p class="hero-tagline">Your Products. Our Galleries. More Opportunities.</p>
+    </div>
+    <div class="hero-visual reveal">
+      <div class="hero-card">
+        <div class="hero-card-img" style="background-image:url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80')">
+          <div class="overlay"></div>
+        </div>
+        <div class="metric-row">
+          <div class="metric"><div class="label">Gallery Network</div><div class="val" id="mGal">120+</div></div>
+          <div class="metric"><div class="label">Vendor Partners</div><div class="val" id="mVen">480+</div></div>
+          <div class="metric"><div class="label">Categories</div><div class="val">40+</div></div>
+          <div class="metric"><div class="label">Settlements</div><div class="val">On-time</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<div class="trust">
+  <div class="container">
+    <h3>Built for Businesses Ready to Grow</h3>
+    <div class="trust-grid">
+      <div class="trust-item"><div class="icon">🏪</div><span>Gallery Network</span></div>
+      <div class="trust-item"><div class="icon">🛒</div><span>E-commerce Opportunities</span></div>
+      <div class="trust-item"><div class="icon">📦</div><span>Business Orders</span></div>
+      <div class="trust-item"><div class="icon">📈</div><span>Growth Opportunities</span></div>
+      <div class="trust-item"><div class="icon">🤝</div><span>Long-Term Partnerships</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY -->
+<section id="why">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Why Partner</span>
+      <h2 class="section-title">Your Business Deserves a Bigger Market</h2>
+      <p class="section-sub">You have the products. You have the experience. Now connect with a platform designed to help your business reach further.</p>
+    </div>
+    <div class="cards-3">
+      <div class="card reveal reveal-d1"><div class="icon">🏬</div><h3>Reach Epay Gallery Customers</h3><p>Showcase your products through participating Epay Gallery locations and connect with customers looking for quality products.</p></div>
+      <div class="card reveal reveal-d2"><div class="icon">🌐</div><h3>Expand Beyond Your Local Market</h3><p>Your business doesn't have to stay limited to one city. Explore opportunities across Epay's growing multi-location network.</p></div>
+      <div class="card reveal reveal-d3"><div class="icon">🛒</div><h3>Take Your Products Online</h3><p>Showcase through the Epay marketplace and open another channel for customers to discover your business.</p></div>
+      <div class="card reveal"><div class="icon">🤝</div><h3>Long-Term Relationships</h3><p>Work with Epay Galleries through a structured vendor partnership designed for sustainable growth.</p></div>
+      <div class="card reveal reveal-d1"><div class="icon">📦</div><h3>Supply Multiple Locations</h3><p>Eligible vendors can supply products to multiple participating galleries based on category and availability.</p></div>
+      <div class="card reveal reveal-d2"><div class="icon">📊</div><h3>Manage Digitally</h3><p>Access a dedicated vendor platform for products, orders, inventory, settlements and performance.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<section style="padding-top:40px">
+  <div class="container text-center">
+    <span class="section-label">The Path</span>
+    <h2 class="section-title">One Partnership. Multiple Opportunities.</h2>
+    <p class="section-sub">Start with one gallery. Grow with the Epay network.</p>
+    <div class="journey reveal">
+      <div class="journey-node"><div class="step">01</div><div class="name">Your Business</div></div>
+      <div class="journey-arrow">→</div>
+      <div class="journey-node"><div class="step">02</div><div class="name">Epay Partnership</div></div>
+      <div class="journey-arrow">→</div>
+      <div class="journey-node"><div class="step">03</div><div class="name">Gallery Customers</div></div>
+      <div class="journey-arrow">→</div>
+      <div class="journey-node"><div class="step">04</div><div class="name">Multi-Gallery</div></div>
+      <div class="journey-arrow">→</div>
+      <div class="journey-node"><div class="step">05</div><div class="name">Marketplace</div></div>
+      <div class="journey-arrow">→</div>
+      <div class="journey-node"><div class="step">06</div><div class="name">Business Growth</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- OPPORTUNITIES -->
+<section id="opportunities" style="background:rgba(18,20,28,.4)">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Sell Through Epay</span>
+      <h2 class="section-title">Put Your Products Where Customers Are Looking</h2>
+      <p class="section-sub">Showcase products, receive enquiries and orders, and build visibility among customers actively looking for products like yours.</p>
+    </div>
+    <div class="cards-2">
+      <div class="card reveal">
+        <h3 style="margin-bottom:14px">🏪 With Epay Gallery, You Can</h3>
+        <ul style="list-style:none;font-size:.92rem;color:var(--muted);line-height:2">
+          <li>✓ Showcase your products</li>
+          <li>✓ Connect with participating galleries</li>
+          <li>✓ Receive business enquiries</li>
+          <li>✓ Supply eligible gallery locations</li>
+          <li>✓ Manage your product catalogue</li>
+          <li>✓ Track orders & inventory</li>
+          <li>✓ Track payments and settlements</li>
+          <li>✓ View business performance</li>
+        </ul>
+      </div>
+      <div class="card reveal reveal-d1" style="background-image:linear-gradient(to top,rgba(10,11,16,.92),rgba(10,11,16,.4)),url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80');background-size:cover;background-position:center;min-height:320px;display:flex;flex-direction:column;justify-content:flex-end">
+        <h3 style="color:var(--gold-light)">Take Your Products Online</h3>
+        <p style="color:rgba(255,255,255,.8);margin:8px 0 16px">Reach customers beyond your physical market through the Epay digital marketplace.</p>
+        <button class="btn btn-gold" onclick="openModal('apply')">Start Selling With Epay</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section id="categories">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Categories</span>
+      <h2 class="section-title">Built for Different Types of Businesses</h2>
+      <p class="section-sub">Whatever you sell, let's explore the opportunity.</p>
+    </div>
+    <div class="cat-slider reveal" id="catSlider">
+      <div class="cat-card" onclick="openModal('apply')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80')"></div><div class="body"><h4>🏠 Furniture & Home</h4><p>Interiors, décor, furnishings</p></div></div>
+      <div class="cat-card" onclick="openModal('apply')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&q=80')"></div><div class="body"><h4>📱 Electronics</h4><p>Devices, accessories, tech</p></div></div>
+      <div class="cat-card" onclick="openModal('apply')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&q=80')"></div><div class="body"><h4>👗 Fashion & Lifestyle</h4><p>Apparel, footwear, accessories</p></div></div>
+      <div class="cat-card" onclick="openModal('apply')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80')"></div><div class="body"><h4>💄 Beauty & Care</h4><p>Skincare, wellness, personal care</p></div></div>
+      <div class="cat-card" onclick="openModal('apply')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1556911220-bff31c812dce?w=400&q=80')"></div><div class="body"><h4>🍳 Kitchen & Appliances</h4><p>Kitchenware, household</p></div></div>
+      <div class="cat-card" onclick="openModal('apply')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&q=80')"></div><div class="body"><h4>🏢 Business & Commercial</h4><p>Office, commercial solutions</p></div></div>
+      <div class="cat-card" onclick="openModal('apply')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=400&q=80')"></div><div class="body"><h4>🎁 Specialty Products</h4><p>Unique & innovative goods</p></div></div>
+      <div class="cat-card" onclick="openModal('apply')"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1556745753-b2903579e95c?w=400&q=80')"></div><div class="body"><h4>➕ Your Category</h4><p>Don't see yours? Tell us</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section style="background:rgba(18,20,28,.4)">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Vendor Portal</span>
+      <h2 class="section-title">Everything Your Business Needs, In One Place</h2>
+      <p class="section-sub">Once onboarded, manage your Epay business from your dedicated vendor portal.</p>
+    </div>
+    <div class="dash-preview reveal">
+      <div class="dash-grid">
+        <div class="dash-tile"><div class="icon">📦</div><h4>Manage Products</h4><p>Complete product catalogue</p></div>
+        <div class="dash-tile"><div class="icon">📊</div><h4>Inventory</h4><p>Monitor stock & availability</p></div>
+        <div class="dash-tile"><div class="icon">🛒</div><h4>Orders</h4><p>Confirmation to delivery</p></div>
+        <div class="dash-tile"><div class="icon">💳</div><h4>Payments</h4><p>Transactions & status</p></div>
+        <div class="dash-tile"><div class="icon">🏦</div><h4>Settlements</h4><p>History & pending amounts</p></div>
+        <div class="dash-tile"><div class="icon">📈</div><h4>Reports</h4><p>Sales & performance</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Process</span>
+      <h2 class="section-title">Becoming an Epay Vendor Is Simple</h2>
+    </div>
+    <div class="steps">
+      <div class="step-card reveal"><div class="step-num">01</div><h3>Apply</h3><p>Tell us about your business and products.</p></div>
+      <div class="step-card reveal reveal-d1"><div class="step-num">02</div><h3>Connect</h3><p>Our team reviews your application and understands your requirements.</p></div>
+      <div class="step-card reveal reveal-d2"><div class="step-num">03</div><h3>Get Verified</h3><p>Complete required business verification and documentation.</p></div>
+      <div class="step-card reveal"><div class="step-num">04</div><h3>List Products</h3><p>Add your products, pricing and availability.</p></div>
+      <div class="step-card reveal reveal-d1"><div class="step-num">05</div><h3>Start Partnership</h3><p>Products become eligible for gallery & digital opportunities.</p></div>
+      <div class="step-card reveal reveal-d2"><div class="step-num">06</div><h3>Grow With Us</h3><p>Explore more gallery and marketplace opportunities as you scale.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO WE WANT -->
+<section style="background:rgba(18,20,28,.4)">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">Who We Partner With</span>
+      <h2 class="section-title">A Partnership That Grows With You</h2>
+      <p class="section-sub">We're looking for manufacturers, wholesalers, distributors, retailers, brands, product suppliers — emerging and established.</p>
+    </div>
+    <div class="expect-grid reveal">
+      <div class="expect-item"><div class="ei">🤝</div><div><h4>Business Partnership</h4><p>Relationships, not just listings.</p></div></div>
+      <div class="expect-item"><div class="ei">📈</div><div><h4>Growth Opportunities</h4><p>New opportunities as the network expands.</p></div></div>
+      <div class="expect-item"><div class="ei">🏪</div><div><h4>Gallery Access</h4><p>Supply participating Epay locations.</p></div></div>
+      <div class="expect-item"><div class="ei">🌐</div><div><h4>Digital Reach</h4><p>Showcase through Epay's ecosystem.</p></div></div>
+      <div class="expect-item"><div class="ei">📊</div><div><h4>Business Visibility</h4><p>Orders, sales and performance tools.</p></div></div>
+      <div class="expect-item"><div class="ei">🔐</div><div><h4>Structured Operations</h4><p>Onboarding, approvals, settlements.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EARLY PARTNERS CTA -->
+<section>
+  <div class="container">
+    <div class="cta-band reveal">
+      <span class="section-label">Early Vendor Partners</span>
+      <h2>Be Among the Businesses Growing With Epay</h2>
+      <p>We're building the vendor network with businesses that believe in long-term growth. Limited onboarding capacity may apply by category and location.</p>
+      <button class="btn btn-gold btn-lg" onclick="openModal('apply')">Apply to Become a Vendor</button>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<section class="text-center" style="padding-bottom:40px">
+  <div class="container reveal">
+    <span class="section-label">The Ecosystem</span>
+    <h2 class="section-title">Your Growth Becomes Part of Our Growth</h2>
+    <p class="section-sub" style="max-width:640px">When vendors succeed, the marketplace becomes stronger. When the marketplace is stronger, galleries become more valuable — and businesses get more opportunities.</p>
+    <p style="font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold-light);margin-top:8px">
+      Vendors → Products → Galleries → Customers → Sales → Growth
+    </p>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section>
+  <div class="container">
+    <div class="cta-band reveal" style="background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(212,175,55,.12))">
+      <h2>Ready to Take Your Business Further?</h2>
+      <p>Partner with Epay Gallery. Bring your products to a growing ecosystem across galleries and digital commerce.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-gold btn-lg" onclick="openModal('apply')">🚀 Become an Epay Vendor</button>
+        <button class="btn btn-ghost btn-lg" onclick="openModal('talk')">📞 Talk to Vendor Team</button>
+      </div>
+      <p style="margin-top:18px;font-size:.85rem"><a href="#" onclick="openModal('login');return false" style="color:var(--gold-light);text-decoration:underline">Already registered? Vendor Login</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="text-center reveal">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title">Questions, Answered</h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Who can become an Epay Vendor? <span class="chev">▾</span></button><div class="faq-a">Manufacturers, wholesalers, distributors, retailers, brands and eligible product suppliers can apply.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can a small business apply? <span class="chev">▾</span></button><div class="faq-a">Yes. Businesses of different sizes can apply, subject to verification and category requirements.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I supply multiple Epay Galleries? <span class="chev">▾</span></button><div class="faq-a">Eligible vendors may supply multiple participating galleries depending on category, location, stock and commercial arrangements.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I sell my products online? <span class="chev">▾</span></button><div class="faq-a">Eligible vendors can list products through the Epay digital marketplace.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How are vendor payments handled? <span class="chev">▾</span></button><div class="faq-a">Eligible transactions are tracked through the vendor platform, with deductions and settlements per agreed commercial terms.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I talk to someone before registering? <span class="chev">▾</span></button><div class="faq-a">Absolutely. <a href="#" onclick="openModal('talk');return false" style="color:var(--gold-light)">Talk to an Epay Vendor Specialist</a>.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL MESSAGE -->
+<section class="text-center" style="padding-bottom:100px">
+  <div class="container reveal">
+    <h2 class="section-title" style="font-size:clamp(1.8rem,3.5vw,2.6rem)">Let's Build Something Bigger Together.</h2>
+    <p class="section-sub">You bring the products. We bring the network. Together, we create more opportunities.</p>
+    <button class="btn btn-gold btn-lg" onclick="openModal('apply')">JOIN EPAY GALLERY →</button>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo" style="margin-bottom:16px"><div class="logo-mark">eP</div> <span>Epay Gallery</span></div>
+    <p>© 2026 Epay Digital Gallery · Vendor Partnership Program</p>
+  </div>
+</footer>
+
+<!-- APPLY MODAL -->
+<div class="modal-overlay" id="modal-apply">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('apply')">×</button>
+    <h2>Become an Epay Vendor</h2>
+    <p class="sub">Tell us about your business. Our team will review and connect with you.</p>
+    <form id="applyForm" onsubmit="return submitApply(event)">
+      <div class="form-grid">
+        <div class="form-group full"><label>Business / Brand Name *</label><input name="business" required placeholder="Your company name" /></div>
+        <div class="form-group"><label>Contact Person *</label><input name="name" required placeholder="Full name" /></div>
+        <div class="form-group"><label>Mobile *</label><input name="mobile" required type="tel" placeholder="10-digit mobile" /></div>
+        <div class="form-group"><label>Email</label><input name="email" type="email" placeholder="you@business.com" /></div>
+        <div class="form-group"><label>City</label><input name="city" placeholder="Pune" /></div>
+        <div class="form-group"><label>Category *</label>
+          <select name="category" required>
+            <option value="">Select</option>
+            <option>Furniture & Home</option><option>Electronics</option><option>Fashion & Lifestyle</option>
+            <option>Beauty & Personal Care</option><option>Kitchen & Appliances</option>
+            <option>Business & Commercial</option><option>Specialty</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Business Type</label>
+          <select name="type"><option>Manufacturer</option><option>Wholesaler</option><option>Distributor</option><option>Retailer</option><option>Brand</option><option>Other</option></select>
+        </div>
+        <div class="form-group full"><label>About your products</label><textarea name="about" rows="3" placeholder="What do you sell? Unique strengths?"></textarea></div>
+        <div class="form-group full"><button type="submit" class="btn btn-gold btn-lg" style="width:100%">Submit Application</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- TALK MODAL -->
+<div class="modal-overlay" id="modal-talk">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('talk')">×</button>
+    <h2>Talk to Our Vendor Team</h2>
+    <p class="sub">Request a callback from an Epay Vendor Specialist.</p>
+    <form onsubmit="return submitTalk(event)">
+      <div class="form-grid">
+        <div class="form-group"><label>Name *</label><input name="name" required /></div>
+        <div class="form-group"><label>Mobile *</label><input name="mobile" required type="tel" /></div>
+        <div class="form-group full"><label>Best time to call</label><select name="time"><option>Morning</option><option>Afternoon</option><option>Evening</option></select></div>
+        <div class="form-group full"><label>Message</label><textarea name="msg" rows="2" placeholder="Optional"></textarea></div>
+        <div class="form-group full"><button type="submit" class="btn btn-gold btn-lg" style="width:100%">Request Callback</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('login')">×</button>
+    <h2>Vendor Login</h2>
+    <p class="sub">Access your Epay Vendor Portal.</p>
+    <form onsubmit="return submitLogin(event)">
+      <div class="form-grid">
+        <div class="form-group full"><label>Email / Vendor ID</label><input name="id" required placeholder="vendor@business.com" /></div>
+        <div class="form-group full"><label>Password</label><input name="pass" type="password" required /></div>
+        <div class="form-group full"><button type="submit" class="btn btn-gold btn-lg" style="width:100%">Login</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast-box" id="toasts"></div>
+
+<script>
+function toast(msg){
+  var box=document.getElementById('toasts');
+  var t=document.createElement('div');
+  t.className='toast';
+  t.textContent=msg;
+  box.appendChild(t);
+  setTimeout(function(){t.style.opacity='0';t.style.transition='.3s';setTimeout(function(){t.remove()},300)},3000);
+}
+function openModal(id){
+  document.getElementById('modal-'+id).classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(id){
+  document.getElementById('modal-'+id).classList.remove('open');
+  document.body.style.overflow='';
+}
+document.querySelectorAll('.modal-overlay').forEach(function(o){
+  o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('open');document.body.style.overflow='';});
+});
+function toggleFaq(btn){
+  var item=btn.parentElement;
+  var open=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(function(i){i.classList.remove('open')});
+  if(!open)item.classList.add('open');
+}
+function submitApply(e){
+  e.preventDefault();
+  var fd=new FormData(e.target);
+  var data={type:'vendor-apply',business:fd.get('business'),name:fd.get('name'),mobile:fd.get('mobile'),email:fd.get('email'),city:fd.get('city'),category:fd.get('category'),bizType:fd.get('type'),about:fd.get('about'),ts:new Date().toISOString()};
+  try{
+    var arr=JSON.parse(localStorage.getItem('epay-vendor-leads')||'[]');
+    arr.push(data);
+    localStorage.setItem('epay-vendor-leads',JSON.stringify(arr));
+  }catch(err){}
+  closeModal('apply');
+  toast('Application submitted · Ref VEN-'+Date.now().toString().slice(-6));
+  e.target.reset();
+  return false;
+}
+function submitTalk(e){
+  e.preventDefault();
+  var fd=new FormData(e.target);
+  try{
+    var arr=JSON.parse(localStorage.getItem('epay-vendor-leads')||'[]');
+    arr.push({type:'vendor-callback',name:fd.get('name'),mobile:fd.get('mobile'),time:fd.get('time'),msg:fd.get('msg'),ts:new Date().toISOString()});
+    localStorage.setItem('epay-vendor-leads',JSON.stringify(arr));
+  }catch(err){}
+  closeModal('talk');
+  toast('Callback requested · We will contact you soon');
+  e.target.reset();
+  return false;
+}
+function submitLogin(e){
+  e.preventDefault();
+  toast('Vendor portal demo — credentials verified (simulated)');
+  closeModal('login');
+  return false;
+}
+// Nav scroll
+window.addEventListener('scroll',function(){
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40);
+});
+document.getElementById('mobileToggle').addEventListener('click',function(){
+  document.getElementById('navLinks').classList.toggle('open');
+});
+// Reveal
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('visible');obs.unobserve(en.target)}});
+},{threshold:0.12,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
+// Live metrics jitter
+setInterval(function(){
+  var g=document.getElementById('mGal');
+  var v=document.getElementById('mVen');
+  if(g) g.textContent=(118+Math.floor(Math.random()*6))+'+';
+  if(v) v.textContent=(475+Math.floor(Math.random()*12))+'+';
+},5000);
+// Auto-scroll categories gently
+(function(){
+  var sl=document.getElementById('catSlider');
+  if(!sl) return;
+  var dir=1;
+  setInterval(function(){
+    if(sl.scrollLeft+sl.clientWidth>=sl.scrollWidth-10) dir=-1;
+    if(sl.scrollLeft<=0) dir=1;
+    sl.scrollBy({left:dir*1.2,behavior:'auto'});
+  },40);
+})();
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){['apply','talk','login'].forEach(closeModal)}});
+</script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
+

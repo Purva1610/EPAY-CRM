@@ -1,0 +1,2841 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enterprise Gallery CRM Pro</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+    <style>
+
+
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 12px;
+        }
+
+        .sidebar-link {
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+        }
+        .sidebar-link.active {
+            background: #1e293b;
+            color: #fff;
+            box-shadow: inset 3px 0 0 #3b82f6;
+        }
+        .sidebar-link .icon {
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal-box {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 1000px;
+            width: 94%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 28px 32px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            animation: modalIn 0.25s ease;
+        }
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96) translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        .modal-close {
+            float: right;
+            font-size: 26px;
+            font-weight: 300;
+            cursor: pointer;
+            color: #94a3b8;
+            line-height: 1;
+            transition: color 0.15s;
+        }
+        .modal-close:hover {
+            color: #1e293b;
+        }
+
+        .stat-card {
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        }
+        .badge {
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+        .badge-success {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .badge-warning {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .badge-neutral {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .profit-share-bar {
+            height: 6px;
+            border-radius: 8px;
+            background: #e2e8f0;
+            overflow: hidden;
+        }
+        .profit-share-bar .fill {
+            height: 100%;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transition: width 0.4s ease;
+        }
+
+        .report-item {
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+        .report-item:hover {
+            border-color: #3b82f6;
+            background: #f8fafc;
+            transform: translateY(-1px);
+        }
+
+        .gallery-card {
+            transition: all 0.15s ease;
+        }
+        .gallery-card:hover {
+            border-color: #94a3b8;
+        }
+
+        .content-section {
+            scroll-margin-top: 80px;
+        }
+
+        .btn-download {
+            transition: all 0.15s ease;
+        }
+        .btn-download:hover {
+            transform: translateY(-1px);
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+
+        .filter-bar {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 16px;
+        }
+        .filter-bar input,
+        .filter-bar select {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 13px;
+            background: white;
+            min-width: 120px;
+        }
+        .filter-bar input:focus,
+        .filter-bar select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+        }
+        .filter-bar label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+/* ===== Toast Notifications ===== */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 360px;
+        }
+        .toast {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #fff;
+            border-radius: 14px;
+            padding: 14px 16px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid #3b82f6;
+            animation: toastIn 0.3s ease forwards;
+            font-size: 13px;
+            color: #1e293b;
+        }
+        .toast.success { border-left-color: #10b981; }
+        .toast.error { border-left-color: #ef4444; }
+        .toast.warning { border-left-color: #f59e0b; }
+        .toast.info { border-left-color: #3b82f6; }
+        .toast .toast-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+        .toast.success .toast-icon { color: #10b981; }
+        .toast.error .toast-icon { color: #ef4444; }
+        .toast.warning .toast-icon { color: #f59e0b; }
+        .toast.info .toast-icon { color: #3b82f6; }
+        .toast .toast-title { font-weight: 700; margin-bottom: 2px; }
+        .toast .toast-msg { color: #64748b; line-height: 1.4; }
+        .toast.hide { animation: toastOut 0.3s ease forwards; }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(40px); }
+        }
+
+        /* ===== Notification Dropdown ===== */
+        .notif-popup {
+            position: absolute;
+            top: 58px;
+            right: 0;
+            width: 340px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+            border: 1px solid #e2e8f0;
+            z-index: 1000;
+            display: none;
+            overflow: hidden;
+        }
+        .notif-popup.open { display: block; animation: modalIn 0.2s ease; }
+        .notif-popup .notif-head {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .notif-popup .notif-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .notif-popup .notif-item:hover { background: #f8fafc; }
+        .notif-popup .notif-item.unread { background: #eff6ff; }
+        .notif-icon-w { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+        /* ===== Profile Dropdown ===== */
+        .profile-popup {
+            position: absolute;
+            top: 58px;
+            right: 0;
+            width: 260px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+            border: 1px solid #e2e8f0;
+            z-index: 1000;
+            display: none;
+            overflow: hidden;
+        }
+        .profile-popup.open { display: block; animation: modalIn 0.2s ease; }
+        .profile-popup .profile-menu-item {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #334155;
+            transition: background 0.15s;
+        }
+        .profile-popup .profile-menu-item:hover { background: #f8fafc; }
+        .profile-popup .profile-menu-item i { width: 20px; text-align: center; color: #64748b; }
+        .profile-popup .profile-menu-item.danger { color: #dc2626; }
+        .profile-popup .profile-menu-item.danger i { color: #dc2626; }
+
+        /* ===== Action Buttons ===== */
+        .action-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid transparent;
+            transition: all 0.15s ease;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .action-btn.view { color: #3b82f6; background: #eff6ff; }
+        .action-btn.view:hover { background: #dbeafe; }
+        .action-btn.edit { color: #8b5cf6; background: #f5f3ff; }
+        .action-btn.edit:hover { background: #ede9fe; }
+        .action-btn.del { color: #ef4444; background: #fef2f2; }
+        .action-btn.del:hover { background: #fee2e2; }
+        .action-btn.transfer { color: #f59e0b; background: #fffbeb; }
+        .action-btn.transfer:hover { background: #fef3c7; }
+
+        /* ===== Confirmation Modal ===== */
+        .confirm-box {
+            max-width: 420px;
+            width: 94%;
+        }
+
+        @media (max-width: 768px) {
+            .modal-box {
+                padding: 20px;
+                width: 98%;
+            }
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-bar input,
+            .filter-bar select {
+                min-width: unset;
+            }
+            .notif-popup, .profile-popup { width: 290px; right: -20px; }
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- ========== TOAST CONTAINER ========== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ========== MODAL (Generic Edit) ========== -->
+    <div id="editModal" class="modal-overlay">
+        <div class="modal-box max-w-md">
+            <span class="modal-close" onclick="closeEditModal()">&times;</span>
+            <h2 id="editModalTitle" class="text-2xl font-bold text-gray-800 mb-4"><i class="fas fa-pen text-purple-500 mr-2"></i>Edit Record</h2>
+            <form id="editForm" class="space-y-3">
+                <div id="editFormFields"></div>
+                <button type="submit" class="w-full bg-purple-600 text-white py-2.5 rounded-xl font-medium hover:bg-purple-700 transition">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== MODAL (Confirm Delete) ========== -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-box confirm-box">
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-600 text-xl flex-shrink-0"><i class="fas fa-trash"></i></div>
+                <div class="flex-1">
+                    <h3 class="text-lg font-bold text-gray-800">Confirm Delete</h3>
+                    <p id="confirmModalMsg" class="text-sm text-gray-500 mt-1">Are you sure you want to delete this record? This action cannot be undone.</p>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-6 justify-end">
+                <button onclick="closeConfirmModal()" class="px-4 py-2 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50">Cancel</button>
+                <button id="confirmDeleteBtn" class="px-4 py-2 rounded-xl bg-red-600 text-white text-sm font-medium hover:bg-red-700">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL (Profile Settings) ========== -->
+    <div id="profileSettingsModal" class="modal-overlay">
+        <div class="modal-box max-w-md">
+            <span class="modal-close" onclick="closeProfileSettingsModal()">&times;</span>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4"><i class="fas fa-user-cog text-blue-500 mr-2"></i>Profile Settings</h2>
+            <form id="profileSettingsForm" class="space-y-3">
+                <div><label class="block text-sm font-medium text-gray-700">Full Name</label><input type="text" id="profName" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500" value="Rahul Patil" /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Email</label><input type="email" id="profEmail" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500" value="rahul@example.com" /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Mobile</label><input type="text" id="profMobile" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500" value="9876543210" /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Role</label><input type="text" id="profRole" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500" value="Master Owner" /></div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-medium hover:bg-blue-700 transition">Save Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== MODAL (Report) ========== -->
+    <div id="reportModal" class="modal-overlay">
+        <div class="modal-box">
+            <span class="modal-close" onclick="closeReportModal()">&times;</span>
+            <h2 id="reportModalTitle" class="text-2xl font-bold text-gray-800 mb-2">Report</h2>
+            <div id="reportModalBody" class="space-y-4 text-sm"></div>
+            <div class="flex gap-3 mt-6 pt-4 border-t border-gray-200">
+                <button onclick="exportReportCSV()" class="btn-download bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-sm shadow-green-600/20"><i class="fas fa-file-csv mr-2"></i>CSV</button>
+                <button onclick="exportReportPDF()" class="btn-download bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-sm shadow-blue-600/20"><i class="fas fa-file-pdf mr-2"></i>PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL (Add Owner) ========== -->
+    <div id="addOwnerModal" class="modal-overlay">
+        <div class="modal-box max-w-md">
+            <span class="modal-close" onclick="closeAddOwnerModal()">&times;</span>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4"><i class="fas fa-user-plus text-blue-500 mr-2"></i>Add New Owner</h2>
+            <form id="addOwnerForm" class="space-y-4">
+                <div><label class="block text-sm font-medium text-gray-700">Full Name</label><input type="text" id="ownerName" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500" required /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Mobile</label><input type="text" id="ownerMobile" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500" required /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Email</label><input type="email" id="ownerEmail" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500" required /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Capital Invested (â‚¹)</label><input type="number" id="ownerCapital" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500" required /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Role</label>
+                    <select id="ownerRole" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500">
+                        <option value="Owner">Owner</option><option value="Co-Owner">Co-Owner</option><option value="Investor">Investor</option><option value="Silent Partner">Silent Partner</option>
+                    </select>
+                </div>
+                <div><label class="block text-sm font-medium text-gray-700">Gallery (optional)</label>
+                    <select id="ownerGallery" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500">
+                        <option value="ALL">All Galleries</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-medium hover:bg-blue-700 transition">Add Owner</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== MODAL (Add Employee) ========== -->
+    <div id="addEmployeeModal" class="modal-overlay">
+        <div class="modal-box max-w-md">
+            <span class="modal-close" onclick="closeAddEmployeeModal()">&times;</span>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4"><i class="fas fa-user-plus text-blue-500 mr-2"></i>Add Employee</h2>
+            <form id="addEmployeeForm" class="space-y-3">
+                <div><label class="block text-sm font-medium text-gray-700">Name</label><input type="text" id="empName" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" required /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Role</label><input type="text" id="empRole" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" required /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Salary (â‚¹)</label><input type="number" id="empSalary" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" required /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Location</label><input type="text" id="empLocation" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Contact Number</label><input type="text" id="empContact" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Email</label><input type="email" id="empEmail" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Emergency Contact</label><input type="text" id="empEmergency" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Department</label><input type="text" id="empDept" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Joining Date</label><input type="date" id="empJoining" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" /></div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-medium hover:bg-blue-700 transition">Add Employee</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== MODAL (Add Customer / Visitor) ========== -->
+    <div id="addCustomerModal" class="modal-overlay">
+        <div class="modal-box max-w-md">
+            <span class="modal-close" onclick="closeAddCustomerModal()">&times;</span>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4"><i class="fas fa-user-plus text-blue-500 mr-2"></i>Add Visitor</h2>
+            <form id="addCustomerForm" class="space-y-3">
+                <div><label class="block text-sm font-medium text-gray-700">Name</label><input type="text" id="custName" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" required /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Phone</label><input type="text" id="custPhone" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" required /></div>
+                <div><label class="block text-sm font-medium text-gray-700">WhatsApp</label><input type="text" id="custWhatsapp" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Email</label><input type="email" id="custEmail" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Enquiry For</label><input type="text" id="custEnquiry" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Visit For</label><input type="text" id="custVisit" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Assignee</label><input type="text" id="custAssignee" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" /></div>
+                <div><label class="block text-sm font-medium text-gray-700">Follow-up</label>
+                    <select id="custFollowup" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm">
+                        <option value="Pending">Pending</option><option value="Scheduled">Scheduled</option><option value="Completed">Completed</option>
+                    </select>
+                </div>
+                <div><label class="block text-sm font-medium text-gray-700">Visit Date</label><input type="date" id="custDate" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm" /></div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-medium hover:bg-blue-700 transition">Add Visitor</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="fixed top-0 left-0 h-full w-72 bg-[#0f172a] text-slate-300 flex flex-col z-30 overflow-hidden">
+        <div class="p-5 flex items-center gap-3 border-b border-slate-700/60 flex-shrink-0">
+            <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-blue-600/20">
+                <i class="fas fa-building"></i>
+            </div>
+            <div>
+                <h1 class="text-white font-extrabold text-xl tracking-tight">Gallery<span class="text-blue-400">CRM</span></h1>
+                <p class="text-[10px] text-slate-400 tracking-wider">Enterprise Pro</p>
+            </div>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1 text-sm font-medium" id="sidebarNav">
+            <div class="text-[10px] uppercase text-slate-500 font-bold tracking-wider px-3 mb-2">Main</div>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl active" data-target="section-dashboard">
+                <i class="fas fa-tachometer-alt icon"></i> Portfolio Dashboard
+            </a>
+            <div class="text-[10px] uppercase text-slate-500 font-bold tracking-wider px-3 mt-6 mb-2">My Galleries</div>
+            <div id="sidebarGalleries" class="space-y-1"></div>
+            <div class="text-[10px] uppercase text-slate-500 font-bold tracking-wider px-3 mt-6 mb-2">Owner Reports</div>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-xl text-slate-400" data-target="section-reports"><i class="fas fa-user-tie icon"></i> Owner Reports</a>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-xl text-slate-400" data-target="section-history"><i class="fas fa-clock-rotate-left icon"></i> Ownership History</a>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-xl text-slate-400" data-target="section-profit"><i class="fas fa-coins icon"></i> Profit Engine</a>
+            <div class="text-[10px] uppercase text-slate-500 font-bold tracking-wider px-3 mt-6 mb-2">Operations</div>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-xl text-slate-400" data-target="section-gallery-overview"><i class="fas fa-store icon"></i> Gallery Overview</a>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-xl text-slate-400" data-target="section-owners"><i class="fas fa-users icon"></i> Multi-Owner Management</a>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-xl text-slate-400" data-target="section-investments"><i class="fas fa-wallet icon"></i> Investment Management</a>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-xl text-slate-400" data-target="section-assets"><i class="fas fa-boxes-stacked icon"></i> Gallery Assets</a>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-xl text-slate-400" data-target="section-employees"><i class="fas fa-user-group icon"></i> Employees</a>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-xl text-slate-400" data-target="section-customers"><i class="fas fa-users-viewfinder icon"></i> Customers</a>
+            <a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-xl text-slate-400" data-target="section-reports"><i class="fas fa-chart-line icon"></i> Reports</a>
+        </nav>
+    </aside>
+
+    <!-- ========== MAIN ========== -->
+    <main class="ml-72 flex flex-col h-screen overflow-hidden">
+        <header class="bg-white h-16 flex items-center justify-between px-6 border-b border-gray-200/80 shadow-sm flex-shrink-0">
+            <div class="flex items-center gap-4 flex-1 min-w-0">
+                <span class="text-sm font-semibold text-gray-500 whitespace-nowrap">Gallery:</span>
+                <select id="gallerySwitcher" class="bg-gray-50 border border-gray-200 text-gray-800 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block w-64 p-2 font-semibold shadow-sm cursor-pointer"></select>
+                <input id="gallerySearch" class="hidden md:block bg-gray-50 border border-gray-200 text-sm rounded-xl px-4 py-2 w-56 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Search gallery..." />
+            </div>
+<div class="flex items-center gap-5 flex-shrink-0">
+                <div class="relative" id="notifWrap">
+                    <i class="far fa-bell text-xl text-gray-500 hover:text-gray-700 cursor-pointer transition" onclick="toggleNotif(event)"></i>
+                    <span id="notifCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">12</span>
+                    <div id="notifPopup" class="notif-popup">
+                        <div class="notif-head">
+                            <span class="font-bold text-gray-800 text-sm"><i class="fa-solid fa-bell text-blue-500 mr-1"></i>Notifications</span>
+                            <button onclick="markAllRead()" class="text-[11px] text-blue-600 hover:underline">Mark all read</button>
+                        </div>
+                        <div id="notifList" class="max-h-72 overflow-y-auto"></div>
+                    </div>
+                </div>
+                <div class="relative" id="profileWrap">
+                    <div class="flex items-center gap-3 pl-4 border-l border-gray-200 cursor-pointer" onclick="toggleProfile(event)">
+                        <div class="text-right hidden sm:block"><p class="text-sm font-bold text-gray-800 leading-tight">Rahul Patil</p><p class="text-[10px] text-gray-500">Master Owner</p></div>
+                        <img src="https://ui-avatars.com/api/?name=Rahul+Patil&background=2563eb&color=fff&size=40" class="w-9 h-9 rounded-full border-2 border-blue-100 shadow-sm" />
+                    </div>
+                    <div id="profilePopup" class="profile-popup">
+                        <div class="p-4 border-b border-gray-100 flex items-center gap-3">
+                            <img src="https://ui-avatars.com/api/?name=Rahul+Patil&background=2563eb&color=fff&size=44" class="w-11 h-11 rounded-full border-2 border-blue-100" />
+                            <div><p class="font-bold text-gray-800 text-sm">Rahul Patil</p><p class="text-[10px] text-gray-500">rahul@example.com</p></div>
+                        </div>
+                        <div class="py-1">
+                            <div class="profile-menu-item" onclick="openProfileSettings()"><i class="fas fa-user-cog"></i> Profile Settings</div>
+                            <div class="profile-menu-item" onclick="showProfileDetails()"><i class="fas fa-id-card"></i> View Details</div>
+                            <div class="profile-menu-item" onclick="toast('info','Security','2FA and password management','fa-shield-halved')"><i class="fas fa-shield-halved"></i> Security</div>
+                            <div class="profile-menu-item" onclick="toast('info','Settings','Preferences updated','fa-sliders')"><i class="fas fa-sliders"></i> Preferences</div>
+                            <div class="border-t border-gray-100 mt-1"></div>
+                            <div class="profile-menu-item danger" onclick="logout()"><i class="fas fa-right-from-bracket"></i> Logout</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-6 space-y-6 bg-[#f1f5f9]" id="mainContent">
+
+            <!-- ===== DASHBOARD ===== -->
+            <div id="section-dashboard" class="content-section">
+                <div class="flex flex-wrap items-end justify-between gap-3">
+                    <div><h2 id="viewTitle" class="text-2xl font-extrabold text-gray-800 flex items-center gap-2">Portfolio Dashboard</h2><p id="viewSubtitle" class="text-sm text-gray-500 mt-0.5">Consolidated metrics across all galleries.</p></div>
+                    <div class="flex gap-2 flex-wrap">
+                        <button onclick="exportDashboardPDF()" class="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 shadow-sm transition btn-download"><i class="fas fa-file-pdf mr-2"></i> PDF Report</button>
+                        <button onclick="exportDashboardCSV()" class="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 shadow-sm transition btn-download"><i class="fas fa-file-csv mr-2"></i> CSV Report</button>
+                        <button onclick="openAddOwnerModal()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 shadow-sm shadow-blue-600/20 transition"><i class="fas fa-plus mr-2"></i> Add Owner</button>
+                    </div>
+                </div>
+                <div id="kpiGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-4"></div>
+                <section class="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200/70 p-5"><h3 class="text-md font-bold text-gray-800 mb-4"><i class="fas fa-store text-blue-500 mr-2"></i>My Galleries</h3><div id="myGalleries" class="space-y-3"></div></div>
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200/70 p-5"><h3 class="text-md font-bold text-gray-800 mb-4"><i class="fas fa-robot text-purple-500 mr-2"></i>AI Business Insights</h3><ul id="aiInsights" class="space-y-2.5"></ul></div>
+                </section>
+            </div>
+
+            <!-- ===== GALLERY OVERVIEW ===== -->
+            <section id="section-gallery-overview" class="content-section bg-white rounded-2xl shadow-sm border border-gray-200/70 p-5">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                    <h3 class="text-lg font-bold text-gray-800"><i class="fas fa-chart-pie text-indigo-500 mr-2"></i>Gallery Overview</h3>
+                    <button onclick="exportTableToCSV('galleryOverviewTable','Gallery_Overview')" class="btn-download text-xs bg-green-50 text-green-600 px-3 py-1.5 rounded-xl border border-green-200 hover:bg-green-100"><i class="fas fa-file-csv mr-1"></i> CSV</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div><strong class="text-gray-600">Expenses:</strong> <span id="galleryExpenses" class="font-bold text-rose-600">â‚¹0</span></div>
+                    <div><strong class="text-gray-600">Revenue:</strong> <span id="galleryRevenue" class="font-bold text-emerald-600">â‚¹0</span></div>
+                </div>
+                <div class="table-wrap">
+                    <p class="font-semibold text-gray-700 mt-4 mb-2">Employees</p>
+                    <table id="employeesTable" class="w-full text-sm border-collapse">
+                        <thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase"><th class="p-2 border">Name</th><th class="p-2 border">Role</th><th class="p-2 border">Salary</th><th class="p-2 border">Location</th><th class="p-2 border">Performance</th><th class="p-2 border">Attendance</th><th class="p-2 border">Department</th><th class="p-2 border">Experience</th></tr></thead>
+                        <tbody id="employeesTableBody"></tbody>
+                    </table>
+                </div>
+                <div class="table-wrap mt-4">
+                    <p class="font-semibold text-gray-700 mb-2">Assets</p>
+                    <table id="assetsOverviewTable" class="w-full text-sm border-collapse">
+                        <thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase"><th class="p-2 border">Asset</th><th class="p-2 border">Price</th><th class="p-2 border">Date</th><th class="p-2 border">Qty</th><th class="p-2 border">Supplier</th><th class="p-2 border">Warranty</th></tr></thead>
+                        <tbody id="assetsTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ===== MULTI-OWNER MANAGEMENT ===== -->
+            <section id="section-owners" class="content-section bg-white rounded-2xl shadow-sm border border-gray-200/70 overflow-hidden">
+                <div class="p-5 border-b border-gray-200 flex flex-wrap items-center justify-between gap-2 bg-gray-50/60">
+                    <div><h3 class="text-lg font-bold text-gray-800"><i class="fas fa-users text-blue-500 mr-2"></i>Multi-Owner Management</h3><p class="text-xs text-gray-500 mt-0.5">Gallery owner mapping, investment, and role control</p></div>
+                    <div class="flex gap-2 flex-wrap">
+                        <button onclick="openAddOwnerModal()" class="px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-xl border border-blue-100 hover:bg-blue-100 transition"><i class="fas fa-user-plus mr-1"></i> Add Owner</button>
+                        <button onclick="alert('Transfer Ownership: Select owner and target gallery')" class="px-3 py-1.5 text-xs font-medium text-purple-600 bg-purple-50 rounded-xl border border-purple-100 hover:bg-purple-100 transition"><i class="fas fa-exchange-alt mr-1"></i> Transfer</button>
+                        <button onclick="alert('Upload Documents: Select files to upload')" class="px-3 py-1.5 text-xs font-medium text-emerald-600 bg-emerald-50 rounded-xl border border-emerald-100 hover:bg-emerald-100 transition"><i class="fas fa-file-arrow-up mr-1"></i> Upload</button>
+                        <button onclick="exportTableToCSV('ownersTable','Owners')" class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-50 rounded-xl border border-gray-200 hover:bg-gray-100 transition"><i class="fas fa-file-csv mr-1"></i> CSV</button>
+                    </div>
+                </div>
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <label><i class="fas fa-calendar-alt mr-1"></i> From: <input type="date" id="ownerFilterFrom" onchange="applyOwnerFilter()" /></label>
+                    <label>To: <input type="date" id="ownerFilterTo" onchange="applyOwnerFilter()" /></label>
+                    <label><i class="fas fa-search mr-1"></i> Search: <input type="text" id="ownerFilterSearch" placeholder="Name, ID, Role..." oninput="applyOwnerFilter()" /></label>
+                </div>
+                <div class="table-wrap">
+                    <table id="ownersTable" class="w-full text-sm whitespace-nowrap">
+                        <thead class="bg-white text-gray-500 border-b border-gray-200 text-xs uppercase">
+                            <tr><th class="px-5 py-4 text-left font-semibold">Owner</th><th class="px-5 py-4 text-right font-semibold">Capital</th><th class="px-5 py-4 text-center font-semibold">Ownership %</th><th class="px-5 py-4 text-center font-semibold">Profit %</th><th class="px-5 py-4 text-center font-semibold">Loss %</th><th class="px-5 py-4 text-center font-semibold">Role</th><th class="px-5 py-4 text-center font-semibold">Status</th><th class="px-5 py-4 text-right font-semibold">Actions</th></tr>
+                        </thead>
+                        <tbody id="ownersTbody" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+                <div id="validationBar" class="bg-emerald-50/70 border-t border-emerald-100 p-3 flex justify-between items-center text-xs px-6"><span class="text-emerald-700 font-medium"><i class="fas fa-check-circle mr-1"></i> Validation Ready</span></div>
+            </section>
+
+            <!-- ===== PROFIT ENGINE ===== -->
+            <section id="section-profit" class="content-section grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200/70 p-5">
+                    <h3 class="text-md font-bold text-gray-800 mb-4"><i class="fas fa-coins text-amber-500 mr-2"></i>Profit Distribution</h3>
+                    <div class="mb-4"><label class="block text-sm font-medium text-gray-600">Total Gallery Profit (â‚¹)</label><input id="totalProfitInput" type="number" class="mt-1 w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500" value="1250000" /></div>
+                    <div id="profitDistribution" class="space-y-3 max-h-60 overflow-y-auto"></div>
+                    <div class="mt-5 flex flex-wrap gap-2">
+                        <button onclick="calculateProfit()" class="bg-indigo-50 text-indigo-600 border border-indigo-100 font-medium py-2 px-4 rounded-xl text-sm hover:bg-indigo-100 transition">Calculate</button>
+                        <button onclick="approveDistribution()" class="bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-xl text-sm hover:bg-gray-50 transition">Approve</button>
+                        <button onclick="distributeProfit()" class="bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-xl text-sm hover:bg-gray-50 transition">Distribute</button>
+                        <button onclick="reverseEntry()" class="bg-white border border-gray-200 text-gray-700 py-2 px-4 rounded-xl text-sm hover:bg-gray-50 transition">Reverse</button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200/70 p-5">
+                    <h3 class="text-md font-bold text-gray-800 mb-4"><i class="fas fa-bell text-yellow-500 mr-2"></i>Smart Notifications</h3>
+                    <ul id="notificationsList" class="space-y-3"></ul>
+                </div>
+            </section>
+
+            <!-- ===== INVESTMENT MANAGEMENT ===== -->
+            <section id="section-investments" class="content-section bg-white rounded-2xl shadow-sm border border-gray-200/70 p-5">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                    <h3 class="text-md font-bold text-gray-800"><i class="fas fa-wallet text-emerald-500 mr-2"></i>Investment Management</h3>
+<div class="flex gap-2 flex-wrap">
+                        <button onclick="recordInvestment()" class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-emerald-700 shadow-sm shadow-emerald-600/20 transition"><i class="fas fa-indian-rupee-sign mr-1"></i> Record Investment</button>
+                        <button onclick="addInvestment()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 shadow-sm shadow-blue-600/20 transition"><i class="fas fa-plus mr-1"></i> Add Investment</button>
+                        <button onclick="exportTableToCSV('investmentTable','Investments')" class="btn-download bg-green-50 text-green-600 px-3 py-2 rounded-xl border border-green-200 hover:bg-green-100 text-sm"><i class="fas fa-file-csv mr-1"></i> CSV</button>
+                    </div>
+                </div>
+                <div class="filter-bar">
+                    <label><i class="fas fa-calendar-alt mr-1"></i> From: <input type="date" id="invFilterFrom" onchange="applyInvestmentFilter()" /></label>
+                    <label>To: <input type="date" id="invFilterTo" onchange="applyInvestmentFilter()" /></label>
+                    <label><i class="fas fa-search mr-1"></i> Search: <input type="text" id="invFilterSearch" placeholder="Owner, ID..." oninput="applyInvestmentFilter()" /></label>
+                </div>
+                <div class="table-wrap">
+                    <table id="investmentTable" class="w-full text-sm">
+                        <thead class="text-xs uppercase text-gray-500 border-b"><tr><th class="py-3 text-left font-semibold">ID</th><th class="py-3 text-left">Owner</th><th class="py-3 text-left">Type</th><th class="py-3 text-right">Amount</th><th class="py-3 text-left">Mode</th><th class="py-3 text-left">Status</th><th class="py-3 text-left">Date</th><th class="py-3 text-left">Actions</th></tr></thead>
+                        <tbody id="investmentTbody" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+                <!-- Detailed Transaction History -->
+                <div class="mt-6">
+                    <h4 class="font-bold text-gray-700 mb-2">Investment Collection History</h4>
+                    <div class="filter-bar">
+                        <label>From: <input type="date" id="invTxFilterFrom" onchange="applyInvestmentTxFilter()" /></label>
+                        <label>To: <input type="date" id="invTxFilterTo" onchange="applyInvestmentTxFilter()" /></label>
+                        <label>Search: <input type="text" id="invTxFilterSearch" placeholder="ID, Person..." oninput="applyInvestmentTxFilter()" /></label>
+                    </div>
+                    <div class="table-wrap">
+                        <table id="investmentTxTable" class="w-full text-sm border-collapse">
+                            <thead class="bg-gray-50 text-gray-500 text-xs uppercase"><tr><th class="p-2 border">Transaction ID</th><th class="p-2 border">Investment ID</th><th class="p-2 border">Amount</th><th class="p-2 border">Date</th><th class="p-2 border">Collected By</th><th class="p-2 border">Mode</th><th class="p-2 border">Status</th></tr></thead>
+                            <tbody id="investmentTxTbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== OWNERSHIP HISTORY ===== -->
+            <section id="section-history" class="content-section bg-white rounded-2xl shadow-sm border border-gray-200/70 p-5">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                    <h3 class="text-md font-bold text-gray-800"><i class="fas fa-clock-rotate-left text-purple-500 mr-2"></i>Ownership History</h3>
+                    <button onclick="exportTableToCSV('historyTable','Ownership_History')" class="btn-download bg-green-50 text-green-600 px-3 py-1.5 rounded-xl border border-green-200 hover:bg-green-100 text-xs"><i class="fas fa-file-csv mr-1"></i> CSV</button>
+                </div>
+                <div class="filter-bar">
+                    <label>From: <input type="date" id="histFilterFrom" onchange="applyHistoryFilter()" /></label>
+                    <label>To: <input type="date" id="histFilterTo" onchange="applyHistoryFilter()" /></label>
+                    <label>Search: <input type="text" id="histFilterSearch" placeholder="Owner, ID..." oninput="applyHistoryFilter()" /></label>
+                </div>
+                <div class="table-wrap">
+                    <table id="historyTable" class="w-full text-sm">
+                        <thead class="text-xs uppercase text-gray-500 border-b"><tr><th class="py-3 text-left">ID</th><th class="py-3 text-left">Date</th><th class="py-3 text-left">Owner</th><th class="py-3 text-right">Prev %</th><th class="py-3 text-right">New %</th><th class="py-3 text-left">Reason</th><th class="py-3 text-left">Actions</th></tr></thead>
+                        <tbody id="ownershipHistoryTbody" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ===== REPORTS ===== -->
+            <section id="section-reports" class="content-section bg-white rounded-2xl shadow-sm border border-gray-200/70 p-5">
+                <h3 class="text-md font-bold text-gray-800 mb-4"><i class="fas fa-chart-line text-cyan-500 mr-2"></i>Reports</h3>
+                <div class="filter-bar">
+                    <label>From: <input type="date" id="reportFilterFrom" /></label>
+                    <label>To: <input type="date" id="reportFilterTo" /></label>
+                    <label>Search: <input type="text" id="reportFilterSearch" placeholder="Report name..." oninput="applyReportFilter()" /></label>
+                </div>
+                <div id="reportGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5"></div>
+            </section>
+
+            <!-- ===== ASSETS ===== -->
+            <section id="section-assets" class="content-section grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200/70 p-5 lg:col-span-2">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-md font-bold text-gray-800"><i class="fas fa-boxes-stacked text-orange-500 mr-2"></i>Gallery Assets</h3>
+                        <button onclick="exportTableToCSV('assetsListTable','Assets')" class="btn-download text-xs bg-green-50 text-green-600 px-3 py-1.5 rounded-xl border border-green-200 hover:bg-green-100"><i class="fas fa-file-csv mr-1"></i> CSV</button>
+                    </div>
+                    <div class="filter-bar">
+                        <label>From: <input type="date" id="assetFilterFrom" onchange="applyAssetFilter()" /></label>
+                        <label>To: <input type="date" id="assetFilterTo" onchange="applyAssetFilter()" /></label>
+                        <label>Search: <input type="text" id="assetFilterSearch" placeholder="Asset name..." oninput="applyAssetFilter()" /></label>
+                    </div>
+                    <div id="assetsList" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+                    <div class="table-wrap mt-4 hidden" id="assetsListTableWrap">
+                        <table id="assetsListTable" class="w-full text-sm border-collapse"><thead><tr class="bg-gray-50"><th class="p-2 border">Asset</th><th class="p-2 border">Price</th><th class="p-2 border">Date</th><th class="p-2 border">Qty</th><th class="p-2 border">Supplier</th></tr></thead><tbody id="assetsListTableBody"></tbody></table>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200/70 p-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-md font-bold text-gray-800"><i class="fas fa-users-viewfinder text-pink-500 mr-2"></i>Customer Overview</h3>
+                        <button onclick="exportTableToCSV('customerStatsTable','Customers')" class="btn-download text-xs bg-green-50 text-green-600 px-3 py-1.5 rounded-xl border border-green-200 hover:bg-green-100"><i class="fas fa-file-csv mr-1"></i> CSV</button>
+                    </div>
+                    <div id="customerStats" class="space-y-2.5"></div>
+                    <div class="hidden" id="customerStatsTableWrap"><table id="customerStatsTable" class="w-full text-sm"><thead><tr><th>Name</th><th>Type</th><th>Enquiry</th><th>Amount</th></tr></thead><tbody id="customerStatsTableBody"></tbody></table></div>
+                </div>
+            </section>
+
+            <!-- ===== EMPLOYEES ===== -->
+            <section id="section-employees" class="content-section bg-white rounded-2xl shadow-sm border border-gray-200/70 p-5">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                    <h3 class="text-md font-bold text-gray-800"><i class="fas fa-user-group text-blue-500 mr-2"></i>Employee Overview</h3>
+                    <div class="flex gap-2">
+                        <button onclick="openAddEmployeeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition"><i class="fas fa-plus mr-1"></i> Add Employee</button>
+                        <button onclick="exportTableToCSV('employeeStatsTable','Employees')" class="btn-download bg-green-50 text-green-600 px-3 py-2 rounded-xl border border-green-200 hover:bg-green-100 text-sm"><i class="fas fa-file-csv mr-1"></i> CSV</button>
+                    </div>
+                </div>
+                <div class="filter-bar">
+                    <label>From Joining: <input type="date" id="empFilterFrom" onchange="applyEmployeeFilter()" /></label>
+                    <label>To: <input type="date" id="empFilterTo" onchange="applyEmployeeFilter()" /></label>
+                    <label>Search: <input type="text" id="empFilterSearch" placeholder="Name, Role..." oninput="applyEmployeeFilter()" /></label>
+                </div>
+                <div id="employeeStats" class="space-y-2.5"></div>
+                <div class="hidden" id="employeeStatsTableWrap"><table id="employeeStatsTable" class="w-full text-sm"><thead><tr><th>Name</th><th>Role</th><th>Salary</th><th>Location</th><th>Contact</th><th>Email</th><th>Emergency</th><th>Department</th><th>Joining</th><th>Performance</th><th>Tasks</th><th>Progress</th></tr></thead><tbody id="employeeStatsTableBody"></tbody></table></div>
+            </section>
+
+            <!-- ===== CUSTOMERS ===== -->
+            <section id="section-customers" class="content-section bg-white rounded-2xl shadow-sm border border-gray-200/70 p-5">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                    <h3 class="text-md font-bold text-gray-800"><i class="fas fa-users-viewfinder text-pink-500 mr-2"></i>Customer / Visitor Management</h3>
+                    <div class="flex gap-2">
+                        <button onclick="openAddCustomerModal()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition"><i class="fas fa-plus mr-1"></i> Add Visitor</button>
+                        <button onclick="exportTableToCSV('interactionsTable','Visitors')" class="btn-download bg-green-50 text-green-600 px-3 py-2 rounded-xl border border-green-200 hover:bg-green-100 text-sm"><i class="fas fa-file-csv mr-1"></i> CSV</button>
+                    </div>
+                </div>
+                <div class="filter-bar">
+                    <label>From Date: <input type="date" id="custFilterFrom" onchange="applyCustomerFilter()" /></label>
+                    <label>To: <input type="date" id="custFilterTo" onchange="applyCustomerFilter()" /></label>
+                    <label>Search: <input type="text" id="custFilterSearch" placeholder="Name, Enquiry, Assignee..." oninput="applyCustomerFilter()" /></label>
+                </div>
+                <div id="customerInteractions" class="space-y-2.5"></div>
+                <div class="hidden" id="interactionsTableWrap"><table id="interactionsTable" class="w-full text-sm"><thead><tr><th>Name</th><th>Phone</th><th>WhatsApp</th><th>Email</th><th>Enquiry For</th><th>Visit For</th><th>Assignee</th><th>Follow-up</th><th>Date</th><th>Response</th><th>Deal</th><th>Payment</th><th>Transaction ID</th></tr></thead><tbody id="interactionsTableBody"></tbody></table></div>
+            </section>
+
+            <div class="h-4"></div>
+        </div>
+    </main>
+
+    <script>
+        // ============================================================
+        //  DATA (Enhanced with all fields)
+        // ============================================================
+        const fmt = (n) => 'â‚¹' + Math.round(n || 0).toLocaleString('en-IN');
+
+        // Generate transaction IDs
+        function genTxId() { return 'TX-' + Date.now().toString().slice(-8) + '-' + Math.floor(Math.random() * 1000); }
+
+        // Investment transaction history
+        let investmentTransactions = [
+            { id: 'TX-001', investmentId: 'INV-001', amount: 1000000, date: '2024-01-12', collectedBy: 'Rahul Patil',
+                mode: 'Bank Transfer', status: 'Completed' },
+            { id: 'TX-002', investmentId: 'INV-002', amount: 200000, date: '2024-02-16', collectedBy: 'Amit Shah',
+                mode: 'UPI', status: 'Completed' },
+            { id: 'TX-003', investmentId: 'INV-003', amount: 1500000, date: '2024-03-22', collectedBy: 'Priya Joshi',
+                mode: 'Cheque', status: 'Completed' },
+            { id: 'TX-004', investmentId: 'INV-004', amount: 500000, date: '2024-04-27', collectedBy: 'Pooja Patil',
+                mode: 'Cash', status: 'Pending' },
+            { id: 'TX-005', investmentId: 'INV-005', amount: 300000, date: '2024-06-01', collectedBy: 'Vikram Rao',
+                mode: 'Bank Transfer', status: 'Completed' },
+        ];
+
+        const DB = {
+            portfolio: {
+                id: 'ALL',
+                name: 'All Galleries (Consolidated)',
+                totalInvestment: 38500000,
+                portfolioValue: 54200000,
+                monthlySales: 1840500,
+                monthlyRevenue: 28000000,
+                monthlyProfit: 4875000,
+                pendingDistribution: 1240000,
+                totalEmployees: 142,
+                customersServed: 18520,
+                inventoryValue: 17500000,
+                performance: 94,
+                todaySales: 480000,
+                totalGalleries: 12,
+                totalOwners: 14
+            },
+            galleries: [
+                { id: 'GAL-1001', code: 'PUNE-FC', name: 'Pune FC Road', location: 'Pune, Maharashtra', status: 'Running',
+                    investment: 4500000, sales: 4200000, profit: 850000, employees: 18, customers: 2450,
+                    inventory: 2600000, roi: 18.9, rating: 4.8, growth: 14, expenses: 610000, revenue: 4200000,
+                    description: 'High-end contemporary art gallery in FC Road.', established: '2020-06-15',
+                    phone: '+91 20 1234 5678', email: 'pune@gallery.com', address: '123 FC Road, Pune' },
+                { id: 'GAL-1002', code: 'MUM-AND', name: 'Mumbai Andheri', location: 'Mumbai, Maharashtra', status: 'Running',
+                    investment: 9200000, sales: 6500000, profit: 1850000, employees: 26, customers: 3840,
+                    inventory: 4100000, roi: 21.1, rating: 4.9, growth: 19, expenses: 980000, revenue: 6500000,
+                    description: 'Premier gallery in Andheri West.', established: '2019-03-10',
+                    phone: '+91 22 2345 6789', email: 'mumbai@gallery.com', address: '45 Andheri West, Mumbai' },
+                { id: 'GAL-1003', code: 'NAS-CBS', name: 'Nashik CBS', location: 'Nashik, Maharashtra', status: 'Running',
+                    investment: 3200000, sales: 1200000, profit: 450000, employees: 12, customers: 1240,
+                    inventory: 1900000, roi: 11.2, rating: 3.9, growth: 5, expenses: 290000, revenue: 1200000,
+                    description: 'Cozy art space near CBS.', established: '2021-01-20', phone: '+91 253 3456 7890',
+                    email: 'nashik@gallery.com', address: '7 College Road, Nashik' },
+                { id: 'GAL-1004', code: 'NAG-CEN', name: 'Nagpur Central', location: 'Nagpur, Maharashtra', status: 'Running',
+                    investment: 6100000, sales: 2800000, profit: 800000, employees: 15, customers: 2080,
+                    inventory: 2400000, roi: 13.4, rating: 4.2, growth: 9, expenses: 410000, revenue: 2800000,
+                    description: 'Central Nagpur gallery.', established: '2020-09-05', phone: '+91 712 4567 8901',
+                    email: 'nagpur@gallery.com', address: '10 Central Avenue, Nagpur' },
+                { id: 'GAL-1005', code: 'HYD-BAN', name: 'Hyderabad Banjara Hills', location: 'Hyderabad, Telangana',
+                    status: 'Running', investment: 13750000, sales: 10800000, profit: 2875000, employees: 29,
+                    customers: 4910, inventory: 6200000, roi: 23.4, rating: 4.9, growth: 22, expenses: 1410000,
+                    revenue: 10800000, description: 'Luxury gallery in Banjara Hills.', established: '2018-11-12',
+                    phone: '+91 40 5678 9012', email: 'hyderabad@gallery.com', address: '22 Banjara Hills, Hyderabad' },
+                { id: 'GAL-1006', code: 'DEL-CON', name: 'Delhi Connaught Place', location: 'Delhi, India', status: 'Running',
+                    investment: 8500000, sales: 7200000, profit: 1500000, employees: 20, customers: 3200,
+                    inventory: 3800000, roi: 17.6, rating: 4.5, growth: 16, expenses: 850000, revenue: 7200000,
+                    description: 'Iconic gallery in Connaught Place.', established: '2017-07-01',
+                    phone: '+91 11 6789 0123', email: 'delhi@gallery.com', address: '15 Connaught Place, New Delhi' },
+                { id: 'GAL-1007', code: 'CHE-ANN', name: 'Chennai Anna Nagar', location: 'Chennai, Tamil Nadu',
+                    status: 'Running', investment: 6200000, sales: 5500000, profit: 1200000, employees: 17,
+                    customers: 2800, inventory: 3200000, roi: 19.4, rating: 4.3, growth: 12, expenses: 650000,
+                    revenue: 5500000, description: 'Charming gallery in Anna Nagar.', established: '2019-05-20',
+                    phone: '+91 44 7890 1234', email: 'chennai@gallery.com', address: '8 Anna Nagar, Chennai' },
+                { id: 'GAL-1008', code: 'BAN-JUB', name: 'Bangalore Jubilee Hills', location: 'Bangalore, Karnataka',
+                    status: 'Running', investment: 9800000, sales: 8500000, profit: 2100000, employees: 25,
+                    customers: 4000, inventory: 4500000, roi: 21.4, rating: 4.7, growth: 18, expenses: 1000000,
+                    revenue: 8500000, description: 'Modern gallery in Jubilee Hills.', established: '2020-02-28',
+                    phone: '+91 80 8901 2345', email: 'bangalore@gallery.com', address: '33 Jubilee Hills, Bangalore' },
+                { id: 'GAL-1009', code: 'KOL-PAR', name: 'Kolkata Park Street', location: 'Kolkata, West Bengal',
+                    status: 'Running', investment: 7400000, sales: 6300000, profit: 1400000, employees: 19,
+                    customers: 2900, inventory: 3500000, roi: 18.9, rating: 4.6, growth: 15, expenses: 720000,
+                    revenue: 6300000, description: 'Historic gallery on Park Street.', established: '2016-12-10',
+                    phone: '+91 33 9012 3456', email: 'kolkata@gallery.com', address: '5 Park Street, Kolkata' },
+                { id: 'GAL-1010', code: 'JAIP-MAL', name: 'Jaipur Malviya Nagar', location: 'Jaipur, Rajasthan',
+                    status: 'Running', investment: 5100000, sales: 4200000, profit: 950000, employees: 14,
+                    customers: 2100, inventory: 2500000, roi: 18.6, rating: 4.4, growth: 11, expenses: 560000,
+                    revenue: 4200000, description: 'Royal gallery in Malviya Nagar.', established: '2021-03-18',
+                    phone: '+91 141 0123 4567', email: 'jaipur@gallery.com', address: '12 Malviya Nagar, Jaipur' },
+                { id: 'GAL-1011', code: 'LUCK-HAZ', name: 'Lucknow Hazratganj', location: 'Lucknow, Uttar Pradesh',
+                    status: 'Running', investment: 6800000, sales: 5800000, profit: 1300000, employees: 16,
+                    customers: 2600, inventory: 3200000, roi: 19.1, rating: 4.5, growth: 14, expenses: 640000,
+                    revenue: 5800000, description: 'Elegant gallery in Hazratganj.', established: '2020-07-22',
+                    phone: '+91 522 1234 5678', email: 'lucknow@gallery.com', address: '9 Hazratganj, Lucknow' },
+                { id: 'GAL-1012', code: 'PAT-BOR', name: 'Patna Boring Road', location: 'Patna, Bihar', status: 'Running',
+                    investment: 4300000, sales: 3700000, profit: 800000, employees: 13, customers: 1900,
+                    inventory: 2100000, roi: 18.6, rating: 4.1, growth: 10, expenses: 480000, revenue: 3700000,
+                    description: 'Growing gallery on Boring Road.', established: '2021-09-01',
+                    phone: '+91 612 2345 6789', email: 'patna@gallery.com', address: '3 Boring Road, Patna' }
+            ],
+            owners: [
+                { id: 'OWN-001', name: 'Rahul Patil', photo: 'https://ui-avatars.com/api/?name=Rahul+Patil&background=2563eb&color=fff',
+                    mobile: '9876543210', email: 'rahul@example.com', pan: 'ABCDE1234F', aadhaar: '1234-5678-9012',
+                    address: 'Flat 102, ABC Apartments, FC Road, Pune', bank: 'HDFC Bank â€¢â€¢â€¢â€¢ 8841',
+                    nominee: 'Anjali Patil', status: 'Active', permission: 'Owner', dateOfBirth: '1985-05-15',
+                    nationality: 'Indian', occupation: 'Business Owner', netWorth: 25000000 },
+                { id: 'OWN-002', name: 'Amit Shah', photo: 'https://ui-avatars.com/api/?name=Amit+Shah&background=7c3aed&color=fff',
+                    mobile: '9988776655', email: 'amit@example.com', pan: 'FGHIJ5678K', aadhaar: '2345-6789-0123',
+                    address: 'Villa 5, XYZ Colony, Andheri West, Mumbai', bank: 'ICICI Bank â€¢â€¢â€¢â€¢ 4421',
+                    nominee: 'Raj Shah', status: 'Active', permission: 'Co-Owner', dateOfBirth: '1982-03-22',
+                    nationality: 'Indian', occupation: 'Investor', netWorth: 18000000 },
+                { id: 'OWN-003', name: 'Priya Joshi', photo: 'https://ui-avatars.com/api/?name=Priya+Joshi&background=ec4899&color=fff',
+                    mobile: '9123456780', email: 'priya@example.com', pan: 'LMNOP9012Q', aadhaar: '3456-7890-1234',
+                    address: 'House 45, PQR Society, College Road, Nashik', bank: 'SBI â€¢â€¢â€¢â€¢ 1198', nominee: 'Vikram Joshi',
+                    status: 'Active', permission: 'Investor', dateOfBirth: '1990-08-10', nationality: 'Indian',
+                    occupation: 'Entrepreneur', netWorth: 12000000 },
+                { id: 'OWN-004', name: 'Pooja Patil', photo: 'https://ui-avatars.com/api/?name=Pooja+Patil&background=0ea5e9&color=fff',
+                    mobile: '9345678901', email: 'pooja@example.com', pan: 'RSTUV3456W', aadhaar: '4567-8901-2345',
+                    address: 'Apartment 203, DEF Towers, Baner Road, Pune', bank: 'Axis Bank â€¢â€¢â€¢â€¢ 8830',
+                    nominee: 'Rahul Patil', status: 'Active', permission: 'Silent Partner', dateOfBirth: '1988-12-05',
+                    nationality: 'Indian', occupation: 'Designer', netWorth: 8000000 },
+                { id: 'OWN-005', name: 'Sachin Patil', photo: 'https://ui-avatars.com/api/?name=Sachin+Patil&background=16a34a&color=fff',
+                    mobile: '9112233445', email: 'sachin@example.com', pan: 'XYZAB7890C', aadhaar: '5678-9012-3456',
+                    address: 'Villa 10, LMN Residency, Banjara Hills, Hyderabad', bank: 'Kotak Bank â€¢â€¢â€¢â€¢ 6677',
+                    nominee: 'Neha Patil', status: 'Active', permission: 'Gallery Manager', dateOfBirth: '1975-07-20',
+                    nationality: 'Indian', occupation: 'Art Curator', netWorth: 15000000 },
+                { id: 'OWN-006', name: 'Company Share', photo: 'https://ui-avatars.com/api/?name=Company+Share&background=64748b&color=fff',
+                    mobile: '9000000000', email: 'finance@company.com', pan: 'CORP1234D', aadhaar: 'N/A',
+                    address: 'Registered Office, Mumbai', bank: 'Corporate Account', nominee: 'N/A', status: 'Active',
+                    permission: 'Investor', dateOfBirth: 'N/A', nationality: 'Corporate', occupation: 'Corporate',
+                    netWorth: 50000000 },
+                { id: 'OWN-007', name: 'Vikram Rao', photo: 'https://ui-avatars.com/api/?name=Vikram+Rao&background=10b981&color=fff',
+                    mobile: '9556677889', email: 'vikram@example.com', pan: 'DEFGH5678I', aadhaar: '6789-0123-4567',
+                    address: 'Flat 501, OPQ Building, Connaught Place, Delhi', bank: 'PNB â€¢â€¢â€¢â€¢ 2234',
+                    nominee: 'Priya Rao', status: 'Active', permission: 'Co-Owner', dateOfBirth: '1980-11-30',
+                    nationality: 'Indian', occupation: 'Consultant', netWorth: 22000000 },
+                { id: 'OWN-008', name: 'Kavita Singh', photo: 'https://ui-avatars.com/api/?name=Kavita+Singh&background=f59e0b&color=fff',
+                    mobile: '9445566778', email: 'kavita@example.com', pan: 'IJKLM9012N', aadhaar: '7890-1234-5678',
+                    address: 'House 12, RST Lane, Park Street, Kolkata', bank: 'BOB â€¢â€¢â€¢â€¢ 5566', nominee: 'Arjun Singh',
+                    status: 'Inactive', permission: 'Investor', dateOfBirth: '1987-04-18', nationality: 'Indian',
+                    occupation: 'Teacher', netWorth: 6000000 },
+                { id: 'OWN-009', name: 'Arun Kumar', photo: 'https://ui-avatars.com/api/?name=Arun+Kumar&background=dc2626&color=fff',
+                    mobile: '9666777889', email: 'arun@example.com', pan: 'OPQRS3456T', aadhaar: '8901-2345-6789',
+                    address: 'Apartment 305, UVW Complex, Anna Nagar, Chennai', bank: 'SBI â€¢â€¢â€¢â€¢ 4455',
+                    nominee: 'Lakshmi Kumar', status: 'Active', permission: 'Owner', dateOfBirth: '1978-09-12',
+                    nationality: 'Indian', occupation: 'Engineer', netWorth: 30000000 },
+                { id: 'OWN-010', name: 'Sneha Gupta', photo: 'https://ui-avatars.com/api/?name=Sneha+Gupta&background=059669&color=fff',
+                    mobile: '9777888990', email: 'sneha@example.com', pan: 'TUVWX7890Y', aadhaar: '9012-3456-7890',
+                    address: 'Villa 8, XYZ Palace, Malviya Nagar, Jaipur', bank: 'HDFC â€¢â€¢â€¢â€¢ 7788', nominee: 'Rohan Gupta',
+                    status: 'Active', permission: 'Investor', dateOfBirth: '1992-06-25', nationality: 'Indian',
+                    occupation: 'Artist', netWorth: 9000000 },
+                { id: 'OWN-011', name: 'Ravi Sharma', photo: 'https://ui-avatars.com/api/?name=Ravi+Sharma&background=059669&color=fff',
+                    mobile: '9888999000', email: 'ravi@example.com', pan: 'YZABC1234D', aadhaar: '0123-4567-8901',
+                    address: 'House 25, ABC Colony, Hazratganj, Lucknow', bank: 'BOI â€¢â€¢â€¢â€¢ 1122', nominee: 'Meera Sharma',
+                    status: 'Active', permission: 'Co-Owner', dateOfBirth: '1983-01-14', nationality: 'Indian',
+                    occupation: 'Doctor', netWorth: 16000000 },
+                { id: 'OWN-012', name: 'Meera Reddy', photo: 'https://ui-avatars.com/api/?name=Meera+Reddy&background=dc2626&color=fff',
+                    mobile: '9999000111', email: 'meera@example.com', pan: 'DEFGH5678J', aadhaar: '1234-5678-9012',
+                    address: 'Apartment 407, DEF Heights, Jubilee Hills, Bangalore', bank: 'IDBI â€¢â€¢â€¢â€¢ 3344',
+                    nominee: 'Suresh Reddy', status: 'Active', permission: 'Investor', dateOfBirth: '1985-02-28',
+                    nationality: 'Indian', occupation: 'Software Engineer', netWorth: 25000000 },
+                { id: 'OWN-013', name: 'Deepak Jain', photo: 'https://ui-avatars.com/api/?name=Deepak+Jain&background=2563eb&color=fff',
+                    mobile: '9111122233', email: 'deepak@example.com', pan: 'IJKLM9012P', aadhaar: '2345-6789-0123',
+                    address: 'Flat 101, GHI Society, Boring Road, Patna', bank: 'SBI â€¢â€¢â€¢â€¢ 7789', nominee: 'Priyanka Jain',
+                    status: 'Active', permission: 'Owner', dateOfBirth: '1981-10-08', nationality: 'Indian',
+                    occupation: 'Banker', netWorth: 20000000 },
+                { id: 'OWN-014', name: 'Nisha Verma', photo: 'https://ui-avatars.com/api/?name=Nisha+Verma&background=7c3aed&color=fff',
+                    mobile: '9223344556', email: 'nisha@example.com', pan: 'QRSTU3456V', aadhaar: '3456-7890-1234',
+                    address: 'Villa 15, JKL Garden, Satellite City, Ahmedabad', bank: 'ICICI â€¢â€¢â€¢â€¢ 6678',
+                    nominee: 'Raj Verma', status: 'Active', permission: 'Investor', dateOfBirth: '1991-05-19',
+                    nationality: 'Indian', occupation: 'Lawyer', netWorth: 14000000 }
+            ],
+            mappings: [
+                { galleryId: 'GAL-1001', ownerId: 'OWN-001', ownerName: 'Rahul Patil', capital: 1000000, ownership: 50,
+                    profitShare: 45, lossShare: 45, role: 'Owner', investmentDate: '2024-01-10', status: 'Active',
+                    effectiveFrom: '2024-01-10', currentCapital: 1250000, additionalInvestment: 250000, withdrawnCapital: 0,
+                    netCapital: 1250000, votingRights: 50, dividend: 45, managementRole: 'Owner' },
+                { galleryId: 'GAL-1001', ownerId: 'OWN-002', ownerName: 'Amit Shah', capital: 600000, ownership: 30,
+                    profitShare: 35, lossShare: 35, role: 'Co-Owner', investmentDate: '2024-01-10', status: 'Active',
+                    effectiveFrom: '2024-01-10', currentCapital: 600000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 600000, votingRights: 30, dividend: 35, managementRole: 'Co-Owner' },
+                { galleryId: 'GAL-1001', ownerId: 'OWN-003', ownerName: 'Priya Joshi', capital: 400000, ownership: 20,
+                    profitShare: 20, lossShare: 20, role: 'Investor', investmentDate: '2024-01-10', status: 'Active',
+                    effectiveFrom: '2024-01-10', currentCapital: 400000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 400000, votingRights: 20, dividend: 20, managementRole: 'Investor' },
+                { galleryId: 'GAL-1002', ownerId: 'OWN-001', ownerName: 'Rahul Patil', capital: 3000000, ownership: 60,
+                    profitShare: 60, lossShare: 60, role: 'Owner', investmentDate: '2024-03-01', status: 'Active',
+                    effectiveFrom: '2024-03-01', currentCapital: 3300000, additionalInvestment: 300000, withdrawnCapital: 0,
+                    netCapital: 3300000, votingRights: 60, dividend: 60, managementRole: 'Owner' },
+                { galleryId: 'GAL-1002', ownerId: 'OWN-006', ownerName: 'Company Share', capital: 1500000, ownership: 40,
+                    profitShare: 40, lossShare: 40, role: 'Corporate', investmentDate: '2024-03-01', status: 'Active',
+                    effectiveFrom: '2024-03-01', currentCapital: 1500000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 1500000, votingRights: 40, dividend: 40, managementRole: 'Investor' },
+                { galleryId: 'GAL-1003', ownerId: 'OWN-003', ownerName: 'Priya Joshi', capital: 1500000, ownership: 100,
+                    profitShare: 100, lossShare: 100, role: 'Owner', investmentDate: '2024-02-15', status: 'Active',
+                    effectiveFrom: '2024-02-15', currentCapital: 1500000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 1500000, votingRights: 100, dividend: 100, managementRole: 'Owner' },
+                { galleryId: 'GAL-1004', ownerId: 'OWN-005', ownerName: 'Sachin Patil', capital: 2500000, ownership: 40,
+                    profitShare: 40, lossShare: 40, role: 'Gallery Manager', investmentDate: '2024-04-12', status: 'Active',
+                    effectiveFrom: '2024-04-12', currentCapital: 2500000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 2500000, votingRights: 10, dividend: 40, managementRole: 'Gallery Manager' },
+                { galleryId: 'GAL-1004', ownerId: 'OWN-001', ownerName: 'Rahul Patil', capital: 3600000, ownership: 60,
+                    profitShare: 60, lossShare: 60, role: 'Owner', investmentDate: '2024-04-12', status: 'Active',
+                    effectiveFrom: '2024-04-12', currentCapital: 3600000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 3600000, votingRights: 60, dividend: 60, managementRole: 'Owner' },
+                { galleryId: 'GAL-1005', ownerId: 'OWN-001', ownerName: 'Rahul Patil', capital: 5500000, ownership: 40,
+                    profitShare: 35, lossShare: 35, role: 'Owner', investmentDate: '2024-05-01', status: 'Active',
+                    effectiveFrom: '2024-05-01', currentCapital: 6000000, additionalInvestment: 500000, withdrawnCapital: 0,
+                    netCapital: 6000000, votingRights: 40, dividend: 35, managementRole: 'Owner' },
+                { galleryId: 'GAL-1005', ownerId: 'OWN-004', ownerName: 'Pooja Patil', capital: 4000000, ownership: 30,
+                    profitShare: 32, lossShare: 32, role: 'Co-Owner', investmentDate: '2024-05-01', status: 'Active',
+                    effectiveFrom: '2024-05-01', currentCapital: 4000000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 4000000, votingRights: 30, dividend: 32, managementRole: 'Co-Owner' },
+                { galleryId: 'GAL-1005', ownerId: 'OWN-002', ownerName: 'Amit Shah', capital: 2500000, ownership: 20,
+                    profitShare: 23, lossShare: 23, role: 'Investor', investmentDate: '2024-05-01', status: 'Active',
+                    effectiveFrom: '2024-05-01', currentCapital: 2500000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 2500000, votingRights: 20, dividend: 23, managementRole: 'Investor' },
+                { galleryId: 'GAL-1005', ownerId: 'OWN-006', ownerName: 'Company Share', capital: 1750000, ownership: 10,
+                    profitShare: 10, lossShare: 10, role: 'Silent Partner', investmentDate: '2024-05-01', status: 'Active',
+                    effectiveFrom: '2024-05-01', currentCapital: 1750000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 1750000, votingRights: 10, dividend: 10, managementRole: 'Silent Partner' },
+                { galleryId: 'GAL-1002', ownerId: 'OWN-007', ownerName: 'Vikram Rao', capital: 800000, ownership: 15,
+                    profitShare: 15, lossShare: 15, role: 'Co-Owner', investmentDate: '2024-06-15', status: 'Active',
+                    effectiveFrom: '2024-06-15', currentCapital: 850000, additionalInvestment: 50000, withdrawnCapital: 0,
+                    netCapital: 850000, votingRights: 15, dividend: 15, managementRole: 'Co-Owner' },
+                { galleryId: 'GAL-1003', ownerId: 'OWN-008', ownerName: 'Kavita Singh', capital: 1200000, ownership: 25,
+                    profitShare: 20, lossShare: 20, role: 'Investor', investmentDate: '2024-07-20', status: 'Inactive',
+                    effectiveFrom: '2024-07-20', currentCapital: 1200000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 1200000, votingRights: 25, dividend: 20, managementRole: 'Investor' },
+                { galleryId: 'GAL-1004', ownerId: 'OWN-009', ownerName: 'Arun Kumar', capital: 1200000, ownership: 30,
+                    profitShare: 28, lossShare: 28, role: 'Owner', investmentDate: '2024-08-10', status: 'Active',
+                    effectiveFrom: '2024-08-10', currentCapital: 1300000, additionalInvestment: 100000, withdrawnCapital: 0,
+                    netCapital: 1300000, votingRights: 30, dividend: 28, managementRole: 'Owner' },
+                { galleryId: 'GAL-1001', ownerId: 'OWN-010', ownerName: 'Sneha Gupta', capital: 800000, ownership: 15,
+                    profitShare: 12, lossShare: 12, role: 'Investor', investmentDate: '2024-09-05', status: 'Active',
+                    effectiveFrom: '2024-09-05', currentCapital: 800000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 800000, votingRights: 15, dividend: 12, managementRole: 'Investor' },
+                { galleryId: 'GAL-1006', ownerId: 'OWN-007', ownerName: 'Vikram Rao', capital: 2000000, ownership: 50,
+                    profitShare: 50, lossShare: 50, role: 'Owner', investmentDate: '2024-07-01', status: 'Active',
+                    effectiveFrom: '2024-07-01', currentCapital: 2100000, additionalInvestment: 100000, withdrawnCapital: 0,
+                    netCapital: 2100000, votingRights: 50, dividend: 50, managementRole: 'Owner' },
+                { galleryId: 'GAL-1006', ownerId: 'OWN-011', ownerName: 'Ravi Sharma', capital: 2000000, ownership: 50,
+                    profitShare: 50, lossShare: 50, role: 'Co-Owner', investmentDate: '2024-07-01', status: 'Active',
+                    effectiveFrom: '2024-07-01', currentCapital: 2000000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 2000000, votingRights: 50, dividend: 50, managementRole: 'Co-Owner' },
+                { galleryId: 'GAL-1007', ownerId: 'OWN-009', ownerName: 'Arun Kumar', capital: 3100000, ownership: 100,
+                    profitShare: 100, lossShare: 100, role: 'Owner', investmentDate: '2024-08-15', status: 'Active',
+                    effectiveFrom: '2024-08-15', currentCapital: 3100000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 3100000, votingRights: 100, dividend: 100, managementRole: 'Owner' },
+                { galleryId: 'GAL-1008', ownerId: 'OWN-012', ownerName: 'Meera Reddy', capital: 4900000, ownership: 50,
+                    profitShare: 50, lossShare: 50, role: 'Owner', investmentDate: '2024-09-20', status: 'Active',
+                    effectiveFrom: '2024-09-20', currentCapital: 5000000, additionalInvestment: 100000, withdrawnCapital: 0,
+                    netCapital: 5000000, votingRights: 50, dividend: 50, managementRole: 'Owner' },
+                { galleryId: 'GAL-1008', ownerId: 'OWN-005', ownerName: 'Sachin Patil', capital: 4900000, ownership: 50,
+                    profitShare: 50, lossShare: 50, role: 'Co-Owner', investmentDate: '2024-09-20', status: 'Active',
+                    effectiveFrom: '2024-09-20', currentCapital: 4900000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 4900000, votingRights: 50, dividend: 50, managementRole: 'Co-Owner' },
+                { galleryId: 'GAL-1009', ownerId: 'OWN-013', ownerName: 'Deepak Jain', capital: 3700000, ownership: 100,
+                    profitShare: 100, lossShare: 100, role: 'Owner', investmentDate: '2024-10-01', status: 'Active',
+                    effectiveFrom: '2024-10-01', currentCapital: 3700000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 3700000, votingRights: 100, dividend: 100, managementRole: 'Owner' },
+                { galleryId: 'GAL-1010', ownerId: 'OWN-010', ownerName: 'Sneha Gupta', capital: 2550000, ownership: 100,
+                    profitShare: 100, lossShare: 100, role: 'Owner', investmentDate: '2024-11-05', status: 'Active',
+                    effectiveFrom: '2024-11-05', currentCapital: 2550000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 2550000, votingRights: 100, dividend: 100, managementRole: 'Owner' },
+                { galleryId: 'GAL-1011', ownerId: 'OWN-011', ownerName: 'Ravi Sharma', capital: 3400000, ownership: 100,
+                    profitShare: 100, lossShare: 100, role: 'Owner', investmentDate: '2024-12-10', status: 'Active',
+                    effectiveFrom: '2024-12-10', currentCapital: 3400000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 3400000, votingRights: 100, dividend: 100, managementRole: 'Owner' },
+                { galleryId: 'GAL-1012', ownerId: 'OWN-013', ownerName: 'Deepak Jain', capital: 2150000, ownership: 100,
+                    profitShare: 100, lossShare: 100, role: 'Owner', investmentDate: '2024-01-15', status: 'Active',
+                    effectiveFrom: '2024-01-15', currentCapital: 2150000, additionalInvestment: 0, withdrawnCapital: 0,
+                    netCapital: 2150000, votingRights: 100, dividend: 100, managementRole: 'Owner' }
+            ],
+            ownershipHistory: [
+                { id: 'HIS-001', date: '2024-06-01', owner: 'Rahul Patil', prev: 45, next: 40,
+                    reason: 'Share transfer to Pooja Patil for family inheritance.', updatedBy: 'Finance Admin',
+                    remarks: 'Effective from month start.' },
+                { id: 'HIS-002', date: '2024-06-01', owner: 'Pooja Patil', prev: 23, next: 32,
+                    reason: 'New capital injection from personal savings.', updatedBy: 'Finance Admin',
+                    remarks: 'Future distributions updated.' },
+                { id: 'HIS-003', date: '2024-07-10', owner: 'Amit Shah', prev: 35, next: 23,
+                    reason: 'Partial exit transfer due to personal commitments.', updatedBy: 'Finance Admin',
+                    remarks: 'Pending document sign-off.' },
+                { id: 'HIS-004', date: '2024-08-05', owner: 'Vikram Rao', prev: 0, next: 15,
+                    reason: 'New owner added through strategic partnership.', updatedBy: 'Admin',
+                    remarks: 'Investment approved after due diligence.' },
+                { id: 'HIS-005', date: '2024-09-12', owner: 'Kavita Singh', prev: 0, next: 25,
+                    reason: 'Equity investment from long-term investor.', updatedBy: 'Finance',
+                    remarks: 'KYC pending, follow-up scheduled.' },
+                { id: 'HIS-006', date: '2024-10-01', owner: 'Arun Kumar', prev: 0, next: 30,
+                    reason: 'Initial investment as new owner for Chennai market.', updatedBy: 'Super Admin',
+                    remarks: 'Full approval granted.' },
+                { id: 'HIS-007', date: '2024-10-15', owner: 'Sneha Gupta', prev: 0, next: 15,
+                    reason: 'Additional funding for emerging talents in Rajasthan.', updatedBy: 'Finance Admin',
+                    remarks: 'Effective immediately.' },
+                { id: 'HIS-008', date: '2024-11-01', owner: 'Ravi Sharma', prev: 0, next: 50,
+                    reason: 'Partnership with medical professional for cultural investment.', updatedBy: 'Admin',
+                    remarks: 'Agreement signed.' },
+                { id: 'HIS-009', date: '2024-11-10', owner: 'Meera Reddy', prev: 0, next: 50,
+                    reason: 'New owner acquisition from tech entrepreneur.', updatedBy: 'Finance',
+                    remarks: 'Due diligence completed.' },
+                { id: 'HIS-010', date: '2024-12-01', owner: 'Deepak Jain', prev: 0, next: 100,
+                    reason: 'Full ownership transfer for independent operation.', updatedBy: 'Admin',
+                    remarks: 'Transition completed smoothly.' }
+            ],
+            investments: [
+                { id: 'INV-001', owner: 'Rahul Patil', gallery: 'Pune FC Road', type: 'Initial Investment',
+                    amount: 1000000, mode: 'Bank Transfer', bank: 'HDFC', status: 'Approved', date: '2024-01-10',
+                    interest: '5%', maturity: '2025-01-10', purpose: 'Startup capital.' },
+                { id: 'INV-002', owner: 'Amit Shah', gallery: 'Pune FC Road', type: 'Additional Investment',
+                    amount: 200000, mode: 'UPI', bank: 'ICICI', status: 'Approved', date: '2024-02-15', interest: '4%',
+                    maturity: '2025-02-15', purpose: 'Marketing campaign.' },
+                { id: 'INV-003', owner: 'Priya Joshi', gallery: 'Nashik CBS', type: 'Equity', amount: 1500000,
+                    mode: 'Cheque', bank: 'SBI', status: 'Approved', date: '2024-03-20', interest: '6%',
+                    maturity: '2025-03-20', purpose: 'Building renovation.' },
+                { id: 'INV-004', owner: 'Pooja Patil', gallery: 'Hyderabad Banjara Hills', type: 'Loan', amount: 500000,
+                    mode: 'Cash', bank: 'N/A', status: 'Pending', date: '2024-04-25', interest: '7%',
+                    maturity: '2025-04-25', purpose: 'Emergency fund.' },
+                { id: 'INV-005', owner: 'Vikram Rao', gallery: 'Mumbai Andheri', type: 'Capital Appreciation',
+                    amount: 300000, mode: 'Bank Transfer', bank: 'PNB', status: 'Approved', date: '2024-05-30',
+                    interest: '5.5%', maturity: '2025-05-30', purpose: 'Art collection expansion.' },
+                { id: 'INV-006', owner: 'Kavita Singh', gallery: 'Nashik CBS', type: 'Initial Investment', amount: 1200000,
+                    mode: 'UPI', bank: 'BOB', status: 'Approved', date: '2024-06-10', interest: '6%',
+                    maturity: '2025-06-10', purpose: 'Community outreach.' },
+                { id: 'INV-007', owner: 'Arun Kumar', gallery: 'Nagpur Central', type: 'Equity', amount: 1200000,
+                    mode: 'Cheque', bank: 'SBI', status: 'Approved', date: '2024-07-15', interest: '5%',
+                    maturity: '2025-07-15', purpose: 'Technology upgrade.' },
+                { id: 'INV-008', owner: 'Sneha Gupta', gallery: 'Pune FC Road', type: 'Additional Investment',
+                    amount: 800000, mode: 'Bank Transfer', bank: 'HDFC', status: 'Approved', date: '2024-08-20',
+                    interest: '4.5%', maturity: '2025-08-20', purpose: 'Employee training.' },
+                { id: 'INV-009', owner: 'Ravi Sharma', gallery: 'Delhi Connaught Place', type: 'Initial Investment',
+                    amount: 2000000, mode: 'Bank Transfer', bank: 'PNB', status: 'Approved', date: '2024-09-01',
+                    interest: '5%', maturity: '2025-09-01', purpose: 'Grand opening.' },
+                { id: 'INV-010', owner: 'Meera Reddy', gallery: 'Bangalore Jubilee Hills', type: 'Equity', amount: 4900000,
+                    mode: 'Cheque', bank: 'IDBI', status: 'Approved', date: '2024-10-05', interest: '5.5%',
+                    maturity: '2025-10-05', purpose: 'Sustainable art initiatives.' },
+                { id: 'INV-011', owner: 'Deepak Jain', gallery: 'Kolkata Park Street', type: 'Initial Investment',
+                    amount: 3700000, mode: 'Bank Transfer', bank: 'SBI', status: 'Approved', date: '2024-11-10',
+                    interest: '5%', maturity: '2025-11-10', purpose: 'Heritage preservation.' },
+                { id: 'INV-012', owner: 'Nisha Verma', gallery: 'Jaipur Malviya Nagar', type: 'Equity', amount: 2550000,
+                    mode: 'Cheque', bank: 'HDFC', status: 'Approved', date: '2024-12-01', interest: '6%',
+                    maturity: '2025-12-01', purpose: 'Cultural exchange.' }
+            ],
+            employees: [
+                { id: 'EMP-001', name: 'John Doe', role: 'Sales Manager', salary: 25000, location: 'Pune',
+                    contact: '9876543210', email: 'john@example.com', emergency: '9123456789', performance: 92,
+                    attendance: 95, joiningDate: '2023-01-15', department: 'Sales', skills: 'Customer Service, Negotiation',
+                    experience: '5 years', education: 'MBA Marketing', tasks: 'Lead generation, Client meetings',
+                    progress: '85%' },
+                { id: 'EMP-002', name: 'Jane Smith', role: 'Marketing Lead', salary: 28000, location: 'Mumbai',
+                    contact: '9988776655', email: 'jane@example.com', emergency: '9345678901', performance: 88,
+                    attendance: 90, joiningDate: '2023-02-20', department: 'Marketing',
+                    skills: 'Digital Marketing, Content Creation', experience: '4 years', education: 'BFA Fine Arts',
+                    tasks: 'Campaign planning, Social media', progress: '70%' },
+                { id: 'EMP-003', name: 'Bob Johnson', role: 'Operations Head', salary: 22000, location: 'Nashik',
+                    contact: '9123456780', email: 'bob@example.com', emergency: '9112233445', performance: 85,
+                    attendance: 98, joiningDate: '2023-03-10', department: 'Operations',
+                    skills: 'Logistics, Team Management', experience: '6 years', education: 'BSc Business Admin',
+                    tasks: 'Inventory, Staff scheduling', progress: '90%' },
+                { id: 'EMP-004', name: 'Alice Brown', role: 'Finance Officer', salary: 30000, location: 'Nagpur',
+                    contact: '9556677889', email: 'alice@example.com', emergency: '9445566778', performance: 91,
+                    attendance: 96, joiningDate: '2023-04-05', department: 'Finance',
+                    skills: 'Accounting, Financial Analysis', experience: '7 years', education: 'MCom Finance',
+                    tasks: 'Bookkeeping, Tax filing', progress: '95%' },
+                { id: 'EMP-005', name: 'Charlie Wilson', role: 'Customer Support', salary: 20000, location: 'Hyderabad',
+                    contact: '9666777889', email: 'charlie@example.com', emergency: '9777888990', performance: 87,
+                    attendance: 93, joiningDate: '2023-05-12', department: 'Support',
+                    skills: 'Communication, Problem Solving', experience: '3 years', education: 'BA Psychology',
+                    tasks: 'Query resolution, Follow-ups', progress: '78%' },
+            ],
+            customers: [
+                { id: 'CUS-001', name: 'Customer A', type: 'Visited', phone: '9876543210', whatsapp: '9876543210',
+                    email: 'a@example.com', enquiry: 'Franchise Interest', reason: 'Business Expansion',
+                    time: '2024-10-01 10:00', associate: 'John Doe', review: 'Positive', followUp: 'Scheduled',
+                    purchase: true, amount: 50000, details: 'Paid via Bank Transfer.', transactionId: 'TXN-001',
+                    visitFor: 'Franchise Consultation', response: 'Interested', dealDone: true, paymentMode: 'Bank Transfer' },
+                { id: 'CUS-002', name: 'Customer B', type: 'Phone Call', phone: '9988776655', whatsapp: '9988776655',
+                    email: 'b@example.com', enquiry: 'Product Enquiry', reason: 'Home Decoration',
+                    time: '2024-10-02 14:00', associate: 'Jane Smith', review: 'Neutral', followUp: 'Pending',
+                    purchase: false, amount: 0, details: 'Interested in viewing collection.', transactionId: '',
+                    visitFor: 'Art Purchase', response: 'Will visit', dealDone: false, paymentMode: '' },
+                { id: 'CUS-003', name: 'Customer C', type: 'Email', phone: '9123456780', whatsapp: '9123456780',
+                    email: 'c@example.com', enquiry: 'Service Enquiry', reason: 'Franchise Consultation',
+                    time: '2024-10-03 16:00', associate: 'Bob Johnson', review: 'Positive', followUp: 'Completed',
+                    purchase: true, amount: 75000, details: 'Paid via UPI for franchise agreement.',
+                    transactionId: 'TXN-002', visitFor: 'Franchise', response: 'Signed', dealDone: true,
+                    paymentMode: 'UPI' },
+                { id: 'CUS-004', name: 'Customer D', type: 'WhatsApp', phone: '9556677889', whatsapp: '9556677889',
+                    email: 'd@example.com', enquiry: 'Franchise Enquiry', reason: 'New Venture',
+                    time: '2024-10-04 11:30', associate: 'Alice Brown', review: 'Positive', followUp: 'Scheduled',
+                    purchase: true, amount: 100000, details: 'Paid via Cheque for franchise package.',
+                    transactionId: 'TXN-003', visitFor: 'Franchise', response: 'Interested', dealDone: true,
+                    paymentMode: 'Cheque' },
+                { id: 'CUS-005', name: 'Customer E', type: 'Visited', phone: '9666777889', whatsapp: '9666777889',
+                    email: 'e@example.com', enquiry: 'Product Enquiry', reason: 'Gift Purchase',
+                    time: '2024-10-05 09:15', associate: 'Charlie Wilson', review: 'Excellent', followUp: 'Completed',
+                    purchase: true, amount: 25000, details: 'Paid via Cash for custom portrait.',
+                    transactionId: 'TXN-004', visitFor: 'Gift', response: 'Delighted', dealDone: true,
+                    paymentMode: 'Cash' },
+                { id: 'CUS-006', name: 'Customer F', type: 'Phone Call', phone: '9777888990', whatsapp: '9777888990',
+                    email: 'f@example.com', enquiry: 'Service Enquiry', reason: 'Art Exhibition Hosting',
+                    time: '2024-10-06 13:45', associate: 'Diana Prince', review: 'Good', followUp: 'Pending',
+                    purchase: false, amount: 0, details: 'Discussed space availability.', transactionId: '',
+                    visitFor: 'Exhibition', response: 'Will confirm', dealDone: false, paymentMode: '' }
+            ],
+            assets: [
+                { galleryId: 'GAL-1001', name: 'Furniture', price: 50000, date: '2024-01-15', quantity: 10,
+                    supplier: 'Modern Furniture Co.', warranty: '2 years', condition: 'New' },
+                { galleryId: 'GAL-1001', name: 'Computers', price: 150000, date: '2024-02-20', quantity: 5,
+                    supplier: 'Tech Solutions Ltd.', warranty: '3 years', condition: 'New' },
+                { galleryId: 'GAL-1001', name: 'Air Conditioner', price: 80000, date: '2024-03-10', quantity: 3,
+                    supplier: 'Cool Air Systems', warranty: '5 years', condition: 'New' },
+                { galleryId: 'GAL-1001', name: 'Printers', price: 40000, date: '2024-04-05', quantity: 2,
+                    supplier: 'Print Masters Inc.', warranty: '2 years', condition: 'New' },
+                { galleryId: 'GAL-1002', name: 'Sign Boards', price: 60000, date: '2024-05-12', quantity: 4,
+                    supplier: 'Signage Experts', warranty: '1 year', condition: 'New' },
+                { galleryId: 'GAL-1002', name: 'CCTV Cameras', price: 120000, date: '2024-06-18', quantity: 8,
+                    supplier: 'Security Tech', warranty: '3 years', condition: 'New' },
+            ]
+        };
+
+        const reportNames = [
+            'Market Share Report', 'Owner Master Report', 'Owner Investment Report',
+            'Owner Profit Sharing Report', 'Owner ROI Report', 'Gallery Performance Report',
+            'Gallery Revenue Report', 'Gallery Profit & Loss', 'Gallery Balance Sheet',
+            'Daily Cash Book', 'General Ledger', 'Trial Balance',
+            'Franchise Onboarding Report', 'Multi-Owner Shareholding Report',
+            'Ownership Change History', 'Investment Change History', 'Capital Withdrawal History'
+        ];
+
+// ============================================================
+        //  STATE
+        // ============================================================
+        let currentGalleryId = 'ALL';
+        let currentReportContent = '';
+        let gallerySearchTerm = '';
+
+        // Safe lowercase helper to avoid null/undefined errors in search
+        const safeLow = (val) => (val == null ? '' : String(val)).toLowerCase();
+
+        // ============================================================
+        //  HELPERS
+        // ============================================================
+        function getGalleryData(id) {
+            if (id === 'ALL') return DB.portfolio;
+            return DB.galleries.find(g => g.id === id) || DB.portfolio;
+        }
+
+        function getMappings(galleryId) {
+            if (galleryId === 'ALL') {
+                const map = {};
+                DB.mappings.forEach(m => {
+                    if (!map[m.ownerId]) map[m.ownerId] = { ...m, capital: 0, ownership: '-', profitShare: '-',
+                        lossShare: '-', role: 'Multiple', status: 'Active' };
+                    map[m.ownerId].capital += m.capital;
+                });
+                return Object.values(map);
+            }
+            return DB.mappings.filter(m => m.galleryId === galleryId);
+        }
+
+        function getAssets(galleryId) {
+            if (galleryId === 'ALL') return DB.assets;
+            return DB.assets.filter(a => a.galleryId === galleryId);
+        }
+
+        function getEmployees() { return DB.employees; }
+
+        function getCustomers() { return DB.customers; }
+
+        function getInvestments() { return DB.investments; }
+
+function getHistory() { return DB.ownershipHistory; }
+
+        // ============================================================
+        //  TOAST, NOTIFICATION & PROFILE UI
+        // ============================================================
+        const currentUser = 'Rahul Patil';
+
+        function toast(type = 'info', title = 'Notification', msg = '', icon = 'fa-circle-info') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+            const icons = {
+                success: 'fa-circle-check',
+                error: 'fa-circle-xmark',
+                warning: 'fa-triangle-exclamation',
+                info: 'fa-circle-info'
+            };
+            const el = document.createElement('div');
+            el.className = `toast ${type}`;
+            el.innerHTML = `
+                <i class="fa-solid ${icons[type] || icons.info} toast-icon"></i>
+                <div class="flex-1">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-msg">${msg}</div>
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-gray-600 text-xs ml-1 flex-shrink-0"><i class="fa-solid fa-xmark"></i></button>
+            `;
+            container.appendChild(el);
+            setTimeout(() => {
+                el.classList.add('hide');
+                setTimeout(() => el.remove(), 300);
+            }, 3500);
+        }
+
+        // Notification dropdown
+        const notifData = [
+            { icon: 'fa-coins', color: 'bg-amber-100 text-amber-600', title: 'Profit Ready', msg: 'Monthly profit of â‚¹12,40,000 is ready for distribution.', read: false },
+            { icon: 'fa-store', color: 'bg-blue-100 text-blue-600', title: 'New Visitor', msg: 'Customer D visited Hyderabad gallery today.', read: false },
+            { icon: 'fa-triangle-exclamation', color: 'bg-yellow-100 text-yellow-600', title: 'Low Inventory', msg: 'Nashik gallery inventory needs reordering.', read: false },
+            { icon: 'fa-file-signature', color: 'bg-purple-100 text-purple-600', title: 'Agreement Reminder', msg: 'Kavita Singh\'s digital agreement expires soon.', read: false },
+            { icon: 'fa-user-plus', color: 'bg-green-100 text-green-600', title: 'New Owner', msg: 'Arun Kumar invested in Nagpur Central gallery.', read: true },
+            { icon: 'fa-bell', color: 'bg-gray-100 text-gray-600', title: 'Welcome', msg: 'Welcome back, Rahul! You have 12 unread notifications.', read: true }
+        ];
+
+        function renderNotifList() {
+            const list = document.getElementById('notifList');
+            const unread = notifData.filter(n => !n.read).length;
+            document.getElementById('notifCount').textContent = unread;
+            document.getElementById('notifCount').style.display = unread > 0 ? '' : 'none';
+            list.innerHTML = notifData.map(n => `
+                <div class="notif-item ${n.read ? '' : 'unread'}" onclick="markNotifRead(this)">
+                    <div class="notif-icon-w ${n.color}"><i class="fa-solid ${n.icon}"></i></div>
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold text-gray-800">${n.title}</p>
+                        <p class="text-xs text-gray-500">${n.msg}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleNotif(e) {
+            e.stopPropagation();
+            renderNotifList();
+            document.getElementById('notifPopup').classList.toggle('open');
+            document.getElementById('profilePopup').classList.remove('open');
+        }
+
+        function markNotifRead(el) {
+            el.classList.remove('unread');
+            const idx = [...document.getElementById('notifList').children].indexOf(el);
+            if (notifData[idx]) notifData[idx].read = true;
+            renderNotifList();
+        }
+
+        function markAllRead() {
+            notifData.forEach(n => n.read = true);
+            renderNotifList();
+            toast('success', 'Notifications read', 'All notifications marked as read.', 'fa-check-double');
+        }
+
+        // Profile dropdown
+        function toggleProfile(e) {
+            e.stopPropagation();
+            document.getElementById('profilePopup').classList.toggle('open');
+            document.getElementById('notifPopup').classList.remove('open');
+        }
+
+        function closeDropdowns() {
+            document.getElementById('profilePopup').classList.remove('open');
+            document.getElementById('notifPopup').classList.remove('open');
+        }
+
+        function openProfileSettings() {
+            closeDropdowns();
+            document.getElementById('profileSettingsModal').classList.add('open');
+        }
+
+        function closeProfileSettingsModal() {
+            document.getElementById('profileSettingsModal').classList.remove('open');
+        }
+
+        function showProfileDetails() {
+            closeDropdowns();
+            const owner = DB.owners.find(o => o.name === currentUser) || DB.owners[0];
+            if (!owner) return;
+            const html = `
+                <div class="flex items-center gap-4 pb-4 border-b border-gray-100">
+                    <img src="${owner.photo}&size=64" class="w-16 h-16 rounded-full border-2 border-blue-100" />
+                    <div>
+                        <p class="text-lg font-bold text-gray-800">${owner.name}</p>
+                        <p class="text-xs text-gray-500">${owner.permission} Â· ${owner.status}</p>
+                        <p class="text-xs text-gray-500">${owner.email}</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
+                    <div class="bg-gray-50 rounded-xl p-3"><p class="text-[10px] text-gray-400 uppercase">Mobile</p><p class="font-semibold text-gray-800">${owner.mobile}</p></div>
+                    <div class="bg-gray-50 rounded-xl p-3"><p class="text-[10px] text-gray-400 uppercase">PAN</p><p class="font-semibold text-gray-800">${owner.pan}</p></div>
+                    <div class="bg-gray-50 rounded-xl p-3"><p class="text-[10px] text-gray-400 uppercase">Aadhaar</p><p class="font-semibold text-gray-800">${owner.aadhaar}</p></div>
+                    <div class="bg-gray-50 rounded-xl p-3"><p class="text-[10px] text-gray-400 uppercase">Bank</p><p class="font-semibold text-gray-800">${owner.bank}</p></div>
+                    <div class="bg-gray-50 rounded-xl p-3 col-span-2"><p class="text-[10px] text-gray-400 uppercase">Address</p><p class="font-semibold text-gray-800">${owner.address}</p></div>
+                    <div class="bg-gray-50 rounded-xl p-3"><p class="text-[10px] text-gray-400 uppercase">Nominee</p><p class="font-semibold text-gray-800">${owner.nominee}</p></div>
+                    <div class="bg-gray-50 rounded-xl p-3"><p class="text-[10px] text-gray-400 uppercase">Net Worth</p><p class="font-semibold text-gray-800">${fmt(owner.netWorth)}</p></div>
+                </div>
+            `;
+            document.getElementById('reportModalTitle').textContent = 'Owner Profile';
+            document.getElementById('reportModalBody').innerHTML = html;
+            document.getElementById('reportModal').classList.add('open');
+            toast('info', 'Profile', 'Showing owner profile details.', 'fa-id-card');
+        }
+
+        function logout() {
+            closeDropdowns();
+            toast('warning', 'Logged out', 'You have been logged out of the session.', 'fa-right-from-bracket');
+            setTimeout(() => {
+                alert('You have been logged out. (Demo)');
+            }, 600);
+        }
+
+        // ============================================================
+        //  GENERIC EDIT MODAL
+        // ============================================================
+        let editCallback = null;
+
+        function openEditModal(title, fields, onSave) {
+            document.getElementById('editModalTitle').innerHTML = `<i class="fas fa-pen text-purple-500 mr-2"></i>${title}`;
+            document.getElementById('editFormFields').innerHTML = fields.map(f => `
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">${f.label}</label>
+                    <input type="${f.type || 'text'}" data-field="${f.key}" value="${f.value || ''}" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-purple-500" ${f.required ? 'required' : ''} />
+                </div>
+            `).join('');
+            editCallback = onSave;
+            document.getElementById('editModal').classList.add('open');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('open');
+            editCallback = null;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('editForm');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const data = {};
+                    form.querySelectorAll('[data-field]').forEach(inp => {
+                        data[inp.getAttribute('data-field')] = inp.value;
+                    });
+                    if (editCallback) editCallback(data);
+                    closeEditModal();
+                    toast('success', 'Saved', 'Changes saved successfully.', 'fa-check');
+                });
+            }
+        });
+
+        // ============================================================
+        //  CONFIRM MODAL
+        // ============================================================
+        let confirmCallback = null;
+
+        function openConfirmModal(msg, onConfirm) {
+            document.getElementById('confirmModalMsg').textContent = msg || 'Are you sure?';
+            confirmCallback = onConfirm;
+            document.getElementById('confirmModal').classList.add('open');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.remove('open');
+            confirmCallback = null;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+                if (confirmCallback) confirmCallback();
+                closeConfirmModal();
+            });
+            document.getElementById('confirmModal').addEventListener('click', function(e) {
+                if (e.target === e.currentTarget) closeConfirmModal();
+            });
+        });
+
+        // ============================================================
+        //  EXPORT FUNCTIONS
+        // ============================================================
+        function exportTableToCSV(tableId, filename = 'export') {
+            const table = document.getElementById(tableId);
+            if (!table) { alert('Table not found'); return; }
+            let csv = [];
+            const headers = [];
+            const ths = table.querySelectorAll('thead tr th');
+            ths.forEach(th => headers.push(th.innerText.trim()));
+            csv.push(headers.join(','));
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const cols = row.querySelectorAll('td');
+                const rowData = [];
+                cols.forEach(col => rowData.push('"' + col.innerText.trim() + '"'));
+                csv.push(rowData.join(','));
+            });
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename + '.csv';
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+
+        function exportReportCSV() {
+            const body = document.getElementById('reportModalBody');
+            const tables = body.querySelectorAll('table');
+            if (tables.length === 0) { alert('No table data'); return; }
+            let csv = '';
+            tables.forEach((table, idx) => {
+                if (idx > 0) csv += '\n\n';
+                const rows = table.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const cols = row.querySelectorAll('th, td');
+                    const rowData = [];
+                    cols.forEach(col => rowData.push('"' + col.innerText.trim() + '"'));
+                    csv += rowData.join(',') + '\n';
+                });
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'Report.csv';
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+
+        function exportReportPDF() {
+            const body = document.getElementById('reportModalBody');
+            html2canvas(body, { scale: 2, useCORS: true }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save('Report.pdf');
+            }).catch(err => alert('PDF error: ' + err));
+        }
+
+        function exportDashboardPDF() {
+            const element = document.getElementById('section-dashboard');
+            if (element) {
+                const temp = document.createElement('div');
+                temp.innerHTML = element.innerHTML;
+                const kpi = document.getElementById('kpiGrid');
+                const insights = document.getElementById('aiInsights');
+                const galleries = document.getElementById('myGalleries');
+                const clone = document.createElement('div');
+                clone.appendChild(kpi.cloneNode(true));
+                clone.appendChild(galleries.cloneNode(true));
+                clone.appendChild(insights.cloneNode(true));
+                temp.appendChild(clone);
+                document.body.appendChild(temp);
+                html2canvas(temp, { scale: 2, useCORS: true }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                    pdf.save('Dashboard_Report.pdf');
+                    document.body.removeChild(temp);
+                }).catch(err => alert('PDF error: ' + err));
+            }
+        }
+
+        function exportDashboardCSV() {
+            const kpiItems = document.querySelectorAll('#kpiGrid .stat-card');
+            let csv = 'Metric,Value\n';
+            kpiItems.forEach(item => {
+                const label = item.querySelector('p').innerText;
+                const value = item.querySelector('h4').innerText;
+                csv += `"${label}","${value}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'Dashboard_KPI.csv';
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+
+        // ============================================================
+        //  NAVIGATION
+        // ============================================================
+        function setupSidebarNavigation() {
+            const links = document.querySelectorAll('.sidebar-link');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.hasAttribute('onclick')) return;
+                    e.preventDefault();
+                    const targetId = this.getAttribute('data-target');
+                    if (!targetId) return;
+                    links.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+        }
+
+        // ============================================================
+        //  RENDER FUNCTIONS
+        // ============================================================
+
+function renderSidebar() {
+            const container = document.getElementById('sidebarGalleries');
+            const term = gallerySearchTerm;
+            container.innerHTML = DB.galleries.map(g => {
+                const matches = !term || safeLow(g.name).includes(term);
+                return `<a href="#" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-xl text-slate-400 ${currentGalleryId === g.id ? 'active' : ''}" data-target="section-dashboard" onclick="switchGallery('${g.id}'); return false;" style="${matches ? '' : 'display:none'}">
+                    <i class="fas fa-store icon"></i> ${g.name}
+                </a>`;
+            }).join('');
+        }
+
+        function renderSwitcher() {
+            const sel = document.getElementById('gallerySwitcher');
+            sel.innerHTML =
+                `<option value="ALL">ðŸ“ˆ Consolidated Portfolio</option>` +
+                DB.galleries.map(g => `<option value="${g.id}">ðŸ¢ ${g.name}</option>`).join('');
+            sel.value = currentGalleryId;
+        }
+
+        function renderKPIs(data, isPortfolio) {
+            const grid = document.getElementById('kpiGrid');
+            const cards = [
+                { label: 'Total Galleries', value: isPortfolio ? data.totalGalleries : 1, icon: 'fa-layer-group' },
+                { label: 'Total Investment', value: fmt(data.totalInvestment), icon: 'fa-indian-rupee-sign' },
+                { label: isPortfolio ? 'Portfolio Value' : 'Gallery Value', value: fmt(data.portfolioValue || data
+                        .investment * 1.4), icon: 'fa-chart-line' },
+                { label: "Today's Sales", value: fmt(isPortfolio ? data.todaySales : (data.monthlySales / 30 || 0)),
+                    icon: 'fa-sack-dollar' },
+                { label: 'Monthly Profit', value: fmt(data.monthlyProfit || 0), icon: 'fa-coins' },
+                { label: 'Performance', value: (data.performance || 94) + '%', icon: 'fa-star' },
+                { label: 'Total Owners', value: isPortfolio ? DB.owners.length : getMappings(currentGalleryId).length,
+                    icon: 'fa-users' }
+            ];
+            grid.innerHTML = cards.map(c =>
+                `<div class="stat-card bg-white p-5 rounded-2xl border border-gray-200/70 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="text-xs text-gray-500 font-medium">${c.label}</p>
+                        <i class="fas ${c.icon} text-gray-400"></i>
+                    </div>
+                    <h4 class="text-2xl font-extrabold text-gray-800">${c.value}</h4>
+                </div>`
+            ).join('');
+        }
+
+        // Filtering functions
+        function applyOwnerFilter() {
+            renderOwners(currentGalleryId);
+        }
+
+        function applyInvestmentFilter() {
+            renderInvestments();
+        }
+
+        function applyInvestmentTxFilter() {
+            renderInvestmentTransactions();
+        }
+
+        function applyHistoryFilter() {
+            renderHistory();
+        }
+
+        function applyAssetFilter() {
+            renderAssetsList(currentGalleryId);
+        }
+
+        function applyEmployeeFilter() {
+            renderEmployees();
+        }
+
+        function applyCustomerFilter() {
+            renderCustomers();
+        }
+
+        function applyReportFilter() {
+            renderReports();
+        }
+
+        function renderOwners(galleryId) {
+            const tbody = document.getElementById('ownersTbody');
+            const dist = document.getElementById('profitDistribution');
+            const bar = document.getElementById('validationBar');
+
+            let owners = getMappings(galleryId);
+            const isPortfolio = galleryId === 'ALL';
+            const totalProfit = parseFloat(document.getElementById('totalProfitInput').value) || 0;
+
+            // Filter
+const from = document.getElementById('ownerFilterFrom').value;
+            const to = document.getElementById('ownerFilterTo').value;
+            const search = safeLow(document.getElementById('ownerFilterSearch').value);
+            if (from || to || search) {
+                owners = owners.filter(o => {
+                    const date = o.investmentDate || '';
+                    const inDate = (!from || date >= from) && (!to || date <= to);
+                    const inSearch = !search || safeLow(o.ownerName).includes(search) || safeLow(o.role)
+                        .includes(search) || safeLow(o.ownerId).includes(search);
+                    return inDate && inSearch;
+                });
+            }
+
+            tbody.innerHTML = '';
+            dist.innerHTML = '';
+
+            let totalOwn = 0,
+                totalProfitRatio = 0,
+                totalLoss = 0;
+
+            if (owners.length === 0) {
+                tbody.innerHTML =
+                    `<tr><td colspan="8" class="px-5 py-8 text-center text-gray-400 text-sm">No owners found.</td></tr>`;
+                dist.innerHTML =
+                    `<div class="p-4 text-center text-gray-400 text-sm">No owners to distribute profit to.</div>`;
+                bar.style.display = 'none';
+                return;
+            }
+
+            owners.forEach(o => {
+                const isOwner = o.permission === 'Owner' && currentUser === o.name;
+                const mobile = isOwner ? o.mobile : 'â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢';
+                const email = isOwner ? o.email : 'â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-50/60 transition">
+                        <td class="px-5 py-4">
+                            <div class="flex items-center gap-3">
+                                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(o.ownerName || o.name)}&background=64748b&color=fff&size=32" class="w-8 h-8 rounded-full border border-gray-200" />
+                                <div>
+                                    <p class="font-bold text-gray-800 text-sm">${o.ownerName || o.name}</p>
+                                    <p class="text-[10px] text-gray-400">${o.role || o.permission}</p>
+                                    <p class="text-[9px] text-gray-400">${mobile} Â· ${email}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-5 py-4 text-right font-semibold text-gray-800">${fmt(o.capital)}</td>
+                        <td class="px-5 py-4 text-center font-bold ${isPortfolio ? 'text-gray-400' : 'text-slate-700'} bg-slate-50/50 rounded">${isPortfolio ? '-' : o.ownership + '%'}</td>
+                        <td class="px-5 py-4 text-center font-bold text-blue-700">${isPortfolio ? '-' : o.profitShare + '%'}</td>
+                        <td class="px-5 py-4 text-center font-bold text-rose-700">${isPortfolio ? '-' : (o.lossShare + '%' || '0%')}</td>
+                        <td class="px-5 py-4 text-center"><span class="badge badge-info">${o.permission || o.managementRole || o.role}</span></td>
+                        <td class="px-5 py-4 text-center"><span class="badge ${o.status === 'Active' ? 'badge-success' : 'badge-danger'}">${o.status || 'Active'}</span></td>
+<td class="px-5 py-4 text-right">
+                            <button type="button" class="action-btn view" title="View" onclick="viewOwner('${o.ownerId}')"><i class="fas fa-user"></i></button>
+                            <button type="button" class="action-btn edit" title="Edit" onclick="editOwner('${o.ownerId}')"><i class="fas fa-pen"></i></button>
+                            <button type="button" class="action-btn transfer" title="Transfer" onclick="transferOwnership('${o.ownerId}')"><i class="fas fa-right-left"></i></button>
+                            <button type="button" class="action-btn del" title="Remove" onclick="deleteOwner('${o.ownerId}')"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>`;
+
+                if (!isPortfolio) {
+                    totalOwn += Number(o.ownership || 0);
+                    totalProfitRatio += Number(o.profitShare || 0);
+                    totalLoss += Number(o.lossShare || 0);
+                    const shareAmt = (totalProfit * Number(o.profitShare || 0)) / 100;
+                    dist.innerHTML += `
+                        <div class="flex items-center justify-between p-3 bg-gray-50/70 rounded-xl border border-gray-200/60">
+                            <div class="flex-1">
+                                <p class="text-sm font-bold text-gray-800">${o.ownerName || o.name}</p>
+                                <p class="text-[10px] text-gray-500">${o.profitShare}% share</p>
+                                <div class="profit-share-bar w-32 mt-1"><div class="fill" style="width:${o.profitShare}%"></div></div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-emerald-600">${fmt(shareAmt)}</p>
+                                <p class="text-[10px] text-gray-400">of ${fmt(totalProfit)}</p>
+                            </div>
+                        </div>`;
+                }
+            });
+
+            if (isPortfolio) {
+                bar.style.display = 'none';
+                dist.innerHTML = `<div class="p-4 text-center text-gray-400 text-sm">Select a specific gallery to view profit distribution.</div>`;
+            } else {
+                bar.style.display = 'flex';
+                const valid = Math.abs(totalOwn - 100) < 0.01 && Math.abs(totalProfitRatio - 100) < 0.01 && Math.abs(
+                totalLoss - 100) < 0.01;
+                bar.className =
+                    `p-3 flex justify-between items-center text-xs px-6 ${valid ? 'bg-emerald-50/70 border-t border-emerald-100' : 'bg-red-50/70 border-t border-red-200'}`;
+                bar.innerHTML = valid ?
+                    `<span class="text-emerald-700 font-medium"><i class="fas fa-check-circle mr-1"></i> Validation Passed: Ownership (${totalOwn}%), Profit (${totalProfitRatio}%), Loss (${totalLoss}%) = 100%</span>` :
+                    `<span class="text-red-700 font-medium"><i class="fas fa-exclamation-circle mr-1"></i> Error: Ownership / Profit / Loss must equal 100%. Current: ${totalOwn}% / ${totalProfitRatio}% / ${totalLoss}%</span>`;
+            }
+        }
+
+        function renderGalleryCards() {
+            const container = document.getElementById('myGalleries');
+            container.innerHTML = DB.galleries.map(g => `
+                <div class="gallery-card p-4 rounded-xl border ${currentGalleryId === g.id ? 'border-blue-300 bg-blue-50/60' : 'border-gray-200/80 bg-white'}">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <p class="font-bold text-gray-800">ðŸ¢ ${g.name}</p>
+                            <p class="text-xs text-gray-500">${g.status} Â· ${g.location}</p>
+                            <div class="text-xs text-gray-600 mt-2 space-y-0.5">
+                                <p>Investment: ${fmt(g.investment)} Â· ROI: ${g.roi}%</p>
+                                <p>Sales: ${fmt(g.sales)} Â· Profit: ${fmt(g.profit)}</p>
+                                <p>Est: ${g.established} Â· ${g.employees} employees</p>
+                            </div>
+                        </div>
+                        <button onclick="switchGallery('${g.id}')" class="text-xs px-3 py-1.5 rounded-xl bg-gray-900 text-white hover:bg-gray-800 transition">Switch</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAIInsights() {
+            const insights = [
+                { text: 'This month\'s sales increased by 18% across all galleries.', color: 'blue' },
+                { text: 'Mumbai gallery is generating the highest ROI at 24.5%.', color: 'green' },
+                { text: 'Nashik gallery has low inventory; reorder recommended.', color: 'yellow' },
+                { text: 'Pune gallery expenses increased by 12% due to staffing.', color: 'red' },
+                { text: 'Nagpur gallery needs additional staff; turnover at 15%.', color: 'purple' },
+                { text: 'Profit margin decreased by 3%; review pricing strategy.', color: 'orange' },
+                { text: 'Inventory worth â‚¹2.1 lakh should be reordered soon.', color: 'indigo' }
+            ];
+            const colors = {
+                blue: 'bg-blue-50 text-blue-800 border-blue-100',
+                green: 'bg-green-50 text-green-800 border-green-100',
+                yellow: 'bg-yellow-50 text-yellow-800 border-yellow-100',
+                red: 'bg-red-50 text-red-800 border-red-100',
+                purple: 'bg-purple-50 text-purple-800 border-purple-100',
+                orange: 'bg-orange-50 text-orange-800 border-orange-100',
+                indigo: 'bg-indigo-50 text-indigo-800 border-indigo-100'
+            };
+            document.getElementById('aiInsights').innerHTML = insights.map(i =>
+                `<li class="text-sm p-3 rounded-xl border ${colors[i.color] || 'bg-gray-50 text-gray-700 border-gray-200'}">${i.text}</li>`
+            ).join('');
+        }
+
+        function renderOverview(galleryId) {
+            const data = getGalleryData(galleryId);
+            document.getElementById('galleryExpenses').textContent = fmt(data.expenses || (data.monthlyRevenue - data
+            .monthlyProfit));
+            document.getElementById('galleryRevenue').textContent = fmt(data.revenue || data.monthlyRevenue || 0);
+
+            const empBody = document.getElementById('employeesTableBody');
+            const emps = getEmployees();
+            empBody.innerHTML = emps.map(e =>
+                `<tr class="border-b border-gray-100"><td class="p-2 border">${e.name}</td><td class="p-2 border">${e.role}</td><td class="p-2 border">${fmt(e.salary)}</td><td class="p-2 border">${e.location}</td><td class="p-2 border">${e.performance}%</td><td class="p-2 border">${e.attendance}%</td><td class="p-2 border">${e.department}</td><td class="p-2 border">${e.experience}</td></tr>`
+            ).join('');
+
+            const assetBody = document.getElementById('assetsTableBody');
+            const assets = getAssets(galleryId);
+            assetBody.innerHTML = assets.map(a =>
+                `<tr class="border-b border-gray-100"><td class="p-2 border">${a.name}</td><td class="p-2 border">${fmt(a.price)}</td><td class="p-2 border">${a.date}</td><td class="p-2 border">${a.quantity}</td><td class="p-2 border">${a.supplier || 'N/A'}</td><td class="p-2 border">${a.warranty || 'N/A'}</td></tr>`
+            ).join('');
+        }
+
+        function renderHistory() {
+            const tbody = document.getElementById('ownershipHistoryTbody');
+            let history = getHistory();
+            // Filter
+            const from = document.getElementById('histFilterFrom').value;
+            const to = document.getElementById('histFilterTo').value;
+            const search = document.getElementById('histFilterSearch').value.toLowerCase();
+            if (from || to || search) {
+                history = history.filter(h => {
+                    const date = h.date || '';
+                    const inDate = (!from || date >= from) && (!to || date <= to);
+                    const inSearch = !search || h.owner.toLowerCase().includes(search) || h.id.toLowerCase()
+                    .includes(search);
+                    return inDate && inSearch;
+                });
+            }
+
+            if (history.length === 0) {
+                tbody.innerHTML =
+                    `<tr><td colspan="7" class="px-5 py-8 text-center text-gray-400 text-sm">No records found.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = history.map(h =>
+                `<tr><td class="py-3 text-gray-700 font-medium">${h.id}</td><td class="py-3 text-gray-700">${h.date}</td><td class="py-3 text-gray-700">${h.owner}</td><td class="py-3 text-right text-gray-700">${h.prev}%</td><td class="py-3 text-right text-gray-700 font-bold">${h.next}%</td><td class="py-3 text-gray-600 max-w-xs truncate">${h.reason}</td><td class="py-3 text-gray-400"><i class="fas fa-edit cursor-pointer hover:text-blue-600 transition"></i></td></tr>`
+            ).join('');
+        }
+
+        function renderInvestments() {
+            const tbody = document.getElementById('investmentTbody');
+            let invs = getInvestments();
+            // Filter
+            const from = document.getElementById('invFilterFrom').value;
+            const to = document.getElementById('invFilterTo').value;
+            const search = document.getElementById('invFilterSearch').value.toLowerCase();
+            if (from || to || search) {
+                invs = invs.filter(i => {
+                    const date = i.date || '';
+                    const inDate = (!from || date >= from) && (!to || date <= to);
+                    const inSearch = !search || i.owner.toLowerCase().includes(search) || i.id.toLowerCase()
+                        .includes(search);
+                    return inDate && inSearch;
+                });
+            }
+
+            if (invs.length === 0) {
+                tbody.innerHTML =
+                    `<tr><td colspan="8" class="px-5 py-8 text-center text-gray-400 text-sm">No investments found.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = invs.map(i =>
+                `<tr><td class="py-3 text-gray-700 font-medium">${i.id}</td><td class="py-3 text-gray-700">${i.owner}</td><td class="py-3 text-gray-700">${i.type}</td><td class="py-3 text-right font-semibold text-gray-800">${fmt(i.amount)}</td><td class="py-3 text-gray-700">${i.mode}</td><td class="py-3"><span class="badge ${i.status === 'Approved' ? 'badge-success' : 'badge-warning'}">${i.status}</span></td><td class="py-3 text-gray-700">${i.date}</td><td class="py-3"><button onclick="editInvestment('${i.id}')" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Edit</button></td></tr>`
+            ).join('');
+
+            // Also render investment transactions
+            renderInvestmentTransactions();
+        }
+
+        function renderInvestmentTransactions() {
+            const tbody = document.getElementById('investmentTxTbody');
+            let txs = investmentTransactions;
+            const from = document.getElementById('invTxFilterFrom').value;
+            const to = document.getElementById('invTxFilterTo').value;
+            const search = document.getElementById('invTxFilterSearch').value.toLowerCase();
+            if (from || to || search) {
+                txs = txs.filter(tx => {
+                    const date = tx.date || '';
+                    const inDate = (!from || date >= from) && (!to || date <= to);
+                    const inSearch = !search || tx.id.toLowerCase().includes(search) || tx.collectedBy.toLowerCase()
+                        .includes(search);
+                    return inDate && inSearch;
+                });
+            }
+
+            if (txs.length === 0) {
+                tbody.innerHTML =
+                    `<tr><td colspan="7" class="px-5 py-8 text-center text-gray-400 text-sm">No transactions found.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = txs.map(tx =>
+                `<tr><td class="p-2 border">${tx.id}</td><td class="p-2 border">${tx.investmentId}</td><td class="p-2 border text-right">${fmt(tx.amount)}</td><td class="p-2 border">${tx.date}</td><td class="p-2 border">${tx.collectedBy}</td><td class="p-2 border">${tx.mode}</td><td class="p-2 border"><span class="badge ${tx.status === 'Completed' ? 'badge-success' : 'badge-warning'}">${tx.status}</span></td></tr>`
+            ).join('');
+        }
+
+        function renderReports() {
+            const grid = document.getElementById('reportGrid');
+            const search = document.getElementById('reportFilterSearch').value.toLowerCase();
+            let filtered = reportNames;
+            if (search) {
+                filtered = reportNames.filter(r => r.toLowerCase().includes(search));
+            }
+            grid.innerHTML = filtered.map(r =>
+                `<div class="report-item p-2.5 border border-gray-200/80 rounded-xl bg-gray-50/60 hover:bg-white hover:border-blue-300 transition text-center" onclick="generateReport('${r}')">
+                    <p class="text-xs font-semibold text-gray-700 leading-tight">${r}</p>
+                </div>`
+            ).join('');
+        }
+
+        function renderAssetsList(galleryId) {
+            const container = document.getElementById('assetsList');
+            let assets = getAssets(galleryId);
+            // Filter
+            const from = document.getElementById('assetFilterFrom').value;
+            const to = document.getElementById('assetFilterTo').value;
+            const search = document.getElementById('assetFilterSearch').value.toLowerCase();
+            if (from || to || search) {
+                assets = assets.filter(a => {
+                    const date = a.date || '';
+                    const inDate = (!from || date >= from) && (!to || date <= to);
+                    const inSearch = !search || a.name.toLowerCase().includes(search);
+                    return inDate && inSearch;
+                });
+            }
+
+            if (assets.length === 0) {
+                container.innerHTML =
+                    `<div class="col-span-full text-center text-gray-400 text-sm py-6">No assets found.</div>`;
+                return;
+            }
+            container.innerHTML = assets.map(a =>
+                `<div class="p-3 rounded-xl border border-gray-200/80 bg-gray-50/60 text-sm font-medium text-gray-700 flex flex-col">
+                    <span>${a.name}</span>
+                    <span class="text-xs text-gray-400">${fmt(a.price)} Â· Qty ${a.quantity}</span>
+                    <span class="text-[10px] text-gray-400">${a.supplier || ''}</span>
+                </div>`
+            ).join('');
+
+            const tableBody = document.getElementById('assetsListTableBody');
+            if (tableBody) {
+                tableBody.innerHTML = assets.map(a =>
+                    `<tr><td class="p-2 border">${a.name}</td><td class="p-2 border">${fmt(a.price)}</td><td class="p-2 border">${a.date}</td><td class="p-2 border">${a.quantity}</td><td class="p-2 border">${a.supplier || ''}</td></tr>`
+                ).join('');
+            }
+        }
+
+        function renderCustomers() {
+            const container = document.getElementById('customerInteractions');
+            let customers = getCustomers();
+            // Filter
+            const from = document.getElementById('custFilterFrom').value;
+            const to = document.getElementById('custFilterTo').value;
+            const search = document.getElementById('custFilterSearch').value.toLowerCase();
+            if (from || to || search) {
+                customers = customers.filter(c => {
+                    const date = c.time ? c.time.split(' ')[0] : '';
+                    const inDate = (!from || date >= from) && (!to || date <= to);
+                    const inSearch = !search || c.name.toLowerCase().includes(search) || c.enquiry.toLowerCase()
+                        .includes(search) || c.associate.toLowerCase().includes(search);
+                    return inDate && inSearch;
+                });
+            }
+
+            if (customers.length === 0) {
+                container.innerHTML =
+                    `<div class="text-center text-gray-400 text-sm py-6">No visitors found.</div>`;
+                return;
+            }
+            container.innerHTML = customers.map(c =>
+                `<div class="p-3 bg-gray-50/70 rounded-xl border border-gray-200/60 text-sm">
+                    <div class="flex items-center justify-between"><span class="font-bold text-gray-800">${c.name}</span><span class="text-xs text-gray-400">${c.type}</span></div>
+                    <p class="text-gray-600 text-xs mt-0.5">${c.enquiry} Â· ${c.review}</p>
+                    <p class="text-gray-400 text-xs">${fmt(c.amount)} Â· ${c.followUp} Â· ${c.associate}</p>
+                    <p class="text-gray-400 text-xs">Phone: ${c.phone} Â· WhatsApp: ${c.whatsapp} Â· Email: ${c.email}</p>
+                    <p class="text-gray-400 text-xs">Visit: ${c.visitFor} Â· Response: ${c.response} Â· Deal: ${c.dealDone ? 'âœ…' : 'âŒ'}</p>
+                    ${c.transactionId ? `<p class="text-xs text-blue-600">Tx: ${c.transactionId} Â· ${c.paymentMode}</p>` : ''}
+                </div>`
+            ).join('');
+
+            const tableBody = document.getElementById('interactionsTableBody');
+            if (tableBody) {
+                tableBody.innerHTML = customers.map(c =>
+                    `<tr><td class="p-2 border">${c.name}</td><td class="p-2 border">${c.phone}</td><td class="p-2 border">${c.whatsapp || ''}</td><td class="p-2 border">${c.email}</td><td class="p-2 border">${c.enquiry}</td><td class="p-2 border">${c.visitFor}</td><td class="p-2 border">${c.associate}</td><td class="p-2 border">${c.followUp}</td><td class="p-2 border">${c.time ? c.time.split(' ')[0] : ''}</td><td class="p-2 border">${c.response}</td><td class="p-2 border">${c.dealDone ? 'Yes' : 'No'}</td><td class="p-2 border">${c.purchase ? fmt(c.amount) : '-'}</td><td class="p-2 border">${c.transactionId || '-'}</td></tr>`
+                ).join('');
+            }
+        }
+
+        function renderEmployees() {
+            const container = document.getElementById('employeeStats');
+            let emps = getEmployees();
+            // Filter
+            const from = document.getElementById('empFilterFrom').value;
+            const to = document.getElementById('empFilterTo').value;
+            const search = document.getElementById('empFilterSearch').value.toLowerCase();
+            if (from || to || search) {
+                emps = emps.filter(e => {
+                    const date = e.joiningDate || '';
+                    const inDate = (!from || date >= from) && (!to || date <= to);
+                    const inSearch = !search || e.name.toLowerCase().includes(search) || e.role.toLowerCase()
+                        .includes(search);
+                    return inDate && inSearch;
+                });
+            }
+
+            if (emps.length === 0) {
+                container.innerHTML =
+                    `<div class="text-center text-gray-400 text-sm py-6">No employees found.</div>`;
+                return;
+            }
+            container.innerHTML = emps.map(e =>
+                `<div class="flex items-center justify-between p-3 bg-gray-50/70 rounded-xl border border-gray-200/60">
+                    <span class="text-sm text-gray-700"><span class="font-medium">${e.name}</span> Â· ${e.role}</span>
+                    <span class="text-xs text-gray-500">${fmt(e.salary)} Â· ${e.performance}%</span>
+                    <span class="text-xs text-gray-400">${e.tasks || ''} (${e.progress || '0%'})</span>
+                </div>`
+            ).join('');
+
+            const tableBody = document.getElementById('employeeStatsTableBody');
+            if (tableBody) {
+                tableBody.innerHTML = emps.map(e =>
+                    `<tr><td class="p-2 border">${e.name}</td><td class="p-2 border">${e.role}</td><td class="p-2 border">${fmt(e.salary)}</td><td class="p-2 border">${e.location}</td><td class="p-2 border">${e.contact}</td><td class="p-2 border">${e.email}</td><td class="p-2 border">${e.emergency}</td><td class="p-2 border">${e.department}</td><td class="p-2 border">${e.joiningDate}</td><td class="p-2 border">${e.performance}%</td><td class="p-2 border">${e.tasks || ''}</td><td class="p-2 border">${e.progress || ''}</td></tr>`
+                ).join('');
+            }
+        }
+
+        function renderNotifications() {
+            const container = document.getElementById('notificationsList');
+            const data = getGalleryData(currentGalleryId);
+            container.innerHTML = `
+                <li class="flex items-start gap-3 text-sm p-3 bg-green-50 text-green-800 rounded-xl border border-green-100"><i class="fas fa-check-circle mt-0.5"></i><div><strong>Profit Ready:</strong> Monthly profit is ready for distribution.</div></li>
+                <li class="flex items-start gap-3 text-sm p-3 bg-yellow-50 text-yellow-800 rounded-xl border border-yellow-100"><i class="fas fa-triangle-exclamation mt-0.5"></i><div><strong>Low Inventory:</strong> Inventory worth ${fmt(data.inventoryValue || 17500000)} should be reviewed.</div></li>
+                <li class="flex items-start gap-3 text-sm p-3 bg-blue-50 text-blue-800 rounded-xl border border-blue-100"><i class="fas fa-circle-info mt-0.5"></i><div><strong>Owner Ratio Changed:</strong> Future profit sharing uses effective dates and saved history.</div></li>
+                <li class="flex items-start gap-3 text-sm p-3 bg-purple-50 text-purple-800 rounded-xl border border-purple-100"><i class="fas fa-file-signature mt-0.5"></i><div><strong>Agreement Reminder:</strong> Digital agreement expiry is approaching.</div></li>
+            `;
+        }
+
+        function updateTitle(galleryId) {
+            const title = document.getElementById('viewTitle');
+            const sub = document.getElementById('viewSubtitle');
+            if (galleryId === 'ALL') {
+                title.innerHTML = `<i class="fas fa-globe-asia mr-2 text-blue-600"></i> Portfolio Dashboard`;
+                sub.textContent = `Consolidated metrics across all ${DB.galleries.length} galleries.`;
+            } else {
+                const g = DB.galleries.find(x => x.id === galleryId);
+                if (g) {
+                    title.innerHTML = `<i class="fas fa-store mr-2 text-blue-600"></i> ${g.name}`;
+                    sub.innerHTML =
+                        `<span class="badge badge-success mr-2">${g.status}</span> ${g.location} Â· ${g.description}`;
+                }
+            }
+        }
+
+        // ============================================================
+        //  MAIN SWITCH
+        // ============================================================
+        function switchGallery(id) {
+            currentGalleryId = id;
+            document.getElementById('gallerySwitcher').value = id;
+
+            const data = getGalleryData(id);
+            const isPortfolio = id === 'ALL';
+
+            updateTitle(id);
+            renderKPIs(data, isPortfolio);
+            renderOwners(id);
+            renderGalleryCards();
+            renderOverview(id);
+            renderAssetsList(id);
+            renderCustomers();
+            renderEmployees();
+            renderNotifications();
+            renderSidebar();
+            renderSwitcher();
+
+            // Reset filters (optional)
+            // document.querySelectorAll('.filter-bar input[type="date"]').forEach(inp => inp.value = '');
+            // document.querySelectorAll('.filter-bar input[type="text"]').forEach(inp => inp.value = '');
+
+            const dashboard = document.getElementById('section-dashboard');
+            if (dashboard) {
+                dashboard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            if (id === 'ALL') {
+                const dashLink = document.querySelector('.sidebar-link[data-target="section-dashboard"]');
+                if (dashLink) dashLink.classList.add('active');
+            } else {
+                const galleryLinks = document.querySelectorAll('#sidebarGalleries .sidebar-link');
+                galleryLinks.forEach(l => {
+                    if (l.textContent.trim() === data.name) {
+                        l.classList.add('active');
+                    }
+                });
+            }
+        }
+
+        // ============================================================
+        //  ACTIONS
+        // ============================================================
+        function calculateProfit() {
+            const total = parseFloat(document.getElementById('totalProfitInput').value) || 0;
+            renderOwners(currentGalleryId);
+            alert(`âœ… Profit of ${fmt(total)} calculated.`);
+        }
+
+        function approveDistribution() { alert('âœ… Distribution approved.'); }
+
+        function distributeProfit() { alert('âœ… Profit distributed to owners.'); }
+
+        function reverseEntry() { alert('â†©ï¸ Entry reversed.'); }
+
+        function addInvestment() {
+            const name = prompt('Enter owner name:') || 'New Owner';
+            const amount = parseFloat(prompt('Enter amount (â‚¹):') || '0');
+            if (amount > 0) {
+                const invId = 'INV-' + String(DB.investments.length + 1).padStart(3, '0');
+                DB.investments.push({
+                    id: invId,
+                    owner: name,
+                    gallery: 'All',
+                    type: 'Equity',
+                    amount: amount,
+                    mode: 'Bank Transfer',
+                    bank: 'N/A',
+                    status: 'Pending',
+                    date: new Date().toISOString().slice(0, 10),
+                    interest: '5%',
+                    maturity: '2026-01-01',
+                    purpose: 'New investment'
+                });
+                // Add a transaction record
+                investmentTransactions.push({
+                    id: 'TX-' + Date.now().toString().slice(-8),
+                    investmentId: invId,
+                    amount: amount,
+                    date: new Date().toISOString().slice(0, 10),
+                    collectedBy: currentUser,
+                    mode: 'Bank Transfer',
+                    status: 'Pending'
+                });
+                renderInvestments();
+                alert('âœ… Investment added with transaction.');
+            }
+        }
+
+function editInvestment(id) {
+            const inv = DB.investments.find(i => i.id === id);
+            if (inv) {
+                const newStatus = prompt('Update status (Approved/Pending/Rejected):', inv.status);
+                if (newStatus) { inv.status = newStatus;
+                    renderInvestments(); }
+            }
+        }
+
+        // ============================================================
+        //  OWNER & RECORD ACTIONS (View / Edit / Transfer / Delete)
+        // ============================================================
+        function findOwner(ownerId) {
+            return DB.owners.find(o => o.id === ownerId);
+        }
+
+        function viewOwner(ownerId) {
+            const owner = findOwner(ownerId);
+            if (!owner) { toast('error', 'Error', 'Owner not found.', 'fa-circle-xmark'); return; }
+            const html = `
+                <div class="flex items-center gap-4 pb-4 border-b border-gray-100">
+                    <img src="${owner.photo}&size=64" class="w-16 h-16 rounded-full border-2 border-blue-100" />
+                    <div>
+                        <p class="text-lg font-bold text-gray-800">${owner.name}</p>
+                        <p class="text-xs text-gray-500">${owner.permission} Â· ${owner.status}</p>
+                        <p class="text-xs text-gray-500">${owner.email}</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
+                    <div class="bg-gray-50 rounded-xl p-3"><p class="text-[10px] text-gray-400 uppercase">Mobile</p><p class="font-semibold text-gray-800">${owner.mobile}</p></div>
+                    <div class="bg-gray-50 rounded-xl p-3"><p class="text-[10px] text-gray-400 uppercase">PAN</p><p class="font-semibold text-gray-800">${owner.pan}</p></div>
+                    <div class="bg-gray-50 rounded-xl p-3"><p class="text-[10px] text-gray-400 uppercase">Aadhaar</p><p class="font-semibold text-gray-800">${owner.aadhaar}</p></div>
+                    <div class="bg-gray-50 rounded-xl p-3"><p class="text-[10px] text-gray-400 uppercase">Bank</p><p class="font-semibold text-gray-800">${owner.bank}</p></div>
+                    <div class="bg-gray-50 rounded-xl p-3 col-span-2"><p class="text-[10px] text-gray-400 uppercase">Address</p><p class="font-semibold text-gray-800">${owner.address}</p></div>
+                    <div class="bg-gray-50 rounded-xl p-3"><p class="text-[10px] text-gray-400 uppercase">Nominee</p><p class="font-semibold text-gray-800">${owner.nominee}</p></div>
+                    <div class="bg-gray-50 rounded-xl p-3"><p class="text-[10px] text-gray-400 uppercase">Net Worth</p><p class="font-semibold text-gray-800">${fmt(owner.netWorth)}</p></div>
+                    <div class="bg-gray-50 rounded-xl p-3"><p class="text-[10px] text-gray-400 uppercase">DOB</p><p class="font-semibold text-gray-800">${owner.dateOfBirth}</p></div>
+                    <div class="bg-gray-50 rounded-xl p-3"><p class="text-[10px] text-gray-400 uppercase">Occupation</p><p class="font-semibold text-gray-800">${owner.occupation}</p></div>
+                </div>
+            `;
+            document.getElementById('reportModalTitle').textContent = 'Owner Details';
+            document.getElementById('reportModalBody').innerHTML = html;
+            document.getElementById('reportModal').classList.add('open');
+            toast('info', 'Owner', `Viewing details for ${owner.name}.`, 'fa-id-card');
+        }
+
+        function editOwner(ownerId) {
+            const owner = findOwner(ownerId);
+            if (!owner) { toast('error', 'Error', 'Owner not found.', 'fa-circle-xmark'); return; }
+            openEditModal('Edit Owner', [
+                { key: 'name', label: 'Full Name', value: owner.name, required: true },
+                { key: 'mobile', label: 'Mobile', value: owner.mobile },
+                { key: 'email', label: 'Email', value: owner.email },
+                { key: 'pan', label: 'PAN', value: owner.pan },
+                { key: 'aadhaar', label: 'Aadhaar', value: owner.aadhaar },
+                { key: 'bank', label: 'Bank', value: owner.bank },
+                { key: 'address', label: 'Address', value: owner.address },
+                { key: 'nominee', label: 'Nominee', value: owner.nominee },
+                { key: 'status', label: 'Status', value: owner.status }
+            ], (data) => {
+                Object.assign(owner, data);
+                renderOwners(currentGalleryId);
+                toast('success', 'Owner updated', `${owner.name}'s details were updated.`, 'fa-user-pen');
+            });
+        }
+
+        function transferOwnership(ownerId) {
+            const owner = findOwner(ownerId);
+            if (!owner) return;
+            const targetGallery = prompt('Enter target gallery ID (e.g. GAL-1001):', 'GAL-1001');
+            if (!targetGallery) return;
+            const mapping = DB.mappings.find(m => m.ownerId === ownerId && m.galleryId === currentGalleryId);
+            if (mapping) {
+                DB.ownershipHistory.unshift({
+                    id: 'HIS-' + String(DB.ownershipHistory.length + 1).padStart(3, '0'),
+                    date: new Date().toISOString().slice(0, 10),
+                    owner: owner.name,
+                    prev: mapping.ownership,
+                    next: 0,
+                    reason: `Ownership transferred to gallery ${targetGallery}.`,
+                    updatedBy: currentUser,
+                    remarks: 'Transfer in progress.'
+                });
+                mapping.status = 'Inactive';
+                toast('success', 'Ownership transfer', `${owner.name} transferred to ${targetGallery}.`, 'fa-right-left');
+            } else {
+                toast('warning', 'Transfer', `No active mapping found for ${owner.name} in this gallery.`, 'fa-triangle-exclamation');
+            }
+            renderOwners(currentGalleryId);
+            renderHistory();
+        }
+
+        function deleteOwner(ownerId) {
+            openConfirmModal('Remove this owner from the gallery? This will mark their mapping as inactive.', () => {
+                const mapping = DB.mappings.find(m => m.ownerId === ownerId && m.galleryId === currentGalleryId);
+                if (mapping) mapping.status = 'Inactive';
+                renderOwners(currentGalleryId);
+                toast('error', 'Owner removed', 'Owner mapping marked as inactive.', 'fa-user-slash');
+            });
+        }
+
+        function recordInvestment() {
+            openEditModal('Record Investment', [
+                { key: 'owner', label: 'Owner Name', required: true },
+                { key: 'amount', label: 'Amount (â‚¹)', type: 'number', required: true },
+                { key: 'mode', label: 'Mode', value: 'Bank Transfer' },
+                { key: 'date', label: 'Date', type: 'date', value: new Date().toISOString().slice(0, 10) }
+            ], (data) => {
+                const invId = 'INV-' + String(DB.investments.length + 1).padStart(3, '0');
+                DB.investments.unshift({
+                    id: invId,
+                    owner: data.owner,
+                    gallery: 'All',
+                    type: 'Equity',
+                    amount: parseFloat(data.amount) || 0,
+                    mode: data.mode,
+                    bank: 'N/A',
+                    status: 'Pending',
+                    date: data.date,
+                    interest: '5%',
+                    maturity: '2026-01-01',
+                    purpose: 'New investment'
+                });
+                investmentTransactions.unshift({
+                    id: 'TX-' + Date.now().toString().slice(-8),
+                    investmentId: invId,
+                    amount: parseFloat(data.amount) || 0,
+                    date: data.date,
+                    collectedBy: currentUser,
+                    mode: data.mode,
+                    status: 'Pending'
+                });
+                renderInvestments();
+                toast('success', 'Investment recorded', `Investment of ${fmt(data.amount)} added for ${data.owner}.`, 'fa-coins');
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('click', function(e) {
+                const popups = ['profilePopup', 'notifPopup'];
+                const isInside = popups.some(id => {
+                    const el = document.getElementById(id);
+                    return el && el.contains(e.target);
+                });
+                const isWrap = e.target.closest && ['notifWrap', 'profileWrap'].includes((e.target.closest('.relative') || {}).id);
+                if (!isInside && !isWrap) closeDropdowns();
+            });
+        });
+
+        // Add Owner Modal
+        function openAddOwnerModal() {
+            document.getElementById('addOwnerModal').classList.add('open');
+            // Populate gallery dropdown
+            const sel = document.getElementById('ownerGallery');
+            sel.innerHTML = `<option value="ALL">All Galleries</option>` + DB.galleries.map(g =>
+                `<option value="${g.id}">${g.name}</option>`).join('');
+        }
+
+        function closeAddOwnerModal() {
+            document.getElementById('addOwnerModal').classList.remove('open');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('addOwnerForm');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const name = document.getElementById('ownerName').value.trim();
+                    const mobile = document.getElementById('ownerMobile').value.trim();
+                    const email = document.getElementById('ownerEmail').value.trim();
+                    const capital = parseFloat(document.getElementById('ownerCapital').value) || 0;
+                    const role = document.getElementById('ownerRole').value;
+                    const galleryId = document.getElementById('ownerGallery').value;
+
+                    if (!name || !mobile || !email || capital <= 0) {
+                        alert('Please fill all fields correctly.');
+                        return;
+                    }
+
+                    const newOwner = {
+                        id: 'OWN-' + String(DB.owners.length + 1).padStart(3, '0'),
+                        name: name,
+                        photo: 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) +
+                            '&background=64748b&color=fff',
+                        mobile: mobile,
+                        email: email,
+                        pan: 'PENDING',
+                        aadhaar: 'PENDING',
+                        address: 'Not provided',
+                        bank: 'N/A',
+                        nominee: 'N/A',
+                        status: 'Active',
+                        permission: role,
+                        dateOfBirth: 'N/A',
+                        nationality: 'Indian',
+                        occupation: 'Business',
+                        netWorth: capital
+                    };
+                    DB.owners.push(newOwner);
+
+                    const targetGallery = galleryId !== 'ALL' ? galleryId : DB.galleries[0].id;
+                    DB.mappings.push({
+                        galleryId: targetGallery,
+                        ownerId: newOwner.id,
+                        ownerName: name,
+                        capital: capital,
+                        ownership: 0,
+                        profitShare: 0,
+                        lossShare: 0,
+                        role: role,
+                        investmentDate: new Date().toISOString().slice(0, 10),
+                        status: 'Active',
+                        effectiveFrom: new Date().toISOString().slice(0, 10),
+                        currentCapital: capital,
+                        additionalInvestment: 0,
+                        withdrawnCapital: 0,
+                        netCapital: capital,
+                        votingRights: 0,
+                        dividend: 0,
+                        managementRole: role
+                    });
+
+                    switchGallery(currentGalleryId);
+                    closeAddOwnerModal();
+                    alert('âœ… Owner added successfully!');
+                });
+            }
+        });
+
+        // Add Employee Modal
+        function openAddEmployeeModal() {
+            document.getElementById('addEmployeeModal').classList.add('open');
+        }
+
+        function closeAddEmployeeModal() {
+            document.getElementById('addEmployeeModal').classList.remove('open');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('addEmployeeForm');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const name = document.getElementById('empName').value.trim();
+                    const role = document.getElementById('empRole').value.trim();
+                    const salary = parseFloat(document.getElementById('empSalary').value) || 0;
+                    const location = document.getElementById('empLocation').value.trim();
+                    const contact = document.getElementById('empContact').value.trim();
+                    const email = document.getElementById('empEmail').value.trim();
+                    const emergency = document.getElementById('empEmergency').value.trim();
+                    const dept = document.getElementById('empDept').value.trim();
+                    const joining = document.getElementById('empJoining').value || new Date().toISOString().slice(0, 10);
+
+                    if (!name || !role || salary <= 0) {
+                        alert('Please fill required fields.');
+                        return;
+                    }
+
+                    DB.employees.push({
+                        id: 'EMP-' + String(DB.employees.length + 1).padStart(3, '0'),
+                        name: name,
+                        role: role,
+                        salary: salary,
+                        location: location || 'N/A',
+                        contact: contact || 'N/A',
+                        email: email || 'N/A',
+                        emergency: emergency || 'N/A',
+                        performance: 0,
+                        attendance: 0,
+                        joiningDate: joining,
+                        department: dept || 'General',
+                        skills: '',
+                        experience: '0 years',
+                        education: 'N/A',
+                        tasks: '',
+                        progress: '0%'
+                    });
+
+                    renderEmployees();
+                    closeAddEmployeeModal();
+                    alert('âœ… Employee added!');
+                });
+            }
+        });
+
+        // Add Customer Modal
+        function openAddCustomerModal() {
+            document.getElementById('addCustomerModal').classList.add('open');
+        }
+
+        function closeAddCustomerModal() {
+            document.getElementById('addCustomerModal').classList.remove('open');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('addCustomerForm');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const name = document.getElementById('custName').value.trim();
+                    const phone = document.getElementById('custPhone').value.trim();
+                    const whatsapp = document.getElementById('custWhatsapp').value.trim();
+                    const email = document.getElementById('custEmail').value.trim();
+                    const enquiry = document.getElementById('custEnquiry').value.trim();
+                    const visit = document.getElementById('custVisit').value.trim();
+                    const assignee = document.getElementById('custAssignee').value.trim();
+                    const followup = document.getElementById('custFollowup').value;
+                    const date = document.getElementById('custDate').value || new Date().toISOString().slice(0, 10);
+
+                    if (!name || !phone || !enquiry) {
+                        alert('Please fill required fields.');
+                        return;
+                    }
+
+                    DB.customers.push({
+                        id: 'CUS-' + String(DB.customers.length + 1).padStart(3, '0'),
+                        name: name,
+                        type: 'Visited',
+                        phone: phone,
+                        whatsapp: whatsapp || phone,
+                        email: email || 'N/A',
+                        enquiry: enquiry,
+                        reason: visit || 'General',
+                        time: date + ' 00:00',
+                        associate: assignee || 'Unassigned',
+                        review: 'Pending',
+                        followUp: followup,
+                        purchase: false,
+                        amount: 0,
+                        details: '',
+                        transactionId: '',
+                        visitFor: visit || 'General',
+                        response: 'New',
+                        dealDone: false,
+                        paymentMode: ''
+                    });
+
+                    renderCustomers();
+                    closeAddCustomerModal();
+                    alert('âœ… Visitor added!');
+                });
+            }
+        });
+
+        // ============================================================
+        //  REPORT GENERATION (enhanced with filters)
+        // ============================================================
+        function generateReport(name) {
+            const modal = document.getElementById('reportModal');
+            document.getElementById('reportModalTitle').textContent = name;
+            const body = document.getElementById('reportModalBody');
+
+            const from = document.getElementById('reportFilterFrom').value || '2024-01-01';
+            const to = document.getElementById('reportFilterTo').value || '2024-12-31';
+
+            let html = `<p class="text-xs text-gray-400 mb-4">Report Period: ${from} to ${to}</p>`;
+
+            if (name.includes('Market Share')) {
+                html += `
+                    <table class="w-full border-collapse text-sm"><thead><tr class="bg-gray-100"><th class="p-2 border text-left">Region</th><th class="p-2 border text-right">Market Size</th><th class="p-2 border text-right">Share %</th><th class="p-2 border text-right">Growth</th></tr></thead>
+                    <tbody><tr><td class="p-2 border">Mumbai</td><td class="p-2 border text-right">â‚¹50,00,000</td><td class="p-2 border text-right">25%</td><td class="p-2 border text-right">10%</td></tr>
+                    <tr><td class="p-2 border">Delhi</td><td class="p-2 border text-right">â‚¹42,00,000</td><td class="p-2 border text-right">21%</td><td class="p-2 border text-right">12%</td></tr>
+                    <tr><td class="p-2 border">Hyderabad</td><td class="p-2 border text-right">â‚¹38,00,000</td><td class="p-2 border text-right">19%</td><td class="p-2 border text-right">18%</td></tr>
+                    <tr><td class="p-2 border">Others</td><td class="p-2 border text-right">â‚¹70,00,000</td><td class="p-2 border text-right">35%</td><td class="p-2 border text-right">8%</td></tr></tbody></table>`;
+            } else if (name.includes('Owner Master')) {
+                html +=
+                    `<table class="w-full border-collapse text-sm"><thead><tr class="bg-gray-100"><th class="p-2 border">ID</th><th class="p-2 border">Name</th><th class="p-2 border">Mobile</th><th class="p-2 border">Email</th><th class="p-2 border">Status</th></tr></thead>
+                    <tbody>${DB.owners.map(o => `<tr><td class="p-2 border">${o.id}</td><td class="p-2 border font-medium">${o.name}</td><td class="p-2 border">${o.mobile}</td><td class="p-2 border">${o.email}</td><td class="p-2 border"><span class="badge ${o.status === 'Active' ? 'badge-success' : 'badge-danger'}">${o.status}</span></td></tr>`).join('')}</tbody></table>`;
+            } else if (name.includes('Gallery Performance')) {
+                html +=
+                    `<table class="w-full border-collapse text-sm"><thead><tr class="bg-gray-100"><th class="p-2 border">Gallery</th><th class="p-2 border text-right">Revenue</th><th class="p-2 border text-right">Profit</th><th class="p-2 border text-right">ROI</th><th class="p-2 border text-right">Growth</th></tr></thead>
+                    <tbody>${DB.galleries.map(g => `<tr><td class="p-2 border font-medium">${g.name}</td><td class="p-2 border text-right">${fmt(g.revenue)}</td><td class="p-2 border text-right">${fmt(g.profit)}</td><td class="p-2 border text-right">${g.roi}%</td><td class="p-2 border text-right">${g.growth}%</td></tr>`).join('')}</tbody></table>`;
+            } else if (name.includes('Profit & Loss') || name.includes('P&L')) {
+                const totalRev = DB.galleries.reduce((s, g) => s + g.revenue, 0);
+                const totalExp = DB.galleries.reduce((s, g) => s + g.expenses, 0);
+                const totalProfit = DB.galleries.reduce((s, g) => s + g.profit, 0);
+                html += `
+                    <div class="space-y-2"><p><strong>Total Revenue:</strong> ${fmt(totalRev)}</p>
+                    <p><strong>Total Expenses:</strong> ${fmt(totalExp)}</p>
+                    <p><strong>Gross Profit:</strong> ${fmt(totalRev - totalExp)}</p>
+                    <p><strong>Net Profit:</strong> ${fmt(totalProfit)}</p>
+                    <p><strong>Profit Margin:</strong> ${((totalProfit / totalRev) * 100).toFixed(1)}%</p></div>`;
+            } else if (name.includes('Balance Sheet')) {
+                const assets = DB.galleries.reduce((s, g) => s + g.investment, 0);
+                const liabilities = DB.galleries.reduce((s, g) => s + (g.investment * 0.4), 0);
+                const equity = assets - liabilities;
+                html += `
+                    <h4 class="font-bold mt-2">Assets</h4><p>Total Assets: ${fmt(assets)}</p>
+                    <h4 class="font-bold mt-4">Liabilities</h4><p>Total Liabilities: ${fmt(liabilities)}</p>
+                    <h4 class="font-bold mt-4">Equity</h4><p>Owner's Equity: ${fmt(equity)}</p>`;
+            } else {
+                html +=
+                    `<p class="text-gray-600">Detailed <strong>${name}</strong> with all relevant fields, calculations, and summaries.</p>
+                    <div class="bg-gray-50 p-4 rounded-xl text-xs text-gray-500 mt-3">Generated on ${new Date().toLocaleString()} Â· Period: ${from} to ${to}</div>`;
+            }
+
+            body.innerHTML = html;
+            currentReportContent = html;
+            modal.classList.add('open');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('open');
+        }
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            setupSidebarNavigation();
+
+            renderSwitcher();
+            renderSidebar();
+            renderAIInsights();
+            renderReports();
+            renderInvestments();
+            renderHistory();
+            renderCustomers();
+            renderEmployees();
+            renderNotifications();
+
+            switchGallery('ALL');
+
+            document.getElementById('gallerySwitcher').addEventListener('change', (e) => {
+                switchGallery(e.target.value);
+            });
+
+document.getElementById('gallerySearch').addEventListener('input', (e) => {
+                gallerySearchTerm = e.target.value.toLowerCase();
+                renderSidebar();
+            });
+
+            document.getElementById('reportModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeReportModal();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeReportModal();
+            });
+
+            const dashLink = document.querySelector('.sidebar-link[data-target="section-dashboard"]');
+            if (dashLink) dashLink.classList.add('active');
+
+            console.log('âœ… Enterprise Gallery CRM Pro initialized.');
+        });
+
+        // Expose globals
+        window.switchGallery = switchGallery;
+        window.calculateProfit = calculateProfit;
+        window.approveDistribution = approveDistribution;
+        window.distributeProfit = distributeProfit;
+        window.reverseEntry = reverseEntry;
+        window.addInvestment = addInvestment;
+        window.editInvestment = editInvestment;
+        window.generateReport = generateReport;
+        window.closeReportModal = closeReportModal;
+        window.openAddOwnerModal = openAddOwnerModal;
+        window.closeAddOwnerModal = closeAddOwnerModal;
+        window.openAddEmployeeModal = openAddEmployeeModal;
+        window.closeAddEmployeeModal = closeAddEmployeeModal;
+        window.openAddCustomerModal = openAddCustomerModal;
+        window.closeAddCustomerModal = closeAddCustomerModal;
+        window.exportTableToCSV = exportTableToCSV;
+        window.exportDashboardPDF = exportDashboardPDF;
+        window.exportDashboardCSV = exportDashboardCSV;
+        window.exportReportCSV = exportReportCSV;
+        window.exportReportPDF = exportReportPDF;
+window.applyOwnerFilter = applyOwnerFilter;
+        window.applyInvestmentFilter = applyInvestmentFilter;
+        window.applyInvestmentTxFilter = applyInvestmentTxFilter;
+        window.applyHistoryFilter = applyHistoryFilter;
+        window.applyAssetFilter = applyAssetFilter;
+        window.applyEmployeeFilter = applyEmployeeFilter;
+        window.applyCustomerFilter = applyCustomerFilter;
+        window.applyReportFilter = applyReportFilter;
+
+        // Toast / Notifications / Profile UI
+        window.toast = toast;
+        window.toggleNotif = toggleNotif;
+        window.toggleProfile = toggleProfile;
+        window.markNotifRead = markNotifRead;
+        window.markAllRead = markAllRead;
+        window.openProfileSettings = openProfileSettings;
+        window.closeProfileSettingsModal = closeProfileSettingsModal;
+        window.showProfileDetails = showProfileDetails;
+        window.logout = logout;
+
+        // Generic Edit & Confirm modals
+        window.openEditModal = openEditModal;
+        window.closeEditModal = closeEditModal;
+        window.openConfirmModal = openConfirmModal;
+        window.closeConfirmModal = closeConfirmModal;
+
+        // Owner & record actions
+        window.viewOwner = viewOwner;
+        window.editOwner = editOwner;
+        window.transferOwnership = transferOwnership;
+        window.deleteOwner = deleteOwner;
+        window.recordInvestment = recordInvestment;
+    </script>
+    <!-- ====== LOGOUT BUTTON & SESSION TIMER ====== -->
+    
+
+    <style>
+
+
+
+    .crm-logout-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .crm-logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .crm-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .crm-logout-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+
+    <!-- CRM Services -->
+    <script src="session-timer-service.js"></script>
+    <script src="email-service.js"></script>
+    <script src="calling-service.js"></script>
+    <script src="firebase-init.js"></script>
+
+    <!-- Logout Handler Script -->
+    <script>
+    function handleCRMLogout() {
+        const btn = document.getElementById('logout-btn');
+        btn.disabled = true;
+        btn.textContent = 'Logging out...';
+        
+        try {
+            if (typeof firebase === 'undefined') {
+                console.warn('Firebase not initialized');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const auth = firebase.auth();
+            const user = auth.currentUser;
+
+            if (!user) {
+                console.info('No user logged in');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Get active time from session timer
+            let activeTimeMs = 0;
+            if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getActiveTime) {
+                activeTimeMs = window.sessionTimerService.getActiveTime();
+            }
+
+            // Send logout email notification
+            if (typeof window.emailService !== 'undefined' && window.emailService.sendLogoutNotification) {
+                window.emailService.sendLogoutNotification(user, activeTimeMs)
+                    .then(() => {
+                        console.info('✅ Logout email sent');
+                        performLogout(auth);
+                    })
+                    .catch(error => {
+                        console.error('❌ Email send failed:', error);
+                        performLogout(auth); // Logout anyway
+                    });
+            } else {
+                console.warn('EmailService not available, proceeding with logout');
+                performLogout(auth);
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            btn.disabled = false;
+            btn.textContent = 'Logout';
+            alert('Error during logout: ' + error.message);
+        }
+    }
+
+    function performLogout(auth) {
+        auth.signOut().then(() => {
+            console.info('✅ User signed out');
+            // Redirect to login
+            window.location.href = '/login.html';
+        }).catch(error => {
+            console.error('Sign-out error:', error);
+            window.location.href = '/login.html'; // Redirect anyway
+        });
+    }
+
+    // Update timer display every second
+    function updateTimerDisplay() {
+        const timerDisplay = document.getElementById('session-timer-display');
+        if (!timerDisplay) return;
+
+        if (typeof window.sessionTimerService !== 'undefined' && window.sessionTimerService.getFormattedActiveTime) {
+            try {
+                const formattedTime = window.sessionTimerService.getFormattedActiveTime();
+                timerDisplay.textContent = formattedTime;
+            } catch (e) {
+                console.debug('Timer update error:', e);
+            }
+        }
+    }
+
+    // Start timer updates when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(updateTimerDisplay, 1000);
+        });
+    } else {
+        setInterval(updateTimerDisplay, 1000);
+    }
+
+    // Listen for services ready event
+    window.addEventListener('crm-services-ready', () => {
+        console.info('✅ CRM services ready on this page');
+    });
+
+    window.addEventListener('crm-services-error', (e) => {
+        console.error('❌ CRM services error:', e.detail);
+    });
+    </script>
+</body>
+</html>
