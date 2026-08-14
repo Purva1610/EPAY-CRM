@@ -5,8 +5,6 @@ pipeline {
         NODE_VERSION = '20'
         FIREBASE_PROJECT_ID = credentials('firebase-project-id')
         FIREBASE_TOKEN = credentials('firebase-token')
-        // Add missing Firebase build variables if defined in Jenkins global system credentials
-        // FIREBASE_API_KEY = credentials('firebase-api-key') 
     }
 
     options {
@@ -18,7 +16,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Hardcoded to main to guarantee proper repo sourcing
                 git branch: 'main', url: 'https://github.com/Purva1610/EPAY-CRM.git'
             }
         }
@@ -32,23 +29,18 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm ci'
+                // Installs modules needed for testing and building
+                sh 'npm ci' 
             }
-            post {
-                always {
-                    cleanWs()
-                }
-            }
+            // REMOVED early cleanWs() from here so files aren't wiped prematurely
         }
 
         stage('Run Tests') {
             steps {
-                // Added a safety check flag to prevent crashes if no test specs are active yet
                 sh 'npm test -- --passWithNoTests || true'
             }
             post {
                 always {
-                    // Safe parsing prevents pipeline failures over missing reports
                     junit allowEmptyResults: true, testResults: '**/test-results/*.xml'
                     
                     script {
@@ -66,7 +58,6 @@ pipeline {
 
         stage('Build Application') {
             steps {
-                // Ensure these variables are populated globally in Jenkins before building
                 withEnv([
                     "FIREBASE_API_KEY=${env.FIREBASE_API_KEY ?: ''}",
                     "FIREBASE_AUTH_DOMAIN=${env.FIREBASE_AUTH_DOMAIN ?: ''}",
@@ -121,7 +112,8 @@ pipeline {
             }
         }
         always {
-            cleanWs()
+            // Cleans up the agent workspace safely after everything completes
+            cleanWs() 
         }
     }
 }
