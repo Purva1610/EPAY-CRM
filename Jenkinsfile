@@ -5,13 +5,11 @@ pipeline {
         NODE_VERSION = '20'
         FIREBASE_PROJECT_ID = credentials('firebase-project-id')
         FIREBASE_TOKEN = credentials('firebase-token')
-        DOCKER_REGISTRY = 'docker.io'
-        DOCKER_IMAGE = "epaycrm/web:${env.BUILD_NUMBER}"
     }
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
-        timeout(time: 30, unit: 'MINUTES')
+        timeout(time: 20, unit: 'MINUTES')
         timestamps()
     }
 
@@ -53,33 +51,22 @@ pipeline {
 
         stage('Build Application') {
             steps {
-                sh 'npm run build:prod'
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    docker.build("${DOCKER_IMAGE}")
+                withEnv([
+                    "FIREBASE_API_KEY=${env.FIREBASE_API_KEY}",
+                    "FIREBASE_AUTH_DOMAIN=${env.FIREBASE_AUTH_DOMAIN}",
+                    "FIREBASE_PROJECT_ID=${env.FIREBASE_PROJECT_ID}",
+                    "FIREBASE_STORAGE_BUCKET=${env.FIREBASE_STORAGE_BUCKET}",
+                    "FIREBASE_MESSAGING_SENDER_ID=${env.FIREBASE_MESSAGING_SENDER_ID}",
+                    "FIREBASE_APP_ID=${env.FIREBASE_APP_ID}",
+                    "FIREBASE_MEASUREMENT_ID=${env.FIREBASE_MEASUREMENT_ID}",
+                    "FIREBASE_DATABASE_URL=${env.FIREBASE_DATABASE_URL}"
+                ]) {
+                    sh 'npm run build:prod'
                 }
             }
         }
 
-        stage('Push Docker Image') {
-            when {
-                branch 'main'
-            }
-            steps {
-                script {
-                    docker.withRegistry("https://${DOCKER_REGISTRY}", 'dockerhub-credentials') {
-                        docker.image("${DOCKER_IMAGE}").push()
-                        docker.image("${DOCKER_IMAGE}").push('latest')
-                    }
-                }
-            }
-        }
-
-        stage('Deploy to Firebase') {
+        stage('Deploy Firebase Hosting') {
             when {
                 branch 'main'
             }
@@ -87,7 +74,7 @@ pipeline {
                 sh '''
                     npm install -g firebase-tools
                     firebase use ${FIREBASE_PROJECT_ID} --non-interactive
-                    firebase deploy --only hosting --non-interactive
+                    firebase deploy --only hosting --token ${FIREBASE_TOKEN} --non-interactive
                 '''
             }
         }
@@ -98,7 +85,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    firebase deploy --only firestore:rules,database:rules --non-interactive
+                    firebase deploy --only firestore:rules,database:rules --token ${FIREBASE_TOKEN} --non-interactive
                 '''
             }
         }
