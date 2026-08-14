@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         NODE_VERSION = '20'
+        PATH = "${env.HOME}/.local/bin:${env.PATH}"
     }
 
     options {
@@ -21,8 +22,22 @@ pipeline {
 
         stage('Setup Node.js') {
             steps {
-                sh 'node --version'
-                sh 'npm --version'
+                script {
+                    def nodeBin = sh(script: 'which node || echo ""', returnStdout: true).trim()
+                    if (!nodeBin) {
+                        sh '''
+                            echo "Node.js not found. Installing to ~/.local ..."
+                            NODE_VERSION=20.15.1
+                            curl -fsSL https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz -o /tmp/node.tar.xz
+                            mkdir -p ~/.local
+                            tar -xJf /tmp/node.tar.xz -C ~/.local --strip-components=1
+                            echo 'export PATH=~/.local/bin:$PATH' >> ~/.bashrc
+                            export PATH=~/.local/bin:$PATH
+                        '''
+                    }
+                }
+                sh 'export PATH=~/.local/bin:$PATH && node --version'
+                sh 'export PATH=~/.local/bin:$PATH && npm --version'
             }
         }
 
