@@ -1,6 +1,6 @@
 # Firebase Emulator Dockerfile
 # Builds a container with Firebase CLI tools pre-installed
-FROM node:20-alpine
+FROM node:26-alpine
 
 # Install Firebase CLI globally
 RUN npm install -g firebase-tools@latest
