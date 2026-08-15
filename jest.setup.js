@@ -6,10 +6,11 @@
 // Disable console methods in tests to reduce noise
 global.console = {
     ...console,
-    // Keep error and warn for debugging
     log: jest.fn(),
     debug: jest.fn(),
-    info: jest.fn()
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn()
 };
 
 // Mock Firebase SDK if not available in test environment
@@ -102,25 +103,6 @@ if (typeof global.CustomEvent !== 'function') {
         }
     };
 }
-
-// Suppress act warnings in tests
-const originalError = console.error;
-beforeAll(() => {
-    console.error = (...args) => {
-        if (
-            typeof args[0] === 'string' &&
-            (args[0].includes('act') ||
-                args[0].includes('not wrapped in act'))
-        ) {
-            return;
-        }
-        originalError.call(console, ...args);
-    };
-});
-
-afterAll(() => {
-    console.error = originalError;
-});
 
 // Reset mocks before each test
 beforeEach(() => {
