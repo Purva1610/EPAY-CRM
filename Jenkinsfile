@@ -73,6 +73,24 @@ pipeline {
             }
         }
 
+        stage('Load Firebase Credentials') {
+            steps {
+                withCredentials([string(credentialsId: 'firebase', variable: 'FIREBASE_CREDENTIALS_JSON')]) {
+                    script {
+                        def jsonFile = '/tmp/firebase-credentials.json'
+                        writeFile file: jsonFile, text: env.FIREBASE_CREDENTIALS_JSON
+                        def json = readJSON file: jsonFile
+                        def keys = json.keySet().toArray()
+                        for (int i = 0; i < keys.length; i++) {
+                            def key = keys[i]
+                            env.setProperty(key, json.getProperty(key).toString())
+                        }
+                        echo 'Loaded Firebase configuration from Jenkins credentials'
+                    }
+                }
+            }
+        }
+
         stage('Validate Environment') {
             steps {
                 script {
@@ -166,7 +184,7 @@ pipeline {
                         error('FIREBASE_PROJECT_ID is not set and could not be read from BUILD_MANIFEST.json')
                     }
 
-                    withCredentials([string(credentialsId: 'firebase-token', variable: 'FIREBASE_TOKEN')]) {
+                    withCredentials([string(credentialsId: 'firebase', variable: 'FIREBASE_TOKEN')]) {
                         sh '''
                             npm install -g firebase-tools
                             firebase use "${projectId}" --non-interactive
@@ -198,7 +216,7 @@ pipeline {
                         error('FIREBASE_PROJECT_ID is not set and could not be read from BUILD_MANIFEST.json')
                     }
 
-                    withCredentials([string(credentialsId: 'firebase-token', variable: 'FIREBASE_TOKEN')]) {
+                    withCredentials([string(credentialsId: 'firebase', variable: 'FIREBASE_TOKEN')]) {
                         sh '''
                             firebase use "${projectId}" --non-interactive
                             firebase deploy --only firestore:rules,database:rules --token "${FIREBASE_TOKEN}" --non-interactive
