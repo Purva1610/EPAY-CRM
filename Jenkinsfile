@@ -79,11 +79,20 @@ pipeline {
                     script {
                         def jsonFile = '/tmp/firebase-credentials.json'
                         writeFile file: jsonFile, text: env.FIREBASE_CREDENTIALS_JSON
-                        def json = readJSON file: jsonFile
-                        def keys = json.keySet().toArray()
-                        for (int i = 0; i < keys.length; i++) {
-                            def key = keys[i]
-                            env.setProperty(key, json.getProperty(key).toString())
+                        def vars = [
+                            'FIREBASE_API_KEY',
+                            'FIREBASE_AUTH_DOMAIN',
+                            'FIREBASE_PROJECT_ID',
+                            'FIREBASE_STORAGE_BUCKET',
+                            'FIREBASE_MESSAGING_SENDER_ID',
+                            'FIREBASE_APP_ID',
+                            'FIREBASE_MEASUREMENT_ID',
+                            'FIREBASE_DATABASE_URL'
+                        ]
+                        for (int i = 0; i < vars.size(); i++) {
+                            def key = vars[i]
+                            def value = sh(script: "node -e \"console.log(JSON.parse(require('fs').readFileSync('${jsonFile}','utf8')).${key})\"", returnStdout: true).trim()
+                            env.setProperty(key, value)
                         }
                         echo 'Loaded Firebase configuration from Jenkins credentials'
                     }
