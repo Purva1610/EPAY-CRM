@@ -52,11 +52,19 @@ pipeline {
                 script {
                     if (fileExists('.env')) {
                         def envVars = readProperties file: '.env'
-                        envVars.each { k, v -> env."${k}" = v }
+                        def keys = envVars.keySet().toArray()
+                        for (int i = 0; i < keys.length; i++) {
+                            def key = keys[i]
+                            env.setProperty(key, envVars.getProperty(key))
+                        }
                         echo 'Loaded environment variables from .env'
                     } else if (fileExists('.env.production')) {
                         def envVars = readProperties file: '.env.production'
-                        envVars.each { k, v -> env."${k}" = v }
+                        def keys = envVars.keySet().toArray()
+                        for (int i = 0; i < keys.length; i++) {
+                            def key = keys[i]
+                            env.setProperty(key, envVars.getProperty(key))
+                        }
                         echo 'Loaded environment variables from .env.production'
                     } else {
                         echo 'No .env or .env.production file found, using Jenkins environment variables'
@@ -76,8 +84,14 @@ pipeline {
                         'FIREBASE_MESSAGING_SENDER_ID',
                         'FIREBASE_APP_ID'
                     ]
-                    def missing = required.findAll { !env[it] }
-                    if (missing) {
+                    def missing = []
+                    for (int i = 0; i < required.size(); i++) {
+                        def val = env.getProperty(required[i])
+                        if (!val) {
+                            missing.add(required[i])
+                        }
+                    }
+                    if (missing.size() > 0) {
                         error("Missing required Firebase environment variables: ${missing.join(', ')}. Add them to .env, .env.production, or Jenkins environment.")
                     }
                     echo 'All required Firebase environment variables are present'
