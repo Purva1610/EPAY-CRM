@@ -54,22 +54,11 @@ pipeline {
         stage('Load Environment') {
             steps {
                 script {
-                    def loadEnvFromFile(String filename) {
-                        def content = readFile(filename).trim()
-                        content.split('\n').each { line ->
-                            line = line.trim()
-                            if (line && !line.startsWith('#')) {
-                                def parts = line.split('=', 2)
-                                if (parts.length == 2) {
-                                    env[parts[0].trim()] = parts[1].trim()
-                                }
-                            }
-                        }
-                    }
-
                     if (!fileExists('.env') && !fileExists('.env.production')) {
                         echo 'No .env or .env.production file found, using Jenkins environment variables'
                     } else {
+                        // The .env.production file will be created and loaded in the next stage.
+                        // This stage now primarily handles the case where a .env file exists for local testing.
                         if (fileExists('.env.production')) {
                             loadEnvFromFile('.env.production')
                         } else if (fileExists('.env')) {
@@ -241,6 +230,23 @@ pipeline {
                 always {
                     cleanWs()
                 }
+            }
+        }
+    }
+}
+
+/**
+ * Helper function to read a .env file and load its variables into the Jenkins environment.
+ * @param filename The name of the environment file to read.
+ */
+def loadEnvFromFile(String filename) {
+    def content = readFile(filename).trim()
+    content.split('\n').each { line ->
+        line = line.trim()
+        if (line && !line.startsWith('#')) {
+            def parts = line.split('=', 2)
+            if (parts.length == 2) {
+                env[parts[0].trim()] = parts[1].trim()
             }
         }
     }
