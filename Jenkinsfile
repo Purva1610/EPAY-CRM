@@ -54,9 +54,33 @@ pipeline {
                         def envVars = readProperties file: '.env'
                         envVars.each { k, v -> env."${k}" = v }
                         echo 'Loaded environment variables from .env'
+                    } else if (fileExists('.env.production')) {
+                        def envVars = readProperties file: '.env.production'
+                        envVars.each { k, v -> env."${k}" = v }
+                        echo 'Loaded environment variables from .env.production'
                     } else {
-                        echo '.env file not found, using Jenkins environment variables'
+                        echo 'No .env or .env.production file found, using Jenkins environment variables'
                     }
+                }
+            }
+        }
+
+        stage('Validate Environment') {
+            steps {
+                script {
+                    def required = [
+                        'FIREBASE_API_KEY',
+                        'FIREBASE_AUTH_DOMAIN',
+                        'FIREBASE_PROJECT_ID',
+                        'FIREBASE_STORAGE_BUCKET',
+                        'FIREBASE_MESSAGING_SENDER_ID',
+                        'FIREBASE_APP_ID'
+                    ]
+                    def missing = required.findAll { !env[it] }
+                    if (missing) {
+                        error("Missing required Firebase environment variables: ${missing.join(', ')}. Add them to .env, .env.production, or Jenkins environment.")
+                    }
+                    echo 'All required Firebase environment variables are present'
                 }
             }
         }
