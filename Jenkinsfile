@@ -49,7 +49,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh 'npm test -- --passWithNoTests || true'
+                sh 'npm test'
             }
             post {
                 always {
@@ -103,21 +103,21 @@ pipeline {
                 branch 'main'
             }
             steps {
-                withCredentials([string(credentialsId: 'firebase-token', variable: 'FIREBASE_TOKEN')]) {
-                    script {
-                        def projectId = env.FIREBASE_PROJECT_ID
-                        if (!projectId && fileExists('dist/BUILD_MANIFEST.json')) {
-                            def manifest = readJSON file: 'dist/BUILD_MANIFEST.json'
-                            projectId = manifest.firebaseProject
-                        }
+                script {
+                    def projectId = env.FIREBASE_PROJECT_ID
+                    if (!projectId && fileExists('dist/BUILD_MANIFEST.json')) {
+                        def manifest = readJSON file: 'dist/BUILD_MANIFEST.json'
+                        projectId = manifest.firebaseProject
+                    }
 
-                        if (!projectId) {
-                            error('FIREBASE_PROJECT_ID is not set and could not be read from BUILD_MANIFEST.json')
-                        }
+                    if (!projectId) {
+                        error('FIREBASE_PROJECT_ID is not set and could not be read from BUILD_MANIFEST.json')
+                    }
 
+                    withCredentials([string(credentialsId: 'firebase-token', variable: 'FIREBASE_TOKEN')]) {
                         sh '''
                             npm install -g firebase-tools
-                            firebase use "${PROJECT_ID}" --non-interactive
+                            firebase use "${projectId}" --non-interactive
                             firebase deploy --only hosting --token "${FIREBASE_TOKEN}" --non-interactive
                         '''
                     }
@@ -135,20 +135,20 @@ pipeline {
                 branch 'main'
             }
             steps {
-                withCredentials([string(credentialsId: 'firebase-token', variable: 'FIREBASE_TOKEN')]) {
-                    script {
-                        def projectId = env.FIREBASE_PROJECT_ID
-                        if (!projectId && fileExists('dist/BUILD_MANIFEST.json')) {
-                            def manifest = readJSON file: 'dist/BUILD_MANIFEST.json'
-                            projectId = manifest.firebaseProject
-                        }
+                script {
+                    def projectId = env.FIREBASE_PROJECT_ID
+                    if (!projectId && fileExists('dist/BUILD_MANIFEST.json')) {
+                        def manifest = readJSON file: 'dist/BUILD_MANIFEST.json'
+                        projectId = manifest.firebaseProject
+                    }
 
-                        if (!projectId) {
-                            error('FIREBASE_PROJECT_ID is not set and could not be read from BUILD_MANIFEST.json')
-                        }
+                    if (!projectId) {
+                        error('FIREBASE_PROJECT_ID is not set and could not be read from BUILD_MANIFEST.json')
+                    }
 
+                    withCredentials([string(credentialsId: 'firebase-token', variable: 'FIREBASE_TOKEN')]) {
                         sh '''
-                            firebase use "${PROJECT_ID}" --non-interactive
+                            firebase use "${projectId}" --non-interactive
                             firebase deploy --only firestore:rules,database:rules --token "${FIREBASE_TOKEN}" --non-interactive
                         '''
                     }

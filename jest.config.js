@@ -75,5 +75,17 @@ module.exports = {
     maxWorkers: '50%',
 
     // Timeout for tests
-    testTimeout: 10000
+    testTimeout: 10000,
+
+    reporters: [
+        'default',
+        [
+            'jest-junit',
+            {
+                outputDirectory: 'test-results',
+                outputName: 'junit.xml',
+                usePathForSuiteName: true
+            }
+        ]
+    ]
 };
