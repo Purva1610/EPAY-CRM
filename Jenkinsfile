@@ -47,6 +47,20 @@ pipeline {
             }
         }
 
+        stage('Load Environment') {
+            steps {
+                script {
+                    if (fileExists('.env')) {
+                        def envVars = readProperties file: '.env'
+                        envVars.each { k, v -> env."${k}" = v }
+                        echo 'Loaded environment variables from .env'
+                    } else {
+                        echo '.env file not found, using Jenkins environment variables'
+                    }
+                }
+            }
+        }
+
         stage('Run Tests') {
             steps {
                 sh 'npm test'

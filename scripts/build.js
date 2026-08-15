@@ -6,7 +6,7 @@
  * Usage: npm run build or NODE_ENV=production npm run build:prod
  */
 
-require('dotenv').config();
+require('dotenv').config({ path: '.env' });
 
 const fs = require('fs');
 const path = require('path');
@@ -35,6 +35,7 @@ const placeholders = requiredVars.filter(v => {
 if (missing.length > 0 && environment === 'production') {
     console.error(`[Build] ✗ Error: Missing Firebase configuration: ${missing.join(', ')}`);
     console.error(`[Build] Set these environment variables before building.`);
+    console.error(`[Build] Create a .env file with FIREBASE_API_KEY, FIREBASE_AUTH_DOMAIN, FIREBASE_PROJECT_ID, FIREBASE_STORAGE_BUCKET, FIREBASE_MESSAGING_SENDER_ID, FIREBASE_APP_ID`);
     process.exit(1);
 }
 
