@@ -165,29 +165,10 @@ pipeline {
         stage('Build Application') {
             steps {
                 script {
-                    def firebaseConfig = [
-                        apiKey:         env.FIREBASE_API_KEY         ?: '',
-                        authDomain:     env.FIREBASE_AUTH_DOMAIN     ?: '',
-                        projectId:      env.FIREBASE_PROJECT_ID      ?: '',
-                        storageBucket:  env.FIREBASE_STORAGE_BUCKET  ?: '',
-                        messagingSenderId: env.FIREBASE_MESSAGING_SENDER_ID ?: '',
-                        appId:          env.FIREBASE_APP_ID          ?: '',
-                        measurementId:  env.FIREBASE_MEASUREMENT_ID  ?: '',
-                        databaseUrl:    env.FIREBASE_DATABASE_URL    ?: ''
-                    ]
-
-                    withEnv([
-                        "FIREBASE_API_KEY=${firebaseConfig.apiKey}",
-                        "FIREBASE_AUTH_DOMAIN=${firebaseConfig.authDomain}",
-                        "FIREBASE_PROJECT_ID=${firebaseConfig.projectId}",
-                        "FIREBASE_STORAGE_BUCKET=${firebaseConfig.storageBucket}",
-                        "FIREBASE_MESSAGING_SENDER_ID=${firebaseConfig.messagingSenderId}",
-                        "FIREBASE_APP_ID=${firebaseConfig.appId}",
-                        "FIREBASE_MEASUREMENT_ID=${firebaseConfig.measurementId}",
-                        "FIREBASE_DATABASE_URL=${firebaseConfig.databaseUrl}"
-                    ]) {
-                        sh 'npm run build:prod'
-                    }
+                    // Directly use the environment variables loaded in previous stages.
+                    // The build process (e.g., Vite, Webpack) should be configured
+                    // to pick up these env vars (e.g., process.env.FIREBASE_API_KEY).
+                    sh 'npm run build:prod'
                 }
             }
         }
