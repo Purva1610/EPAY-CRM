@@ -13,6 +13,10 @@ pipeline {
         timestamps()
     }
 
+    parameters {
+        booleanParam(name: 'DEPLOY_TO_PROD', defaultValue: false, description: 'Allow deploy to production')
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -79,23 +83,27 @@ pipeline {
                     script {
                         def jsonFile = '/tmp/firebase-credentials.json'
                         writeFile file: jsonFile, text: env.FIREBASE_CREDENTIALS_JSON
-                        def vars = [
-                            'FIREBASE_API_KEY',
-                            'FIREBASE_AUTH_DOMAIN',
-                            'FIREBASE_PROJECT_ID',
-                            'FIREBASE_STORAGE_BUCKET',
-                            'FIREBASE_MESSAGING_SENDER_ID',
-                            'FIREBASE_APP_ID',
-                            'FIREBASE_MEASUREMENT_ID',
-                            'FIREBASE_DATABASE_URL'
-                        ]
-                        for (int i = 0; i < vars.size(); i++) {
-                            def key = vars[i]
-                            def value = sh(script: "node -e \"console.log(JSON.parse(require('fs').readFileSync('${jsonFile}','utf8')).${key})\"", returnStdout: true).trim()
-                            env.setProperty(key, value)
+                        sh '''
+                            node -e "
+                            const fs = require('fs');
+                            const creds = JSON.parse(fs.readFileSync('/tmp/firebase-credentials.json','utf8'));
+                            const lines = Object.entries(creds).map(([k,v]) => k+'='+v).join('\\n');
+                            fs.writeFileSync('.env.production', lines);
+                            "
+                        '''
+                        def envVars = readProperties file: '.env.production'
+                        def keys = envVars.keySet().toArray()
+                        for (int i = 0; i < keys.length; i++) {
+                            def key = keys[i]
+                            env.setProperty(key, envVars.getProperty(key))
                         }
                         echo 'Loaded Firebase configuration from Jenkins credentials'
                     }
+                }
+            }
+            post {
+                always {
+                    sh 'rm -f /tmp/firebase-credentials.json'
                 }
             }
         }
@@ -179,19 +187,23 @@ pipeline {
 
         stage('Deploy Firebase Hosting') {
             when {
-                branch 'main'
+                allOf {
+                    branch 'main'
+                    expression { params.DEPLOY_TO_PROD == true }
+                }
             }
             steps {
                 script {
                     def projectId = env.FIREBASE_PROJECT_ID
                     if (!projectId && fileExists('dist/BUILD_MANIFEST.json')) {
-                        def manifest = readJSON file: 'dist/BUILD_MANIFEST.json'
-                        projectId = manifest.firebaseProject
+                        projectId = sh(script: "node -e \"console.log(JSON.parse(require('fs').readFileSync('dist/BUILD_MANIFEST.json','utf8')).firebaseProject)\"", returnStdout: true).trim()
                     }
 
                     if (!projectId) {
                         error('FIREBASE_PROJECT_ID is not set and could not be read from BUILD_MANIFEST.json')
                     }
+
+                    input message: 'Deploy to production?', okText: 'Deploy'
 
                     withCredentials([string(credentialsId: 'firebase', variable: 'FIREBASE_TOKEN')]) {
                         sh '''
@@ -211,19 +223,23 @@ pipeline {
 
         stage('Deploy Firebase Rules') {
             when {
-                branch 'main'
+                allOf {
+                    branch 'main'
+                    expression { params.DEPLOY_TO_PROD == true }
+                }
             }
             steps {
                 script {
                     def projectId = env.FIREBASE_PROJECT_ID
                     if (!projectId && fileExists('dist/BUILD_MANIFEST.json')) {
-                        def manifest = readJSON file: 'dist/BUILD_MANIFEST.json'
-                        projectId = manifest.firebaseProject
+                        projectId = sh(script: "node -e \"console.log(JSON.parse(require('fs').readFileSync('dist/BUILD_MANIFEST.json','utf8')).firebaseProject)\"", returnStdout: true).trim()
                     }
 
                     if (!projectId) {
                         error('FIREBASE_PROJECT_ID is not set and could not be read from BUILD_MANIFEST.json')
                     }
+
+                    input message: 'Deploy Firebase Rules to production?', okText: 'Deploy'
 
                     withCredentials([string(credentialsId: 'firebase', variable: 'FIREBASE_TOKEN')]) {
                         sh '''
