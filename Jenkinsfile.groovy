@@ -69,6 +69,12 @@ pipeline {
 
                     if (!fileExists('.env') && !fileExists('.env.production')) {
                         echo 'No .env or .env.production file found, using Jenkins environment variables'
+                    } else {
+                        if (fileExists('.env.production')) {
+                            loadEnvFromFile('.env.production')
+                        } else if (fileExists('.env')) {
+                            loadEnvFromFile('.env')
+                        }
                     }
                 }
             }
