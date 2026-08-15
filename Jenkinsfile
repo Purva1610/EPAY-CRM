@@ -70,17 +70,30 @@ pipeline {
 
         stage('Build Application') {
             steps {
-                withEnv([
-                    "FIREBASE_API_KEY=${env.FIREBASE_API_KEY ?: ''}",
-                    "FIREBASE_AUTH_DOMAIN=${env.FIREBASE_AUTH_DOMAIN ?: ''}",
-                    "FIREBASE_PROJECT_ID=${env.FIREBASE_PROJECT_ID ?: ''}",
-                    "FIREBASE_STORAGE_BUCKET=${env.FIREBASE_STORAGE_BUCKET ?: ''}",
-                    "FIREBASE_MESSAGING_SENDER_ID=${env.FIREBASE_MESSAGING_SENDER_ID ?: ''}",
-                    "FIREBASE_APP_ID=${env.FIREBASE_APP_ID ?: ''}",
-                    "FIREBASE_MEASUREMENT_ID=${env.FIREBASE_MEASUREMENT_ID ?: ''}",
-                    "FIREBASE_DATABASE_URL=${env.FIREBASE_DATABASE_URL ?: ''}"
-                ]) {
-                    sh 'npm run build:prod'
+                script {
+                    def firebaseConfig = [
+                        apiKey:         env.FIREBASE_API_KEY         ?: '',
+                        authDomain:     env.FIREBASE_AUTH_DOMAIN     ?: '',
+                        projectId:      env.FIREBASE_PROJECT_ID      ?: '',
+                        storageBucket:  env.FIREBASE_STORAGE_BUCKET  ?: '',
+                        messagingSenderId: env.FIREBASE_MESSAGING_SENDER_ID ?: '',
+                        appId:          env.FIREBASE_APP_ID          ?: '',
+                        measurementId:  env.FIREBASE_MEASUREMENT_ID  ?: '',
+                        databaseUrl:    env.FIREBASE_DATABASE_URL    ?: ''
+                    ]
+
+                    withEnv([
+                        "FIREBASE_API_KEY=${firebaseConfig.apiKey}",
+                        "FIREBASE_AUTH_DOMAIN=${firebaseConfig.authDomain}",
+                        "FIREBASE_PROJECT_ID=${firebaseConfig.projectId}",
+                        "FIREBASE_STORAGE_BUCKET=${firebaseConfig.storageBucket}",
+                        "FIREBASE_MESSAGING_SENDER_ID=${firebaseConfig.messagingSenderId}",
+                        "FIREBASE_APP_ID=${firebaseConfig.appId}",
+                        "FIREBASE_MEASUREMENT_ID=${firebaseConfig.measurementId}",
+                        "FIREBASE_DATABASE_URL=${firebaseConfig.databaseUrl}"
+                    ]) {
+                        sh 'npm run build:prod'
+                    }
                 }
             }
         }
@@ -91,11 +104,23 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'firebase-token', variable: 'FIREBASE_TOKEN')]) {
-                    sh '''
-                        npm install -g firebase-tools
-                        firebase use "${FIREBASE_PROJECT_ID}" --non-interactive
-                        firebase deploy --only hosting --token "${FIREBASE_TOKEN}" --non-interactive
-                    '''
+                    script {
+                        def projectId = env.FIREBASE_PROJECT_ID
+                        if (!projectId && fileExists('dist/BUILD_MANIFEST.json')) {
+                            def manifest = readJSON file: 'dist/BUILD_MANIFEST.json'
+                            projectId = manifest.firebaseProject
+                        }
+
+                        if (!projectId) {
+                            error('FIREBASE_PROJECT_ID is not set and could not be read from BUILD_MANIFEST.json')
+                        }
+
+                        sh '''
+                            npm install -g firebase-tools
+                            firebase use "${PROJECT_ID}" --non-interactive
+                            firebase deploy --only hosting --token "${FIREBASE_TOKEN}" --non-interactive
+                        '''
+                    }
                 }
             }
             post {
@@ -111,9 +136,22 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'firebase-token', variable: 'FIREBASE_TOKEN')]) {
-                    sh '''
-                        firebase deploy --only firestore:rules,database:rules --token "${FIREBASE_TOKEN}" --non-interactive
-                    '''
+                    script {
+                        def projectId = env.FIREBASE_PROJECT_ID
+                        if (!projectId && fileExists('dist/BUILD_MANIFEST.json')) {
+                            def manifest = readJSON file: 'dist/BUILD_MANIFEST.json'
+                            projectId = manifest.firebaseProject
+                        }
+
+                        if (!projectId) {
+                            error('FIREBASE_PROJECT_ID is not set and could not be read from BUILD_MANIFEST.json')
+                        }
+
+                        sh '''
+                            firebase use "${PROJECT_ID}" --non-interactive
+                            firebase deploy --only firestore:rules,database:rules --token "${FIREBASE_TOKEN}" --non-interactive
+                        '''
+                    }
                 }
             }
             post {
