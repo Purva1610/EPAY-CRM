@@ -32,10 +32,15 @@ const placeholders = requiredVars.filter(v => {
     return val && (val.includes('_placeholder') || val.startsWith('YOUR_') || val.length < 10);
 });
 
-if (missing.length > 0) {
+if (missing.length > 0 && environment === 'production') {
     console.error(`[Build] ✗ Error: Missing Firebase configuration: ${missing.join(', ')}`);
     console.error(`[Build] Set these environment variables before building.`);
     process.exit(1);
+}
+
+if (missing.length > 0) {
+    console.warn(`[Build] ⚠ Warning: Missing Firebase configuration: ${missing.join(', ')}`);
+    console.warn(`[Build] Continuing with empty values for ${environment} environment.`);
 }
 
 if (placeholders.length > 0 && environment === 'production') {
@@ -122,12 +127,12 @@ const envProdFile = path.join(buildDir, '.env.production');
 
 const envContent = `# Build-time Firebase configuration (${environment})
 NODE_ENV=${environment}
-FIREBASE_API_KEY=${process.env.FIREBASE_API_KEY}
-FIREBASE_AUTH_DOMAIN=${process.env.FIREBASE_AUTH_DOMAIN}
-FIREBASE_PROJECT_ID=${process.env.FIREBASE_PROJECT_ID}
-FIREBASE_STORAGE_BUCKET=${process.env.FIREBASE_STORAGE_BUCKET}
-FIREBASE_MESSAGING_SENDER_ID=${process.env.FIREBASE_MESSAGING_SENDER_ID}
-FIREBASE_APP_ID=${process.env.FIREBASE_APP_ID}
+FIREBASE_API_KEY=${process.env.FIREBASE_API_KEY || ''}
+FIREBASE_AUTH_DOMAIN=${process.env.FIREBASE_AUTH_DOMAIN || ''}
+FIREBASE_PROJECT_ID=${process.env.FIREBASE_PROJECT_ID || ''}
+FIREBASE_STORAGE_BUCKET=${process.env.FIREBASE_STORAGE_BUCKET || ''}
+FIREBASE_MESSAGING_SENDER_ID=${process.env.FIREBASE_MESSAGING_SENDER_ID || ''}
+FIREBASE_APP_ID=${process.env.FIREBASE_APP_ID || ''}
 FIREBASE_MEASUREMENT_ID=${process.env.FIREBASE_MEASUREMENT_ID || ''}
 FIREBASE_DATABASE_URL=${process.env.FIREBASE_DATABASE_URL || ''}
 `;
