@@ -148,7 +148,7 @@ pipeline {
             post {
                 always {
                     junit allowEmptyResults: true, testResults: '**/test-results/*.xml'
-                    
+
                     script {
                         if (fileExists('coverage/index.html')) {
                             publishHTML(target: [
@@ -194,10 +194,7 @@ pipeline {
 
         stage('Deploy Firebase Hosting') {
             when {
-                allOf {
-                    branch 'main'
-                    expression { params.DEPLOY_TO_PROD == true }
-                }
+                expression { params.DEPLOY_TO_PROD == true }
             }
             steps {
                 script {
@@ -230,10 +227,7 @@ pipeline {
 
         stage('Deploy Firebase Rules') {
             when {
-                allOf {
-                    branch 'main'
-                    expression { params.DEPLOY_TO_PROD == true }
-                }
+                expression { params.DEPLOY_TO_PROD == true }
             }
             steps {
                 script {
