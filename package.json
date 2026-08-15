@@ -34,7 +34,7 @@
     "firebase": "^10.7.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.0",
+    "@babel/core": "^8.0.1",
     "@babel/preset-env": "^7.22.0",
     "babel-jest": "^29.5.0",
     "dotenv": "^16.3.1",
