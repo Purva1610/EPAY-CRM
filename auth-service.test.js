@@ -5,6 +5,8 @@
  * Requirements: 1.1, 1.2, 1.3
  */
 
+const AuthService = require('./auth-service.js');
+
 describe('AuthService', () => {
     let authService;
     let mockAuth;
