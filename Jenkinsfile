@@ -54,22 +54,22 @@ pipeline {
         stage('Load Environment') {
             steps {
                 script {
-                    if (fileExists('.env')) {
-                        def envVars = readProperties file: '.env'
-                        def keys = envVars.keySet().toArray()
-                        for (int i = 0; i < keys.length; i++) {
-                            def key = keys[i]
-                            env.setProperty(key, envVars.getProperty(key))
+                    def envFile = fileExists('.env') ? '.env' : (fileExists('.env.production') ? '.env.production' : null)
+                    if (envFile) {
+                        def content = readFile envFile
+                        def lines = content.split('\n')
+                        for (int i = 0; i < lines.length; i++) {
+                            def line = lines[i].trim()
+                            if (line && !line.startsWith('#')) {
+                                def idx = line.indexOf('=')
+                                if (idx > 0) {
+                                    def key = line.substring(0, idx).trim()
+                                    def value = line.substring(idx + 1).trim()
+                                    env.setProperty(key, value)
+                                }
+                            }
                         }
-                        echo 'Loaded environment variables from .env'
-                    } else if (fileExists('.env.production')) {
-                        def envVars = readProperties file: '.env.production'
-                        def keys = envVars.keySet().toArray()
-                        for (int i = 0; i < keys.length; i++) {
-                            def key = keys[i]
-                            env.setProperty(key, envVars.getProperty(key))
-                        }
-                        echo 'Loaded environment variables from .env.production'
+                        echo "Loaded environment variables from ${envFile}"
                     } else {
                         echo 'No .env or .env.production file found, using Jenkins environment variables'
                     }
@@ -91,11 +91,18 @@ pipeline {
                             fs.writeFileSync('.env.production', lines);
                             "
                         '''
-                        def envVars = readProperties file: '.env.production'
-                        def keys = envVars.keySet().toArray()
-                        for (int i = 0; i < keys.length; i++) {
-                            def key = keys[i]
-                            env.setProperty(key, envVars.getProperty(key))
+                        def content = readFile '.env.production'
+                        def lines = content.split('\n')
+                        for (int i = 0; i < lines.length; i++) {
+                            def line = lines[i].trim()
+                            if (line && !line.startsWith('#')) {
+                                def idx = line.indexOf('=')
+                                if (idx > 0) {
+                                    def key = line.substring(0, idx).trim()
+                                    def value = line.substring(idx + 1).trim()
+                                    env.setProperty(key, value)
+                                }
+                            }
                         }
                         echo 'Loaded Firebase configuration from Jenkins credentials'
                     }
