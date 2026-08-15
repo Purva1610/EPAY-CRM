@@ -54,17 +54,7 @@ pipeline {
         stage('Load Environment') {
             steps {
                 script {
-                    if (!fileExists('.env') && !fileExists('.env.production')) {
-                        echo 'No .env or .env.production file found, using Jenkins environment variables'
-                    } else {
-                        // The .env.production file will be created and loaded in the next stage.
-                        // This stage now primarily handles the case where a .env file exists for local testing.
-                        if (fileExists('.env.production')) {
-                            loadEnvFromFile('.env.production')
-                        } else if (fileExists('.env')) {
-                            loadEnvFromFile('.env')
-                        }
-                    }
+                    echo 'Checking for environment files...'
                 }
             }
         }
@@ -83,16 +73,7 @@ pipeline {
                             fs.writeFileSync('.env.production', lines);
                             "
                         '''
-                        def content = readFile('.env.production').trim()
-                        content.split('\n').each { line ->
-                            line = line.trim()
-                            if (line && !line.startsWith('#')) {
-                                def parts = line.split('=', 2)
-                                if (parts.length == 2) {
-                                    env[parts[0].trim()] = parts[1].trim()
-                                }
-                            }
-                        }
+                        loadEnvFromFile('.env.production')
                         echo 'Loaded Firebase configuration from Jenkins credentials'
                     }
                 }
