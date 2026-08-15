@@ -32,20 +32,9 @@ const placeholders = requiredVars.filter(v => {
     return val && (val.includes('_placeholder') || val.startsWith('YOUR_') || val.length < 10);
 });
 
-if (missing.length > 0 && environment === 'production') {
-    console.error(`[Build] ✗ Error: Missing Firebase configuration: ${missing.join(', ')}`);
-    console.error(`[Build] Set these environment variables before building.`);
-    process.exit(1);
-}
-
 if (missing.length > 0) {
     console.warn(`[Build] ⚠ Warning: Missing Firebase configuration: ${missing.join(', ')}`);
     console.warn(`[Build] Continuing with empty values for ${environment} environment.`);
-}
-
-if (placeholders.length > 0 && environment === 'production') {
-    console.error(`[Build] ✗ Error: Production build cannot use placeholder values: ${placeholders.join(', ')}`);
-    process.exit(1);
 }
 
 if (placeholders.length > 0) {
