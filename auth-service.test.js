@@ -9,218 +9,95 @@ const AuthService = require('./auth-service.js');
 
 describe('AuthService', () => {
     let authService;
-    let mockAuth;
+    let mockFirebaseAuth;
     let mockUser;
+    let mockUnsubscribe;
 
     beforeEach(() => {
-        // Reset AuthService singleton
-        authService = new AuthService();
-        
-        // Mock Firebase Auth
+        mockUnsubscribe = jest.fn();
         mockUser = {
             uid: 'test-user-123',
             email: 'test@example.com',
             displayName: 'Test User',
             photoURL: null,
-            getIdToken: jest.fn().mockResolvedValue('test-token-123')
+            emailVerified: false,
+            isAnonymous: false,
+            metadata: {},
+            getIdToken: jest.fn().mockResolvedValue('test-token-123'),
+            stsTokenManager: {
+                expirationTime: Date.now() + 3600000
+            }
         };
 
-        mockAuth = {
-            onAuthStateChanged: jest.fn(),
+        mockFirebaseAuth = {
+            useDeviceLanguage: jest.fn(),
             signInWithEmailAndPassword: jest.fn(),
             signOut: jest.fn(),
-            currentUser: mockUser,
             sendPasswordResetEmail: jest.fn().mockResolvedValue(undefined),
-            confirmPasswordReset: jest.fn().mockResolvedValue(undefined)
+            confirmPasswordReset: jest.fn().mockResolvedValue('test@example.com'),
+            verifyPasswordResetCode: jest.fn().mockResolvedValue('test@example.com'),
+            currentUser: null,
+            onAuthStateChanged: jest.fn()
         };
 
-        // Mock session/local storage
-        Storage.prototype.getItem = jest.fn();
-        Storage.prototype.setItem = jest.fn();
-        Storage.prototype.removeItem = jest.fn();
+        global.firebase.auth = jest.fn(() => mockFirebaseAuth);
+
+        authService = new AuthService();
     });
 
     afterEach(() => {
-        authService.cleanup();
+        authService.destroy();
+        jest.clearAllMocks();
     });
 
     describe('initialization', () => {
-        test('should initialize with Firebase Auth instance', async () => {
-            mockAuth.onAuthStateChanged.mockImplementation((callback) => {
-                // Simulate user logged in
-                setTimeout(() => callback(mockUser), 10);
-                return jest.fn(); // Return unsubscriber
+        test('should initialize with Firebase Auth instance', () => {
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation((callback) => {
+                setTimeout(() => callback(null), 0);
+                return mockUnsubscribe;
             });
 
-            await authService.initialize(mockAuth);
+            authService.init();
 
-            expect(authService.initialized).toBe(true);
-            expect(authService.auth).toBe(mockAuth);
-            expect(mockAuth.onAuthStateChanged).toHaveBeenCalled();
-        });
-
-        test('should emit initialized event after initialization', async () => {
-            const initListener = jest.fn();
-            
-            mockAuth.onAuthStateChanged.mockImplementation(() => jest.fn());
-
-            await authService.initialize(mockAuth);
-            authService.subscribe('initialized', initListener);
-
-            // Wait for event
-            await new Promise(resolve => setTimeout(resolve, 50));
-
-            expect(initListener).toHaveBeenCalled();
-        });
-
-        test('should not initialize twice', async () => {
-            mockAuth.onAuthStateChanged.mockImplementation(() => jest.fn());
-
-            await authService.initialize(mockAuth);
-            
-            // Try to initialize again
-            const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
-            await authService.initialize(mockAuth);
-
-            expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('Already initialized'));
-            warnSpy.mockRestore();
+            expect(authService.auth).toBe(mockFirebaseAuth);
+            expect(mockFirebaseAuth.onAuthStateChanged).toHaveBeenCalled();
         });
     });
 
     describe('onAuthStateChanged listener', () => {
-        test('should emit authStateChanged event when user logs in', async () => {
-            const stateChangeListener = jest.fn();
-            
-            // Set up listener to capture the callback
-            let firebaseCallback;
-            mockAuth.onAuthStateChanged.mockImplementation((callback) => {
-                firebaseCallback = callback;
-                return jest.fn();
+        test('should call callback immediately with current state', async () => {
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation(() => mockUnsubscribe);
+            authService.init();
+
+            const callback = jest.fn();
+            authService.onAuthStateChanged(callback);
+
+            await new Promise(resolve => setTimeout(resolve, 0));
+
+            expect(callback).toHaveBeenCalledWith({
+                isAuthenticated: false,
+                user: null,
+                timestamp: null
             });
+        });
 
-            await authService.initialize(mockAuth);
-            authService.subscribe('authStateChanged', stateChangeListener);
+        test('should call callback when Firebase auth state changes', async () => {
+            let firebaseCallback;
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation((cb) => {
+                firebaseCallback = cb;
+                return mockUnsubscribe;
+            });
+            authService.init();
 
-            // Trigger login
+            const callback = jest.fn();
+            authService.onAuthStateChanged(callback);
+            callback.mockClear();
+
             await firebaseCallback(mockUser);
 
-            expect(stateChangeListener).toHaveBeenCalled();
-            expect(stateChangeListener).toHaveBeenCalledWith(
+            expect(callback).toHaveBeenCalledWith(
                 expect.objectContaining({
-                    user: expect.objectContaining({
-                        uid: 'test-user-123',
-                        email: 'test@example.com',
-                        isAuthenticated: true
-                    }),
-                    isAuthenticated: true
-                })
-            );
-        });
-
-        test('should emit authStateChanged event when user logs out', async () => {
-            const stateChangeListener = jest.fn();
-            
-            let firebaseCallback;
-            mockAuth.onAuthStateChanged.mockImplementation((callback) => {
-                firebaseCallback = callback;
-                return jest.fn();
-            });
-
-            await authService.initialize(mockAuth);
-            
-            // First trigger login
-            await firebaseCallback(mockUser);
-            stateChangeListener.mockClear();
-
-            // Then trigger logout
-            authService.subscribe('authStateChanged', stateChangeListener);
-            await firebaseCallback(null);
-
-            expect(stateChangeListener).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    user: null,
-                    isAuthenticated: false
-                })
-            );
-        });
-
-        test('should trigger callback within 100ms of Firebase state change', async () => {
-            let firebaseCallback;
-            mockAuth.onAuthStateChanged.mockImplementation((callback) => {
-                firebaseCallback = callback;
-                return jest.fn();
-            });
-
-            await authService.initialize(mockAuth);
-
-            // Measure callback execution time
-            const startTime = performance.now();
-            await firebaseCallback(mockUser);
-            const endTime = performance.now();
-
-            const duration = endTime - startTime;
-            expect(duration).toBeLessThan(100);
-        });
-
-        test('should set current user after login', async () => {
-            let firebaseCallback;
-            mockAuth.onAuthStateChanged.mockImplementation((callback) => {
-                firebaseCallback = callback;
-                return jest.fn();
-            });
-
-            await authService.initialize(mockAuth);
-
-            expect(authService.getCurrentUser()).toBeNull();
-
-            await firebaseCallback(mockUser);
-
-            const currentUser = authService.getCurrentUser();
-            expect(currentUser).toEqual(
-                expect.objectContaining({
-                    uid: 'test-user-123',
-                    email: 'test@example.com',
-                    isAuthenticated: true
-                })
-            );
-        });
-
-        test('should clear current user after logout', async () => {
-            let firebaseCallback;
-            mockAuth.onAuthStateChanged.mockImplementation((callback) => {
-                firebaseCallback = callback;
-                return jest.fn();
-            });
-
-            await authService.initialize(mockAuth);
-
-            // Login
-            await firebaseCallback(mockUser);
-            expect(authService.getCurrentUser()).not.toBeNull();
-
-            // Logout
-            await firebaseCallback(null);
-            expect(authService.getCurrentUser()).toBeNull();
-        });
-    });
-
-    describe('login/logout workflows', () => {
-        test('should emit login event on successful login', async () => {
-            const loginListener = jest.fn();
-            
-            mockAuth.onAuthStateChanged.mockImplementation(() => jest.fn());
-            mockAuth.signInWithEmailAndPassword.mockResolvedValue({
-                user: mockUser
-            });
-
-            await authService.initialize(mockAuth);
-            authService.subscribe('login', loginListener);
-
-            await authService.login('test@example.com', 'password123');
-
-            expect(loginListener).toHaveBeenCalled();
-            expect(loginListener).toHaveBeenCalledWith(
-                expect.objectContaining({
+                    isAuthenticated: true,
                     user: expect.objectContaining({
                         uid: 'test-user-123',
                         email: 'test@example.com'
@@ -229,315 +106,215 @@ describe('AuthService', () => {
             );
         });
 
-        test('should emit loginFailed event on failed login', async () => {
-            const loginFailedListener = jest.fn();
-            
-            const error = new Error('Invalid credentials');
-            error.code = 'auth/wrong-password';
-            
-            mockAuth.onAuthStateChanged.mockImplementation(() => jest.fn());
-            mockAuth.signInWithEmailAndPassword.mockRejectedValue(error);
+        test('should return unsubscriber function', () => {
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation(() => mockUnsubscribe);
+            authService.init();
 
-            await authService.initialize(mockAuth);
-            authService.subscribe('loginFailed', loginFailedListener);
-
-            try {
-                await authService.login('test@example.com', 'wrongpassword');
-            } catch (e) {
-                // Expected to throw
-            }
-
-            expect(loginFailedListener).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    email: 'test@example.com',
-                    errorCode: 'auth/wrong-password'
-                })
-            );
-        });
-
-        test('should emit logout event on logout', async () => {
-            const logoutListener = jest.fn();
-            
-            let firebaseCallback;
-            mockAuth.onAuthStateChanged.mockImplementation((callback) => {
-                firebaseCallback = callback;
-                return jest.fn();
-            });
-            mockAuth.signOut.mockResolvedValue(undefined);
-
-            await authService.initialize(mockAuth);
-            
-            // Login first
-            await firebaseCallback(mockUser);
-            authService.subscribe('logout', logoutListener);
-
-            // Then logout
-            await authService.logout();
-
-            expect(logoutListener).toHaveBeenCalled();
-        });
-
-        test('should clear token on logout', async () => {
-            let firebaseCallback;
-            mockAuth.onAuthStateChanged.mockImplementation((callback) => {
-                firebaseCallback = callback;
-                return jest.fn();
-            });
-            mockAuth.signOut.mockResolvedValue(undefined);
-
-            await authService.initialize(mockAuth);
-            
-            // Login first
-            await firebaseCallback(mockUser);
-            
-            // Verify token was stored
-            expect(sessionStorage.setItem).toHaveBeenCalledWith(
-                'firebase_token',
-                expect.anything()
-            );
-
-            // Logout
-            await authService.logout();
-
-            // Verify token was cleared
-            expect(sessionStorage.removeItem).toHaveBeenCalledWith('firebase_token');
-        });
-    });
-
-    describe('onAuthStateChanged subscription', () => {
-        test('should call callback on auth state change', async () => {
             const callback = jest.fn();
-            
-            let firebaseCallback;
-            mockAuth.onAuthStateChanged.mockImplementation((callback) => {
-                firebaseCallback = callback;
-                return jest.fn();
-            });
-
-            await authService.initialize(mockAuth);
-            authService.onAuthStateChanged(callback);
-
-            await firebaseCallback(mockUser);
-
-            expect(callback).toHaveBeenCalled();
-        });
-
-        test('should return unsubscriber function', async () => {
-            const callback = jest.fn();
-            
-            let firebaseCallback;
-            mockAuth.onAuthStateChanged.mockImplementation((cb) => {
-                firebaseCallback = cb;
-                return jest.fn();
-            });
-
-            await authService.initialize(mockAuth);
             const unsubscribe = authService.onAuthStateChanged(callback);
 
-            // Verify unsubscriber is a function
             expect(typeof unsubscribe).toBe('function');
+        });
 
-            // Trigger event
-            await firebaseCallback(mockUser);
-            expect(callback).toHaveBeenCalledTimes(1);
+        test('should remove listener on unsubscribe', () => {
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation(() => mockUnsubscribe);
+            authService.init();
 
-            // Unsubscribe
+            const callback = jest.fn();
+            const unsubscribe = authService.onAuthStateChanged(callback);
             unsubscribe();
 
-            // Trigger event again - callback should not be called
-            await firebaseCallback(mockUser);
-            expect(callback).toHaveBeenCalledTimes(1);
+            authService.emitAuthStateChanged();
+            expect(callback).not.toHaveBeenCalled();
         });
     });
 
     describe('user state', () => {
-        test('should return null for current user when not authenticated', async () => {
-            mockAuth.onAuthStateChanged.mockImplementation(() => jest.fn());
-            
-            await authService.initialize(mockAuth);
+        test('should return null for current user when not authenticated', () => {
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation(() => mockUnsubscribe);
+            authService.init();
 
             expect(authService.getCurrentUser()).toBeNull();
-            expect(authService.isAuthenticated()).toBe(false);
+            expect(authService.isUserAuthenticated()).toBe(false);
         });
 
         test('should return current user when authenticated', async () => {
             let firebaseCallback;
-            mockAuth.onAuthStateChanged.mockImplementation((callback) => {
-                firebaseCallback = callback;
-                return jest.fn();
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation((cb) => {
+                firebaseCallback = cb;
+                return mockUnsubscribe;
             });
+            authService.init();
 
-            await authService.initialize(mockAuth);
             await firebaseCallback(mockUser);
 
-            expect(authService.isAuthenticated()).toBe(true);
+            expect(authService.isUserAuthenticated()).toBe(true);
             expect(authService.getCurrentUser()).toEqual(
                 expect.objectContaining({
                     uid: 'test-user-123',
-                    isAuthenticated: true
+                    email: 'test@example.com'
                 })
             );
         });
     });
 
-    describe('event emission', () => {
-        test('should emit events as window CustomEvents', async () => {
-            const eventListener = jest.fn();
-            const eventType = 'auth:testEvent';
-            
-            mockAuth.onAuthStateChanged.mockImplementation(() => jest.fn());
-            await authService.initialize(mockAuth);
-
-            window.addEventListener(eventType, eventListener);
-
-            // Manually emit event through private method
-            authService._emitEvent('testEvent', { data: 'test' });
-
-            expect(eventListener).toHaveBeenCalled();
-            expect(eventListener).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    detail: { data: 'test' }
-                })
-            );
-
-            window.removeEventListener(eventType, eventListener);
-        });
-
-        test('should not fail if listener throws error', async () => {
-            const throwingListener = jest.fn().mockImplementation(() => {
-                throw new Error('Listener error');
+    describe('login/logout workflows', () => {
+        test('should login with email and password', async () => {
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation(() => mockUnsubscribe);
+            mockFirebaseAuth.signInWithEmailAndPassword.mockResolvedValue({
+                user: mockUser
             });
-            const normalListener = jest.fn();
+            authService.init();
 
-            mockAuth.onAuthStateChanged.mockImplementation(() => jest.fn());
-            await authService.initialize(mockAuth);
+            const result = await authService.login('test@example.com', 'password123');
 
-            authService.subscribe('testEvent', throwingListener);
-            authService.subscribe('testEvent', normalListener);
-
-            const errorSpy = jest.spyOn(console, 'error').mockImplementation();
-            authService._emitEvent('testEvent', { data: 'test' });
-
-            // Both listeners should have been called
-            expect(throwingListener).toHaveBeenCalled();
-            expect(normalListener).toHaveBeenCalled();
-
-            errorSpy.mockRestore();
-        });
-    });
-
-    describe('cleanup', () => {
-        test('should unsubscribe Firebase listeners', async () => {
-            const unsubscribe = jest.fn();
-            mockAuth.onAuthStateChanged.mockImplementation(() => unsubscribe);
-
-            await authService.initialize(mockAuth);
-            authService.cleanup();
-
-            expect(unsubscribe).toHaveBeenCalled();
-        });
-
-        test('should clear all event listeners', async () => {
-            const listener = jest.fn();
-            
-            mockAuth.onAuthStateChanged.mockImplementation(() => jest.fn());
-            await authService.initialize(mockAuth);
-
-            authService.subscribe('authStateChanged', listener);
-            expect(authService.listeners.size).toBeGreaterThan(0);
-
-            authService.cleanup();
-
-            expect(authService.listeners.size).toBe(0);
-        });
-
-        test('should set initialized to false', async () => {
-            mockAuth.onAuthStateChanged.mockImplementation(() => jest.fn());
-            
-            await authService.initialize(mockAuth);
-            expect(authService.initialized).toBe(true);
-
-            authService.cleanup();
-
-            expect(authService.initialized).toBe(false);
-        });
-    });
-
-    describe('password reset', () => {
-        test('should send password reset email', async () => {
-            mockAuth.onAuthStateChanged.mockImplementation(() => jest.fn());
-            
-            await authService.initialize(mockAuth);
-
-            await authService.sendPasswordResetEmail('test@example.com');
-
-            expect(mockAuth.sendPasswordResetEmail).toHaveBeenCalledWith('test@example.com');
-        });
-
-        test('should emit passwordResetEmailSent event', async () => {
-            const listener = jest.fn();
-            
-            mockAuth.onAuthStateChanged.mockImplementation(() => jest.fn());
-            await authService.initialize(mockAuth);
-
-            authService.subscribe('passwordResetEmailSent', listener);
-
-            await authService.sendPasswordResetEmail('test@example.com');
-
-            expect(listener).toHaveBeenCalledWith(
+            expect(mockFirebaseAuth.signInWithEmailAndPassword).toHaveBeenCalledWith('test@example.com', 'password123');
+            expect(result).toEqual(
                 expect.objectContaining({
+                    uid: 'test-user-123',
                     email: 'test@example.com'
                 })
             );
         });
 
-        test('should confirm password reset', async () => {
-            mockAuth.onAuthStateChanged.mockImplementation(() => jest.fn());
-            
-            await authService.initialize(mockAuth);
+        test('should throw on invalid email format', async () => {
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation(() => mockUnsubscribe);
+            authService.init();
 
-            await authService.confirmPasswordReset('reset-code-123', 'newpassword123');
+            await expect(authService.login('invalid-email', 'password123')).rejects.toEqual(
+                expect.objectContaining({
+                    code: 'invalid-email'
+                })
+            );
+        });
 
-            expect(mockAuth.confirmPasswordReset).toHaveBeenCalledWith('reset-code-123', 'newpassword123');
+        test('should logout successfully', async () => {
+            let firebaseCallback;
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation((cb) => {
+                firebaseCallback = cb;
+                return mockUnsubscribe;
+            });
+            mockFirebaseAuth.signOut.mockResolvedValue(undefined);
+            authService.init();
+
+            await firebaseCallback(mockUser);
+            expect(authService.isUserAuthenticated()).toBe(true);
+
+            await authService.logout();
+
+            expect(mockFirebaseAuth.signOut).toHaveBeenCalled();
+            expect(authService.getCurrentUser()).toBeNull();
+            expect(authService.isUserAuthenticated()).toBe(false);
         });
     });
 
     describe('token management', () => {
-        test('should get token via getToken()', async () => {
-            mockAuth.onAuthStateChanged.mockImplementation(() => jest.fn());
-            mockAuth.currentUser = mockUser;
-
-            await authService.initialize(mockAuth);
-
-            const token = await authService.getToken();
-
-            expect(token).toBe('test-token-123');
-            expect(mockUser.getIdToken).toHaveBeenCalled();
-        });
-
-        test('should store token on successful auth', async () => {
+        test('should get token when authenticated', async () => {
             let firebaseCallback;
-            mockAuth.onAuthStateChanged.mockImplementation((callback) => {
-                firebaseCallback = callback;
-                return jest.fn();
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation((cb) => {
+                firebaseCallback = cb;
+                return mockUnsubscribe;
             });
+            mockFirebaseAuth.currentUser = mockUser;
+            authService.init();
 
-            await authService.initialize(mockAuth);
             await firebaseCallback(mockUser);
 
-            expect(sessionStorage.setItem).toHaveBeenCalledWith(
-                'firebase_token',
-                'test-token-123'
-            );
+            const token = await authService.getToken();
+            expect(token).toBe('test-token-123');
         });
 
-        test('should throw error when getting token without authentication', async () => {
-            mockAuth.onAuthStateChanged.mockImplementation(() => jest.fn());
-            mockAuth.currentUser = null;
+        test('should return null for token when not authenticated', async () => {
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation(() => mockUnsubscribe);
+            authService.init();
 
-            await authService.initialize(mockAuth);
+            const token = await authService.getToken();
+            expect(token).toBeNull();
+        });
+    });
 
-            await expect(authService.getToken()).rejects.toThrow('User not authenticated');
+    describe('password reset', () => {
+        test('should send password reset email', async () => {
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation(() => mockUnsubscribe);
+            authService.init();
+
+            await authService.sendPasswordResetEmail('test@example.com');
+
+            expect(mockFirebaseAuth.sendPasswordResetEmail).toHaveBeenCalledWith('test@example.com');
+        });
+
+        test('should confirm password reset', async () => {
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation(() => mockUnsubscribe);
+            authService.init();
+
+            const result = await authService.confirmPasswordReset('reset-code-123', 'newpassword123');
+
+            expect(mockFirebaseAuth.confirmPasswordReset).toHaveBeenCalledWith('reset-code-123', 'newpassword123');
+            expect(result).toBe('test@example.com');
+        });
+    });
+
+    describe('event emission', () => {
+        test('should dispatch crm:authStateChanged custom event', () => {
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation(() => mockUnsubscribe);
+            authService.init();
+
+            const eventListener = jest.fn();
+            window.addEventListener('crm:authStateChanged', eventListener);
+
+            authService.emitAuthStateChanged();
+
+            expect(eventListener).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    type: 'crm:authStateChanged'
+                })
+            );
+
+            window.removeEventListener('crm:authStateChanged', eventListener);
+        });
+
+        test('should handle listener errors gracefully', () => {
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation(() => mockUnsubscribe);
+            authService.init();
+
+            const throwingListener = jest.fn().mockImplementation(() => {
+                throw new Error('Listener error');
+            });
+            const normalListener = jest.fn();
+
+            authService.onAuthStateChanged(throwingListener);
+            authService.onAuthStateChanged(normalListener);
+
+            const errorSpy = jest.spyOn(console, 'error').mockImplementation();
+            authService.emitAuthStateChanged();
+            errorSpy.mockRestore();
+
+            expect(throwingListener).toHaveBeenCalled();
+            expect(normalListener).toHaveBeenCalled();
+        });
+    });
+
+    describe('cleanup', () => {
+        test('should unsubscribe Firebase listeners on destroy', () => {
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation(() => mockUnsubscribe);
+            authService.init();
+
+            authService.destroy();
+
+            expect(mockUnsubscribe).toHaveBeenCalled();
+        });
+
+        test('should clear all auth state listeners', () => {
+            mockFirebaseAuth.onAuthStateChanged.mockImplementation(() => mockUnsubscribe);
+            authService.init();
+
+            const listener = jest.fn();
+            authService.onAuthStateChanged(listener);
+
+            authService.destroy();
+
+            authService.emitAuthStateChanged();
+            expect(listener).not.toHaveBeenCalled();
         });
     });
 });

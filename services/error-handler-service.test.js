@@ -5,6 +5,8 @@
  * Requirements: 9.1, 9.2, 9.3
  */
 
+const ErrorHandlerService = require('./error-handler-service');
+
 describe('ErrorHandlerService', () => {
     let errorHandler;
 
@@ -267,8 +269,6 @@ describe('ErrorHandlerService', () => {
         });
 
         it('should respect initialDelayMs parameter', async () => {
-            jest.useFakeTimers();
-
             const error = new Error('Network timeout');
             error.code = 'timeout';
 
@@ -276,15 +276,10 @@ describe('ErrorHandlerService', () => {
                 .mockRejectedValueOnce(error)
                 .mockResolvedValueOnce('success');
 
-            const promise = errorHandler.executeWithRetry(operation, 3, 50);
+            const result = await errorHandler.executeWithRetry(operation, 3, 10);
 
-            // Should wait before retrying
-            jest.runOnlyPendingTimers();
-
-            const result = await promise;
             expect(result).toBe('success');
-
-            jest.useRealTimers();
+            expect(operation).toHaveBeenCalledTimes(2);
         });
     });
 
@@ -371,7 +366,7 @@ describe('ErrorHandlerService', () => {
 
             const notification = container.querySelector('.toast-notification');
             expect(notification).toBeTruthy();
-            expect(notification).toHaveClass('toast-error');
+            expect(notification.classList.contains('toast-error')).toBe(true);
         });
 
         it('should display correct message text', () => {
@@ -386,19 +381,19 @@ describe('ErrorHandlerService', () => {
         it('should create warning notification', () => {
             errorHandler.displayErrorNotification('Warning', 0, 'warning');
             const notification = document.querySelector('.toast-notification');
-            expect(notification).toHaveClass('toast-warning');
+            expect(notification.classList.contains('toast-warning')).toBe(true);
         });
 
         it('should create success notification', () => {
             errorHandler.displayErrorNotification('Success', 0, 'success');
             const notification = document.querySelector('.toast-notification');
-            expect(notification).toHaveClass('toast-success');
+            expect(notification.classList.contains('toast-success')).toBe(true);
         });
 
         it('should create info notification', () => {
             errorHandler.displayErrorNotification('Info', 0, 'info');
             const notification = document.querySelector('.toast-notification');
-            expect(notification).toHaveClass('toast-info');
+            expect(notification.classList.contains('toast-info')).toBe(true);
         });
 
         it('should auto-dismiss after specified duration', async () => {

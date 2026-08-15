@@ -132,13 +132,11 @@ describe('SessionSyncManager', () => {
 
         test('should handle broadcast errors gracefully', () => {
             const error = new Error('Broadcast failed');
-            sessionSyncManager.channel = {
-                postMessage: jest.fn().mockImplementation(() => {
-                    throw error;
-                })
-            };
-
             sessionSyncManager.initialize(mockAuthService);
+
+            sessionSyncManager.channel.postMessage = jest.fn().mockImplementation(() => {
+                throw error;
+            });
 
             const errorSpy = jest.spyOn(console, 'error').mockImplementation();
 
@@ -149,7 +147,7 @@ describe('SessionSyncManager', () => {
 
             sessionSyncManager.broadcastLogin(userData);
 
-            expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('Failed to broadcast login'), error);
+            expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('Failed to broadcast via BroadcastChannel'), error);
             errorSpy.mockRestore();
         });
     });
@@ -378,9 +376,10 @@ describe('SessionSyncManager', () => {
 
             expect(sessionSyncManager.channel).not.toBeNull();
 
+            const channel = sessionSyncManager.channel;
             sessionSyncManager.cleanup();
 
-            expect(sessionSyncManager.channel.close).toHaveBeenCalled();
+            expect(channel.close).toHaveBeenCalled();
             expect(sessionSyncManager.channel).toBeNull();
         });
 
