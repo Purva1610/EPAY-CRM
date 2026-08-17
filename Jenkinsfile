@@ -88,10 +88,10 @@ pipeline {
                             const fs = require('fs');
                             const creds = JSON.parse(fs.readFileSync('/tmp/firebase-credentials.json','utf8'));
                             const lines = Object.entries(creds).map(([k,v]) => k+'='+v).join('\\n');
-                            fs.writeFileSync('.env.production', lines);
+                            fs.writeFileSync('.env', lines);
                             "
                         '''
-                        def content = readFile '.env.production'
+                        def content = readFile '.env'
                         def lines = content.split('\n')
                         for (int i = 0; i < lines.length; i++) {
                             def line = lines[i].trim()
@@ -118,6 +118,7 @@ pipeline {
         stage('Validate Environment') {
             steps {
                 script {
+                    def content = readFile '.env'
                     def required = [
                         'FIREBASE_API_KEY',
                         'FIREBASE_AUTH_DOMAIN',
@@ -128,9 +129,9 @@ pipeline {
                     ]
                     def missing = []
                     for (int i = 0; i < required.size(); i++) {
-                        def val = env.getProperty(required[i])
-                        if (!val) {
-                            missing.add(required[i])
+                        def key = required[i]
+                        if (!content.contains(key + '=')) {
+                            missing.add(key)
                         }
                     }
                     if (missing.size() > 0) {
@@ -164,46 +165,7 @@ pipeline {
 
         stage('Build Application') {
             steps {
-                script {
-                    def firebaseConfig = [
-                        apiKey:         env.FIREBASE_API_KEY         ?: '',
-                        authDomain:     env.FIREBASE_AUTH_DOMAIN     ?: '',
-                        projectId:      env.FIREBASE_PROJECT_ID      ?: '',
-                        storageBucket:  env.FIREBASE_STORAGE_BUCKET  ?: '',
-                        messagingSenderId: env.FIREBASE_MESSAGING_SENDER_ID ?: '',
-                        appId:          env.FIREBASE_APP_ID          ?: '',
-                        measurementId:  env.FIREBASE_MEASUREMENT_ID  ?: '',
-                        databaseUrl:    env.FIREBASE_DATABASE_URL    ?: ''
-                    ]
-
-                    withEnv([
-                        "FIREBASE_API_KEY=${firebaseConfig.apiKey}",
-                        "FIREBASE_AUTH_DOMAIN=${firebaseConfig.authDomain}",
-                        "FIREBASE_PROJECT_ID=${firebaseConfig.projectId}",
-                        "FIREBASE_STORAGE_BUCKET=${firebaseConfig.storageBucket}",
-                        "FIREBASE_MESSAGING_SENDER_ID=${firebaseConfig.messagingSenderId}",
-                        "FIREBASE_APP_ID=${firebaseConfig.appId}",
-                        "FIREBASE_MEASUREMENT_ID=${firebaseConfig.measurementId}",
-                        "FIREBASE_DATABASE_URL=${firebaseConfig.databaseUrl}"
-                    ]) {
-                        sh 'npm run build:prod'
-                    }
-
-                    // Resolve the Firebase project ID once here, right after the build,
-                    // while dist/BUILD_MANIFEST.json is guaranteed to exist. Both deploy
-                    // stages below just read env.RESOLVED_PROJECT_ID instead of re-deriving it.
-                    def resolvedProjectId = env.FIREBASE_PROJECT_ID
-                    if (!resolvedProjectId && fileExists('dist/BUILD_MANIFEST.json')) {
-                        resolvedProjectId = sh(
-                            script: "node -e \"console.log(JSON.parse(require('fs').readFileSync('dist/BUILD_MANIFEST.json','utf8')).firebaseProject)\"",
-                            returnStdout: true
-                        ).trim()
-                    }
-                    if (!resolvedProjectId) {
-                        error('FIREBASE_PROJECT_ID is not set and could not be read from BUILD_MANIFEST.json')
-                    }
-                    env.RESOLVED_PROJECT_ID = resolvedProjectId
-                }
+                sh 'npm run build:prod'
             }
         }
 
@@ -213,28 +175,32 @@ pipeline {
             }
             steps {
                 script {
-                    def approved = false
-                    try {
-                        // Scoped timeout so waiting for approval never collides with
-                        // the pipeline-wide 20-minute options{} timeout above.
-                        timeout(time: 24, unit: 'HOURS') {
-                            input message: 'Deploy to production?', ok: 'Deploy'
-                            approved = true
+                    def projectId = null
+                    def envContent = readFile '.env'
+                    def lines = envContent.split('\n')
+                    for (int i = 0; i < lines.length; i++) {
+                        def line = lines[i].trim()
+                        if (line.startsWith('FIREBASE_PROJECT_ID=')) {
+                            projectId = line.substring(line.indexOf('=') + 1).trim()
+                            break
                         }
-                    } catch (err) {
-                        echo "Hosting deploy not approved (timed out or aborted): ${err}"
+                    }
+                    if (!projectId && fileExists('dist/BUILD_MANIFEST.json')) {
+                        projectId = sh(script: "node -e \"console.log(JSON.parse(require('fs').readFileSync('dist/BUILD_MANIFEST.json','utf8')).firebaseProject)\"", returnStdout: true).trim()
                     }
 
-                    if (approved) {
-                        withCredentials([string(credentialsId: 'firebase', variable: 'FIREBASE_TOKEN')]) {
-                            sh '''
-                                npm install -g firebase-tools
-                                firebase use "${RESOLVED_PROJECT_ID}" --non-interactive
-                                firebase deploy --only hosting --token "${FIREBASE_TOKEN}" --non-interactive
-                            '''
-                        }
-                    } else {
-                        echo 'Skipping Firebase Hosting deploy.'
+                    if (!projectId) {
+                        error('FIREBASE_PROJECT_ID is not set and could not be read from BUILD_MANIFEST.json')
+                    }
+
+                    input message: 'Deploy to production?', okText: 'Deploy'
+
+                    withCredentials([string(credentialsId: 'firebase', variable: 'FIREBASE_TOKEN')]) {
+                        sh '''
+                            npm install -g firebase-tools
+                            firebase use "${projectId}" --non-interactive
+                            firebase deploy --only hosting --token "${FIREBASE_TOKEN}" --non-interactive
+                        '''
                     }
                 }
             }
@@ -246,25 +212,31 @@ pipeline {
             }
             steps {
                 script {
-                    def approved = false
-                    try {
-                        timeout(time: 24, unit: 'HOURS') {
-                            input message: 'Deploy Firebase Rules to production?', ok: 'Deploy'
-                            approved = true
+                    def projectId = null
+                    def envContent = readFile '.env'
+                    def lines = envContent.split('\n')
+                    for (int i = 0; i < lines.length; i++) {
+                        def line = lines[i].trim()
+                        if (line.startsWith('FIREBASE_PROJECT_ID=')) {
+                            projectId = line.substring(line.indexOf('=') + 1).trim()
+                            break
                         }
-                    } catch (err) {
-                        echo "Rules deploy not approved (timed out or aborted): ${err}"
+                    }
+                    if (!projectId && fileExists('dist/BUILD_MANIFEST.json')) {
+                        projectId = sh(script: "node -e \"console.log(JSON.parse(require('fs').readFileSync('dist/BUILD_MANIFEST.json','utf8')).firebaseProject)\"", returnStdout: true).trim()
                     }
 
-                    if (approved) {
-                        withCredentials([string(credentialsId: 'firebase', variable: 'FIREBASE_TOKEN')]) {
-                            sh '''
-                                firebase use "${RESOLVED_PROJECT_ID}" --non-interactive
-                                firebase deploy --only firestore:rules,database:rules --token "${FIREBASE_TOKEN}" --non-interactive
-                            '''
-                        }
-                    } else {
-                        echo 'Skipping Firebase Rules deploy.'
+                    if (!projectId) {
+                        error('FIREBASE_PROJECT_ID is not set and could not be read from BUILD_MANIFEST.json')
+                    }
+
+                    input message: 'Deploy Firebase Rules to production?', okText: 'Deploy'
+
+                    withCredentials([string(credentialsId: 'firebase', variable: 'FIREBASE_TOKEN')]) {
+                        sh '''
+                            firebase use "${projectId}" --non-interactive
+                            firebase deploy --only firestore:rules,database:rules --token "${FIREBASE_TOKEN}" --non-interactive
+                        '''
                     }
                 }
             }
