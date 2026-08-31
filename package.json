@@ -43,7 +43,7 @@
     "jest-environment-jsdom": "^29.5.0",
     "jest-junit": "^17.0.0",
     "jest-watch-typeahead": "^2.2.2",
-    "webpack": "^5.89.0",
+    "webpack": "^5.110.1",
     "webpack-cli": "^5.1.4"
   }
 }
